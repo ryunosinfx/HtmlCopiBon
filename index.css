@@ -21,7 +21,12 @@ div.footer {
   min-height: 100%;
   width: 100%;
   border: solid 1px red;
-  padding:0.2em;
+  padding:0.5em;
+}
+div.copyright {
+  width: 100%;
+  padding:0.5em;
+  text-align: center;
 }
 div.header {
   min-height: 100%;
@@ -36,8 +41,13 @@ div.title {
   padding:0.5em;
 
 }
-div.A {
+div.FileUploadArea {
   min-height: 100%;
   width: 100%;
-  border: solid 1px blue;
+  border: dotted 1px black;
+  background-color:#a8bae0;
+  padding-top:5em;
+  padding-bottom: 5em;
+  text-align: center;
+  font-size: 2em;
 }
