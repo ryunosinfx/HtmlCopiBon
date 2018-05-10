@@ -16,6 +16,16 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        use: [
+          'style-loader', {
+            loader: 'css-loader',
+            options: {
+              url: false,
+            }
+          }
+        ]
+      }, {
         test: /\.js$/,
         exclude: /node_modules/,
         enforce: 'pre',
@@ -32,12 +42,12 @@ module.exports = {
     contentBase: __dirname + "/dist/",
     watchContentBase: true,
     // inline: true,
-    // //host: '0.0.0.0',
-    port: 8082,
+    // host: '0.0.0.0',
+    port: 8082
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
-      // test: /\.xxx$/, // may apply this only for some modules
+      // test: /\.xxx$/,  may apply this only for some modules
       options: {
         html: './index.html'
       }

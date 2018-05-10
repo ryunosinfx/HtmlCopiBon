@@ -1,6 +1,7 @@
-
+import MainFrame from "./view/mainFrame"
 export default class CopiBonService {
   static main(){
-    alert("start!");
+    const mf = new MainFrame();
+    mf.render("aaaaa");
   }
 }
