@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
   //  context: __dirname,
   entry: [
-    './index.js', './index.css'
+    './src/main.js', './index.css'
   ],
   output: {
     // 出力するファイル名

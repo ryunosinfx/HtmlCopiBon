@@ -2,10 +2,13 @@ export default class ViewUtil {
   constructor(){
 
   }
-  static create(id,clasｓName){
+  static create(id,clasｓName,text){
     const div = document.createElement("div");
     div.className = clasｓName;
     div.id = id;
+    if(text){
+      div.textContent = text;
+    }
     return div;
   }
   static append(parent,child){

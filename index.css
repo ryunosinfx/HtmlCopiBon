@@ -1,5 +1,43 @@
+html,body{
+  min-height: 100%;
+  width: 100%;
+  padding:0;
+  margin:0;
+}
+div{
+  box-sizing: border-box;
+}
+
 div.frame {
-  height: 100%;
+  min-height: 99%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin:0;
+
+  border: solid 1px blue;
+}
+div.footer {
+  min-height: 100%;
+  width: 100%;
+  border: solid 1px red;
+  padding:0.2em;
+}
+div.header {
+  min-height: 100%;
+  width: 100%;
+  border: solid 1px green;
+  padding:0.2em;
+}
+div.title {
+  font-size: 2em;
+  font-weight: bold;
+  background-color:#c23cc1;
+  padding:0.5em;
+
+}
+div.A {
+  min-height: 100%;
   width: 100%;
   border: solid 1px blue;
 }
