@@ -3,29 +3,45 @@ export default class FileUploader {
   constructor(fileProcessor, indigator) {
     this.fileProcessor = fileProcessor;
     this.progress = indigator;
+    this.name = "FileUploader";
+  }
+  test(){
+    alert(this.name );
   }
   handleFileSelect(event) {
+    event.stopPropagation(); // Stops some browsers from redirecting.
+    event.preventDefault();
     let files = event.target.files; // FileList object
+    this.handleFiles(files);
+  }
+
+  handleDrop(event){
+    event.stopPropagation(); // Stops some browsers from redirecting.
+    event.preventDefault();
+
+    let files = event.dataTransfer.files;
+    this.handleFiles(files);
+  }
+  handleFiles(files){
     this.reader = new FileReader();
     this.progress.init();
 
-    this.reader.onerror = this.errorHandler;
-    this.reader.onprogress = this.updateProgress;
+    this.reader.onerror = (event)=>{this.errorHandler(event)};
+    this.reader.onprogress = (event)=>{this.updateProgress(event)};
     this.reader.onabort = (e) => {
       alert('File read cancelled');
     };
 
-    this.reader.onloadstart = this.onLoadStart;
-    this.reader.onload = this.onload;
+    this.reader.onloadstart = (event)=>{this.onLoadStart(event)};
+    this.reader.onload = (event)=>{this.onload(event)};
     this.fileProcessor.showFiles(files);
-    this.reader.readAsBinaryString(evt.target.files[0]);
+    this.reader.readAsBinaryString(files[0]);
   }
   abortRead() {
     if (this.reader) {
       this.reader.abort();
     }
   }
-
   errorHandler(event) {
     switch (event.target.error.code) {
       case event.target.error.NOT_FOUND_ERR:
@@ -49,7 +65,7 @@ export default class FileUploader {
   }
   onload(event) {
     this.progress.compliet();
-    setTimeout("document.getElementById('progress_bar').className='';", 2000);
+    
     if (this.fileProcessor) {
       this.fileProcessor.process();
     } else {
@@ -57,6 +73,6 @@ export default class FileUploader {
     }
   }
   onLoadStart() {
-    document.getElementById('progress_bar').className = 'loading';
+    this.progress.start();
   }
 }

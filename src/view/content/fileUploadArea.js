@@ -9,11 +9,13 @@ export default class FileUploadArea extends BaseView{
     this.pb = new pb(this.elm);
   }
   render() {
-    const elm = vu.create("FileUploadArea", "FileUploadArea",text);
+    const elm = vu.createFile("FileUploadArea", "FileUploadArea",text);
     return elm;
   }
   addEventListeners(fp){
     this.fu = new fu(fp,this.pb);
-    this.elm.addEventListener('change', this.fu.handleFileSelect, false);
+    vu.on(this.elm,'change',(e)=>{this.fu.handleFileSelect(e)});
+    vu.on(this.elm,'drop',(e)=>{this.fu.handleDrop(e)});
+    vu.on(this.elm,'click',(e)=>{this.fu.test(e)});
   }
 }

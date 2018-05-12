@@ -14,54 +14,54 @@ export default class DragAndDropper {
     this.fileUploader = fileUploader;
     this.dragImagePath = dragImagePath;
   }
-  handleDragStart(e) {
-    this.style.opacity = '0.4'; // this / e.target is the source node.
+  handleDragStart(event) {
+    this.stylevent.opacity = '0.4'; // this / event.target is the source nodevent.
     dragSrcEl = this;
 
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/html', this.innerHTML);
     let dragIcon = document.createElement('img');
     dragIcon.src = this.dragImagePath;
     dragIcon.width = 100;
-    e.dataTransfer.setDragImage(dragIcon, -10, -10);
+    event.dataTransfer.setDragImage(dragIcon, -10, -10);
   }
-  handleDragOver(e) {
-    if (e.preventDefault) {
-      e.preventDefault(); // Necessary. Allows us to drop.
+  handleDragOver(event) {
+    if (event.preventDefault) {
+      event.preventDefault(); // Necessary. Allows us to drop.
     }
-    e.dataTransfer.dropEffect = 'move'; // See the section on the DataTransfer object.
+    event.dataTransfer.dropEffect = 'move'; // See the section on the DataTransfer object.
     return false;
   }
-  handleDragEnter(e) {
-    // this / e.target is the current hover target.
+  handleDragEnter(event) {
+    // this / event.target is the current hover target.
     this.classList.add('over');
   }
-  handleDragLeave(e) {
-    this.classList.remove('over'); // this / e.target is previous target element.
+  handleDragLeave(event) {
+    this.classList.remove('over'); // this / event.target is previous target element.
   }
-  handleDrop(e) {
-    e.stopPropagation(); // Stops some browsers from redirecting.
-    e.preventDefault();
+  handleDrop(event) {
+    event.stopPropagation(); // Stops some browsers from redirecting.
+    event.preventDefault();
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
       // Set the source column's HTML to the HTML of the columnwe dropped on.
       dragSrcEl.innerHTML = this.innerHTML;
-      this.innerHTML = e.dataTransfer.getData('text/html');
+      this.innerHTML = event.dataTransfer.getData('text/html');
     }
-    let files = e.dataTransfer.files;
+    let files = event.dataTransfer.files;
     for (let i = 0, f; f = files[i]; i++) {
       this.upload(f);
     }
     // See the section on the DataTransfer object.
     return false;
   }
-  handleDragEnd(e) {
-    // this/e.target is the source node.
+  handleDragEnd(event) {
+    // this/event.target is the source nodevent.
     [].forEach.call(cols, function(this.cals) {
       col.classList.remove('over');
     });
   }
   upload(f) {
-    console.log(f);
+    consolevent.log(f);
   }
 }

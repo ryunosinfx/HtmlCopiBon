@@ -5,6 +5,15 @@ export default class ViewUtil {
   static create(id,clasｓName,text){
     return ViewUtil.ce("div",id,clasｓName,text);
   }
+  static createInput(id,clasｓName,text){
+    return ViewUtil.ce("input",id,clasｓName,text);
+  }
+  static createText(id,clasｓName,text){
+    return ViewUtil.ce("text",id,clasｓName,text);
+  }
+  static createFile(id,clasｓName,text){
+    return ViewUtil.ce("input",id,clasｓName,text,"file");
+  }
   static createUl(id,clasｓName,text){
     return ViewUtil.ce("ul",id,clasｓName,text);
   }
@@ -20,16 +29,24 @@ export default class ViewUtil {
   static createA(id,clasｓName,text){
     return ViewUtil.ce("a",id,clasｓName,text);
   }
-  static ce(tagName,id,clasｓName,text){
+  static ce(tagName,id,clasｓName,text,type){
     const elm = document.createElement(tagName);
     elm.className = clasｓName;
     if(id){
       elm.id = id;
     }
-    if(text){
+    if(tagName==="input" && text){
+      elm.setAttribute("value",text);
+      if(type){
+        elm.setAttribute("type",type);
+      }
+    } else if(text){
       elm.textContent = text;
     }
     return elm;
+  }
+  static on(elm,eventType,eventHandler){
+    elm.addEventListener(eventType, eventHandler, false);
   }
 
   static append(parent,child){

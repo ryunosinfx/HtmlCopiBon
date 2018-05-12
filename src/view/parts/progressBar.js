@@ -1,6 +1,6 @@
 import vu from "../../util/viewUtil";
 import BaseView from "../baseView";
-export default class ProgressBar extends BaseView{
+export default class ProgressBar extends BaseView {
   constructor(ancker) {
     super(ancker);
   }
@@ -19,5 +19,9 @@ export default class ProgressBar extends BaseView{
   compliet() {
     this.elm.style.width = '100%';
     this.elm.textContent = '100%';
+    setTimeout(()=>{this.elm.className='';}, 2000);
+  }
+  start() {
+    this.elm  .className = 'loading';
   }
 }

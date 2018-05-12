@@ -51,6 +51,17 @@ div.FileUploadArea {
   text-align: center;
   font-size: 2em;
 }
+div.FilesArea{
+  min-height: 100%;
+  width: 100%;
+  border: dotted 1px black;
+  background-color:rgb(124, 110, 241);
+  padding-top:1em;
+  padding-bottom: 1em;
+  text-align: center;
+  font-size: 2em;
+
+}
 [draggable] {
   user-select: none;
 }
