@@ -1,12 +1,13 @@
 import vu from "../util/viewUtil";
+import BaseView from "./baseView";
 import fua from "./content/fileUploadArea";
-export default class Container {
-  constructor(){
-
+export default class Container extends BaseView{
+  constructor(anker){
+    super(anker);
+    this.fua = new fua(this.elm);
   }
   render() {
-    const container = vu.create("container", "container");
-    vu.append(container,(new fua()).render());
-    return container;
+    const elm = vu.create("container", "container");
+    return elm;
   }
 }

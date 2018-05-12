@@ -10,7 +10,7 @@ export default class MainFrame {
     const footer = vu.create("footer", "footer");
     //alert(frame.appendChild);
     vu.append(frame,(new Header()).render(titleText));
-    vu.append(frame,(new Container()).render());
+    this.container = new Container(frame);
     vu.append(frame,(new Footer()).render());
     vu.attachBody(frame);
   }

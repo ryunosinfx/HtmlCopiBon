@@ -3,14 +3,35 @@ export default class ViewUtil {
 
   }
   static create(id,clasｓName,text){
-    const div = document.createElement("div");
-    div.className = clasｓName;
-    div.id = id;
-    if(text){
-      div.textContent = text;
-    }
-    return div;
+    return ViewUtil.ce("div",id,clasｓName,text);
   }
+  static createUl(id,clasｓName,text){
+    return ViewUtil.ce("ul",id,clasｓName,text);
+  }
+  static createLi(id,clasｓName,text){
+    return ViewUtil.ce("li",id,clasｓName,text);
+  }
+  static createSpan(id,clasｓName,text){
+    return ViewUtil.ce("span",id,clasｓName,text);
+  }
+  static createStrong(id,clasｓName,text){
+    return ViewUtil.ce("strong",id,clasｓName,text);
+  }
+  static createA(id,clasｓName,text){
+    return ViewUtil.ce("a",id,clasｓName,text);
+  }
+  static ce(tagName,id,clasｓName,text){
+    const elm = document.createElement(tagName);
+    elm.className = clasｓName;
+    if(id){
+      elm.id = id;
+    }
+    if(text){
+      elm.textContent = text;
+    }
+    return elm;
+  }
+
   static append(parent,child){
     parent.appendChild(child);
   }
