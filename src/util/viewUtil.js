@@ -14,6 +14,9 @@ export default class ViewUtil {
   static createFile(id,clasｓName,text){
     return ViewUtil.ce("input",id,clasｓName,text,"file");
   }
+  static createImage(id,clasｓName,text){
+    return ViewUtil.ce("img",id,clasｓName,text);
+  }
   static createUl(id,clasｓName,text){
     return ViewUtil.ce("ul",id,clasｓName,text);
   }
