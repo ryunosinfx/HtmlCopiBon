@@ -19,7 +19,7 @@ export default class FileProseccor extends BaseView {
       let arrayBuffer = await fue.readAsArrayBuffer(file);
       let imgElm = await this.createImageNode(arrayBuffer, file);
       const data = {
-        base64: bc.arrayBuffer2base64(arrayBuffer),
+          ab: arrayBuffer,
         name: file.name,
         type: file.type,
         modifyDate: file.lastModifiedDate.toLocaleDateString()
@@ -46,23 +46,24 @@ export default class FileProseccor extends BaseView {
     const datas = await this.ms.loadImages();
     for (let record of datas) {
       let {pk, data} = record;
-      let {name, base64, type, modifyDate} = data;
-      console.log(bc.base642ArrayBuffer(base64));
+      let {name, ab, type, modifyDate} = data;
+      console.log(ab);
       let imgElm = this.createImageNodeByData(data);
       const row = vu.createLi();
       const dataLine = vu.createSpan(null, null, escape(name) + ' (' + (
-      type || 'n/a') + ') - ' + (base64? bc.base642ArrayBuffer(base64).length: 0) + 'bytes, last modified: ' + modifyDate);
+      type || 'n/a') + ') - ' + (ab? (new Uint8Array(ab)).length: 0) + 'bytes, last modified: ' + modifyDate);
       vu.append(row, dataLine);
       vu.append(row, imgElm);
       vu.append(this.elm, row);
     }
   }
   createImageNodeByData(data) {
-    let {name, base64, type} = data;
+    let {name,ab, type} = data;
     let imgElm = vu.createImage();
     if (type && type.match(imgRe)) {
-      console.log(base64);
-      imgElm.src = bc.base642DataURI(base64, type);
+      console.log(ab);
+      imgElm.src = bc.arrayBuffer2DataURI(ab, type);
+      //imgElm.src = bc.base642DataURI(base64, type);
     }
     imgElm.alt = escape(name);
     return imgElm;
