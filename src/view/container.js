@@ -8,6 +8,7 @@ export default class Container extends BaseView{
     this.fua = new fua(this.elm);
     this.fsa = new fsa(this.elm);
     this.fua.addEventListeners(this.fsa.fp);
+    this.fsa.fp.showFilesInit();
   }
   render() {
     const elm = vu.create("container", "container");

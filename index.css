@@ -41,7 +41,8 @@ div.title {
   padding:0.5em;
 
 }
-div.FileUploadArea {
+label.FileUploadArea {
+  display:block;
   min-height: 100%;
   width: 100%;
   border: dotted 1px black;
@@ -50,6 +51,12 @@ div.FileUploadArea {
   padding-bottom: 5em;
   text-align: center;
   font-size: 2em;
+}
+input.FileUploadFile{
+  position: absolute;
+  top :-10em;
+  left:10em;
+  visibility: hidden;
 }
 div.FilesArea{
   min-height: 100%;

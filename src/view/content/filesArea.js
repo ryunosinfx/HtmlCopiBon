@@ -1,10 +1,10 @@
 import vu from "../../util/viewUtil";
 import BaseView from "../baseView";
-import fp from "../parts/fileProcessor";
+import FileProcessor from "../parts/fileProcessor";
 export default class FilesArea extends BaseView {
   constructor(anker) {
     super(anker);
-    this.fp = new fp(this.elm);
+    this.fp = new FileProcessor(this.elm);
     this.files;
   }
   render() {

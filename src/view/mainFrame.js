@@ -14,4 +14,5 @@ export default class MainFrame {
     vu.append(frame,(new Footer()).render());
     vu.attachBody(frame);
   }
+  
 }

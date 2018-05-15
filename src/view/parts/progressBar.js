@@ -1,8 +1,8 @@
 import vu from "../../util/viewUtil";
 import BaseView from "../baseView";
-export default class ProgressBar extends BaseView {
-  constructor(ancker) {
-    super(ancker);
+export default class ProgressBar  {
+  constructor() {
+    this.elm = this.render();
   }
   render() {
     const elm = vu.create("ProgressBar", "ProgressBar");

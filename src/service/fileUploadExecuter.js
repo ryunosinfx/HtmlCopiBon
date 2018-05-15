@@ -1,9 +1,9 @@
-import pb from "../view/parts/progressBar";
-export default class FileUploader {
-  constructor(fileProcessor, indigator) {
-    this.fileProcessor = fileProcessor;
+import MainService from "./mainService";
+export default class FileUploadExecuter {
+  constructor(indigator) {
     this.progress = indigator;
     this.name = "FileUploader";
+    this.ms = MainService.getInstance();
   }
   async readAsArrayBuffer(file) {
     return await this.read(file, "ArrayBuffer");

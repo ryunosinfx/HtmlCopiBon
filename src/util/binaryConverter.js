@@ -1,33 +1,47 @@
 export default class BiaryConverter {
   static binaryString2ArrayBuffer(binaryString) {
-    return Uint8Array.from(binaryString.split(""), (e) => {
-      e.charCodeAt(0)
-    }).arrayBuffer;
+    return BiaryConverter.binaryString2Uint8Array(binaryString).buffer;
   }
   static arrayBuffer2BinaryString(buffer) {
     return BiaryConverter.uint8Array2BinaryString(new Uint8Array(buffer));
   }
+  static arrayBuffer2base64(buffer) {
+    return btoa(BiaryConverter.uint8Array2BinaryString(new Uint8Array(buffer)));
+  }
+  static arrayBuffer2DataURI(buffer, type = "application/octet-stream") {
+    const base64 = btoa(BiaryConverter.arrayBuffer2BinaryString(buffer));
+    return "data:" + type + ";base64," + base64;
+  }
 
-  static binaryString2Uint8Array(str) {
-    return Uint8Array.from(str.split(""), (e) => {
-      e.charCodeAt(0)
-    });
+  static binaryString2Uint8Array(binaryString) {
+    const list = binaryString.split("");
+    const rawLength = binaryString.length;
+    const array = new Uint8Array(new ArrayBuffer(rawLength));
+    for (let i = 0; i < rawLength; i++) {
+      array[i] = binaryString.charCodeAt(i);
+    }
+    return array;
   }
 
   static uint8Array2BinaryString(u8a) {
     let retList = [];
-    for(let e of u8a){
+    for (let e of u8a) {
       retList.push(String.fromCharCode(e));
     }
     return retList.join("");
   }
 
-  static arrayBuffer2DataURI(buffer, type = "application/octet-stream") {
-    const base64 = btoa(BiaryConverter.arrayBuffer2BinaryString(buffer));
-    return "data:" + type + ";base64," + base64;
-  }
   static binaryString2DataURI(binaryString, type = "application/octet-stream") {
     return "data:" + type + ";base64," + btoa(binaryString);
+  }
+  static base642DataURI(base64, type = "application/octet-stream") {
+    return "data:" + type + ";base64," + base64;
+  }
+  static base642binaryString(base64) {
+    return atob(base64);
+  }
+  static base642ArrayBuffer(base64) {
+    return BiaryConverter.binaryString2ArrayBuffer(atob(base64));
   }
 
   static dataURI2binaryString(dataURI) {
