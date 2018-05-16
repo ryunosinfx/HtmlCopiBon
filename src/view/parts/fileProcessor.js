@@ -29,9 +29,9 @@ export default class FileProseccor extends BaseView {
         type: file.type,
         modifyDate: file.lastModifiedDate.toLocaleDateString()
       };
-      console.log(data);
+      //console.log(data);
       data.pk = file.name;
-      vu.insertFirst(this.elm, await his.crateDataLine(data));
+      vu.insertFirst(this.elm, await this.crateDataLine(data));
       delete data.pk;
       this.ms.save(data);
     }
@@ -62,7 +62,7 @@ export default class FileProseccor extends BaseView {
     let {pk, name, ab, type, modifyDate} = data;
     const imgElm = await this.createImageNodeByData(data);
     const row = vu.createLi();
-    console.log(row);
+    //console.log(row);
     const delButton = vu.create(null, "delButton", "☓");
     vu.on(delButton, "click", (e) => {
       this.remove(e, pk)
@@ -87,7 +87,7 @@ export default class FileProseccor extends BaseView {
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
       if (type && type.match(imgRe)) {
-        console.log(ab);
+        //console.log(ab);
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
         //imgElm.src = bc.base642DataURI(base64, type);
         imgElm.onload = () => {
