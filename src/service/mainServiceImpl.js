@@ -13,7 +13,8 @@ export default class MainServiceImpl {
     await this.ss.loadAllData();
   }
   async save(pk,data) {
-    await this.ss.save(pk?pk:data.name, data);
+    let record = data?data:pk;
+    await this.ss.save(data?pk:record.name, record);
   }
   async delete(pk) {
     await this.ss.delete(pk);

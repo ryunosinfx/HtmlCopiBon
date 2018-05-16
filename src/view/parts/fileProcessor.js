@@ -24,7 +24,6 @@ export default class FileProseccor extends BaseView {
       loaded.set(file.name,file.name);
       let arrayBuffer = await fue.readAsArrayBuffer(file);
       const data = {
-        pk: file.name,
         ab: arrayBuffer,
         name: file.name,
         type: file.type,
@@ -32,7 +31,8 @@ export default class FileProseccor extends BaseView {
       };
       this.ms.save(data);
       console.log(data);
-      vu.append(this.elm, this.crateDataLine(data));
+      data.pk = file.name;
+      vu.insertFirst(this.elm, this.crateDataLine(data));
     }
   }
   async showFilesInit() {

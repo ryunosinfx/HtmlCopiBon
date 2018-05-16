@@ -10,8 +10,8 @@ export default class StrageService {
     this.idbAccessor = this.idbAccessors.has(storeNameKey)? this.idbAccessors.get(storeNameKey):new  idb(storeNameKey);
     this.idbAccessors.set(storeNameKey,this.idbAccessor);
   }
-  async save(fileName,data){
-    await this.idbAccessor.saveDataDefault(fileName,data);
+  async save(pk,data){
+    await this.idbAccessor.saveDataDefault(pk,data);
   }
   async loadAll(){
     return await this.idbAccessor.loadAllData();

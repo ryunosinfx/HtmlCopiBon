@@ -18,9 +18,9 @@ export default class ViewUtil {
   static createUl(id, clasｓName, text) {
     return ViewUtil.ce("ul", id, clasｓName, text);
   }
-  static createLabel(id, clasｓName, text,forId) {
+  static createLabel(id, clasｓName, text, forId) {
     const elm = ViewUtil.ce("label", id, clasｓName, text);
-    elm.setAttribute("for",forId);
+    elm.setAttribute("for", forId);
     return elm;
   }
   static createLi(id, clasｓName, text) {
@@ -61,7 +61,15 @@ export default class ViewUtil {
   static append(parent, child) {
     parent.appendChild(child);
   }
-  static getBodyElm(){
+
+  static insertFirst(parent, child) {
+    if (parent.hasChildNodes()) {
+      parent.insertBefore(child, parent.childNodes[0]);
+    } else {
+      parent.appendChild(child);
+    }
+  }
+  static getBodyElm() {
     return document.getElementsByTagName("body")[0];
   }
   static attachBody(elm) {
