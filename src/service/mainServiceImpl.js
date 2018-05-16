@@ -1,5 +1,6 @@
 import StorageService from "./storageService";
 import ViewPartsLoader from "./viewPartsLoader"
+import ImageProcessor from "./imageProcessor"
 
 const title = "CopiBon";
 const titlePrefix = "title_";
@@ -8,6 +9,7 @@ export default class MainServiceImpl {
     this.vpl = new ViewPartsLoader();
     this.ss = new StorageService();
     this.ss.crateTitleStore();
+    this.ip = new ImageProcessor();
   }
   async init() {
     await this.ss.loadAllData();

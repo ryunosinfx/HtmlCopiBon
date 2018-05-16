@@ -12,6 +12,9 @@ export default class ViewUtil {
   static createFile(id, clasｓName, text) {
     return ViewUtil.ce("input", id, clasｓName, text, "file");
   }
+  static createCanvas(id, clasｓName, text) {
+    return ViewUtil.ce("canvas", id, clasｓName, text);
+  }
   static createImage(id, clasｓName, text) {
     return ViewUtil.ce("img", id, clasｓName, text);
   }
@@ -92,6 +95,11 @@ export default class ViewUtil {
     const elm = documet.getElementById(id);
     while (elm.firstChild) {
       elm.removeChild(elm.firstChild);
+    }
+  }
+  static setStyles(elm, styleObj) {
+    for(let name in styleObj){
+      elm.style[name] = styleObj[name];
     }
   }
   static text(elm, text) {

@@ -1,15 +1,15 @@
-export default class BiaryConverter {
+export default class BinaryConverter {
   static binaryString2ArrayBuffer(binaryString) {
-    return BiaryConverter.binaryString2Uint8Array(binaryString).buffer;
+    return BinaryConverter.binaryString2Uint8Array(binaryString).buffer;
   }
   static arrayBuffer2BinaryString(buffer) {
-    return BiaryConverter.uint8Array2BinaryString(new Uint8Array(buffer));
+    return BinaryConverter.uint8Array2BinaryString(new Uint8Array(buffer));
   }
   static arrayBuffer2base64(buffer) {
-    return btoa(BiaryConverter.uint8Array2BinaryString(new Uint8Array(buffer)));
+    return btoa(BinaryConverter.uint8Array2BinaryString(new Uint8Array(buffer)));
   }
   static arrayBuffer2DataURI(buffer, type = "application/octet-stream") {
-    const base64 = btoa(BiaryConverter.arrayBuffer2BinaryString(buffer));
+    const base64 = btoa(BinaryConverter.arrayBuffer2BinaryString(buffer));
     return "data:" + type + ";base64," + base64;
   }
 
@@ -41,7 +41,7 @@ export default class BiaryConverter {
     return atob(base64);
   }
   static base642ArrayBuffer(base64) {
-    return BiaryConverter.binaryString2ArrayBuffer(atob(base64));
+    return BinaryConverter.binaryString2ArrayBuffer(atob(base64));
   }
 
   static dataURI2binaryString(dataURI) {
