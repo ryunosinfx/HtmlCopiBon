@@ -54,6 +54,9 @@ export default class ViewUtil {
   static on(elm, eventType, eventHandler) {
     elm.addEventListener(eventType, eventHandler, false);
   }
+  static off(elm, eventType, eventHandler) {
+    elm.removeEventListener(eventType, eventHandler, false);
+  }
 
   static append(parent, child) {
     parent.appendChild(child);
@@ -68,7 +71,7 @@ export default class ViewUtil {
     const child = documet.getElementById(id);
     document.getElementsByTagName("body")[0].removeChild(child);
   }
-  static detacthBody(child) {
+  static removeChild(child) {
     child.parentNode.removeChild(child);
   }
   static remove(id) {

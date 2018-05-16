@@ -12,8 +12,11 @@ export default class MainServiceImpl {
   async init() {
     await this.ss.loadAllData();
   }
-  async save(data) {
-    await this.ss.save(data.name, data);
+  async save(pk,data) {
+    await this.ss.save(pk?pk:data.name, data);
+  }
+  async delete(pk) {
+    await this.ss.delete(pk);
   }
   async loadImages() {
     this.ss.crateTitleStore();

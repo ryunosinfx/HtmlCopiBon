@@ -413,7 +413,7 @@ export default class IndexeddbHelper {
         let objectStoreRequest = objectStore.delete(keyPathValue + "");
         objectStoreRequest.onsuccess = (event) => {
           db.close();
-          resolve({data, keyPathValue});
+          resolve({tableName,keyPathValue});
           // console.log("onsuccess delete keyPath:"+keyPath);
         }
         objectStoreRequest.onerror = (e) => {

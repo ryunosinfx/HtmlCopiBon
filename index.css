@@ -1,10 +1,11 @@
-html,body{
+html, body {
   min-height: 100%;
   width: 100%;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
 }
-div{
+
+div {
   box-sizing: border-box;
 }
 
@@ -13,65 +14,97 @@ div.frame {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin:0;
-
+  margin: 0;
   border: solid 1px blue;
 }
+
 div.footer {
   min-height: 100%;
   width: 100%;
   border: solid 1px red;
-  padding:0.5em;
+  padding: 0.5em;
 }
+
 div.copyright {
   width: 100%;
-  padding:0.5em;
+  padding: 0.5em;
   text-align: center;
 }
+
 div.header {
   min-height: 100%;
   width: 100%;
   border: solid 1px green;
-  padding:0.2em;
+  padding: 0.2em;
 }
+
 div.title {
   font-size: 2em;
   font-weight: bold;
-  background-color:#c23cc1;
-  padding:0.5em;
-
+  background-color: #c23cc1;
+  padding: 0.5em;
 }
+
 label.FileUploadArea {
-  display:block;
+  display: block;
   min-height: 100%;
   width: 100%;
   border: dotted 1px black;
-  background-color:#a8bae0;
-  padding-top:5em;
+  background-color: #a8bae0;
+  padding-top: 5em;
   padding-bottom: 5em;
   text-align: center;
   font-size: 2em;
 }
-input.FileUploadFile{
+
+input.FileUploadFile {
   position: absolute;
-  top :-10em;
-  left:10em;
+  top: -10em;
+  left: 10em;
   visibility: hidden;
 }
-div.FilesArea{
+
+div.FilesArea {
   min-height: 100%;
   width: 100%;
   border: dotted 1px black;
-  background-color:rgb(124, 110, 241);
-  padding-top:1em;
+  background-color: rgb(124, 110, 241);
+  padding-top: 1em;
   padding-bottom: 1em;
   text-align: center;
   font-size: 2em;
-
 }
+
+span.imageDataLine {
+  display: inline-block;
+  font-size: 50%;
+  padding: 0.2em;
+}
+
+div.delButton {
+  display: inline-block;
+  font-size: 50%;
+  width: 3em;
+  padding: 0.2em;
+  line-height: 1em;
+  text-align: center;
+  cursor: pointer;
+  background-color: #675275;
+}
+
+div.delButton:active {
+  color: red;
+}
+
+div.delButton:hover {
+  color: #d48a60;
+  background-color: #7b4f99;
+}
+
 [draggable] {
   user-select: none;
 }
+
 .column {
   height: 150px;
   width: 150px;
@@ -84,9 +117,11 @@ div.FilesArea{
   text-align: center;
   cursor: move;
 }
+
 .column.over {
   border: 2px dashed #000;
 }
+
 .column header {
   color: #fff;
   text-shadow: #000 0 1px;
