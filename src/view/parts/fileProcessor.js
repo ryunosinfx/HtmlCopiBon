@@ -23,8 +23,9 @@ export default class FileProseccor extends BaseView {
       }
       loaded.set(file.name, file.name);
       let arrayBuffer = await fue.readAsArrayBuffer(file);
+      let arrayBufferA = bc.dataURI2ArrayBuffer(await this.ms.createThumbnail(arrayBuffer,100,100,file.type)) ;
       const data = {
-        ab: arrayBuffer,
+        ab: arrayBufferA,
         name: file.name,
         type: file.type,
         modifyDate: file.lastModifiedDate.toLocaleDateString()

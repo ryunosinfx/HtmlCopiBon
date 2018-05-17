@@ -44,8 +44,11 @@ export default class BinaryConverter {
     return BinaryConverter.binaryString2ArrayBuffer(atob(base64));
   }
 
-  static dataURI2binaryString(dataURI) {
+  static dataURI2BinaryString(dataURI) {
     return atob(dataURI.split(",")[1]);
+  }
+  static dataURI2ArrayBuffer(dataURI) {
+    return BinaryConverter.binaryString2Uint8Array(atob(dataURI.split(",")[1]));
   }
 
   static uintArray2ArrayBuffer(uintArray) {
