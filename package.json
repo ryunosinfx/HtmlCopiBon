@@ -4,9 +4,9 @@
   "description": "aaaaa",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "testA": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot --inline --progress --colors",
-    "plane": "webpack"
+    "test": "webpack --progress --colors"
   },
   "repository": {
     "type": "git",
