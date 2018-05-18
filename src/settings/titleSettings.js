@@ -1,6 +1,6 @@
 const ua = navigator.userAgent.replace(/[\.0-9]+/g,"x");
 const domain = window.location;
-const A5 = {};
+const R2L_L = {};
 export default {
-  A5:A5
+  R2L_L:R2L_L
 }
