@@ -8,8 +8,8 @@ export default class FileProseccor extends BaseView {
   constructor(anker) {
     super(anker);
     this.vpl = this.ms.getViewPartsLoader();
+    this.vpl = this.ms.getViewPartsLoader();
     this.pb = this.vpl.getIndigator();
-
   }
   render() {
     const elm = vu.createUl("FileProseccor", "FileProseccor");

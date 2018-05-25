@@ -1,10 +1,10 @@
-import BaseEntity from "./baseEntity";
+import BaseEntity from "../service/entity/baseEntity";
 export default class Title extends BaseEntity {
   constructor(titleId, titlePrefix, name) {
     super();
     this.id = titleId;
     this.prefix = titlePrefix;
-    this.name = title;
+    this.name = name;
     this.target = "";
     this.no = "";
     this.date = "";
@@ -18,10 +18,4 @@ export default class Title extends BaseEntity {
     this.listing = 0;
   }
 
-  include(obj) {
-    this.images = obj;
-  }
-  exclude(obj) {
-    obj.images = [];
-  }
 }

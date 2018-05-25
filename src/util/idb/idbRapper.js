@@ -21,16 +21,16 @@ export default class IdbRapper {
       })
     });
   }
-  async saveDataDefault(key, data) {
+  async saveDataDefault(key, data, callback) {
     let record = {
       pk: key,
       data: data
     };
     //console.log("saveDataDefault 001:" + key + "/" + data);
-    await this.saveData(record);
+    await this.saveData(record,undefined, callback);
     //console.log("saveDataDefault 002:" + key + "/" + data);
   }
-  async saveData(dataObj, key) {
+  async saveData(dataObj, key, callback) {
     //console.log("saveData 001:" + key + "/" + JSON.stringify(dataObj)+"/dataObj.data:"+dataObj.data);
     let storeData = dataObj;
     //console.log("saveData 002:" + key + "/" + dataObj[this.keyPathName]);
@@ -41,7 +41,7 @@ export default class IdbRapper {
       storeData[this.keyPathName] = key;
     } else if (key !== undefined) {}
     //console.log("saveData 003:" + key + "/" + dataObj +"/this.objectStoreName:"+this.objectStoreName);
-    let value = await this.idbh._insertUpdate(this.objectStoreName, this.keyPathName, storeData);
+    let value = await this.idbh._insertUpdate(this.objectStoreName, this.keyPathName, storeData, callback);
     //console.log("saveData 004:" + key + "/" + dataObj+"/"+JSON.stringify(value)+"/"+value.data.data);
   }
   async loadData(key) {

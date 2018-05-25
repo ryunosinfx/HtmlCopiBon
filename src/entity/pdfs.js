@@ -1,9 +1,9 @@
-import BaseEntity from "./baseEntity";
-export default class Images extends BaseEntity{
+import BaseEntity from "../service/entity/baseEntity";
+export default class Pdfs extends BaseEntity{
   constructor() {
     super();
     this.name = null;
-    this.ab = null;
+    this.binary = null;
     this.type = null;
     this.modifyDate = null;
     this.width = null;

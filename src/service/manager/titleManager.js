@@ -1,44 +1,52 @@
 import idb from "../util/idb/idbRapper"
 import Title from "../entity/title";
-import Img from "../entity/image";
+import Img from "../entity/images";
 import Thumbnale from "../entity/thumbnales";
 import Series from "../entity/series";
+import {PrimaryKey} from "./entity/primaryKey";
 
 const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
 const defaultName = "DefaultName";
 const defaultTitlePrefix = "title_";
 export default class TitleManager {
-  constructor(storageService, titleId) {
-    this.ss = storageService;
-    this.changeTitle(titleId);
+  constructor(entityManager, titleId) {
+    this.em = entityManager;
   }
+  async load(titleId=defaultTitle) {
+    const title = await this.em.Title.get(titleId);
+    if(title){
+      for(let index in title.images){
+        const image = title.images[index];
+        if(PrimaryKey.isPrimaryKey(image)){
+          title.images[index] = await this.em.get(image);
+        }
+      }
+      return title;
+    }else{
+      return await this.createTitle(titleId);
+    }
+  }
+
   async createTitle(titleId = defaultTitle, titlePrefix= defaultTitlePrefix, name= defaultName) {
-    await this.ss.changeStore(TITLE_STORE_NAME);
     const title = new Title(titleId, titlePrefix, name);
-    await this.ss.save(titleId, title);
+    await this.em.Title.save(title);
     return title;
   }
+
   async changeTitle(newTitleId) {
-    await this.currentTitle = await this.loadTitle(newTitleId);
+    this.currentTitle = await this.loadTitle(newTitleId);
     if (!this.currentTitle) {
       this.currentTitle = await this.createTitle(defaultTitle, defaultTitlePrefix, defaultName);
     }
   }
   async loadTitleList() {
-    await this.ss.changeStore(TITLE_STORE_NAME);
-
-    return
+    return await this.em.Title.loadAllData();;
   }
-  async loadTitle(titleId) {
-    await this.ss.changeStore(TITLE_STORE_NAME);
-    const loadObj = new Title(titleId, titlePrefix, name);
-    return await this.ss.get(titleId,loadObj);
-  }
-  async saveTitle() {
-    if (this.currentTitle) {
-      this.currentTitle.updateDate = Date.now();
-      await this.ss.save(this.currentTitle.titleId, this.currentTitle);
+  async saveTitle(title) {
+    if (title) {
+      title.updateDate = Date.now();
+      await this.em.Title.save(title);
     }
   }
   async deleteTitleCascade() {
