@@ -3,9 +3,8 @@ export default class Thumbnales extends BaseEntity{
   constructor() {
     super();
     this.name = null;
-    this.ab = null;
+    this.binary = null;
     this.type = null;
-    this.modifyDate = null;
     this.width = null;
     this.height = null;
     this.createDate = Date.now();

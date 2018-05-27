@@ -1,9 +1,7 @@
-import idb from "../util/idb/idbRapper"
-import Title from "../entity/title";
-import Img from "../entity/images";
-import Thumbnale from "../entity/thumbnales";
-import Series from "../entity/series";
-import {PrimaryKey} from "./entity/primaryKey";
+import Title from "../../entity/title";
+import Thumbnale from "../../entity/thumbnales";
+import Series from "../../entity/series";
+import {PrimaryKey} from "../entity/primaryKey";
 
 const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
@@ -11,10 +9,20 @@ const defaultName = "DefaultName";
 const defaultTitlePrefix = "title_";
 export default class TitleManager {
   constructor(entityManager, titleId) {
-    this.em = entityManager;
+    this.em = entityManager;console.log("title is new!!");
+    //this.load(titleId).then((title)=>{this.currentTitle=title;console.log("title is new!")});
+  }
+  async loadCurrent(){
+    return this.currentTitle;
   }
   async load(titleId=defaultTitle) {
-    const title = await this.em.Title.get(titleId);
+    console.log("title is titleId!!"+titleId);
+    if(this.currentTitle && this.currentTitle.getPk()===titleId){
+      return this.currentTitle;
+    }
+      console.log("title is titleId!!!"+titleId);
+    let title = await this.em.Title.get(titleId);
+      console.log("title is titleId!１!"+titleId);
     if(title){
       for(let index in title.images){
         const image = title.images[index];
@@ -22,14 +30,19 @@ export default class TitleManager {
           title.images[index] = await this.em.get(image);
         }
       }
-      return title;
+        console.log("title is titleId!2!"+titleId);
     }else{
-      return await this.createTitle(titleId);
+      console.log("title is titleId!3!"+titleId);
+      title = await this.createTitle(titleId);
     }
+      console.log("title is title!!"+title);
+    this.currentTitle = title;
+    return title;
   }
 
   async createTitle(titleId = defaultTitle, titlePrefix= defaultTitlePrefix, name= defaultName) {
     const title = new Title(titleId, titlePrefix, name);
+    title.setPk(titleId);
     await this.em.Title.save(title);
     return title;
   }
@@ -46,7 +59,7 @@ export default class TitleManager {
   async saveTitle(title) {
     if (title) {
       title.updateDate = Date.now();
-      await this.em.Title.save(title);
+      this.currentTitle = await this.em.Title.save(title);
     }
   }
   async deleteTitleCascade() {

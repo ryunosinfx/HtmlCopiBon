@@ -6,4 +6,7 @@ export default class MainService {
   static getInstance(){
     return mainServiceImpl;
   }
+  async init(){
+    await mainServiceImpl.init();
+  }
 }

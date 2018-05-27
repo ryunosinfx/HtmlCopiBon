@@ -7,7 +7,8 @@ const PK_ROW = "pk_row";
 const titlePrefix = "title_";
 const idbAccessors = new Map();
 export default class StorageService {
-  constructor() {
+  constructor(targetObj) {
+    this.entityName = targetObj.getEntityName();
   }
   getStoreNameKey(targetObj, userId = USER_ID) {
     return userId + "_" + targetObj.getEntityName();
@@ -21,7 +22,10 @@ export default class StorageService {
     return idbAccessor;
   }
   async setStore(targetObj, userId = USER_ID) {
+  console.log("A targetObj.getEntityName():"+targetObj.getEntityName()+"/this.idbAccessor:"+this.idbAccessor);
     this.idbAccessor = await this.createStore(targetObj, userId);
+    console.log("B targetObj.getEntityName():"+targetObj.getEntityName()+"/this.idbAccessor:"+this.idbAccessor);
+    return;
   }
   async save(pk, data) {
     let saveData = data;
@@ -29,6 +33,7 @@ export default class StorageService {
       saveData = data.toObj();
     }
     await this.idbAccessor.saveDataDefault(pk, saveData);
+    return data;//
   }
   async loadAll(targetObj) {
     const list = await this.idbAccessor.loadAllData();
@@ -44,14 +49,16 @@ export default class StorageService {
       return list;
     }
   }
-  async get(key, targetObj) {
+  async get(key) {
+    console.log(this.idbAccessor+"/"+this.entityName);
     return await this.idbAccessor.loadData(key);
   }
-  async delete(key, targetObj) {
+  async delete(key) {
     return await this.idbAccessor.deleteData(key);
   }
   async acquirePKNo(userid = USER_ID, targetObj, rowKey = PK_ROW) {
     let currentObjectStore = await this.crateTitleStore(userid + "_" + PK_INCREMENT_STORE);
+    console.log(currentObjectStore);
     let record = await this.get(rowKey);
     let nextCountAB = this.countUpUint32(record.data);
     let {data, keyPath} = await this.save(rowKey, record, (result, record) => {

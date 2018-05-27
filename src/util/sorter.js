@@ -10,27 +10,32 @@ const order = {
 
 export default class Sorter {
   constructor() {}
-  static asc(colName, list) {
-    list.sort((objA, objB) => {
-      let a = objA[colName];
-      let b = objB[colName];
-      if (a < b)
-        return -1;
-      if (a > b)
-        return 1;
-      return 0;
-    });
+  static asc(list, colName) {
+    const func = Sorter.execute([{colName:colName,isDESC:false}]);
+    list.sort(func);
   }
-  static desc(colName, list) {
-    list.sort((objA, objB) => {
-      let a = objA[colName];
-      let b = objB[colName];
-      if (a < b)
-        return 1;
-      if (a > b)
-        return -1;
+  static desc(list, colName) {
+    const func = Sorter.execute([{colName:colName,isDESC:true}]);
+    list.sort(func);
+  }
+  static orderBy(list, orders){
+    const func = Sorter.execute(orders);
+    list.sort(func);
+  }
+  static execute(orders){
+    return (objA, objB) => {
+      for(let order of orders){
+        const {colName,isDESC} = order;
+        let a = objA[colName];
+        let b = objB[colName];
+        if (a < b){
+          return isDESC ? -1:1;
+        }else if (a > b){
+          return isDESC ? 1:-1;
+        }
+      }
       return 0;
-    });
+    };
   }
 
   static typeof() {}

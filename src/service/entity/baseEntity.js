@@ -4,9 +4,6 @@ export default class BaseEntity {
     this.pk = pk;
     this.refs=[];
   }
-  createId(seeds){
-    return seeds.join("_");
-  }
   isEntitiy(){
     return true;
   }

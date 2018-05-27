@@ -12,17 +12,20 @@ export default class EntityManagerImpl {
     this.userId = userId;
     this.entity = entity;
     this.entityName = entity.getEntityName();
-    this.ss = new StorageService();
-    this.ss.setStore(this.entity, this.userId);
+    this.ss = new StorageService(this.entity);
   }
 
+  async init(){
+    console.log("init! "+this.entityName);
+    return await this.ss.setStore(this.entity, this.userId);
+  }
   async save(data) {
     if (!data.getEntityName || entity.getEntityName() !== this.entityName) {
       return;
     }
     let currentPK = data.getPK();
     if (!currentPK) {
-      currentPK = PrimaryKey.assemblePK(this.entity,await this.ss.acquirePKNo(this.userId, data));
+      currentPK = PrimaryKey.assemblePK(this.entity,await this.ss.acquirePKNo(this.userId, this.entity));
     }
     for (let key in data) {
       const column = data[key];
@@ -43,7 +46,8 @@ export default class EntityManagerImpl {
         data[key] = new PrimaryKey(pk);
       }
     }
-    await this.ss.save(currentPK, data);
+    data.setPk(currentPK);
+    return await this.ss.save(currentPK, data);
   }
   async saveArrayBufferData(item) {
     if (!item.getEntityName && item.byteLength) {
@@ -66,13 +70,14 @@ export default class EntityManagerImpl {
     }
   }
   async getBinaryPK() {
-    return PrimaryKey.assemblePK(binaryEntity,await this.ss.acquirePKNo(this.userId, data));
+    //return PrimaryKey.assemblePK(binaryEntity,await this.ss.acquirePKNo(this.userId, data));
     return binaryEntity.getEntityName + "_" + await this.ss.acquirePKNo(this.userId, binaryEntity, BINALY_PK_ROW);
   }
   async loadAll() {
     return await loadAll(this.entity);
   }
   async get(pk) {
+    console.log("get this.entityName:"+this.entityName+"/pk:"+pk);
     return await this.ss.get(pk, this.entity);
   }
   async delete(pk) {
