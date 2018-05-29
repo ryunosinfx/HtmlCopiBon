@@ -11,4 +11,7 @@ export default class Thumbnales extends BaseEntity{
     this.updateDate = Date.now();
     this.listing = 0;
   }
+    create() {
+      return new Thumbnales();
+    }
 }

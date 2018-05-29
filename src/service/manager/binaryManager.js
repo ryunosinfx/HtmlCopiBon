@@ -25,6 +25,6 @@ export default class BinaryManager {
     image.binary = binaryPk
       ? binaryPk
       : binary;
-    return await this.em.Binary.save(pk, data);
+    return await this.em.Binary.save(data);
   }
 }

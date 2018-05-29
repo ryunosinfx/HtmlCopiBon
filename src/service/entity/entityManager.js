@@ -6,14 +6,13 @@ const binaryEntity = new Binary();
 export default class EntityManager {
   constructor() {
   }
-  initAsNewUser(entities, userId = USER_ID) {
+  async initAsNewUser(entities, userId = USER_ID) {
     console.log(entities);
     const promises = [];
     for (let entity of entities) {
-      promises.push(this.initParEntity(entity, userId));
+      await this.initParEntity(entity, userId);
     }
-    promises.push(this.initParEntity(binaryEntity, userId));
-    return Promise.all(promises);
+    await this.initParEntity(binaryEntity, userId);
   }
   async initParEntity(entity, userId) {
     const entityName = entity.getEntityName();

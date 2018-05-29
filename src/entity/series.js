@@ -8,4 +8,7 @@ export default class Series extends BaseEntity{
     this.date="";
     this.pageNo=0;
   }
+    create() {
+      return new Series();
+    }
 }

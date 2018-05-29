@@ -39,6 +39,11 @@ export default class IndexeddbHelper {
   }
   throwNewError() {
     return(e) => {
+      if (e.stack) {
+        console.log(e.stack);
+      } else {
+        console.log(e.message, e);
+      }
       throw new Error(e);
     }
   }
@@ -108,6 +113,8 @@ export default class IndexeddbHelper {
   //Select In-line-return promise;Keyで返す。
   async _selectByKey(tableName, key) {
     const db = await this.getOpenDB().catch(this.throwNewError());
+    console.log("_selectByKey tableName:"+tableName+"/pk:"+key);
+    console.log(key);
     return await this._selectByKeyOnTran(db, tableName, key).catch(this.throwNewError());
   }
   _selectByKeyOnTran(db, tableName, key, tables) {
@@ -144,7 +151,7 @@ export default class IndexeddbHelper {
   async _insertUpdate(tableName, keyPathName, data, callback) {
     const key = data[keyPathName];
     const db = await this.getOpenDB().catch(this.throwNewError());
-    const tables = IdbUtil.currentTables(table);
+    const tables = IdbUtil.currentTables(tableName);
     const value = await this._selectByKeyOnTran(db, tableName, key, tables).catch(this.throwNewError());
     if (callback) {
       callback(value, data);
@@ -188,7 +195,7 @@ export default class IndexeddbHelper {
   //Delete
   async _deleteWithRange(tableName, range, condetions) {
     const db = await this.getOpenDB().catch(this.throwNewError());
-    const tables = IdbUtil.currentTables(table);
+    const tables = IdbUtil.currentTables(tableName);
     return await this._deleteWithRangeExecute(db, tableName, range, condetions, tables);
   };
   _deleteWithRangeExecute(db, tableName, range, condetions, tables) {
@@ -227,7 +234,7 @@ export default class IndexeddbHelper {
   //Delete
   async _delete(tableName, keyPathValue) {
     const db = await this.getOpenDB().catch(this.throwNewError());
-    const tables = IdbUtil.currentTables(table);
+    const tables = IdbUtil.currentTables(tableName);
     return await this._deleteOnTran(db, tableName, keyPathValue, tables);
   };
   _deleteOnTran(db, tableName, key, tables) {
@@ -250,7 +257,7 @@ export default class IndexeddbHelper {
   //truncate
   async _truncate(tableName) {
     const db = await this.getOpenDB().catch(this.throwNewError());
-    const tables = IdbUtil.currentTables(table);
+    const tables = IdbUtil.currentTables(tableName);
     return await this._truncateExecute(db, tableName, tables);
   };
   //truncate

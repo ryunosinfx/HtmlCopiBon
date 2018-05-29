@@ -17,9 +17,10 @@ export default class MainServiceImpl {
   constructor() {
     this.vpl = new ViewPartsLoader();
     this.em = new EntityManager();
+    this.ip = new ImageProcessService();
   }
   async init() {
-    await this.em.initAsNewUser([new Images(),new Pdfs(),new Series(),new Thumbnales(),new Title()]);
+    await this.em.initAsNewUser([new Images(), new Pdfs(), new Series(), new Thumbnales(), new Title()]);
     this.ip = new ImageProcessService();
     this.tm = new TitleManager(this.em);
     this.bm = new BinaryManager(this.em);
@@ -27,8 +28,13 @@ export default class MainServiceImpl {
     this.tbm = new ThumbnaleManager(this.em);
     await this.tm.load();
   }
+  async createThumbnail(arrayBuffer, width, height, type) {
+    const retURI = await this.ip.createThumbnail(arrayBuffer, width, height, type);
+    console.log(retURI);
+    return retURI;
+  }
 
-  getViewPartsLoader(){
+  getViewPartsLoader() {
     return this.vpl;
   }
 }

@@ -1,43 +1,43 @@
 import ObjectUtil from "../../util/objectUtil";
 export default class BaseEntity {
-  constructor(pk="oid") {
+  constructor(pk = "oid") {
     this.pk = pk;
-    this.refs=[];
+    this.refs = [];
   }
-  isEntitiy(){
+  isEntitiy() {
     return true;
   }
   getEntityName() {
     return this.constructor.name;
   }
-  create(){
-
+  create() {}
+  update() {}
+  setPk(pkValue) {
+    return this[this.pk] = pkValue;
   }
-  update(){
-
+  getPk() {
+    return this[this.pk];
   }
-  setPk(pkValue){
-    return this[this.pk]=pkValue;
+  include(obj) {
+    console.log("!=======BaseEntity.include====================!!");
+    console.log(obj);
   }
-  getPk(){
-    return this.pk;
+  exclude(obj) {
+    console.log("!=======BaseEntity.exclude====================!!");
+    console.log(obj);
   }
-  include(obj){
-
-  }
-  exclude(obj){
-
-  }
-  async deepClone(){
+  async deepClone() {
     return await ObjectUtil.deepClone(this);
   }
-  load(obj){
-    for(let key in obj){
+  load(obj) {
+    for (let key in obj) {
       this[key] = obj[key];
     }
   }
-  toObj(refId){
+  toObj() {
     let cloned = ObjectUtil.singleDeepCloneWithoutFuncs(this);
+    delete cloned.pk;
+    delete cloned.refs;
     this.exclude(cloned);
     return cloned;
   }

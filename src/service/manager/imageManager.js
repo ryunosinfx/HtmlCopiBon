@@ -22,6 +22,8 @@ export default class ImageManager {
     } else {
       image.updateDate = Date.now();
     }
+
+    console.log("ImageManager save!!A!! image:"+image);
     image.name = name || name === null
       ? name
       : image.name;
@@ -43,6 +45,8 @@ export default class ImageManager {
     image.listing = listing || listing === null
       ? listing
       : image.listing;
-    return await this.em.Images.save(pk, data);
+    const savedData = await this.em.Images.save(image);
+          console.log("ImageManager save!!B!! image:"+savedData);
+    return savedData;
   }
 }

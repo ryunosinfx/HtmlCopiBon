@@ -5,7 +5,6 @@ export default class FileUploader {
     this.name = "FileUploader";
   }
   test(){
-    //alert(this.name );
   }
   handleFileSelect(event) {
     event.stopPropagation(); // Stops some browsers from redirecting.

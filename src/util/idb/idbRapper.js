@@ -1,5 +1,6 @@
 import constant from '../../settings/constant'
 import idbh from './indexeddbHelper'
+const initQueue = [];
 export default class IdbRapper {
 
   constructor(objectStoreName, keypathName = "pk") {
@@ -10,9 +11,18 @@ export default class IdbRapper {
     this.keyPathName = keypathName;
     this.objectStoreName = objectStoreName;
     //tableName, keyPathName
-    this.firstPromise = this.idbh._createStore(objectStoreName, keypathName);
   }
-  async isFished() {
+  init() {
+    return new Promise((reslve, reject) => {
+      this.idbh._createStore(this.objectStoreName, this.keyPathName).then(() => {
+        reslve(true)
+      }, (e) => {
+        reject(e);
+        throw e;
+      });
+    });
+  }
+  isFished() {
     return new Promise((reslve, reject) => {
       this.firstPromise.then(() => {
         reslve(true);
@@ -27,7 +37,7 @@ export default class IdbRapper {
       data: data
     };
     //console.log("saveDataDefault 001:" + key + "/" + data);
-    await this.saveData(record,undefined, callback);
+    await this.saveData(record, undefined, callback);
     //console.log("saveDataDefault 002:" + key + "/" + data);
   }
   async saveData(dataObj, key, callback) {

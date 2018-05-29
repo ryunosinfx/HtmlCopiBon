@@ -21,7 +21,7 @@ export default class FileProseccor extends BaseView {
   }
   async processFiles(files) {
     const fue = new FileUploadExecuter(this.pb);
-    const title = this.tm.loadCurrent();
+    const title = await this.tm.loadCurrent();
     const images = title.images;
     const iamageEntitis = [];
     let count = images.length;
@@ -58,7 +58,9 @@ export default class FileProseccor extends BaseView {
     }
   }
   async showFilesInit() {
-    const title = this.tm.loadCurrent();
+    const title = await this.tm.loadCurrent();
+    console.log("this.tm.loadCurrent");
+    console.log(title);
     const images = title.images;
     const imagesList = [];
     for (let pk of images) {
@@ -68,6 +70,8 @@ export default class FileProseccor extends BaseView {
   async remove(event, pk) {
     if (window.confirm("delete ok?")) {
       const title = this.tm.loadCurrent();
+      console.log("this.tm.loadCurrent");
+      console.log(title);
       const images = title.images;
       vu.removeChild(event.target.parentNode.parentNode);
       loaded.delete(pk);
@@ -76,7 +80,6 @@ export default class FileProseccor extends BaseView {
     }
   }
   async crateDataLine(iamageEntity) {
-
     const imagePk = iamageEntity.getPk();
     const binaryEntity = this.bm.load(iamageEntity.binary);
     const imgElm = await this.createImageNodeByData({name:iamageEntity.name, ab:binaryEntity.ab, type:iamageEntity.type});

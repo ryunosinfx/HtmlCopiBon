@@ -40,6 +40,6 @@ export default class ThumbnaleManager {
     image.listing = listing || listing === null
       ? listing
       : image.listing;
-    return await this.em.Thumbnales.save(pk, image);
+    return await this.em.Thumbnales.save(image);
   }
 }

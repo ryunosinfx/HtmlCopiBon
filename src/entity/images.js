@@ -13,4 +13,8 @@ export default class Images extends BaseEntity {
     this.updateDate = Date.now();
     this.listing = 0;
   }
+
+  create() {
+    return new Images();
+  }
 }

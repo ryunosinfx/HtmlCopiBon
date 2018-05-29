@@ -14,6 +14,14 @@ export default class ObjectUtil {
   static simpleDeepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
+  static singleDeepClone(obj) {
+    const retObj = {};
+    for(let key in obj){
+      let value = obj[key];
+      retObj[key] = value;
+    }
+    return retObj;
+  }
   static singleDeepCloneWithoutFuncs(obj) {
     const retObj = {};
     for(let key in obj){
