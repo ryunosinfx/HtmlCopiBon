@@ -16,4 +16,7 @@ export default class Binary extends BaseEntity {
     return this.data;
   }
 
+  create() {
+    return new Binary();
+  }
 }

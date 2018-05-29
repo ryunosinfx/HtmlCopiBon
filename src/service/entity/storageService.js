@@ -5,8 +5,10 @@ const idbAccessors = new Map();
 export default class StorageService {
   constructor(targetObj) {
     this.targetObj = targetObj;
-      this.idbAccessor = null;
-    this.entityName = targetObj.getEntityName?targetObj.getEntityName():targetObj;
+    this.idbAccessor = null;
+    this.entityName = targetObj.getEntityName
+      ? targetObj.getEntityName()
+      : targetObj;
   }
   getStoreNameKey(targetObj, userId = USER_ID) {
     return userId + "_" + targetObj.getEntityName();
@@ -19,7 +21,7 @@ export default class StorageService {
     const idbAccessor = idbAccessors.has(storeNameKey)
       ? idbAccessors.get(storeNameKey)
       : new idb(storeNameKey);
-  //console.log("C");
+    //console.log("C");
     await idbAccessor.init().catch((e) => {
       console.log(e)
     });
@@ -55,15 +57,17 @@ export default class StorageService {
   }
   async get(key) {
     //console.log(this.idbAccessor + "/" + this.entityName);
-    const pk = key && key.pk? key.pk:key;
+    const pk = key && key.pk
+      ? key.pk
+      : key;
     const record = await this.idbAccessor.loadData(pk);
     return this.getEntity(record);
   }
-  getEntity(record){
-    if (!record || !record.data ) {
+  getEntity(record) {
+    if (!record || !record.data) {
       return record;
     }
-    if(record.data && !this.targetObj.create){
+    if (record.data && !this.targetObj.create) {
       return record.data;
     }
     const targetObj = this.targetObj.create();

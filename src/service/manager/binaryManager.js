@@ -11,7 +11,7 @@ export default class BinaryManager {
     }
     return await this.em.Binary.get(binaryPk);
   }
-  async save(pk, name, binary, type, width, height, listing = 0) {
+  async save(pk, name, binary) {
     let image = null;
     if (pk) {
       image = await this.em.Binary.get(pk);
@@ -25,6 +25,6 @@ export default class BinaryManager {
     image.binary = binaryPk
       ? binaryPk
       : binary;
-    return await this.em.Binary.save(data);
+    return await this.em.Binary.save(image);
   }
 }
