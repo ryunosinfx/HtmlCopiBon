@@ -9,6 +9,8 @@ export default class FileProseccor extends BaseView {
   constructor(anker) {
     super(anker);
     this.vpl = this.ms.getViewPartsLoader();
+    this.ip = this.ms.ip;
+    this.em = this.ms.em;;
     this.tm = this.ms.tm;;
     this.bm = this.ms.bm;
     this.im = this.ms.im;
@@ -36,7 +38,12 @@ export default class FileProseccor extends BaseView {
         type: file.type
       };
       const imgElm = await this.createImageNodeByData(data);
-      const arrayBufferThumbnail = bc.dataURI2ArrayBuffer(await this.ms.createThumbnail(arrayBuffer, 100, 100, file.type));
+      const dataURI = await this.ip.createThumbnail(arrayBuffer, 100, 100, file.type);
+      //console.log("----dataURI----");
+      //console.log(dataURI);
+      const arrayBufferThumbnail = bc.dataURI2ArrayBuffer(dataURI);
+      //console.log("-----arrayBufferThumbnail-----");
+      //console.log(arrayBufferThumbnail);
       const imgElmThumb = await this.createImageNodeByData({name: file.name, ab: arrayBufferThumbnail, type: file.type});
       const thumbnailEntity = await this.tbm.save(null, file.name, arrayBufferThumbnail, file.type, imgElmThumb.width, imgElmThumb.height, 0);
       const imageEntity = await this.im.save(null, file.name, arrayBuffer, file.type, imgElm.width, imgElm.height, thumbnailEntity, count);
@@ -51,40 +58,40 @@ export default class FileProseccor extends BaseView {
     await this.tm.saveTitle(title);
     await this.showImages(iamageEntitis);
   }
+  async showFilesInit() {
+    const title = await this.tm.load();
+    console.log("this.tm.loadCurrent");
+    console.log(title);
+    const images = title.images;
+    const iamageEntitis = [];
+    for (let index in images) {
+      const pk = images[index];
+      if(!pk){
+        continue;
+      }
+      const iamageEntit = await this.em.get(pk.getPk?pk.getPk():pk);
+      iamageEntitis.push(iamageEntit);
+    }
+    await this.showImages(iamageEntitis);
+  }
   async showImages(iamageEntitis){
     Sorter.orderBy(iamageEntitis,[{colName:"listing",isDESC:false},{colName:"updateDate",isDESC:true}]);
     for(let iamageEntity of iamageEntitis){
       vu.append(this.elm, await this.crateDataLine(iamageEntity));
     }
   }
-  async showFilesInit() {
-    const title = await this.tm.loadCurrent();
-    console.log("this.tm.loadCurrent");
-    console.log(title);
-    const images = title.images;
-    const imagesList = [];
-    for (let pk of images) {
-      imagesList.push(await this.im.load(pk));
-    }
-  }
   async remove(event, pk) {
     if (window.confirm("delete ok?")) {
-      const title = this.tm.loadCurrent();
-      console.log("this.tm.loadCurrent");
-      console.log(title);
-      const images = title.images;
+      await this.tm.removeImage(pk);
       vu.removeChild(event.target.parentNode.parentNode);
       loaded.delete(pk);
-      delete images[pk];
-      await this.tm.saveTitle(title);
     }
   }
   async crateDataLine(iamageEntity) {
     const imagePk = iamageEntity.getPk();
-    const binaryEntity = this.bm.load(iamageEntity.binary);
+    const binaryEntity = await this.em.get(iamageEntity.binary);
     const imgElm = await this.createImageNodeByData({name:iamageEntity.name, ab:binaryEntity.ab, type:iamageEntity.type});
     const row = vu.createLi();
-    //console.log(row);
     const delButton = vu.create(null, "delButton", "☓");
     vu.on(delButton, "click", (e) => {
       this.remove(e, imagePk)
@@ -95,7 +102,7 @@ export default class FileProseccor extends BaseView {
       : 0);
     const dataLine = vu.create();
     const dataStrings = vu.createSpan(null, "imageDataLine", escape(iamageEntity.name) + ' (' + (
-    type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + iamageEntity.modifyDate + ' size:' + iamageEntity.width + 'x' + iamageEntity.height);
+    iamageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + iamageEntity.modifyDate + ' size:' + iamageEntity.width + 'x' + iamageEntity.height);
     vu.append(dataLine, dataStrings);
     vu.append(dataLine, delButton);
     vu.append(row, dataLine);

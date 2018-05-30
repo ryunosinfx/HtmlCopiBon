@@ -17,28 +17,25 @@ export default class TitleManager {
     return this.currentTitle;
   }
   async load(titleId = defaultTitle) {
-    //console.log("title is titleId!!" + titleId);
     if (this.currentTitle && this.currentTitle.getPk() === titleId) {
       return this.currentTitle;
     }
-    //console.log("title is titleId!!A!" + titleId);
     let title = await this.em.Title.get(titleId);
-    //console.log(title);
-  //  console.log("title is titleId!!B!" + titleId);
+    console.log(title);
     if (title) {
       for (let index in title.images) {
         const image = title.images[index];
         if (PrimaryKey.isPrimaryKey(image)) {
-          title.images[index] = await this.em.get(image);
+          console.log(image);
+          const imageEntity = await this.em.get(image);
+          title.images[index] = imageEntity;
         }
       }
-      //console.log("title is titleId!2!" + titleId);
     } else {
-      //console.log("title is titleId!3!" + titleId);
       title = await this.createTitle(titleId);
     }
-    //console.log("title is title!!" + title);
     this.currentTitle = title;
+    console.log(title);
     return title;
   }
 
@@ -69,7 +66,31 @@ export default class TitleManager {
     const titelPrefix = this.titelPrefix;
   }
   async addImage(name, dataURI) {}
-  async removeImage(name, dataURI) {}
+  async removeImage(pk) {
+    const title = await this.load();
+    console.log("this.tm.loadCurrent");
+    console.log(title);
+    const images = title.images;
+    console.log(pk);
+    console.log(images);
+    for(let index in images){
+      const imageEntity = images[index];
+      if(PrimaryKey.getPrimaryKey(imageEntity) === pk){
+        delete images[index];
+        await this.em.delete(pk);
+        const binaryPk = PrimaryKey.getPrimaryKey(imageEntity.binary);
+        await this.em.delete(binaryPk);
+        const thumbnailPk = PrimaryKey.getPrimaryKey(imageEntity.thumbnail);
+        const thumbnailEntity = await this.em.get(thumbnailPk);
+        await this.em.delete(thumbnailPk);
+        const thumbnailBinaryPk = PrimaryKey.getPrimaryKey(thumbnailEntity.binary);
+        await this.em.delete(thumbnailBinaryPk);
+      };
+    }
+    console.log(images);
+    await this.tm.saveTitle(title);
+
+  }
   async exportPDF() {}
   async exportZip() {}
 }

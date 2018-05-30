@@ -9,11 +9,12 @@ const BINALY_PK_ROW = "BINALY_PK_ROW";
 const entityManagerImpls = {};
 const binaryEntity = new Binary();
 export default class EntityManagerImpl {
-  constructor(entityManager, entity, userId = USER_ID) {
+  constructor(entityManager, entityClass, userId = USER_ID) {
     this.userId = userId;
-    this.entity = entity;
-    this.entityName = entity.getEntityName();
-    this.ss = new StorageService(this.entity);
+    this.entityClass = entityClass;
+    this.entity = new entityClass();
+    this.entityName = this.entity.getEntityName();
+    this.ss = new StorageService(entityClass);
     this.pkais = new PrimaryKeyAutoIncrementService(userId);
     this.em = entityManager;
   }
@@ -32,9 +33,7 @@ export default class EntityManagerImpl {
     if (!currentPK) {
       currentPK = PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
     }
-    if(binaryEntity.getEntityName() !== data.getEntityName()){
-      await this.saveArrayBufferCols(data);
-    }
+    await this.saveArrayBufferCols(data);
     data.setPk(currentPK);
     console.log(data);
     const savedData = await this.ss.save(currentPK, data);
@@ -42,6 +41,9 @@ export default class EntityManagerImpl {
     return savedData;
   }
   async saveArrayBufferCols(data){
+    if(binaryEntity.getEntityName() === data.getEntityName()){
+      return;
+    }
     for (let key in data) {
       const column = data[key];
       if (!column) {
@@ -86,11 +88,11 @@ export default class EntityManagerImpl {
     }
   }
   async getBinaryPK() {
-    //return PrimaryKey.assemblePK(binaryEntity,await this.ss.acquirePKNo(this.userId, data));
-    return binaryEntity.getEntityName() + "_" + await this.pkais.acquirePKNo(this.userId, binaryEntity, BINALY_PK_ROW);
+    const newNumber = await this.pkais.acquirePKNo(this.userId, binaryEntity, BINALY_PK_ROW);
+    return PrimaryKey.assemblePK(binaryEntity,newNumber);
   }
   async loadAll() {
-    return await loadAll(this.entity);
+    return await this.ss.loadAll(this.entity);
   }
   async get(pk) {
     console.log("get this.entityName:" + this.entityName + "/pk:" + pk);

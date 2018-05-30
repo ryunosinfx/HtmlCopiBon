@@ -1,6 +1,6 @@
 
-import ImageProcessor from "../util/imageProcessor";
-export default class ImageProcessService {
+import {ImageProcessor} from "../util/imageProcessor";
+export class ImageProcessService {
   constructor() {
     this.ip = new ImageProcessor();
   }

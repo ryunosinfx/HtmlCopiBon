@@ -9,7 +9,7 @@ import Pdfs from "../entity/pdfs";
 import Series from "../entity/series";
 import Thumbnales from "../entity/thumbnales";
 import Title from "../entity/title";
-import ImageProcessService from "./imageProcessService"
+import {ImageProcessService} from "./imageProcessService"
 
 const title = "CopiBon";
 const titlePrefix = "title_";
@@ -20,18 +20,13 @@ export default class MainServiceImpl {
     this.ip = new ImageProcessService();
   }
   async init() {
-    await this.em.initAsNewUser([new Images(), new Pdfs(), new Series(), new Thumbnales(), new Title()]);
+    await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title]);
     this.ip = new ImageProcessService();
     this.tm = new TitleManager(this.em);
     this.bm = new BinaryManager(this.em);
     this.im = new ImageManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);
     await this.tm.load();
-  }
-  async createThumbnail(arrayBuffer, width, height, type) {
-    const retURI = await this.ip.createThumbnail(arrayBuffer, width, height, type);
-    console.log(retURI);
-    return retURI;
   }
 
   getViewPartsLoader() {

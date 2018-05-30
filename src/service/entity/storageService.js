@@ -3,36 +3,35 @@ const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
 const idbAccessors = new Map();
 export default class StorageService {
-  constructor(targetObj) {
-    this.targetObj = targetObj;
+  constructor(entityClass) {
+    this.entityClass = entityClass;
+    this.targetObj = typeof entityClass === "string" ? entityClass: new entityClass();
     this.idbAccessor = null;
-    this.entityName = targetObj.getEntityName
-      ? targetObj.getEntityName()
-      : targetObj;
+    this.entityName = this.targetObj.getEntityName
+      ? this.targetObj.getEntityName()
+      : entityClass;
   }
-  getStoreNameKey(targetObj, userId = USER_ID) {
-    return userId + "_" + targetObj.getEntityName();
+  getStoreNameKey(userId = USER_ID) {
+    return userId + "_" + this.targetObj.getEntityName();
   }
-  async createStore(targetObj, userId = USER_ID) {
-    const storeNameKey = this.getStoreNameKey(targetObj, userId);
+  async createStore(userId = USER_ID) {
+    const storeNameKey = this.getStoreNameKey(userId);
     return await this.createStoreByName(storeNameKey, userId);
   }
   async createStoreByName(storeNameKey, userId = USER_ID) {
     const idbAccessor = idbAccessors.has(storeNameKey)
       ? idbAccessors.get(storeNameKey)
       : new idb(storeNameKey);
-    //console.log("C");
     await idbAccessor.init().catch((e) => {
       console.log(e)
     });
-    //console.log("D");
     idbAccessors.set(storeNameKey, idbAccessor);
     this.idbAccessor = idbAccessor;
     return idbAccessor;
   }
-  async setStore(targetObj, userId = USER_ID) {
+  async setStore(userId = USER_ID) {
     //console.log("A targetObj.getEntityName():" + targetObj.getEntityName() + "/this.idbAccessor:" + this.idbAccessor);
-    this.idbAccessor = await this.createStore(targetObj, userId);
+    this.idbAccessor = await this.createStore(userId);
     //console.log("B targetObj.getEntityName():" + targetObj.getEntityName() + "/this.idbAccessor:" + this.idbAccessor);
     return;
   }
@@ -67,12 +66,13 @@ export default class StorageService {
     if (!record || !record.data) {
       return record;
     }
-    if (record.data && !this.targetObj.create) {
+    if (record.data && !this.targetObj.getEntityName) {
       return record.data;
     }
-    const targetObj = this.targetObj.create();
+    const targetObj = new this.entityClass();
     console.log(targetObj);
     targetObj.load(record.data);
+    console.log(targetObj.getPk());
     return targetObj;
   }
   async delete(key) {

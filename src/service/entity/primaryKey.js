@@ -22,10 +22,17 @@ export class PrimaryKey {
         return value;
       }else if(value.getEntityName && value.getPk){
         return value.getPk();
+      }else if(value.pk){
+        return value.pk;
       }
+      console.log("getPrimaryKey：value:"+value);
+      console.log(value);
       return null;
     }else{
       return value;
     }
+  }
+  static getEntityName(pk){
+    return PrimaryKey.getPrimaryKey(pk).split(DELIMITER)[0];
   }
 }

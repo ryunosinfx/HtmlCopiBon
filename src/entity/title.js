@@ -19,8 +19,5 @@ export default class Title extends BaseEntity {
     this.listing = 0;
     //console.log(this);
   }
-    create() {
-      return new Title();
-    }
 
 }

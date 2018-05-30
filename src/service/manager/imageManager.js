@@ -11,7 +11,7 @@ export default class ImageManager {
     }
     return await this.em.Images.get(binaryPk);
   }
-  async save(pk, name, binary, type, width, height, thunbnail, listing = 0) {
+  async save(pk, name, binary, type, width, height, thumbnail, listing = 0) {
     let image = null;
     if (pk) {
       image = await this.em.Images.get(pk);
@@ -39,9 +39,9 @@ export default class ImageManager {
     image.height = height || height === null
       ? height
       : image.height;
-    image.thunbnail = thunbnail || thunbnail === null
-      ? thunbnail
-      : image.thunbnail;
+    image.thumbnail = thumbnail || thumbnail === null
+      ? thumbnail
+      : image.thumbnail;
     image.listing = listing || listing === null
       ? listing
       : image.listing;

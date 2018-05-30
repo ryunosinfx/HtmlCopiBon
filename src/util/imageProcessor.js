@@ -1,6 +1,6 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
-export default class ImageProcessor {
+export class ImageProcessor {
   constructor() {
     this.canvas = vu.createCanvas(null, "hidden");
     this.ctx = this.canvas.getContext('2d');
@@ -29,7 +29,6 @@ export default class ImageProcessor {
         // console.log(scale);
         resolve(this.exportPng());
       };
-
       imgElm.onerror = (e) => {
         console.log('失敗');
         console.log(e);

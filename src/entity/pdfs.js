@@ -12,8 +12,4 @@ export default class Pdfs extends BaseEntity{
     this.updateDate = Date.now();
     this.listing = 0;
   }
-
-  create() {
-    return new Pdfs();
-  }
 }
