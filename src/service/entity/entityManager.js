@@ -30,9 +30,14 @@ export default class EntityManager {
       alert(pk);
       return null;
     }
-    const entityName = PrimaryKey.getEntityName(pk);
-    console.log("★get entityName:"+entityName);
-    return await this[entityName].get(pk);
+    const truePk = PrimaryKey.getPrimaryKey(pk);
+    if(!PrimaryKey.isPrimaryKey(truePk)){
+        alert(truePk);
+        return null;
+    }
+    const entityName = PrimaryKey.getEntityName(truePk);
+    console.log("★get entityName:"+entityName+truePk);
+    return await this[entityName].get(truePk);
   }
   async delete(pk) {
     if(!pk){

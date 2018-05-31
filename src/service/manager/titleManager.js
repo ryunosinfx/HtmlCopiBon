@@ -2,7 +2,6 @@ import Title from "../../entity/title";
 import Images from "../../entity/images";
 import Thumbnales from "../../entity/thumbnales";
 import Series from "../../entity/series";
-import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import MainService from "../../service/mainService";
@@ -29,16 +28,7 @@ export default class TitleManager {
       return this.currentTitle;
     }
     let title = await this.em.Title.get(titleId);
-    if (title) {
-      for (let index in title.images) {
-        const image = title.images[index];
-        if (PrimaryKey.isPrimaryKey(image)) {
-          console.log(image);
-          const imageEntity = await this.em.get(image);
-          title.images[index] = imageEntity;
-        }
-      }
-    } else {
+    if (!title) {
       title = await this.createTitle(titleId);
     }
     this.currentTitle = title;
@@ -64,6 +54,14 @@ export default class TitleManager {
   async saveTitle(title) {
     if (title) {
       title.updateDate = Date.now();
+      const images = title.images;
+      Sorter.thinningNullData(images);
+      for (let index in images) {
+        const image = images[index];
+        if (!PrimaryKey.isPrimaryKey(image)) {
+          images[index] = PrimaryKey.getPrimaryKey(image);
+        }
+      }
       this.currentTitle = await this.em.Title.save(title);
     }
   }
@@ -78,11 +76,12 @@ export default class TitleManager {
     const iamageEntitis = [];
     let count = images.length;
     for (let file of files) {
-      let {imagePk, imageEntity} = await this.im.saveImageFile(file, count);
+      let {imagePk, imageEntity} = await this.im.saveImageFile(fue, file, count);
       count++;
       images.push(imagePk);
       iamageEntitis.push(imageEntity);
     }
+    console.log(images);
     await this.saveTitle(title);
     return iamageEntitis;
   }

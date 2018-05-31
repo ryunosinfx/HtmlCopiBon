@@ -36,6 +36,19 @@ export class Sorter {
     return(objA, objB) => {
       for (let order of orders) {
         const {colName, isDESC} = order;
+        if(objA === objB){
+          return 0;
+        }
+        if(!objA){
+          return isDESC
+            ? -1
+            : 1;
+        }
+        if(!objB){
+          return isDESC
+            ? 1
+            : -1;
+        }
         let a = objA[colName];
         let b = objB[colName];
         if (a < b) {
@@ -55,11 +68,13 @@ export class Sorter {
     const thinninged = [];
     for (let index in array) {
       const element = array[index];
-      if (element === null || element=== undefined) {
-        thinninged.push(element);
+      if (element === null || element === undefined) {
+        continue;
       }
+      thinninged.push(element);
     }
-    for (let index in array) {
+    const length = array.length;
+    for (let i = 0; i < length; i++) {
       array.pop();
     }
     for (let index in thinninged) {

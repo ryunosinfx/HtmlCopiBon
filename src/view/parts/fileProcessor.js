@@ -1,5 +1,6 @@
 import vu from "../../util/viewUtil";
 import bc from "../../util/binaryConverter";
+import {PrimaryKey} from "../../service/entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import BaseView from "../baseView";
 import FileUploadExecuter from "../../service/fileUploadExecuter";
@@ -37,7 +38,7 @@ export default class FileProseccor extends BaseView {
       if(!pk){
         continue;
       }
-      const iamageEntit = await this.em.get(pk.getPk?pk.getPk():pk);
+      const iamageEntit = await this.em.get(pk);
       iamageEntitis.push(iamageEntit);
     }
     await this.showImages(iamageEntitis);
@@ -45,6 +46,9 @@ export default class FileProseccor extends BaseView {
   async showImages(iamageEntitis){
     Sorter.orderBy(iamageEntitis,[{colName:"listing",isDESC:false},{colName:"updateDate",isDESC:true}]);
     for(let iamageEntity of iamageEntitis){
+      if(!iamageEntity){
+        continue;
+      }
       vu.append(this.elm, await this.crateDataLine(iamageEntity));
     }
   }

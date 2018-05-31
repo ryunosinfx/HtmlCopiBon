@@ -101,7 +101,9 @@ div.delButton:hover {
   background-color: #7b4f99;
 }
 canvas.hidden {
-  
+  position:absolute;
+  left: 10000px;
+  top:0;
 }
 
 [draggable] {

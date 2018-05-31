@@ -1,5 +1,6 @@
 import Images from "../../entity/images";
 import MainService from "../../service/mainService";
+import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../entity/primaryKey";
 export default class ImageManager {
   constructor(entityManager) {
@@ -48,7 +49,7 @@ export default class ImageManager {
     console.log("addImageFiles thumbnailEntity:" + thumbnailEntity);
     const thumbnailPk = PrimaryKey.getPrimaryKey(thumbnailEntity);
     console.log("addImageFiles thumbnailPk:" + thumbnailPk);
-    const imageEntity = await this.im.save(null, file.name, arrayBuffer, file.type, imgElm.width, imgElm.height, thumbnailPk, count);
+    const imageEntity = await this.save(null, file.name, arrayBuffer, file.type, imgElm.width, imgElm.height, thumbnailPk, count);
     console.log("addImageFiles imageEntity:" + imageEntity);
     const imagePk = imageEntity.getPk();
     return {imagePk:imagePk,imageEntity:imageEntity};
