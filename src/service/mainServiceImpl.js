@@ -22,10 +22,10 @@ export default class MainServiceImpl {
   async init() {
     await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title]);
     this.ip = new ImageProcessService();
-    this.tm = new TitleManager(this.em);
     this.bm = new BinaryManager(this.em);
-    this.im = new ImageManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);
+    this.im = new ImageManager(this.em);
+    this.tm = new TitleManager(this.em);
     await this.tm.load();
   }
 

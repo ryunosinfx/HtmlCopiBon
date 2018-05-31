@@ -1,5 +1,6 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
+const imgRe = /^image\/.+/;
 export class ImageProcessor {
   constructor() {
     this.canvas = vu.createCanvas(null, "hidden");
@@ -24,9 +25,6 @@ export class ImageProcessor {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.scale(scale, scale);
         this.ctx.drawImage(imgElm, 0, 0);
-        //this.ctx.scale(1/scale, 1/scale);
-        // console.log(imgElm.src);
-        // console.log(scale);
         resolve(this.exportPng());
       };
       imgElm.onerror = (e) => {
@@ -41,5 +39,23 @@ export class ImageProcessor {
   }
   exportJpeg(quority = 1.0) {
     return this.canvas.toDataURL('image/jpeg', quority);
+  }
+
+  createImageNodeByData(data) {
+    return new Promise((resolve, reject) => {
+      let {name, ab, type} = data;
+      let imgElm = vu.createImage();
+      imgElm.alt = escape(name);
+      if (type && type.match(imgRe)) {
+        imgElm.src = bc.arrayBuffer2DataURI(ab, type);
+        imgElm.onload = () => {
+          data.height = imgElm.height;
+          data.width = imgElm.width;
+          resolve(imgElm);
+        }
+      } else {
+        resolve(imgElm);
+      }
+    });
   }
 }

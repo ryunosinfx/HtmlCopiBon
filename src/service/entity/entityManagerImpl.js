@@ -21,7 +21,7 @@ export default class EntityManagerImpl {
 
   async init() {
     //console.log("init! "+this.entityName);
-    return await this.ss.setStore(this.entity, this.userId);
+    return await this.ss.setStore(this.userId);
   }
   async save(data) {
     console.log("EntityManagerImpl save!!A!! data:" + data);

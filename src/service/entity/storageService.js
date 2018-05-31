@@ -30,9 +30,7 @@ export default class StorageService {
     return idbAccessor;
   }
   async setStore(userId = USER_ID) {
-    //console.log("A targetObj.getEntityName():" + targetObj.getEntityName() + "/this.idbAccessor:" + this.idbAccessor);
     this.idbAccessor = await this.createStore(userId);
-    //console.log("B targetObj.getEntityName():" + targetObj.getEntityName() + "/this.idbAccessor:" + this.idbAccessor);
     return;
   }
   async save(pk, data) {

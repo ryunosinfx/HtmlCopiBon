@@ -10,4 +10,7 @@ export class ImageProcessService {
     return retURI;
   }
 
+  async createImageNodeByData(data) {
+    return await this.ip.createImageNodeByData(data);
+  }
 }

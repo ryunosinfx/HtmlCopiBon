@@ -1,7 +1,11 @@
 import Title from "../../entity/title";
-import Thumbnale from "../../entity/thumbnales";
+import Images from "../../entity/images";
+import Thumbnales from "../../entity/thumbnales";
 import Series from "../../entity/series";
+import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../entity/primaryKey";
+import {Sorter} from "../../util/sorter";
+import MainService from "../../service/mainService";
 
 const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
@@ -10,7 +14,11 @@ const defaultTitlePrefix = "title_";
 export default class TitleManager {
   constructor(entityManager, titleId) {
     this.em = entityManager;
-    console.log("title is new!!");
+    this.ms = MainService.getInstance();
+    this.ip = this.ms.ip;
+    this.im = this.ms.im;
+    this.tbm = this.ms.tbm;
+    console.log("title is new!!" + this.tbm);
     //this.load(titleId).then((title)=>{this.currentTitle=title;console.log("title is new!")});
   }
   async loadCurrent() {
@@ -21,7 +29,6 @@ export default class TitleManager {
       return this.currentTitle;
     }
     let title = await this.em.Title.get(titleId);
-    console.log(title);
     if (title) {
       for (let index in title.images) {
         const image = title.images[index];
@@ -35,7 +42,6 @@ export default class TitleManager {
       title = await this.createTitle(titleId);
     }
     this.currentTitle = title;
-    console.log(title);
     return title;
   }
 
@@ -65,30 +71,34 @@ export default class TitleManager {
     const titelId = this.titelId;
     const titelPrefix = this.titelPrefix;
   }
+  async addImageFiles(fue, files) {
+    const title = await this.loadCurrent();
+    const images = title.images;
+    Sorter.thinningNullData(images);
+    const iamageEntitis = [];
+    let count = images.length;
+    for (let file of files) {
+      let {imagePk, imageEntity} = await this.im.saveImageFile(file, count);
+      count++;
+      images.push(imagePk);
+      iamageEntitis.push(imageEntity);
+    }
+    await this.saveTitle(title);
+    return iamageEntitis;
+  }
   async addImage(name, dataURI) {}
   async removeImage(pk) {
     const title = await this.load();
-    console.log("this.tm.loadCurrent");
-    console.log(title);
     const images = title.images;
-    console.log(pk);
-    console.log(images);
-    for(let index in images){
-      const imageEntity = images[index];
-      if(PrimaryKey.getPrimaryKey(imageEntity) === pk){
+    for (let index in images) {
+      const imageEntityPk = images[index];
+      if (PrimaryKey.getPrimaryKey(imageEntityPk) === pk) {
+        await this.im.remove(pk);
         delete images[index];
-        await this.em.delete(pk);
-        const binaryPk = PrimaryKey.getPrimaryKey(imageEntity.binary);
-        await this.em.delete(binaryPk);
-        const thumbnailPk = PrimaryKey.getPrimaryKey(imageEntity.thumbnail);
-        const thumbnailEntity = await this.em.get(thumbnailPk);
-        await this.em.delete(thumbnailPk);
-        const thumbnailBinaryPk = PrimaryKey.getPrimaryKey(thumbnailEntity.binary);
-        await this.em.delete(thumbnailBinaryPk);
       };
     }
     console.log(images);
-    await this.tm.saveTitle(title);
+    await this.saveTitle(title);
 
   }
   async exportPDF() {}
