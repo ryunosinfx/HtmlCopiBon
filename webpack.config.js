@@ -3,12 +3,15 @@ const path = require('path');
 const webpack = require("webpack");
 module.exports = {
   //  context: __dirname,
-  entry: [
-    './src/main.js', './index.css'
-  ],
+  entry: {
+    bundle:'./src/main.js',worker:'./src/worker.js'
+  },
+  // [
+  //   './src/main.js','./src/worker.js', './index.css'
+  // ],
   output: {
     // 出力するファイル名
-    filename: 'bundle.js',
+    filename: '[name].js',
     // 出力先のパス
     path: __dirname + "/dist",
     //publicPath: __dirname + "/dist/js",
@@ -17,14 +20,8 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          'style-loader', {
-            loader: 'css-loader',
-            options: {
-              url: false,
-            }
-          }
-        ]
+        loader: "style-loader!css-loader?modules&importLoaders=1&camelCase"
+
       }, {
         test: /\.js$/,
         exclude: /node_modules/,

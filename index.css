@@ -102,8 +102,7 @@ div.delButton:hover {
 }
 canvas.hidden {
   position:absolute;
-  left: 10000px;
-  top:0;
+  top:-10000px;
 }
 
 [draggable] {

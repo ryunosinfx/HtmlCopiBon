@@ -1,3 +1,4 @@
+import css from "../index.css";
 import MainFrame from "./view/mainFrame"
 import MainService from "./service/mainService"
 const title = "CopiBon";
