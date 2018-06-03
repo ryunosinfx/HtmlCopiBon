@@ -1,5 +1,5 @@
 import ObjectUtil from "../../util/objectUtil";
-export default class BaseEntity {
+export class BaseEntity {
   constructor(pk = "oid") {
     this.pk = pk;
     this.refs = [];

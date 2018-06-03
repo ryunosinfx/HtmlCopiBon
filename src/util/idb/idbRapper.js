@@ -1,4 +1,4 @@
-import constant from '../../settings/constant'
+import constant from './constant'
 import idbh from './indexeddbHelper'
 const initQueue = [];
 export default class IdbRapper {

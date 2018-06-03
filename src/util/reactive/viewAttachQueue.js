@@ -6,27 +6,27 @@ export class ViewAttachQueue {
     this.queue = [];
   }
   addActiveView(parentView, view, lastTree) {
-    const parentKey = parentView.key;
-    const currentKey = view.key;
-    const resultParent = this.findActivViews(avtiveViews, parentKey);
+    const parentId = parentView.id;
+    const currentId = view.id;
+    const resultParent = this.findActivViews(avtiveViews, parentId);
     if (resultParent && resultParent.primaryView) {
-      const currentTree = resultParent[currentKey];
+      const currentTree = resultParent[currentId];
       if (currentTree && currentTree.primaryView) {
         currentTree.primaryView = view;
         currentTree.parent = resultParent;
       } else {
         if (lastTree) {
           lastTree.parent = resultParent;
-          resultParent[currentKey] = lastTree;
+          resultParent[currentId] = lastTree;
         } else {
-          resultParent[currentKey] = {
+          resultParent[currentId] = {
             primaryView: view,
             parent: resultParent
           };
         }
       }
     } else {
-      avtiveViews[currentKey] = lastTree ? lastTree : {
+      avtiveViews[currentId] = lastTree ? lastTree : {
         primaryView: view,
         parent: avtiveViews
       };
@@ -34,20 +34,20 @@ export class ViewAttachQueue {
     this.loadAllActiveViews();
   }
   changeActiveView(currentView, nextView, nextViewTree) {
-    const currentKey = currentView.key;
-    const resultCurrent = this.findActivViews(avtiveViews, currentKey);
+    const currentId = currentView.id;
+    const resultCurrent = this.findActivViews(avtiveViews, currentId);
     if (!resultCurrent) {
       return;
     }
     const parent = resultCurrent.parent;
-    delete parent[currentKey];
-    const nextKey = nextView.key;
+    delete parent[currentId];
+    const nextId = nextView.id;
     if (nextViewTree && nextViewTree.primaryView) {
-      parent[nextKey] = nextViewTree;
+      parent[nextId] = nextViewTree;
       nextViewTree.primaryView = nextView;
       nextViewTree.parent = parent;
     } else {
-      parent[nextKey] = {
+      parent[nextId] = {
         primaryView: nextView,
         parent: parent
       };
@@ -56,36 +56,36 @@ export class ViewAttachQueue {
     return resultCurrent;
   }
   removeActiveView(view) {
-    const currentKey = view.key;
-    const resultCurrent = this.findActivViews(avtiveViews, currentKey);
+    const currentId = view.id;
+    const resultCurrent = this.findActivViews(avtiveViews, currentId);
     if (!resultCurrent) {
       return;
     }
     const parent = resultCurrent.parent;
-    delete parent[currentKey];
+    delete parent[currentId];
 
     this.loadAllActiveViews();
     return resultCurrent;
   }
 
-  findActivViews(activeViewsTree, key, callback) {
+  findActivViews(activeViewsTree, id, callback) {
     let retView = null;
     if (activeViewsTree) {
-      for (let viewKey in activeViewsTree) {
-        if (viewKey === undefined || viewKey === 'undefined') {
+      for (let viewId in activeViewsTree) {
+        if (viewId === undefined || viewId === 'undefined') {
           continue;
         }
-        const current = activeViewsTree[viewKey];
+        const current = activeViewsTree[viewId];
         if (!current.primaryView || !current.parent) {
           continue;
         }
         if (callback) {
           callback(current);
         }
-        if (viewKey === key) {
+        if (viewId === id) {
           retView = current;
-        } else if (current && viewKey !== 'view' && viewKey !== '0') {
-          retView = this.findActivViews(current, key, callback);
+        } else if (current && viewId !== 'view' && viewId !== '0') {
+          retView = this.findActivViews(current, id, callback);
         }
       }
     }
@@ -104,7 +104,7 @@ export class ViewAttachQueue {
       if (!result.primaryView || !result.parent) {
         continue;
       }
-      activeViewList.push(i.primaryView);
+      activeViewList.push(result.primaryView);
     }
     return activeViewList;
   }

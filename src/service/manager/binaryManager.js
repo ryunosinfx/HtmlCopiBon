@@ -1,4 +1,4 @@
-import Binary from "../entity/binary";
+import {Binary} from "../entity/binary";
 import {PrimaryKey} from "../entity/primaryKey";
 export default class BinaryManager {
   constructor(entityManager) {

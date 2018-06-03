@@ -1,5 +1,5 @@
-import BaseEntity from "./baseEntity";
-export default class Binary extends BaseEntity {
+import {BaseEntity} from "./baseEntity";
+export class Binary extends BaseEntity {
   constructor(arrayBuffer) {
     super();
     this.data = arrayBuffer;

@@ -1,4 +1,4 @@
-import EntityManager from "./entity/entityManager";
+import {EntityManager} from "./entity/entityManager";
 import {ViewPartsLoader} from "./viewPartsLoader";
 import TitleManager from "./manager/titleManager";
 import BinaryManager from "./manager/binaryManager";

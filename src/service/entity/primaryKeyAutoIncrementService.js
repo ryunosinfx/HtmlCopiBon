@@ -1,16 +1,15 @@
 import bc from "../../util/binaryConverter"
-import StorageService from "./storageService"
+import {StorageService} from "./storageService"
 const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
 const PK_ROW = "pk_row";
-export default class PrimaryKeyAutoIncrementService {
+export class PrimaryKeyAutoIncrementService {
   constructor(userid) {
     this.ss = new StorageService(userid + "_" + PK_INCREMENT_STORE);
   }
   async acquirePKNo(userid = USER_ID, targetObj, rowKey = PK_ROW) {
     const entityName = targetObj.getEntityName();
     let currentObjectStore = await this.ss.createStoreByName(userid + "_" + PK_INCREMENT_STORE, userid);
-    console.log(currentObjectStore);
     let record = await this.ss.get(rowKey);
     let nextCountAB = this.countUpUint32(
       record

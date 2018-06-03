@@ -13,6 +13,7 @@ export class MainFrame extends BaseView {
     this.footer = new Footer(this);
     vu.append(this.elm, this.header.render(titleText));
     this.container = new Container(this);
+    vu.append(this.elm, this.container.render());
     vu.append(this.elm, this.footer.render());
     vu.attachBody(this.elm);
   }

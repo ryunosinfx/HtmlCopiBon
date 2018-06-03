@@ -1,19 +1,17 @@
 import {Store} from './store';
 import {ViewAttachQueue} from './viewAttachQueue';
-
+import {ActionDispatcher} from './actionDispatcher'
 const viewAttachQueue = new ViewAttachQueue();
 const actionMap = new Map();
 export class ActionDispatcherImple {
   constructor(view) {
     this.view = view;
   }
-
   static add(action, reducer) {
     console.log('ActionDispatcherImple add00' + action);
     if (!action) {
       return false;
     }
-
     console.log('ActionDispatcherImple add01' + action.type);
     const type = action.type;
     if (!type) {
@@ -31,7 +29,6 @@ export class ActionDispatcherImple {
     }
     return true;
   }
-
   static remove(action) {
     const type = action.type;
     if (!type) {
@@ -48,11 +45,9 @@ export class ActionDispatcherImple {
     }
     return true;
   }
-
   async dispatch(action) {
     const type = action.type;
-
-    console.log('dispatch00 type=' + type + '/action=' + JSON.stringify(action));
+    //console.log('dispatch00 type=' + type + '/action=' + JSON.stringify(action));
     if (!type) {
       return false;
     }
@@ -75,7 +70,7 @@ export class ActionDispatcherImple {
       targetView = action.data.views;
       if (this.view.onViewHide(targetView, data) === false) {
         return;
-      };
+      }
       this.callUpdate(targetView, storeKey);
       this.view.onViewHidden(targetView, data);
     } else {

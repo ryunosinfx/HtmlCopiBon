@@ -1,4 +1,4 @@
-import BaseEntity from "../service/entity/baseEntity";
+import {BaseEntity} from "../service/entity/baseEntity";
 export default class Thumbnales extends BaseEntity{
   constructor() {
     super();

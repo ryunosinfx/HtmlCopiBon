@@ -1,14 +1,14 @@
-import StorageService from "./storageService"
-import Binary from "./binary";
+import {StorageService} from "./storageService"
+import {Binary} from "./binary";
 import {PrimaryKey} from "./primaryKey";
-import PrimaryKeyAutoIncrementService from "./primaryKeyAutoIncrementService";
+import {PrimaryKeyAutoIncrementService} from "./primaryKeyAutoIncrementService";
 const title = "CopiBon";
 const USER_ID = "default";
 const titlePrefix = "title_";
 const BINALY_PK_ROW = "BINALY_PK_ROW";
 const entityManagerImpls = {};
 const binaryEntity = new Binary();
-export default class EntityManagerImpl {
+export class EntityManagerImpl {
   constructor(entityManager, entityClass, userId = USER_ID) {
     this.userId = userId;
     this.entityClass = entityClass;

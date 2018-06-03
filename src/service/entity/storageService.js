@@ -2,7 +2,7 @@ import idb from "../../util/idb/idbRapper";
 const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
 const idbAccessors = new Map();
-export default class StorageService {
+export class StorageService {
   constructor(entityClass) {
     this.entityClass = entityClass;
     this.targetObj = typeof entityClass === "string" ? entityClass: new entityClass();
@@ -34,13 +34,11 @@ export default class StorageService {
     return;
   }
   async save(pk, data) {
-    //console.log("save!!!! data:" + data + "/pk:" + pk + "/this.entityName:" + this.entityName);
     let saveData = data;
     if (data.toObj) {
       saveData = data.toObj();
     }
     await this.idbAccessor.saveDataDefault(pk, saveData);
-    //console.log("save!!! data:" + data + "/this.entityName:" + this.entityName);
     return data; //
   }
   async loadAll() {
@@ -53,7 +51,6 @@ export default class StorageService {
     return retList;
   }
   async get(key) {
-    //console.log(this.idbAccessor + "/" + this.entityName);
     const pk = key && key.pk
       ? key.pk
       : key;

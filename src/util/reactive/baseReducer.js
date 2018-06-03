@@ -1,21 +1,31 @@
-import {ActionDispatcherImple} from '../action/actionDispatcherImple'
+
+import {ActionCreator} from './actionCreator'
+import {ActionDispatcherImple} from './actionDispatcherImple'
 export class BaseReducer {
-  constructor() {
+  constructor(isBaseUse) {
+    this.isBaseUse = isBaseUse;
+    if(isBaseUse){
+      const baseActions = ActionCreator.getBaseActions();
+      for(let index in baseActions){
+        this.atatch(baseActions[index]);
+      }
+    }
   }
   atatch(action) {
-    ActionDispatcherImple.add(action,this);
+    ActionDispatcherImple.add(action, this);
   }
   detach(action) {
-    ActionDispatcherImple.delete(action,this);
+    ActionDispatcherImple.delete(action, this);
   }
-  async preReduce(store,action) {
+  async preReduce(store, action) {
     store.isOrverride = false;
     return store;
   }
-  async reduce(store,action) {
+  async reduce(store, action) {
     return store;
   }
-  async postReduce(store,action) {
+  async postReduce(store, action) {
     return store;
   }
 }
+new BaseReducer(true);

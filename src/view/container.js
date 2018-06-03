@@ -11,6 +11,8 @@ export class Container extends BaseView{
     this.fsa.fp.showFilesInit();
   }
   render() {
+    this.fua.attach(this);
+      this.fsa.attach(this);
     return this.elm;
   }
 }

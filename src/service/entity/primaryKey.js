@@ -1,4 +1,4 @@
-import BaseEntity from "./baseEntity";
+import {BaseEntity} from "./baseEntity";
 const DELIMITER = "-";
 export class PrimaryKey {
   constructor(pk) {

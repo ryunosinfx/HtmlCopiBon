@@ -1,9 +1,9 @@
-import StorageService from "./storageService"
-import EntityManagerImpl from "./entityManagerImpl"
-import Binary from "./binary";
+import {StorageService} from "./storageService"
+import {EntityManagerImpl} from "./entityManagerImpl"
+import {Binary} from "./binary";
 import {PrimaryKey} from "./primaryKey";
 const USER_ID = "default";
-export default class EntityManager {
+export class EntityManager {
   constructor() {}
   async initAsNewUser(entities, userId = USER_ID) {
     console.log(entities);

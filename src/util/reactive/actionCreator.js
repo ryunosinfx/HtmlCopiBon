@@ -1,9 +1,25 @@
+const baseActions ={
+    Attach: {type:"Attach"}
+};
 export class ActionCreator {
+
   constructor() {}
+  static getBaseActions(){
+    return baseActions;
+  }
   static createAction(key, data, storeKey = null) {
     return  {
       type: key,
       data: data,
+      storeKey: storeKey
+    };
+  }
+  static creatAttachAction(parentView, newView, data, storeKey = null) {
+    return {
+      type: "Attach",
+      data: data,
+      parentView: parentView,
+      selector: newView.id,
       storeKey: storeKey
     };
   }
