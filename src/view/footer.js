@@ -1,12 +1,13 @@
 import vu from "../util/viewUtil";
-export default class Footer {
-  constructor() {
+import {BaseView} from "../util/reactive/baseView";
+export class Footer extends BaseView {
+  constructor(parent) {
+    super(parent, "footer", "footer");
     this.copyright = "ryunosinfx";
   }
   render(title) {
-    const footer = vu.create("footer", "footer");
-    const copyright = vu.create("copyright", "copyright",this.copyright );
-    vu.append(footer, copyright);
-    return footer;
+    const copyright = vu.create("copyright", "copyright", this.copyright);
+    vu.append(this.elm, copyright);
+    return this.elm;
   }
 }

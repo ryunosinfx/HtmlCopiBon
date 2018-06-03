@@ -1,17 +1,16 @@
 import vu from "../util/viewUtil";
-import BaseView from "./baseView";
-import fua from "./content/fileUploadArea";
-import fsa from "./content/filesArea";
-export default class Container extends BaseView{
-  constructor(anker){
-    super(anker);
-    this.fua = new fua(this.elm);
-    this.fsa = new fsa(this.elm);
+import {BaseView} from "../util/reactive/baseView";
+import {FileUploadArea} from "./content/fileUploadArea";
+import {FilesArea} from "./content/filesArea";
+export class Container extends BaseView{
+  constructor(parent){
+    super(parent,"container", "container");
+    this.fua = new FileUploadArea(this);
+    this.fsa = new FilesArea(this);
     this.fua.addEventListeners(this.fsa.fp);
     this.fsa.fp.showFilesInit();
   }
   render() {
-    const elm = vu.create("container", "container");
-    return elm;
+    return this.elm;
   }
 }

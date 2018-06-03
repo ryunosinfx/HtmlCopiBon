@@ -20,7 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader?modules&importLoaders=1&camelCase"
+        loader: "style-loader!css-loader?importLoaders=1&camelCase"
 
       }, {
         test: /\.js$/,

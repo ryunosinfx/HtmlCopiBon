@@ -25,8 +25,6 @@ export class PrimaryKey {
       }else if(value.pk){
         return value.pk;
       }
-      console.log("getPrimaryKey：value:"+value);
-      console.log(value);
       return null;
     }else{
       return value;

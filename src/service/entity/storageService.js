@@ -68,9 +68,7 @@ export default class StorageService {
       return record.data;
     }
     const targetObj = new this.entityClass();
-    console.log(targetObj);
     targetObj.load(record.data);
-    console.log(targetObj.getPk());
     return targetObj;
   }
   async delete(key) {

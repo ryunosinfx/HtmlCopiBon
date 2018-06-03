@@ -1,4 +1,4 @@
-import MainService from "./mainService";
+import {MainService} from "./mainService";
 export default class FileUploadExecuter {
   constructor(indigator) {
     this.progress = indigator;

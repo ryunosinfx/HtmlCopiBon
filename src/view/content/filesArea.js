@@ -1,14 +1,13 @@
 import vu from "../../util/viewUtil";
-import BaseView from "../baseView";
-import FileProcessor from "../parts/fileProcessor";
-export default class FilesArea extends BaseView {
-  constructor(anker) {
-    super(anker);
-    this.fp = new FileProcessor(this.elm);
+import {BaseView} from "../../util/reactive/baseView";
+import {FileProcessor} from "../parts/fileProcessor";
+export class FilesArea extends BaseView {
+  constructor(parent) {
+    super(parent,"FilesArea", "FilesArea");
+    this.fp = new FileProcessor(this);
     this.files;
   }
   render() {
-    const elm = vu.create("FilesArea", "FilesArea");
-    return elm;
+    return this.elm;
   }
 }

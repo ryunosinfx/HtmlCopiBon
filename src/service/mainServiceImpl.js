@@ -1,5 +1,5 @@
 import EntityManager from "./entity/entityManager";
-import ViewPartsLoader from "./viewPartsLoader";
+import {ViewPartsLoader} from "./viewPartsLoader";
 import TitleManager from "./manager/titleManager";
 import BinaryManager from "./manager/binaryManager";
 import ImageManager from "./manager/imageManager";
@@ -13,7 +13,7 @@ import {ImageProcessService} from "./imageProcessService"
 
 const title = "CopiBon";
 const titlePrefix = "title_";
-export default class MainServiceImpl {
+export class MainServiceImpl {
   constructor() {
     this.vpl = new ViewPartsLoader();
     this.em = new EntityManager();

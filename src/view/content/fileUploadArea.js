@@ -1,32 +1,25 @@
 import vu from "../../util/viewUtil";
-import BaseView from "../baseView";
-import fu from "../../eventHandler/fileUploader";
+import {BaseView} from "../../util/reactive/baseView";
+import {FileUploader} from "../../eventHandler/fileUploader";
 const text = "ここにファイルをアップロードしてください。";
-export default class FileUploadArea extends BaseView {
-  constructor(anker) {
-    super(anker);
+export class FileUploadArea extends BaseView {
+  constructor(parent) {
+    super(parent,"fuaPArent", "frame");
+    this.render();
   }
   render() {
-    const elm = vu.create("fuaPArent", "frame");
     this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);
     const area = vu.createLabel("FileUploadArea", "FileUploadArea", text,"FileUploadFile");
-    vu.append(elm, area);
-    vu.append(elm, this.fileInput);
-    return elm;
+    vu.append(this.elm, area);
+    vu.append(this.elm, this.fileInput);
+    return this.elm;
   }
   addEventListeners(fp) {
-    this.fu = new fu(fp);
-    vu.on(this.fileInput, 'change', (e) => {
-      this.fu.handleFileSelect(e)
-    });
-    vu.on(this.elm, 'dragover', (e) => {
-      this.fu.handleDrop(e)
-    });
-    vu.on(this.elm, 'drop', (e) => {
-      this.fu.handleDrop(e)
-    });
+    this.fu = new FileUploader(fp);
+    vu.on(this.fileInput, 'change', this.fu.handleFileSelect());
+    vu.on(this.elm, 'dragover', this.fu.handleDrop());
+    vu.on(this.elm, 'drop', this.fu.handleDrop());
     vu.on(this.elm, 'click', (e) => {
-      this.fu.test(e);
       vu.emit(this.fileInput, 'click',false,false);
     });
   }

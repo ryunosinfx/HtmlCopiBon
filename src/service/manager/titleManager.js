@@ -4,7 +4,7 @@ import Thumbnales from "../../entity/thumbnales";
 import Series from "../../entity/series";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
-import MainService from "../../service/mainService";
+import {MainService} from "../../service/mainService";
 
 const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
@@ -98,7 +98,14 @@ export default class TitleManager {
     }
     console.log(images);
     await this.saveTitle(title);
-
+  }
+  async loadThumbnails() {
+    const title = await this.loadCurrent();
+    return await this.im.loadThumbnails(title.images);
+  }
+  async updateImagesListing(newList) {
+    const title = await this.loadCurrent();
+    return await this.im.updateImagesListing(title.images,newList);
   }
   async exportPDF() {}
   async exportZip() {}

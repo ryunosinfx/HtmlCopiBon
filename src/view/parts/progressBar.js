@@ -1,12 +1,11 @@
 import vu from "../../util/viewUtil";
-import BaseView from "../baseView";
-export default class ProgressBar  {
-  constructor() {
-    this.elm = this.render();
+import {BaseView} from "../../util/reactive/baseView";
+export class ProgressBar  extends BaseView {
+  constructor(parent) {
+    super(parent,"ProgressBar", "ProgressBar");
   }
   render() {
-    const elm = vu.create("ProgressBar", "ProgressBar");
-    return elm;
+    return this.elm;
   }
   init() {
     this.elm.style.width = '0%';

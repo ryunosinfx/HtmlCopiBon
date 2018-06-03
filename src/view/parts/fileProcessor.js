@@ -2,21 +2,20 @@ import vu from "../../util/viewUtil";
 import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../../service/entity/primaryKey";
 import {Sorter} from "../../util/sorter";
-import BaseView from "../baseView";
+import {BaseView} from "../../util/reactive/baseView";
 import FileUploadExecuter from "../../service/fileUploadExecuter";
 const loaded = new Map();
-export default class FileProseccor extends BaseView {
-  constructor(anker) {
-    super(anker);
+export class FileProcessor extends BaseView {
+  constructor(parent) {
+    super(parent,"FileProcessor", "FileProcessor");
     this.vpl = this.ms.getViewPartsLoader();
     this.ip = this.ms.ip;
     this.em = this.ms.em;;
     this.tm = this.ms.tm;;
-    this.pb = this.vpl.getIndigator();
+    this.pb = this.vpl.getIndigator(this);
   }
   render() {
-    const elm = vu.createUl("FileProseccor", "FileProseccor");
-    return elm;
+    return this.elm;
   }
   async processFiles(files) {
     const fue = new FileUploadExecuter(this.pb);
@@ -29,8 +28,6 @@ export default class FileProseccor extends BaseView {
   }
   async showFilesInit() {
     const title = await this.tm.load();
-    console.log("this.tm.loadCurrent");
-    console.log(title);
     const images = title.images;
     const iamageEntitis = [];
     for (let index in images) {
@@ -75,6 +72,7 @@ export default class FileProseccor extends BaseView {
     const dataLine = vu.create();
     const dataStrings = vu.createSpan(null, "imageDataLine", escape(iamageEntity.name) + ' (' + (
     iamageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + iamageEntity.modifyDate + ' size:' + iamageEntity.width + 'x' + iamageEntity.height);
+
     vu.append(dataLine, dataStrings);
     vu.append(dataLine, delButton);
     vu.append(row, dataLine);

@@ -1,10 +1,10 @@
-import ProgressBar from "../view/parts/progressBar"
-export default class ViewPartsLoader {
+import {ProgressBar} from "../view/parts/progressBar"
+export class ViewPartsLoader {
     constructor(){
     }
-    getIndigator(){
+    getIndigator(parent){
       if(!!this.pb===false){
-        this.pb = new ProgressBar();
+        this.pb = new ProgressBar(parent);
       }
       return this.pb;
     }

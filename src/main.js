@@ -1,14 +1,14 @@
 import css from "../index.css";
-import MainFrame from "./view/mainFrame"
-import MainService from "./service/mainService"
+import {MainFrame} from "./view/mainFrame"
+import {MainService} from "./service/mainService"
 const title = "CopiBon";
 export default class CopiBonService {
   constructor() {
-    this.mainService = new MainService();
-    this.mf = new MainFrame(this.mainService);
+    this.mainService = MainService.getInstance();
   }
   async init() {
     await this.mainService.init();
+    this.mf = new MainFrame(this.mainService);
     this.mf.render(title);
   }
   static main() {

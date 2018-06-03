@@ -4,6 +4,17 @@ export default class ThumbnaleManager {
   constructor(entityManager) {
     this.em = entityManager;
   }
+  async loadFromImagePk(pk) {
+    const imagePk = PrimaryKey.getPrimaryKey(pk);
+    const imageEntity = await this.em.get(imagePk);
+    if(!imageEntity || !imageEntity.thumbnail){
+      return null;
+    }
+    const thumbnailPk  = PrimaryKey.getPrimaryKey(imageEntity.thumbnail);
+    const thumbnailEntity = await this.em.get(thumbnailPk);
+    thumbnailEntity.parentPk = imagePk;
+    return thumbnailEntity
+  }
   async load(pk) {
     let binaryPk = pk;
     if (!pk) {

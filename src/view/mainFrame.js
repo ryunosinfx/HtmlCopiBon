@@ -1,18 +1,20 @@
 import vu from "../util/viewUtil";
-import Header from "./header";
-import Container from "./container";
-import Footer from "./footer";
-export default class MainFrame {
-  constructor() {}
-  render(titleText) {
-    //alert("aaa");
-    const frame = vu.create("frame", "frame");
-    const footer = vu.create("footer", "footer");
-    //alert(frame.appendChild);
-    vu.append(frame,(new Header()).render(titleText));
-    this.container = new Container(frame);
-    vu.append(frame,(new Footer()).render());
-    vu.attachBody(frame);
+import {Header} from "./header";
+import {Container} from "./container";
+import {Footer} from "./footer";
+import {BaseView} from "../util/reactive/baseView";
+export class MainFrame extends BaseView {
+  constructor(ms) {
+    super(null, "frame", "frame");
+    this.ms = ms;
   }
-  
+  async render(titleText) {
+    this.header = new Header(this);
+    this.footer = new Footer(this);
+    vu.append(this.elm, this.header.render(titleText));
+    this.container = new Container(this);
+    vu.append(this.elm, this.footer.render());
+    vu.attachBody(this.elm);
+  }
+
 }
