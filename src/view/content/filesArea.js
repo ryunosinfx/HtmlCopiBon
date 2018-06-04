@@ -5,7 +5,11 @@ export class FilesArea extends BaseView {
   constructor(parent) {
     super(parent,"FilesArea", "FilesArea");
     this.fp = new FileProcessor(this);
-    this.files;
+  }
+  updateAsAttach(store, actionData){
+    super.updateAsAttachExecute(store, actionData);
+    console.log("FilesArea@updateAsAttach");
+    this.fp.showFilesInit();
   }
   render() {
     return this.elm;

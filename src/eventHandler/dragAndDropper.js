@@ -1,6 +1,8 @@
 import vu from "../../util/viewUtil";
-export class DragAndDropper {
+import {BaseEventHandler} from "./baseEventHandler";
+export class DragAndDropper extends BaseEventHandler {
   constructor(query,fileUploader,dragImagePath) {
+    super();
     let cols = document.querySelectorAll(query);
     [].forEach.call(cols, function(col) {
       col.addEventListener('dragstart', this.handleDragStart(), false);

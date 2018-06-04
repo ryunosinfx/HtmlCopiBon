@@ -7,7 +7,8 @@ export class BaseReducer {
     if(isBaseUse){
       const baseActions = ActionCreator.getBaseActions();
       for(let index in baseActions){
-        this.atatch(baseActions[index]);
+        const type = baseActions[index];
+        this.atatch({type:type});
       }
     }
   }
@@ -22,6 +23,7 @@ export class BaseReducer {
     return store;
   }
   async reduce(store, action) {
+    
     return store;
   }
   async postReduce(store, action) {

@@ -71,26 +71,35 @@ export class ActionDispatcherImple {
       if (this.view.onViewHide(targetView, data) === false) {
         return;
       }
-      this.callUpdate(targetView, storeKey);
+      this.callUpdate(targetView, data, storeKey);
       this.view.onViewHidden(targetView, data);
     } else {
-      this.callUpdate(targetView, storeKey);
+      this.callUpdate(targetView, data, storeKey);
     }
     store = Store.getStore(storeKey);
-
     return true;
   }
-  callUpdate(targetView, storeKey) {
+  callUpdate(targetView, actionData, storeKey) {
     const activViews = viewAttachQueue.getActiveViewList();
     for (let activeView of activViews) {
       const store = Store.getStore(storeKey);
+      activeView.onViewShow(store, actionData);
       if (targetView === activeView) {
-        console.log('callUpdate update key:' + activeView.key);
-        targetView.update(store);
+        console.log('callUpdate update id:' + activeView.id+"/activeView.elm.parentNode:"+activeView.elm.parentNode);
+        if (activeView.elm.parentNode) {
+          targetView.update(store, actionData);
+        } else {
+          targetView.updateAsAttach(store, actionData);
+        }
       } else {
-        console.log('callUpdate updateReactive key:' + activeView.key);
-        activeView.updateReactive(store);
+        console.log('callUpdate updateReactive id:' + activeView.id+"/activeView.elm.parentNode:"+activeView.elm.parentNode);
+        if (activeView.elm.parentNode) {
+          activeView.updateReactive(store, actionData);
+        } else {
+          targetView.updateAsAttach(store, actionData);
+        }
       }
+      activeView.onViewShown(store, actionData);
     }
     console.log('callUpdate END----------------');
   }

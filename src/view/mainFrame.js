@@ -9,12 +9,13 @@ export class MainFrame extends BaseView {
     this.ms = ms;
   }
   async render(titleText) {
-    this.header = new Header(this);
+    this.header = new Header(this, titleText);
     this.footer = new Footer(this);
-    vu.append(this.elm, this.header.render(titleText));
+
+    this.header.attach(this);
     this.container = new Container(this);
-    vu.append(this.elm, this.container.render());
-    vu.append(this.elm, this.footer.render());
+    this.container.attach(this);
+    this.footer.attach(this);
     vu.attachBody(this.elm);
   }
 

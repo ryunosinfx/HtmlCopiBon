@@ -1,13 +1,14 @@
 import vu from "../util/viewUtil";
 import {BaseView} from "../util/reactive/baseView";
 export class Header extends BaseView{
-  constructor(parent) {
+  constructor(parent,titleText) {
     super(parent,"header","header");
+    this.titleText = titleText;
   }
 
-  render(titleText) {
+  render() {
     const title = vu.create("title", "title");
-    vu.text(title, titleText)
+    vu.text(title, this.titleText)
     vu.append(this.elm, title);
     return this.elm;
   }

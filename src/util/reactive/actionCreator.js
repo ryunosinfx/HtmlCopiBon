@@ -1,6 +1,4 @@
-const baseActions ={
-    Attach: {type:"Attach"}
-};
+const baseActions =["Attach"];
 export class ActionCreator {
 
   constructor() {}

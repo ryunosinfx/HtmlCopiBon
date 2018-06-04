@@ -1,5 +1,5 @@
 
-export default class BaseEventHandler {
+export class BaseEventHandler {
   constructor() {
   }
 }

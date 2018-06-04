@@ -1,6 +1,8 @@
 import {ProgressBar} from "../view/parts/progressBar";
-export class FileUploader {
+import {BaseEventHandler} from "./baseEventHandler";
+export class FileUploader extends BaseEventHandler {
   constructor(fileProcessor) {
+    super();
     this.fileProcessor = fileProcessor;
     this.name = "FileUploader";
   }

@@ -24,6 +24,7 @@ export class FileProcessor extends BaseView {
       const imagePk = imageEntity.getPk();
       loaded.set(imagePk, imageEntity.name);
     }
+    console.log("=★=processFiles");
     await this.showImages(iamageEntitis);
   }
   async showFilesInit() {
@@ -39,6 +40,7 @@ export class FileProcessor extends BaseView {
       iamageEntitis.push(iamageEntit);
     }
     await this.showImages(iamageEntitis);
+    console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length+"/this.elm:"+this.elm.parentNode);
   }
   async showImages(iamageEntitis){
     Sorter.orderBy(iamageEntitis,[{colName:"listing",isDESC:false},{colName:"updateDate",isDESC:true}]);

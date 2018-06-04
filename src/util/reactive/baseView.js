@@ -16,44 +16,54 @@ export class BaseView {
   }
   init() {}
   preRender(id, className) {
+    console.log("preRender");
     const store = Store.getStore();
     this.onViewLoad(store)
     this.elm = vu.create(id, className);
     if (this.paren && this.paren.elm) {
       vu.append(this.parent.elm, this.elm);
     }
-      this.onViewLoad(store)
-  }
-  preUpdate(store, actionData, isReactive) {
-    this.onViewShown(store, actionData);
-    if (isReactive) {
-      this.updateReactive(store, actionData);
-    } else {
-      this.update(store, actionData);
-    }
-    this.onViewLoaded(store, actionData);
+    this.onViewLoaded(store)
   }
   updateReactive(store, actionData) {
-    //DomTreeにある。
-    this.onViewLoad(store);
+    console.log("updateReactive this.id:"+this.id);
+    console.log(store);
+    console.log(actionData);
+  }
+  updateAsAttachExecute(store, actionData) {
+    const current = this.render();
+    console.log("updateAsAttach this.id:"+this.id+"/this.parentView.elm:"+this.parentView.elm);
+    vu.append(this.parentView.elm,current);
+    this.elm = current;
+    console.log(store);
+    console.log(actionData);
+  }
+  updateAsAttach(store, actionData) {
+    this.updateAsAttachExecute(store, actionData);
   }
   update(store, actionData) {
-    //DomTreeにある。
-    this.onViewLoad(store);
+    console.log("update this.id:"+this.id);
+    console.log(store);
+    console.log(actionData);
   }
   // attache to
   attach(parentView, selector, data) {
+    this.parentView = parentView;
+    this.selector = selector;
     if (!selector) {
       console.log("attach selector is null :" + selector);
     }
+    const store = Store.getStore();
+    this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
-    console.log('---show selector:' + selector + '/oldVnode');
+    console.log('---show selector:' + selector + '/parentView:'+parentView.id+"/this.id:"+this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatcher.dispatch(action);
   }
-  changeAtherView(parentView, selector, nextView) {
+  changeAnotherView(parentView, selector, nextView) {
     this.onViewHide(nextView, store, actionData);
-
+    const action = ActionCreator.creatAttachAction(parentView, this, data);
+    this.dispatcher.dispatch(action);
     this.onViewHidden(nextView, store, actionData);
   }
   // Event listener
