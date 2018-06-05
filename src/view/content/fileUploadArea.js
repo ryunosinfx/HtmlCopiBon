@@ -5,7 +5,6 @@ const text = "ここにファイルをアップロードしてください。";
 export class FileUploadArea extends BaseView {
   constructor(parent) {
     super(parent,"fuaPArent", "frame");
-    this.render();
   }
   render() {
     this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);

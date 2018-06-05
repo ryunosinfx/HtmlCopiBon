@@ -12,6 +12,7 @@ export class FilesArea extends BaseView {
     this.fp.showFilesInit();
   }
   render() {
+    this.fp.attach(this);
     return this.elm;
   }
 }

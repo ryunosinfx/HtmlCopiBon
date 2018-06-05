@@ -26,13 +26,13 @@ export class BaseView {
     this.onViewLoaded(store)
   }
   updateReactive(store, actionData) {
-    console.log("updateReactive this.id:"+this.id);
+    console.log("BaseView★updateReactive this.id:"+this.id);
     console.log(store);
     console.log(actionData);
   }
   updateAsAttachExecute(store, actionData) {
     const current = this.render();
-    console.log("updateAsAttach this.id:"+this.id+"/this.parentView.elm:"+this.parentView.elm);
+    console.log("BaseView★updateAsAttach this.id:"+this.id+"/this.parentView.elm:"+this.parentView.elm);
     vu.append(this.parentView.elm,current);
     this.elm = current;
     console.log(store);
@@ -42,7 +42,7 @@ export class BaseView {
     this.updateAsAttachExecute(store, actionData);
   }
   update(store, actionData) {
-    console.log("update this.id:"+this.id);
+    console.log("BaseView★update this.id:"+this.id);
     console.log(store);
     console.log(actionData);
   }
@@ -51,7 +51,7 @@ export class BaseView {
     this.parentView = parentView;
     this.selector = selector;
     if (!selector) {
-      console.log("attach selector is null :" + selector);
+      console.log("★attach selector is null :" + selector);
     }
     const store = Store.getStore();
     this.onPreViewBuild(store)
