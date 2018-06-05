@@ -5,16 +5,6 @@ export default class Title extends BaseEntity {
     //console.log("!=!titleId:"+titleId+"!=!titleId:"+titleId+"!=!name:"+name+"!=!"+Date.now());
     this.id = titleId;
     this.prefix = titlePrefix;
-    this.name = name;
-    this.target = "";
-    this.no = "";
-    this.date = "";
-    this.pageNo = 0;
-    this.setting = null;
-    this.series = null;
-    this.pageNum = -1;
-    this.images = [];
-    this.outputsPars = [];
     this.direction = "r2l";
     this.createDate = Date.now();
     this.updateDate = Date.now();
