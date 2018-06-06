@@ -4,7 +4,8 @@ const webpack = require("webpack");
 module.exports = {
   //  context: __dirname,
   entry: {
-    bundle:'./src/main.js',worker:'./src/worker.js'
+    bundle: './src/main.js',
+    worker: './src/worker.js'
   },
   // [
   //   './src/main.js','./src/worker.js', './index.css'
@@ -15,6 +16,8 @@ module.exports = {
     // 出力先のパス
     path: __dirname + "/dist",
     //publicPath: __dirname + "/dist/js",
+    webassemblyModuleFilename: "[modulehash].wasm",
+    publicPath: "/dist/"
   },
   module: {
     rules: [
@@ -31,6 +34,9 @@ module.exports = {
             loader: 'eslint-loader'
           }
         ]
+      }, {
+        test: /\.wasm$/,
+        type: "webassembly/experimental"
       }
     ]
   },

@@ -10,10 +10,14 @@ export default class CopiBonService {
     await this.mainService.init();
     this.mf = new MainFrame(this.mainService);
     this.mf.render(title);
+    ///
+    const sumModule = await import ("./sum.wasm");
+    console.log(sumModule.sum(22, 2200));
   }
   static main() {
     const self = new CopiBonService();
     self.init();
+
   }
 }
 CopiBonService.main();
