@@ -13,7 +13,6 @@ export class Thread {
       this.worker.onerror = (event)=> {
         reject(event);
       }
-      this.worker.
     });
   }
   static buildPostObj(key, dataMap){

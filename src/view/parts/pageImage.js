@@ -5,6 +5,8 @@ export class PageImage  extends BaseView {
     super(parent,"PageImage"+listing, "PageImage");
   }
   render() {
+    const button = vu.create(null, "PageImageA", this.id);
+    vu.append(this.elm, button);
     return this.elm;
   }
 }

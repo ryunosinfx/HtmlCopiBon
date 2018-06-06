@@ -5,6 +5,8 @@ export class ImageDetail  extends BaseView {
     super(parent,"ImageDetail", "ImageDetail");
   }
   render() {
+    const button = vu.create("ImageDetailA", "ImageDetailA", this.id);
+    vu.append(this.elm, button);
     return this.elm;
   }
 }
