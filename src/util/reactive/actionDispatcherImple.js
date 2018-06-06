@@ -89,6 +89,7 @@ export class ActionDispatcherImple {
         if (activeView.elm.parentNode) {
           targetView.update(store, actionData);
         } else {
+          console.log('callUpdate updateAsAttach --first--------------');
           targetView.updateAsAttach(store, actionData);
         }
       } else {
@@ -96,6 +97,7 @@ export class ActionDispatcherImple {
         if (activeView.elm.parentNode) {
           activeView.updateReactive(store, actionData);
         } else {
+          console.log('callUpdate updateAsAttach--parentNode is null--------------');
           targetView.updateAsAttach(store, actionData);
         }
       }
