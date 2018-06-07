@@ -17,7 +17,8 @@
   ],
   "author": "ryunosinfx",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+  "snabbdom": "^0.7.1"},
   "devDependencies": {
     "babel-eslint": "^8.0.2",
     "css-loader": "^0.28.11",

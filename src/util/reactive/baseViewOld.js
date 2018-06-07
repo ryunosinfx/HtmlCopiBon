@@ -1,27 +1,42 @@
-import vu from "../viewUtil";
-import {patch} from './base/preLoader'
-import {ElementSelector} from './elementSelector'
-import {ActionCreator} from './actionCreator'
-import {ViewAttachQueue} from './viewAttachQueue'
-import {ActionDispatcher} from './actionDispatcher'
-import {Store} from './store'
+import {
+  patch,
+  h
+} from 'encrypt-indexeddb-entity-manager/src/view/preLoader'
+
+import ElementSelector from './elementSelector'
+import ViewAttachQueue from './viewAttachQueue'
+import ActionDispatcher from '../action/actionDispatcher'
+import ViewBaseReducer from '../reducer/viewBaseReducer'
+import ViewBaseActions from '../action/viewBaseActions'
+import ActionCreator from '../util/actionCreator'
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
   rootVnode: null
 };
-export class BaseView {
-  constructor(parent, id, className) {
-    this.ms = parent && parent.ms
-      ? parent.ms
-      : null;
+const avtiveViews = new Map();
+export default class BaseView {
+  constructor(service, name, key) {
     this.dispatcher = ActionDispatcher.create(this);
-    this.id = id;
-    this.parent = parent;
+    this.onViewLoad(service, name, key);
+    this.name = name;
+    this.key = key;
     this.es = new ElementSelector();
-    this.preRender(id, className);
+    this.activeViewTree = null;
+    this.filter = (state) => {
+      return true
+    }
+    this.service = service;
+    this.router = this.service.getRouter();
+    this.viewState = null;
+    this.currentVnode = null; //this.render(this.viewState, null);
+    //console.log('name=' + name + '/key:' + key);
+    this.onViewLoaded(service, name, key);
   }
   static setRootVnode(rootVnode) {
     nodeFrame.rootVnode = rootVnode;
+  }
+  isAccessable(state) {
+    return true;
   }
   patch(selector, newVnode) {
     return this.patchFromOtherVnode(nodeFrame.rootVnode, selector, newVnode);
@@ -60,12 +75,13 @@ export class BaseView {
     this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
     return this.currentVnode;
   }
-  updateV(store) {
+  update(store) {
     const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
     const currentVnode = oldVnode ? oldVnode : this.currentVnode;
+
     console.log('A00 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     if (isOrverride) {
       this.onPreViewBuild(oldVnode, store);
@@ -89,7 +105,7 @@ export class BaseView {
     this.onViewShown(viewState, store);
     this.viewState = viewState;
   }
-  updateReactiveV(store) {
+  updateReactive(store) {
     const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
@@ -108,95 +124,115 @@ export class BaseView {
     //console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.viewState = viewState;
   }
-  init() {}
-  preRender(id, className) {
-    console.log("preRender");
-    const store = Store.getStore();
-    this.onViewLoad(store)
-    this.elm = vu.create(id, className);
-    if (this.paren && this.paren.elm) {
-      vu.append(this.parent.elm, this.elm);
-    }
-    this.onViewLoaded(store)
+  static getActiveViews() {
+    return avtiveViews;
   }
-  updateReactive(store, actionData) {
-    console.log("BaseView★updateReactive START this.id:"+this.id);
-    console.log(store);
-    console.log(actionData);
-      console.log("BaseView★updateReactive END this.id:"+this.id);
+  show(oldVnode, selector, store) {
+    avtiveViews.set(this.key, this);
+    console.log('---show selector:' + selector + '/oldVnode');
+    //console.log(oldVnode);
+    let action = ViewBaseActions.getShowViewAction(oldVnode, selector, store);
+    //console.log(action);
+    this.dispatcher.dispatch(action);
   }
-  updateAsAttachExecute(store, actionData) {
-    const current = this.render(store, actionData);
-    console.log("BaseView★updateAsAttachExecute this.id:"+this.id+"/this.parentView.elm:"+this.parentView.elm);
-    console.log(current.parentNode);
-    if(current.parentNode){
-      console.log("BaseView★updateAsAttachExecute END!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  //
+  goAnotherView(nextView, data) {
+    // TODO dispatchaction
+    if (this.onViewHide(nextView, data) === false) {
       return;
-    }
-      console.log("BaseView★updateAsAttachExecute START!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    vu.append(this.parentView.elm,current);
-    this.elm = current;
-    console.log(store);
-    console.log(actionData);
-  }
-  updateAsAttach(store, actionData) {
-    this.updateAsAttachExecute(store, actionData);
-  }
-  update(store, actionData) {
-    console.log("BaseView★update this.id:"+this.id);
-    console.log(store);
-    console.log(actionData);
+    };
+    this.activeViewTree = viewAttachQueue.changeActiveView(this, nextView, nextView.activeViewTree);
+    //console.log('A00 baseView.goAnotherView view;' + view.getName() + '/this.name:' + this.name + '/current:' + this.currentVnode);
+    console.log('A02 baseView.goAnotherView from ' + this.getName() + ' to nextView;' + (nextView.getName ? nextView.getName() : 'none'));
+    nextView.show(this.currentVnode, '#' + this.key, data);
+    this.onViewHidden(nextView, data);
   }
   // attache to
-  attach(parentView = this.parentView , selector, data) {
-    this.parentView = parentView;
-    this.selector = selector;
+  attach(parentView, selector, data) {
     if (!selector) {
-      console.log("★attach selector is null :" + selector);
+      console.log("attach selector is null :" + selector);
     }
-    const store = Store.getStore();
-    this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
-    console.log('---show selector:' + selector + '/parentView:'+parentView.id+"/this.id:"+this.id);
-    const action = ActionCreator.creatAttachAction(parentView, this, data);
-    this.dispatcher.dispatch(action);
+    this.show(parentView.currentVnode, selector, data);
   }
-  changeAnotherView(parentView, selector, nextView) {
-    this.onViewHide(nextView, store, actionData);
-    const action = ActionCreator.creatAttachAction(parentView, this, data);
-    this.dispatcher.dispatch(action);
-    this.onViewHidden(nextView, store, actionData);
+  onAfterAttach(store) {
+    const currentVnode = this.currentVnode;
+    while (viewAttachQueue.hasItem()) {
+      let item = viewAttachQueue.poll();
+      item.view.currentVnode = this.es.getElements(currentVnode, item.selector);
+    }
+  }
+  detach(vnode, selector) {
+
   }
   // Event listener
-  onViewLoad(store, actionData) {
-    console.log('m001 baseView.onViewLoad name:' + name + '/actionData:' + actionData);
+  onViewLoad(service, name, key) {
+    console.log('m001 baseView.onViewLoad service:' + service + '/name:' + name + '/key:' + key);
   }
-  onViewLoaded(store, actionData) {
-    console.log('m002 baseView.onViewLoaded name:' + name + '/actionData:' + actionData);
+  onViewLoaded(service, name, key) {
+    console.log('m002 baseView.onViewLoaded service:' + service + '/name:' + name + '/key:' + key);
+
   }
-  onPreViewBuild(store, actionData) {
-    console.log('m003a baseView.onPreViewBuild store:' + store + '/actionData:' + actionData);
+  onPreViewBuild(oldNode, data) {
+    console.log('m003a baseView.onPreViewBuild oldNode:' + oldNode + '/data:' + data);
   }
-  onViewShow(store, actionData) {
+  onViewShow(viewState, store) {
     console.log('m003 baseView.onViewShow newNode:' + '/store:' + store);
   }
-  onViewShown(store, actionData) {
+  onViewShown(viewState, store) {
     console.log('m004 baseView.onViewShown newNode:' + '/store:' + store);
     //console.log(JSON.stringify(this.currentVnode));
   }
-  onViewHide(nextView, store, actionData) {
-    console.log('m005 baseView.onViewHide nextView:' + nextView + '/actionData:' + actionData);
+  onViewHide(nextView, data) {
+    console.log('m005 baseView.onViewHide nextView:' + nextView + '/data:' + data);
     //console.log(JSON.stringify(this.currentVnode));
     return true;
   }
-  onViewHidden(nextView, store, actionData) {
-    console.log('m006 baseView.onViewHidden nextView:' + nextView + '/actionData:' + actionData);
+  onViewHidden(nextView, data) {
+    console.log('m006 baseView.onViewHidden nextView:' + nextView + '/data:' + data);
   }
-  render() {
-    const elm = vu.create("BaseView", "BaseView");
-    return elm;
+  render(viewStatev, data) {
+    let newVnode = h('div', {
+      style: {
+        color: '#099'
+      }
+    }, [h('h1', 'i am ' + this.name + '!')]);
+    return newVnode;
   }
-  getAnker() {
-    return this.elm;
+  renderWrap(viewStatev, data) {
+    let newVnode = h('div#' + this.key, {
+      style: {
+        margin: 0,
+        padding: 0
+      }
+    }, [this.render(viewStatev, data)]);
+    return newVnode;
+  }
+  isEquals(baseView) {
+    return baseView, name === this, name;
+  }
+  getKey() {
+    return this.key;
+  }
+  getFilter() {
+    return this.filter;
+  }
+  getName() {
+    return this.name;
+  }
+  getHref() {
+    let href = location.href.split(/\?/)[0] + '?' + this.key;
+    console.log('href=' + href);
+    return href;
+  }
+  async goToAnotherView(key, data) {
+    console.log('A03 baseView.goToAnotherView key;' + key);
+    return await this.service.goToAnotherView(key, data);
+  }
+  async goBack(data) {
+    return await this.service.goToAnotherView(key, data);
+  }
+  getCurrentState() {
+    return this.service.store.get('state');
   }
 }
