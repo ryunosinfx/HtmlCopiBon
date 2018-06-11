@@ -6,7 +6,7 @@ const currentTitle = "";
 export class MainService {
   static getInstance(){
     const thread = new Thread();
-    thread.postMessage("aaa","");
+    thread.postMessage("WASMcaller","");
     return mainServiceImpl;
   }
   async init(){
