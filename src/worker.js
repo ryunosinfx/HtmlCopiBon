@@ -3,6 +3,7 @@ import {BaseWorker} from "./worker/baseWorker";
 ////////////////////////////////////////////////////////
 export default class DefaultWorker extends BaseWorker {
   constructor() {
+    super();
   }
 }
 const DEFAULT_WORKER = "DEFAULT_WORKER";

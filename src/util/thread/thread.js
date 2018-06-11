@@ -8,7 +8,7 @@ export class Thread {
       const {transObject, tranceArray} = Thread.buildPostObj(key, dataMap);
       this.worker.postMessage(transObject, tranceArray);
       this.worker.onmessage = (event)=> {
-        resolev(event.data);
+        resolve(event.data);
       }
       this.worker.onerror = (event)=> {
         reject(event);

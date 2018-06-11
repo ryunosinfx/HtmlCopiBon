@@ -18,7 +18,9 @@ module.exports = {
     path: __dirname + "/dest",
     //publicPath: __dirname + "/dest/js",
     webassemblyModuleFilename: "[modulehash].wasm",
-    publicPath: "/dest/"
+    publicPath: "/dest/",
+       globalObject: 'this'
+
   },
   module: {
     rules: [
