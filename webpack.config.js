@@ -1,6 +1,7 @@
 //↓↓↓↓追加
 const path = require('path');
 const webpack = require("webpack");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   //  context: __dirname,
   entry: {
@@ -14,10 +15,10 @@ module.exports = {
     // 出力するファイル名
     filename: '[name].js',
     // 出力先のパス
-    path: __dirname + "/dist",
-    //publicPath: __dirname + "/dist/js",
+    path: __dirname + "/dest",
+    //publicPath: __dirname + "/dest/js",
     webassemblyModuleFilename: "[modulehash].wasm",
-    publicPath: "/dist/"
+    publicPath: "/dest/"
   },
   module: {
     rules: [
@@ -41,8 +42,8 @@ module.exports = {
     ]
   },
   devServer: {
-    publicPath: "/dist/",
-    contentBase: __dirname + "/dist/",
+    publicPath: "/dest/",
+    contentBase: __dirname + "/dest/",
     watchContentBase: true,
     // inline: true,
     // host: '0.0.0.0',
@@ -54,8 +55,13 @@ module.exports = {
       options: {
         html: './index.html'
       }
-    })
-
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: './wasm/*.wasm',
+        to: './'
+      }
+    ], { debug: 'debug' })
     //new webpack.optimize.UglifyJsPlugin(),
     //new webpack.optimize.AggressiveMergingPlugin(),
   ],

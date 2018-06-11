@@ -1,4 +1,4 @@
-import ObjectUtil from '../objectUtil';
+import {ObjectUtil} from '../objectUtil';
 
 const mainHolder = new Map();
 const mainKey = 'aaa';

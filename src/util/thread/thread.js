@@ -1,4 +1,4 @@
-const defaultWorker = "./dist/worker.js";
+const defaultWorker = "./dest/worker.js";
 export class Thread {
   constructor(workerJsPath = defaultWorker) {
     this.worker = new Worker(workerJsPath);

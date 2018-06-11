@@ -1,4 +1,4 @@
-import ObjectUtil from "../../util/objectUtil";
+import {ObjectUtil} from "../../util/objectUtil";
 export class BaseEntity {
   constructor(pk = "oid") {
     this.pk = pk;

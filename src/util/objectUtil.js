@@ -1,4 +1,4 @@
-export default class ObjectUtil {
+export class ObjectUtil {
   static deepClone(obj) {
     const channel = new MessageChannel();
     const inPort = channel.port1;

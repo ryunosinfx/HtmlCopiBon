@@ -1,5 +1,5 @@
 import {patch, h} from './base/preLoader'
-import {ObjectUtil} from './objectUtil'
+import {ObjectUtil} from '../objectUtil'
 export class ElementSelector {
   constructor() {
     this.selectorMap = new Map()
