@@ -44,7 +44,8 @@ export class Thread {
         }
       }
     }
-
+    const retData = {transObject:transObject,tranceArray:tranceArray};
+    return retData;
   }
   close(){
     this.worker.terminate();
