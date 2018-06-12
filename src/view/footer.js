@@ -7,7 +7,7 @@ export class Footer extends BaseView {
     this.copyright = "ryunosinfx";
   }
   render() {
-    const copyright = vu.create("copyright", "copyright", this.copyright);
+    const copyright = div("copyright", "copyright", this.copyright);//vu.create("copyright", "copyright", this.copyright);
     vu.append(this.elm, copyright);
     return this.elm;
   }
