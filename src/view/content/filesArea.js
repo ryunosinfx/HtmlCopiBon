@@ -3,6 +3,16 @@ import {
   BaseView
 } from "../../util/reactive/baseView";
 import {
+  a,
+  div,
+  li,
+  ul,
+  img,
+  span,
+  input,
+  label
+} from "../../util/reactive/base/vtags";
+import {
   FileProcessor
 } from "../parts/fileProcessor";
 import {

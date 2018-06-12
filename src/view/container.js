@@ -1,5 +1,6 @@
 import vu from "../util/viewUtil";
 import {BaseView} from "../util/reactive/baseView";
+import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import {FileUploadArea} from "./content/fileUploadArea";
 import {TitleSettings} from "./content/titleSettings";
 import {ExportButton} from "./content/exportButton";

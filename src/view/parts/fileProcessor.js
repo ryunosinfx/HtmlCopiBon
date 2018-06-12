@@ -3,6 +3,7 @@ import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../../service/entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import {BaseView} from "../../util/reactive/baseView";
+import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import FileUploadExecuter from "../../service/fileUploadExecuter";
 const loaded = new Map();
 export class FileProcessor extends BaseView {

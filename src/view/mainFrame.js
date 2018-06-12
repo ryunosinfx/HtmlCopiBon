@@ -3,6 +3,7 @@ import {Header} from "./header";
 import {Container} from "./container";
 import {Footer} from "./footer";
 import {BaseView} from "../util/reactive/baseView";
+import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class MainFrame extends BaseView {
   constructor(ms) {
     super(null, "frame", "frame");
