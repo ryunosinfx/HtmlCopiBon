@@ -2,8 +2,8 @@ import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class TitleSettings  extends BaseView {
-  constructor(parent) {
-    super(parent,"TitleSettings", "TitleSettings");
+  constructor() {
+    super("TitleSettings", "TitleSettings");
     this.text="TitleSettings";
   }
   render() {

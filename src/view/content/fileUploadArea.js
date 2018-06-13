@@ -4,8 +4,8 @@ import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import {FileUploader} from "../../eventHandler/fileUploader";
 const text = "ここにファイルをアップロードしてください。";
 export class FileUploadArea extends BaseView {
-  constructor(parent) {
-    super(parent,"fuaPArent", "frame");
+  constructor() {
+    super("fuaPArent", "frame");
   }
   render() {
     this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);

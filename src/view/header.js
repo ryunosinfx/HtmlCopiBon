@@ -1,9 +1,9 @@
 import vu from "../util/viewUtil";
 import {BaseView} from "../util/reactive/baseView";
-import {a,div,li,ul,img,span,input,label} from "../util/reactive/base/vtags";
+import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class Header extends BaseView{
-  constructor(parent,titleText) {
-    super(parent,"header","header");
+  constructor(titleText) {
+    super("header","header");
     this.titleText = titleText;
   }
 

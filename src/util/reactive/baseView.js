@@ -1,22 +1,32 @@
 import vu from "../viewUtil";
-import {patch} from './base/preLoader'
-import {ElementSelector} from './elementSelector'
-import {ActionCreator} from './actionCreator'
-import {ViewAttachQueue} from './viewAttachQueue'
-import {ActionDispatcher} from './actionDispatcher'
-import {Store} from './store'
+import {
+  patch
+} from './base/preLoader'
+import {
+  ElementSelector
+} from './elementSelector'
+import {
+  ActionCreator
+} from './actionCreator'
+import {
+  ViewAttachQueue
+} from './viewAttachQueue'
+import {
+  ActionDispatcher
+} from './actionDispatcher'
+import {
+  Store
+} from './store'
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
-  rootVnode: null
+  rootVnode: null,
+  ms: null
 };
 export class BaseView {
-  constructor(parent, id, className) {
-    this.ms = parent && parent.ms
-      ? parent.ms
-      : null;
+  constructor(id, className) {
     this.dispatcher = ActionDispatcher.create(this);
     this.id = id;
-    this.parent = parent;
+    this.ms = nodeFrame.ms;
     this.es = new ElementSelector();
     const store = Store.getStore();
     this.onViewLoad(store)
@@ -27,13 +37,19 @@ export class BaseView {
   static setRootVnode(rootVnode) {
     nodeFrame.rootVnode = rootVnode;
   }
+  static setMainService(ms) {
+    if (ms) {
+
+      nodeFrame.ms = ms;
+    }
+  }
   patch(selector, newVnode) {
     return this.patchFromOtherVnode(nodeFrame.rootVnode, selector, newVnode);
   }
   patchFromOtherVnode(currentVnode, selector, newVnode) {
-    let currentRootNode = selector !== null
-      ? nodeFrame.rootVnode
-      : currentVnode;
+    let currentRootNode = selector !== null ?
+      nodeFrame.rootVnode :
+      currentVnode;
     let currentSelector = selector;
     let currentNewNode = newVnode;
     if (selector !== null && !!newVnode === false) {
@@ -61,21 +77,21 @@ export class BaseView {
     this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
     return this.currentVnode;
   }
-  update(store,actionData) {
+  update(store, actionData) {
     const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    const currentVnode = oldVnode
-      ? oldVnode
-      : this.currentVnode;
+    const currentVnode = oldVnode ?
+      oldVnode :
+      this.currentVnode;
     console.log('A00 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     if (isOrverride) {
       this.onPreViewBuild(oldVnode, store);
       console.log('A01 --baseView.goAnotherView view;' + this.getName());
-      this.currentVnode = !this.currentVnode
-        ? this.renderWrap(store)
-        : this.currentVnode;
+      this.currentVnode = !this.currentVnode ?
+        this.renderWrap(store) :
+        this.currentVnode;
     }
     this.onViewShow(viewState, store);
     if (isOrverride) {
@@ -94,17 +110,17 @@ export class BaseView {
     this.onViewShown(viewState, store);
     this.viewState = viewState;
   }
-  updateReactive(store,actionData) {
+  updateReactive(store, actionData) {
     const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    const currentVnode = oldVnode
-      ? oldVnode
-      : this.currentVnode;
-    this.currentVnode = !this.currentVnode
-      ? this.renderWrap(store)
-      : this.currentVnode;
+    const currentVnode = oldVnode ?
+      oldVnode :
+      this.currentVnode;
+    this.currentVnode = !this.currentVnode ?
+      this.renderWrap(store) :
+      this.currentVnode;
     //console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.onViewShow(viewState, store);
     //console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
@@ -119,10 +135,6 @@ export class BaseView {
   init() {}
   preRender(id, className) {
     console.log("preRender");
-    this.elm = vu.create(id, className);
-    if (this.paren && this.paren.elm) {
-      vu.append(this.parent.elm, this.elm);
-    }
   }
   // attache to
   attach(parentView = this.parentView, selector, data) {

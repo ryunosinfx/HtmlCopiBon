@@ -7,8 +7,8 @@ import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import FileUploadExecuter from "../../service/fileUploadExecuter";
 const loaded = new Map();
 export class FileProcessor extends BaseView {
-  constructor(parent) {
-    super(parent,"FileProcessor", "FileProcessor");
+  constructor() {
+    super("FileProcessor", "FileProcessor");
     this.vpl = this.ms.getViewPartsLoader();
     this.ip = this.ms.ip;
     this.em = this.ms.em;;

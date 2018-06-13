@@ -6,12 +6,12 @@ import {TitleSettings} from "./content/titleSettings";
 import {ExportButton} from "./content/exportButton";
 import {FilesArea} from "./content/filesArea";
 export class Container extends BaseView {
-  constructor(parent) {
-    super(parent, "container", "container");
-    this.fileUploadArea = new FileUploadArea(this);
-    this.titleSettings = new TitleSettings(this);
-    this.filesArea = new FilesArea(this);
-    this.exportButton = new ExportButton(this);
+  constructor() {
+    super("container", "container");
+    this.fileUploadArea = new FileUploadArea();
+    this.titleSettings = new TitleSettings();
+    this.filesArea = new FilesArea();
+    this.exportButton = new ExportButton();
   }
   updateAsAttach(store, actionData) {
     super.updateAsAttachExecute(store, actionData);

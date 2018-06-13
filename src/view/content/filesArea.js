@@ -22,8 +22,8 @@ import {
   PageImages
 } from "../parts/pageImages";
 export class FilesArea extends BaseView {
-  constructor(parent) {
-    super(parent, "FilesArea", "FilesArea");
+  constructor() {
+    super( "FilesArea", "FilesArea");
     this.fp = new FileProcessor(this);
     this.imageDetail = new ImageDetail(this);
     this.pageImages = new PageImages(this);

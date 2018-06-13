@@ -14,9 +14,29 @@ import {
   label
 } from "../util/reactive/base/vtags";
 export class MainFrame extends BaseView {
-  constructor(ms) {
-    super(null, "frame", "frame");
+  constructor(ms,title) {
+    super("frame", "frame");
     this.ms = ms;
+    BaseView.setMainService(ms);
+    this.initialize(title);
+  }
+  initialize(title) {
+    this.header = new Header(title);
+    this.footer = new Footer();
+    this.container = new Container();
+    this.baseFrame = null;
+    this.view = '';
+  }
+  onViewShow(viewState, data){
+    const state = this.getCurrentState();
+    if(state && state.isActivated){
+      let resultNode = h('h1#activateInputArea', 'ok! you are logedin!');
+      this.prePatch("#activateInputArea", resultNode);
+    }
+    this.header.attach(this,'#header');
+    this.footer.attach(this,'#footer');
+    this.container.attach(this,'#container');
+    this.view.attach(this,'#content');
   }
   render(titleText) {
     let newVnode = div('frame', ['frame'], {}, [
@@ -54,6 +74,15 @@ export class MainFrame extends BaseView {
     // this.container.attach(this);
     // this.footer.attach(this);
     // vu.attachBody(this.elm);
+  }
+  createBsaeFrame() {
+    let elements = document.getElementsByTagName("body");
+    elements[0].innerHTML = '<div id="rootA"><p>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></div>';
+    let layout = document.getElementById('rootA');
+    this.patchFromOtherVnode(layout,null,this.render());
+
+    this.update({oldVnode:this.currentVnode,selector:null,isOrverride:true});
+    //return '<header id="header">Hellow!</header><div id="menu"></div><div id="container"><div id="content"></div></div><footer id="footer"></footer>';
   }
 
 }

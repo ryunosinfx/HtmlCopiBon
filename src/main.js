@@ -8,8 +8,8 @@ export default class CopiBonService {
   }
   async init() {
     await this.mainService.init();
-    this.mf = new MainFrame(this.mainService);
-    this.mf.render(title);
+    this.mf = new MainFrame(this.mainService,title);
+    this.mf.createBsaeFrame(title);
     ///
     // const sumModule = await import ("./sum.wasm");
     // console.log(sumModule.sum(22, 2200));
