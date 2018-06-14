@@ -17,6 +17,16 @@ import {
 import {
   Store
 } from './store'
+import {
+  a,
+  div,
+  li,
+  ul,
+  img,
+  span,
+  input,
+  label
+} from "../base/vtags";
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
   rootVnode: null,
@@ -26,6 +36,7 @@ export class BaseView {
   constructor(id, className) {
     this.dispatcher = ActionDispatcher.create(this);
     this.id = id;
+    this.className = className;
     this.ms = nodeFrame.ms;
     this.es = new ElementSelector();
     const store = Store.getStore();
@@ -88,7 +99,7 @@ export class BaseView {
     console.log('A00 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     if (isOrverride) {
       this.onPreViewBuild(oldVnode, store);
-      console.log('A01 --baseView.goAnotherView view;' + this.getName());
+      console.log('A01 --baseView.goAnotherView view;' + this.className);
       this.currentVnode = !this.currentVnode ?
         this.renderWrap(store) :
         this.currentVnode;
@@ -184,6 +195,11 @@ export class BaseView {
   render() {
     const elm = vu.create("BaseView", "BaseView");
     return elm;
+  }
+  renderWrap(store, data) {
+    let newVnode = de(this.id,[this.className] , {
+    }, [this.render(store, data)]);
+    return newVnode;
   }
   getAnker() {
     return this.elm;

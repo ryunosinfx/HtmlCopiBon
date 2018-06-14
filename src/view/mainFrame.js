@@ -26,13 +26,9 @@ export class MainFrame extends BaseView {
     this.container = new Container();
     this.baseFrame = null;
     this.view = '';
+    this.createBsaeFrame();
   }
-  onViewShow(viewState, data){
-    const state = this.getCurrentState();
-    if(state && state.isActivated){
-      let resultNode = h('h1#activateInputArea', 'ok! you are logedin!');
-      this.prePatch("#activateInputArea", resultNode);
-    }
+  onViewShow(store, data){
     this.header.attach(this,'#header');
     this.footer.attach(this,'#footer');
     this.container.attach(this,'#container');
