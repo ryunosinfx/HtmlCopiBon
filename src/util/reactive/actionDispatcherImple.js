@@ -47,7 +47,8 @@ export class ActionDispatcherImple {
   }
   async dispatch(action) {
     const type = action.type;
-    //console.log('dispatch00 type=' + type + '/action=' + JSON.stringify(action));
+    console.log(action);
+    //alert('dispatch00 type=' + type + '/action=' + JSON.stringify(action));
     if (!type) {
       return false;
     }
@@ -84,10 +85,10 @@ export class ActionDispatcherImple {
     for (let activeView of activViews) {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
-        console.log('callUpdate update key:' + activeView.key);
+        console.log('callUpdate update id:' + activeView.id);
         targetView.update(store,actionData);
       } else {
-        console.log('callUpdate updateReactive key:' + activeView.key);
+        console.log('callUpdate updateReactive id:' + activeView.id);
         activeView.updateReactive(store,actionData);
       }
     }

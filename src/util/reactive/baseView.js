@@ -26,7 +26,7 @@ import {
   span,
   input,
   label
-} from "../base/vtags";
+} from "./base/vtags";
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
   rootVnode: null,
@@ -41,7 +41,7 @@ export class BaseView {
     this.es = new ElementSelector();
     const store = Store.getStore();
     this.onViewLoad(store)
-    this.preRender(id, className);
+    //this.preRender(id, className);
     this.currentVnode = null;
     this.onViewLoaded(store)
   }
@@ -132,21 +132,18 @@ export class BaseView {
     this.currentVnode = !this.currentVnode ?
       this.renderWrap(store) :
       this.currentVnode;
-    //console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.onViewShow(viewState, store);
-    //console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.patch("#" + this.id, this.currentVnode);
-    //console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.onAfterAttach(store);
-    //console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.onViewShown(viewState, store);
-    //console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
     this.viewState = viewState;
   }
   init() {}
-  preRender(id, className) {
-    console.log("preRender");
-  }
   // attache to
   attach(parentView = this.parentView, selector, data) {
     this.parentView = parentView;
@@ -160,6 +157,13 @@ export class BaseView {
     console.log('---show selector:' + selector + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatcher.dispatch(action);
+  }
+  onAfterAttach(store) {
+    const currentVnode = this.currentVnode;
+    // while (viewAttachQueue.hasItem()) {
+    //   let item = viewAttachQueue.poll();
+    //   item.view.currentVnode = this.es.getElements(currentVnode, item.selector);
+    // }
   }
   changeAnotherView(parentView, selector, nextView) {
     this.onViewHide(nextView, store, actionData);
@@ -197,8 +201,8 @@ export class BaseView {
     return elm;
   }
   renderWrap(store, data) {
-    let newVnode = de(this.id,[this.className] , {
-    }, [this.render(store, data)]);
+    console.log('renderWrap');
+    let newVnode = div(this.id, [this.className], {}, [this.render(store, data)]);
     return newVnode;
   }
   getAnker() {

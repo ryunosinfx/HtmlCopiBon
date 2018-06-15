@@ -32,7 +32,6 @@ export class MainFrame extends BaseView {
     this.header.attach(this,'#header');
     this.footer.attach(this,'#footer');
     this.container.attach(this,'#container');
-    this.view.attach(this,'#content');
   }
   render(titleText) {
     let newVnode = div('frame', ['frame'], {}, [

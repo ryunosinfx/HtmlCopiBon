@@ -33,4 +33,26 @@ export class ObjectUtil {
     }
     return retObj;
   }
+  static deepVnodeClone(target) {
+    const obj = {
+      sel: target.sel,
+      data: ObjectUtil.simpleDeepClone(target.data),
+      children: undefined,
+      text: target.text,
+      elm: target.elm,
+      key: target.key
+    };
+    for(let key in target.data){
+      if (target.data[key]) {
+        obj.data[key] = target.data[key];
+      }
+    }
+    if (target.children && target.children.length > 0) {
+      obj.children = [];
+      for (let childTarget of target.children) {
+        obj.children.push(ObjectUtil.deepVnodeClone(childTarget));
+      }
+    }
+    return obj;
+  }
 }

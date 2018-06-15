@@ -23,7 +23,7 @@ export class BaseReducer {
     return store;
   }
   async reduce(store, action) {
-    
+    alert(store);
     return store;
   }
   async postReduce(store, action) {
