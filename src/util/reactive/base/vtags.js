@@ -43,20 +43,35 @@ const vtags = (tagName, id, classNames, data = {}, children, text) => {
     : "");
   const childrenArray = children && Array.isArray(children)
     ? children
-    : null;
+    : (
+      data && Array.isArray(data)
+      ? data
+      : (
+        Array.isArray(classNames) && classNames.length > 0 && typeof classNames[0] === "object"
+        ? classNames
+        : []));
   const currentText = text
     ? text
     : (
-      typeof children === "string"
+      children && typeof children === "string"
       ? children
-      : "");
-  let currentData = data;
-  if (children !== undefined && text === undefined && classNames && typeof classNames === "object") {
+      : data && typeof data === "string"
+        ? data
+        : "");
+  let currentData = typeof data === "string" || Array.isArray(data)
+    ? {}
+    : data;
+  if (children !== undefined && text === undefined && classNames && !Array.isArray(classNames) && typeof classNames === "object") {
     currentData = classNames;
-  } else if (children === undefined && text === undefined && id && typeof id === "object") {
+  } else if (children === undefined && text === undefined && id && !Array.isArray(id) && typeof id === "object") {
     currentData = id;
   }
-  return h(id2, currentData, childrenArray, currentText);
+  const toString = Object.prototype.toString
+  console.log("●id2:" + id2 + "/" + typeof currentData + "/currentData:" + currentData + "/toString:" + toString.call(currentData)+"/children:"+childrenArray+"/"+Array.isArray(childrenArray)+"/text:"+currentText);
+  const childNode = childrenArray.length > 0 ? childrenArray:currentText;
+  const newVnode = h(id2, currentData, childNode);
+  console.log(newVnode);
+  return newVnode;
 }
 //a div span img ul li input label
 export const a = (id, classNames, href, data, children) => {
@@ -78,7 +93,7 @@ export const img = (id, classNames, alt, src, data) => {
 }
 
 export const ul = (id, classNames, data, children, text) => {
-  return vtags("ul", id, classNames, data, children, text);
+  return vtags("ul", id, classNames, data, children, text);undefined
 }
 
 export const li = (id, classNames, data, children, text) => {

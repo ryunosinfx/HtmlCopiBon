@@ -18,11 +18,20 @@ export class Container extends BaseView {
     console.log("Container@updateAsAttach");
     this.fileUploadArea.addEventListeners(this.filesArea.fp);
   }
-  render() {
+  renderA() {
     this.fileUploadArea.attach(this);
     this.titleSettings.attach(this);
     this.filesArea.attach(this);
     this.exportButton.attach(this);
     return this.elm;
+  }
+  render() {
+    const newVnode = div({
+      style: {
+        color: '#000'
+      }
+    }, [] ,"container");
+    console.log('container!render!!!!!!!!!!!')
+    return newVnode;
   }
 }

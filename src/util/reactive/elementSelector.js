@@ -15,6 +15,11 @@ export class ElementSelector {
   }
   patch(vnode, selector, newNode) {
     console.log('patch00 START of Patch newNode:' + newNode);
+
+    if (!newNode && typeof selector==="string") {
+      console.log('patch00a ★ERROR★ of Patch newNode:' + newNode+"/selector:"+selector);
+      return vnode;
+    }
     if (!newNode ) {
       console.log('patch01a of Patch newNode:' + newNode);
       this.isValidNode(vnode, "vnode");

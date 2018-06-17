@@ -17,7 +17,7 @@ export class ViewBaseReducer extends BaseReducer {
       store.isOrverride=true;
 
       store.oldVnode=action.data.oldVnode;
-      store.selector=action.data.selector;
+      store.selector="#"+action.data.selector;
     }
     console.log('reduced...');
     return store;

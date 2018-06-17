@@ -6,13 +6,15 @@ const actionMap = new Map();
 export class ActionDispatcherImple {
   constructor(view) {
     this.view = view;
+    this.updateMap = new Map();
+    this.updateQueue = [];
   }
   static add(action, reducer) {
-    console.log('ActionDispatcherImple add00' + action);
+    console.log('ActionDispatcherImple add00:' + action);
     if (!action) {
       return false;
     }
-    console.log('ActionDispatcherImple add01' + action.type);
+    console.log('ActionDispatcherImple add01:' + action.type);
     const type = action.type;
     if (!type) {
       return false;
@@ -20,7 +22,7 @@ export class ActionDispatcherImple {
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
       if (!reducers.includes(reducer)) {
-        reducers.push(reducers);
+        reducers.push(reducer);
       } else {
         return false;
       }
@@ -56,10 +58,15 @@ export class ActionDispatcherImple {
     const storeKey = action.storeKey;
     let store = Store.getStore(storeKey);
     let targetView = this.view;
-    console.log('dispatch01');
+    console.log('dispatch01 type:'+type);
+    console.log(action);
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
+        console.log('A0 dispatch01a'+reducers);
+      console.log(reducers);
       for (let reducer of reducers) {
+        console.log('A0 dispatch01 b reducer : '+reducer);
+ console.log(reducer);
         store = await reducer.preReduce(store, action);
         store = await reducer.reduce(store, action);
         store = await reducer.postReduce(store, action);
@@ -85,13 +92,20 @@ export class ActionDispatcherImple {
     for (let activeView of activViews) {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
-        console.log('callUpdate update id:' + activeView.id);
+        console.log('A0 callUpdate update id:' + activeView.id);
         targetView.update(store,actionData);
+        //this.callUpdateExecute(()=>{targetView.update(store,actionData)});
       } else {
-        console.log('callUpdate updateReactive id:' + activeView.id);
+        console.log('A0 callUpdate updateReactive id:' + activeView.id);
         activeView.updateReactive(store,actionData);
       }
     }
     console.log('callUpdate END----------------');
+  }
+  callUpdateExecute(func){
+    func();
+    // this.updateQueue.push(func);
+    // const funcExecute = this.updateQueue.unshift();
+    // setTimeout(funcExecute,0);
   }
 }

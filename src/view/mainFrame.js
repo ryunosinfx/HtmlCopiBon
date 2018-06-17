@@ -26,12 +26,12 @@ export class MainFrame extends BaseView {
     this.container = new Container();
     this.baseFrame = null;
     this.view = '';
-    this.createBsaeFrame();
+    this.initialPatch();
   }
   onViewShow(store, data){
     this.header.attach(this,'#header');
-    this.footer.attach(this,'#footer');
     this.container.attach(this,'#container');
+    this.footer.attach(this,'#footer');
   }
   render(titleText) {
     let newVnode = div('frame', ['frame'], {}, [
@@ -39,12 +39,12 @@ export class MainFrame extends BaseView {
         style: {
           color: '#000'
         }
-      }, [], 'hellow!!'),
+      }, 'hellow!!'),
       div('menu', {
         style: {
           color: '#000'
         }
-      }, [], 'menu!!'),
+      }, 'menu!!'),
       div('container', {
         style: {
           color: '#000'
@@ -53,12 +53,12 @@ export class MainFrame extends BaseView {
           style: {
             color: '#000'
           }
-        }, [], 'content!!')], 'container!!'),
+        },'content!!')], 'container!!'),
       div('footer', {
         style: {
           color: '#000'
         }
-      }, [], 'footer!!')
+      }, 'footer!!?')
     ]);
     return newVnode;
     // this.header = new Header(this, titleText);
@@ -70,14 +70,4 @@ export class MainFrame extends BaseView {
     // this.footer.attach(this);
     // vu.attachBody(this.elm);
   }
-  createBsaeFrame() {
-    let elements = document.getElementsByTagName("body");
-    elements[0].innerHTML = '<div id="rootA"><p>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></div>';
-    let layout = document.getElementById('rootA');
-    this.patchFromOtherVnode(layout,null,this.render());
-
-    this.update({oldVnode:this.currentVnode,selector:null,isOrverride:true});
-    //return '<header id="header">Hellow!</header><div id="menu"></div><div id="container"><div id="content"></div></div><footer id="footer"></footer>';
-  }
-
 }

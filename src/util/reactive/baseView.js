@@ -27,6 +27,7 @@ import {
   input,
   label
 } from "./base/vtags";
+import {ViewBaseReducer} from './viewBaseReducer'
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
   rootVnode: null,
@@ -50,23 +51,25 @@ export class BaseView {
   }
   static setMainService(ms) {
     if (ms) {
-
       nodeFrame.ms = ms;
     }
   }
   patch(selector, newVnode) {
     return this.patchFromOtherVnode(nodeFrame.rootVnode, selector, newVnode);
   }
+  initialPatch() {
+    let elements = document.getElementsByTagName("body");
+    elements[0].innerHTML = '<div id="rootNodeA"><p>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></div>';
+    let currentVnode = document.getElementById('rootNodeA');
+    this.patchFromOtherVnode(currentVnode, null, this.render());
+    this.update({oldVnode:this.currentVnode,selector:null,isOrverride:true});
+  }
   patchFromOtherVnode(currentVnode, selector, newVnode) {
-    let currentRootNode = selector !== null ?
+    let currentRootNode = selector !== null ? //for firstTime
       nodeFrame.rootVnode :
       currentVnode;
     let currentSelector = selector;
     let currentNewNode = newVnode;
-    if (selector !== null && !!newVnode === false) {
-      currentSelector = this.id;
-      currentNewNode = selector;
-    }
     const result = this.es.patch(currentRootNode, currentSelector, currentNewNode);
     result.data['name'] = this.name + Date.now();
     nodeFrame.rootVnode = result;
@@ -89,72 +92,67 @@ export class BaseView {
     return this.currentVnode;
   }
   update(store, actionData) {
-    const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    const currentVnode = oldVnode ?
-      oldVnode :
-      this.currentVnode;
-    console.log('A00 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
-    if (isOrverride) {
+    console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode+"/" +typeof this.currentVnode);
+    if (isOrverride ) {
       this.onPreViewBuild(oldVnode, store);
-      console.log('A01 --baseView.goAnotherView view;' + this.className);
+      console.log('A01 update --baseView.goAnotherView view;' + this.className);
       this.currentVnode = !this.currentVnode ?
         this.renderWrap(store) :
         this.currentVnode;
+    }else if(!this.currentVnode){
+      this.currentVnode=this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
     }
-    this.onViewShow(viewState, store);
+    this.onViewShow(store, actionData);
     if (isOrverride) {
-      console.log('A02 --baseView.goAnotherView selector;' + selector);
+      console.log(oldVnode);
+      console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode +'/id;' + this.id+'/selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
+      //  alert('A02 update --baseView.goAnotherView selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
       if (oldVnode) {
-        console.log('A02a --baseView.goAnotherView selector;' + selector);
+        console.log('A02a update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(oldVnode, selector, this.currentVnode);
       } else {
-        console.log('A02b --baseView.goAnotherView selector;' + selector);
-        this.patchFromOtherVnode(this.currentVnode, this.currentVnode);
+        console.log('A02b update --baseView.goAnotherView selector;' + selector);
+        this.patchFromOtherVnode(this.currentVnode,'#' +this.id, this.currentVnode);
       }
     } else {
       this.patch(selector, this.currentVnode);
     }
     this.onAfterAttach(store);
-    this.onViewShown(viewState, store);
-    this.viewState = viewState;
+    this.onViewShown(store, actionData);
   }
   updateReactive(store, actionData) {
-    const viewState = this.viewState;
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    const currentVnode = oldVnode ?
-      oldVnode :
-      this.currentVnode;
     this.currentVnode = !this.currentVnode ?
       this.renderWrap(store) :
       this.currentVnode;
-    console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
-    this.onViewShow(viewState, store);
-    console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    this.onViewShow(store, actionData);
+    console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.patch("#" + this.id, this.currentVnode);
-    console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
+    console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.onAfterAttach(store);
-    console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
-    this.onViewShown(viewState, store);
-    console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + currentVnode);
-    this.viewState = viewState;
+    console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    this.onViewShown(store, actionData);
+    console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
   }
   init() {}
   // attache to
   attach(parentView = this.parentView, selector, data) {
     this.parentView = parentView;
-    this.selector = selector;
+    let taregetSelecotor = selector;
     if (!selector) {
       console.log("★attach selector is null :" + selector);
+      taregetSelecotor = this.id;
     }
     const store = Store.getStore();
     this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
-    console.log('---show selector:' + selector + '/parentView:' + parentView.id + "/this.id:" + this.id);
+    console.log('A08---show selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatcher.dispatch(action);
   }
@@ -202,7 +200,8 @@ export class BaseView {
   }
   renderWrap(store, data) {
     console.log('renderWrap');
-    let newVnode = div(this.id, [this.className], {}, [this.render(store, data)]);
+    const newVnode = div(this.id, [this.className], {}, [this.render(store, data)]);
+    console.log(newVnode)
     return newVnode;
   }
   getAnker() {

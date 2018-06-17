@@ -18,12 +18,12 @@ export class Header extends BaseView {
     this.titleText = titleText;
   }
   render() {
-    const newVnode = div({
+    const newVnode = div("aaa",{
       style: {
         color: '#000'
       }
     }, [div("title", ["title"], this.titleText)]);
-    alert('header!')
+    console.log('header!render!!!!!!!!!!!')
     return newVnode;
   }
 }
