@@ -25,6 +25,11 @@ export class Container extends BaseView {
     this.exportButton.attach(this);
     return this.elm;
   }
+
+  onViewShow(store, data){
+  this.exportButton.attach(this);
+
+  }
   render() {
     const newVnode = div({
       style: {

@@ -103,7 +103,7 @@ export class BaseView {
         this.renderWrap(store) :
         this.currentVnode;
     }else if(!this.currentVnode){
-      this.currentVnode=this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
+      //this.currentVnode=this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
     }
     this.onViewShow(store, actionData);
     if (isOrverride) {
@@ -149,12 +149,24 @@ export class BaseView {
       console.log("★attach selector is null :" + selector);
       taregetSelecotor = this.id;
     }
+    if(this.isAttached()){
+      alert('attached!!!');
+      return;
+    }
+    //
     const store = Store.getStore();
     this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
     console.log('A08---show selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatcher.dispatch(action);
+  }
+  isAttached(){
+    const currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
+    if(currentVnode === this.currentVnode){
+      return true;
+    }
+    return false;
   }
   onAfterAttach(store) {
     const currentVnode = this.currentVnode;
