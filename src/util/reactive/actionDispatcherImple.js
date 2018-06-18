@@ -58,15 +58,15 @@ export class ActionDispatcherImple {
     const storeKey = action.storeKey;
     let store = Store.getStore(storeKey);
     let targetView = this.view;
-    console.log('dispatch01 type:'+type);
+    console.log('dispatch01 type:' + type);
     console.log(action);
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
-        console.log('A0 dispatch01a'+reducers);
+      console.log('A0 dispatch01a' + reducers);
       console.log(reducers);
       for (let reducer of reducers) {
-        console.log('A0 dispatch01 b reducer : '+reducer);
- console.log(reducer);
+        console.log('A0 dispatch01 b reducer : ' + reducer);
+        console.log(reducer);
         store = await reducer.preReduce(store, action);
         store = await reducer.reduce(store, action);
         store = await reducer.postReduce(store, action);
@@ -93,16 +93,16 @@ export class ActionDispatcherImple {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
         console.log('A0 callUpdate update id:' + activeView.id);
-        targetView.update(store,actionData);
+        targetView.update(store, actionData);
         //this.callUpdateExecute(()=>{targetView.update(store,actionData)});
       } else {
         console.log('A0 callUpdate updateReactive id:' + activeView.id);
-        activeView.updateReactive(store,actionData);
+        activeView.updateReactive(store, actionData);
       }
     }
     console.log('callUpdate END----------------');
   }
-  callUpdateExecute(func){
+  callUpdateExecute(func) {
     func();
     // this.updateQueue.push(func);
     // const funcExecute = this.updateQueue.unshift();

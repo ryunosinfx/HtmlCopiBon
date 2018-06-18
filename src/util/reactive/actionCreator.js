@@ -8,8 +8,8 @@ export class ActionCreator {
     return {type: key, data: data, storeKey: storeKey};
   }
   static creatAttachAction(parentView, newView, data, storeKey = null) {
-    console.log("creatAttachAction");
-    console.log(newView);
+    // console.log("creatAttachAction");
+    // console.log(newView);
     const addData = data && typeof data === "object"
       ? data
       : {};
