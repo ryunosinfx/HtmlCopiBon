@@ -5,9 +5,13 @@ export class PageImage  extends BaseView {
   constructor(listing) {
     super("PageImage"+listing, "PageImage");
   }
+  // renderA() {
+  //   const button = vu.create(null, "PageImageA", this.id);
+  //   vu.append(this.elm, button);
+  //   return this.elm;
+  // }
   render() {
-    const button = vu.create(null, "PageImageA", this.id);
-    vu.append(this.elm, button);
-    return this.elm;
+    this.button = div(this.id+"child", "PageImageA", this.id);
+    return div(this.id, "PageImage", [this.button]);
   }
 }

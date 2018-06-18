@@ -12,7 +12,6 @@ export class Footer extends BaseView {
         color: '#000'
       }
     }, [div("copyright", ["copyright"], this.copyright)]);
-    console.log('footer!render!!!!!!!!!!!')
     return newVnode;
   }
 }

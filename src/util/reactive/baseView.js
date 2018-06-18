@@ -1,22 +1,10 @@
 import vu from "../viewUtil";
-import {
-  patch
-} from './base/preLoader'
-import {
-  ElementSelector
-} from './elementSelector'
-import {
-  ActionCreator
-} from './actionCreator'
-import {
-  ViewAttachQueue
-} from './viewAttachQueue'
-import {
-  ActionDispatcher
-} from './actionDispatcher'
-import {
-  Store
-} from './store'
+import {patch} from './base/preLoader'
+import {ElementSelector} from './elementSelector'
+import {ActionCreator} from './actionCreator'
+import {ViewAttachQueue} from './viewAttachQueue'
+import {ActionDispatcher} from './actionDispatcher'
+import {Store} from './store'
 import {
   a,
   div,
@@ -45,6 +33,8 @@ export class BaseView {
     //this.preRender(id, className);
     this.currentVnode = null;
     this.onViewLoaded(store)
+    this.updateReactiveCallCount = 0;
+    this.updateCount = 0;
   }
   static setRootVnode(rootVnode) {
     nodeFrame.rootVnode = rootVnode;
@@ -62,12 +52,13 @@ export class BaseView {
     elements[0].innerHTML = '<div id="rootNodeA"><p>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></div>';
     let currentVnode = document.getElementById('rootNodeA');
     this.patchFromOtherVnode(currentVnode, null, this.render());
-    this.update({oldVnode:this.currentVnode,selector:null,isOrverride:true});
+    this.update({oldVnode: this.currentVnode, selector: null, isOrverride: true});
   }
   patchFromOtherVnode(currentVnode, selector, newVnode) {
-    let currentRootNode = selector !== null ? //for firstTime
-      nodeFrame.rootVnode :
-      currentVnode;
+    let currentRootNode = selector !== null
+      ? //for firstTime
+      nodeFrame.rootVnode
+      : currentVnode;
     let currentSelector = selector;
     let currentNewNode = newVnode;
     const result = this.es.patch(currentRootNode, currentSelector, currentNewNode);
@@ -92,44 +83,59 @@ export class BaseView {
     return this.currentVnode;
   }
   update(store, actionData) {
+    this.updateCount++;
+    if (this.updateCount > 1) {
+      setTimeout(() => {
+        this.updateCount = 0
+      });
+      return;
+    }
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode+"/" +typeof this.currentVnode);
-    if (isOrverride ) {
+    console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode + "/" + typeof this.currentVnode);
+    if (isOrverride) {
       this.onPreViewBuild(oldVnode, store);
       console.log('A01 update --baseView.goAnotherView view;' + this.className);
-      this.currentVnode = !this.currentVnode ?
-        this.renderWrap(store) :
-        this.currentVnode;
-    }else if(!this.currentVnode){
+      this.currentVnode = !this.currentVnode
+        ? this.renderWrap(store)
+        : this.currentVnode;
+    } else if (!this.currentVnode) {
       //this.currentVnode=this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
     }
     this.onViewShow(store, actionData);
     if (isOrverride) {
       console.log(oldVnode);
-      console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode +'/id;' + this.id+'/selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
+      console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode + '/id;' + this.id + '/selector;' + selector + "/ this.currentVnode:" + this.currentVnode);
       //  alert('A02 update --baseView.goAnotherView selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
       if (oldVnode) {
         console.log('A02a update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(oldVnode, selector, this.currentVnode);
       } else {
         console.log('A02b update --baseView.goAnotherView selector;' + selector);
-        this.patchFromOtherVnode(this.currentVnode,'#' +this.id, this.currentVnode);
+        this.patchFromOtherVnode(this.currentVnode, '#' + this.id, this.currentVnode);
       }
     } else {
       this.patch(selector, this.currentVnode);
     }
-    this.onAfterAttach(store);
+    this.onAfterAttachWrap(store, actionData);
     this.onViewShown(store, actionData);
   }
   updateReactive(store, actionData) {
+
+    this.updateReactiveCallCount++;
+    if (this.updateReactiveCallCount > 1) {
+      setTimeout(() => {
+        this.updateReactiveCallCount = 0
+      });
+      return;
+    }
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    this.currentVnode = !this.currentVnode ?
-      this.renderWrap(store) :
-      this.currentVnode;
+    this.currentVnode = !this.currentVnode
+      ? this.renderWrap(store)
+      : this.currentVnode;
     console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.onViewShow(store, actionData);
     console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
@@ -149,8 +155,8 @@ export class BaseView {
       console.log("★attach selector is null :" + selector);
       taregetSelecotor = this.id;
     }
-    if(this.isAttached()){
-      alert('attached!!!');
+    if (this.isAttached()) {
+      //alert('attached!!!');
       return;
     }
     //
@@ -161,14 +167,21 @@ export class BaseView {
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatcher.dispatch(action);
   }
-  isAttached(){
+  isAttached() {
     const currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
-    if(currentVnode === this.currentVnode){
+    if (currentVnode === this.currentVnode) {
       return true;
     }
     return false;
   }
-  onAfterAttach(store) {
+  onAfterAttachWrap(store, actionData) {
+    this.updateCount++;
+    if (this.updateCount > 2) {
+      return;
+    }
+    this.onAfterAttach(store, actionData);
+  }
+  onAfterAttach(store, actionData) {
     const currentVnode = this.currentVnode;
     // while (viewAttachQueue.hasItem()) {
     //   let item = viewAttachQueue.poll();

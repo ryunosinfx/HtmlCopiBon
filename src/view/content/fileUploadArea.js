@@ -7,12 +7,18 @@ export class FileUploadArea extends BaseView {
   constructor() {
     super("fuaPArent", "frame");
   }
+  // renderA() {
+  //   this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);
+  //   const area = vu.createLabel("FileUploadArea", "FileUploadArea", text,"FileUploadFile");
+  //   vu.append(this.elm, area);
+  //   vu.append(this.elm, this.fileInput);
+  //   return this.elm;
+  // }
   render() {
-    this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);
-    const area = vu.createLabel("FileUploadArea", "FileUploadArea", text,"FileUploadFile");
-    vu.append(this.elm, area);
-    vu.append(this.elm, this.fileInput);
-    return this.elm;
+    return div(this.id, "TitleSettings", [
+      div("FileUploadArea", "FileUploadArea", "FileUploadFile"),
+      div("FileUploadFile", "FileUploadFile", text)
+    ]);
   }
   addEventListeners(fp) {
     this.fu = new FileUploader(fp);

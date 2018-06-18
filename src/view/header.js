@@ -23,7 +23,6 @@ export class Header extends BaseView {
         color: '#000'
       }
     }, [div("title", ["title"], this.titleText)]);
-    console.log('header!render!!!!!!!!!!!')
     return newVnode;
   }
 }

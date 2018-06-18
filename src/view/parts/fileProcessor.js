@@ -16,7 +16,7 @@ export class FileProcessor extends BaseView {
     this.pb = this.vpl.getIndigator(this);
   }
   render() {
-    return this.elm;
+    return div(this.id);
   }
   async processFiles(files) {
     const fue = new FileUploadExecuter(this.pb);
@@ -41,7 +41,7 @@ export class FileProcessor extends BaseView {
       iamageEntitis.push(iamageEntit);
     }
     await this.showImages(iamageEntitis);
-    console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length+"/this.elm:"+this.elm.parentNode);
+    console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length);
   }
   async showImages(iamageEntitis){
     Sorter.orderBy(iamageEntitis,[{colName:"listing",isDESC:false},{colName:"updateDate",isDESC:true}]);

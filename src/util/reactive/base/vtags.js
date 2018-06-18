@@ -67,10 +67,10 @@ const vtags = (tagName, id, classNames, data = {}, children, text) => {
     currentData = id;
   }
   const toString = Object.prototype.toString
-  console.log("●id2:" + id2 + "/" + typeof currentData + "/currentData:" + currentData + "/toString:" + toString.call(currentData)+"/children:"+childrenArray+"/"+Array.isArray(childrenArray)+"/text:"+currentText);
+  //console.log("●id2:" + id2 + "/" + typeof currentData + "/currentData:" + currentData + "/toString:" + toString.call(currentData)+"/children:"+childrenArray+"/"+Array.isArray(childrenArray)+"/text:"+currentText);
   const childNode = childrenArray.length > 0 ? childrenArray:currentText;
   const newVnode = h(id2, currentData, childNode);
-  console.log(newVnode);
+  //console.log(newVnode);
   return newVnode;
 }
 //a div span img ul li input label

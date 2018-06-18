@@ -6,9 +6,13 @@ export class TitleSettings  extends BaseView {
     super("TitleSettings", "TitleSettings");
     this.text="TitleSettings";
   }
+  // renderA() {
+  //   const settings = vu.create("TitleSettingsA", "TitleSettingsA", this.text);
+  //   vu.append(this.elm, settings);
+  //   return this.elm;
+  // }
   render() {
-    const settings = vu.create("TitleSettingsA", "TitleSettingsA", this.text);
-    vu.append(this.elm, settings);
-    return this.elm;
+    this.setting = div(this.id+"child", "TitleSettings", this.text);
+    return div(this.id, "TitleSettings", [this.setting]);
   }
 }
