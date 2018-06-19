@@ -1,4 +1,5 @@
-const baseActions = ["addImage","removeImage","sortImages"];
+import {ActionCreator} from '../../util/reactive/actionCreator'
+const baseActions = ["addImage","removeImage","sortImages",'loadImages'];
 export class ImageActionCreator {
   constructor() {}
   static getBaseActions() {
@@ -7,17 +8,17 @@ export class ImageActionCreator {
   static createAction(key, data, storeKey = null) {
     return {type: key, data: data, storeKey: storeKey};
   }
-  static creatAddAction(data, storeKey = null) {
-    // console.log("creatAttachAction");
-    // console.log(newView);
-    const addData = data && typeof data === "object"
-      ? data
-      : {};
-    //alert(newView);
-    addData.parentView = parentView;
-    addData.selector = newView.id;
-    addData.storeKey = storeKey;
-    return {type: "addImage", data: addData};
+  static creatAddAction(targetView,data, storeKey = null) {
+    return ActionCreator.createBaseAction("addImage", targetView,data, storeKey);
+  }
+  static creatRemoveAction(targetView,data, storeKey = null) {
+    return ActionCreator.createBaseAction("removeImage", targetView,data, storeKey);
+  }
+  static creatLoadImagesAction(targetView,data, storeKey = null) {
+    return ActionCreator.createBaseAction("loadImages", targetView,data, storeKey);
+  }
+  static creatSortImagesAction(targetView,data, storeKey = null) {
+    return ActionCreator.createBaseAction("sortImages", targetView,data, storeKey);
   }
 
 }

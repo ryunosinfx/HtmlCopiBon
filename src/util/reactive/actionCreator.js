@@ -7,6 +7,15 @@ export class ActionCreator {
   static createAction(key, data, storeKey = null) {
     return {type: key, data: data, storeKey: storeKey};
   }
+  static createBaseAction(type, targetView,data, storeKey = null){
+    const addData = data && typeof data === "object"
+      ? data
+      : {};
+    addData.targetView = targetView;
+    addData.selector = targetView.id;
+    addData.storeKey = storeKey;
+    return {type:type , data: addData};
+  }
   static creatAttachAction(parentView, newView, data, storeKey = null) {
     // console.log("creatAttachAction");
     // console.log(newView);

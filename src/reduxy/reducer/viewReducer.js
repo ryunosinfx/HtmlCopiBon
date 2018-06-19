@@ -4,7 +4,6 @@ import BaseReducer from '../../util/reactive/baseReducer'
 export default class ViewBaseReducer extends BaseReducer {
   constructor() {
     super();
-    this.atatch(ImageActionCreator.creatAddAction());
     this.atatch(ViewBaseActions.getGotoAnotherViewAction());
     this.atatch(ViewBaseActions.getShowViewAction());
   }
