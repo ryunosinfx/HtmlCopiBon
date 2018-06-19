@@ -1,7 +1,7 @@
 import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
-export class Thumnails  extends BaseView {
+export class Thumbnails  extends BaseView {
   constructor() {
     super("Thumnails", "Thumnails");
   }

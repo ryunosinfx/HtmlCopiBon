@@ -165,7 +165,7 @@ export class BaseView {
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
     console.log('A08---show selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
-    this.dispatcher.dispatch(action);
+    this.dispatch(action);
   }
   isAttached() {
     const currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
@@ -173,6 +173,9 @@ export class BaseView {
       return true;
     }
     return false;
+  }
+  dispatch(action){
+    this.dispatcher.dispatch(action);
   }
   onAfterAttachWrap(store, actionData) {
     this.updateCount++;
@@ -191,7 +194,7 @@ export class BaseView {
   changeAnotherView(parentView, selector, nextView) {
     this.onViewHide(nextView, store, actionData);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
-    this.dispatcher.dispatch(action);
+    this.dispatch(action);
     this.onViewHidden(nextView, store, actionData);
   }
   // Event listener

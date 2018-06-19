@@ -1,5 +1,7 @@
 import {ProgressBar} from "../view/parts/progressBar";
 import {BaseEventHandler} from "./baseEventHandler";
+import {ImageActionCreator} from '../reduxy/action/imageActionCreator'
+import {ImageViewReducer} from '../reduxy/reducer/imageViewReducer'
 export class FileUploader extends BaseEventHandler {
   constructor(fileProcessor) {
     super();
@@ -24,7 +26,9 @@ export class FileUploader extends BaseEventHandler {
     }
   }
   handleFiles(files){
-    this.fileProcessor.processFiles(files);
+    const actin = ImageActionCreator.creatAddAction(this.fileProcessor,{files:files});
+    this.fileProcessor.dispathc(actin);
+    //this.fileProcessor.processFiles(files);
   }
   async areadParFile(file){
     return await areadParFile(file);

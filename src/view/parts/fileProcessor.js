@@ -5,15 +5,20 @@ import {Sorter} from "../../util/sorter";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import FileUploadExecuter from "../../service/fileUploadExecuter";
+import {ImageActionCreator} from '../reduxy/action/imageActionCreator'
+import {ImageViewReducer} from '../reduxy/reducer/imageViewReducer'
 const loaded = new Map();
 export class FileProcessor extends BaseView {
   constructor() {
     super("FileProcessor", "FileProcessor");
     this.vpl = this.ms.getViewPartsLoader();
-    this.ip = this.ms.ip;
-    this.em = this.ms.em;;
-    this.tm = this.ms.tm;;
+    // this.ip = this.ms.ip;
+    // this.em = this.ms.em;;
+    // this.tm = this.ms.tm;;
     this.pb = this.vpl.getIndigator(this);
+  }
+  onAfterAttach(store, data) {
+
   }
   render() {
     return div(this.id);

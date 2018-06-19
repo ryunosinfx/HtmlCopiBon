@@ -12,7 +12,7 @@ export class ActionCreator {
       ? data
       : {};
     addData.targetView = targetView;
-    addData.selector = targetView.id;
+    addData.selector = targetView?targetView.id:null;
     addData.storeKey = storeKey;
     return {type:type , data: addData};
   }

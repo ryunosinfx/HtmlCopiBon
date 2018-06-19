@@ -13,12 +13,14 @@ import {
 import {FileProcessor} from "../parts/fileProcessor";
 import {ImageDetail} from "../parts/imageDetail";
 import {PageImages} from "../parts/pageImages";
+import {Thumbnails} from "../parts/thumbnails";
 export class FilesArea extends BaseView {
   constructor() {
     super("FilesArea", "FilesArea");
     this.fp = new FileProcessor(this);
     this.imageDetail = new ImageDetail(this);
     this.pageImages = new PageImages(this);
+    this.thumbnails = new Thumbnails(this);
   }
   // updateAsAttach(store, actionData) {
   //   super.updateAsAttachExecute(store, actionData);
@@ -30,13 +32,15 @@ export class FilesArea extends BaseView {
     this.fp.attach(this);
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
+    this.thumbnails.attach(this);
     this.fp.showFilesInit();
   }
   render() {
     return div(this.id, "FilesArea", [
       div(this.fp.id),
       div(this.imageDetail.id),
-      div(this.pageImages.id)
+      div(this.pageImages.id),
+      div(this.thumbnails.id)
     ])
 
   }
