@@ -1,5 +1,5 @@
 import {MainService} from "./mainService";
-export default class FileUploadExecuter {
+export class FileUploadExecuter {
   constructor(indigator) {
     this.progress = indigator;
     this.name = "FileUploader";

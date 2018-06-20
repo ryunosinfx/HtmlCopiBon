@@ -4,9 +4,9 @@ import {PrimaryKey} from "../../service/entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
-import FileUploadExecuter from "../../service/fileUploadExecuter";
-import {ImageActionCreator} from '../reduxy/action/imageActionCreator'
-import {ImageViewReducer} from '../reduxy/reducer/imageViewReducer'
+import {FileUploadExecuter} from "../../service/fileUploadExecuter";
+import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
+import {ImageViewReducer} from '../../reduxy/reducer/imageViewReducer'
 const loaded = new Map();
 export class FileProcessor extends BaseView {
   constructor() {
@@ -18,36 +18,43 @@ export class FileProcessor extends BaseView {
     this.pb = this.vpl.getIndigator(this);
   }
   onAfterAttach(store, data) {
+    const action = ImageActionCreator.creatLoadImagesAction(this,{});
+    this.dispatch(action);
+  }
 
+  onViewShow(store, actionData) {
+    if(store.imagesData){
+      alert(store.imagesData)
+    }
   }
   render() {
     return div(this.id);
   }
-  async processFiles(files) {
-    const fue = new FileUploadExecuter(this.pb);
-    const iamageEntitis =  await this.tm.addImageFiles(fue,files);
-    for(let imageEntity of iamageEntitis){
-      const imagePk = imageEntity.getPk();
-      loaded.set(imagePk, imageEntity.name);
-    }
-    console.log("=★=processFiles");
-    await this.showImages(iamageEntitis);
-  }
-  async showFilesInit() {
-    const title = await this.tm.load();
-    const images = title.images;
-    const iamageEntitis = [];
-    for (let index in images) {
-      const pk = images[index];
-      if(!pk){
-        continue;
-      }
-      const iamageEntit = await this.em.get(pk);
-      iamageEntitis.push(iamageEntit);
-    }
-    await this.showImages(iamageEntitis);
-    console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length);
-  }
+  // async processFiles(files) {
+  //   const fue = new FileUploadExecuter(this.pb);
+  //   const iamageEntitis =  await this.tm.addImageFiles(fue,files);
+  //   for(let imageEntity of iamageEntitis){
+  //     const imagePk = imageEntity.getPk();
+  //     loaded.set(imagePk, imageEntity.name);
+  //   }
+  //   console.log("=★=processFiles");
+  //   await this.showImages(iamageEntitis);
+  // }
+  // async showFilesInit() {
+  //   const title = await this.tm.load();
+  //   const images = title.images;
+  //   const iamageEntitis = [];
+  //   for (let index in images) {
+  //     const pk = images[index];
+  //     if(!pk){
+  //       continue;
+  //     }
+  //     const iamageEntit = await this.em.get(pk);
+  //     iamageEntitis.push(iamageEntit);
+  //   }
+  //   await this.showImages(iamageEntitis);
+  //   console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length);
+  // }
   async showImages(iamageEntitis){
     Sorter.orderBy(iamageEntitis,[{colName:"listing",isDESC:false},{colName:"updateDate",isDESC:true}]);
     for(let iamageEntity of iamageEntitis){

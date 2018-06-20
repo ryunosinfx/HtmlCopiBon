@@ -7,6 +7,7 @@ export class FileUploader extends BaseEventHandler {
     super();
     this.fileProcessor = fileProcessor;
     this.name = "FileUploader";
+    ImageViewReducer.register()
   }
   handleFileSelect() {
     return (event)=>{

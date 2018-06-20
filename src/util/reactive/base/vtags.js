@@ -93,7 +93,7 @@ export const img = (id, classNames, alt, src, data) => {
 }
 
 export const ul = (id, classNames, data, children, text) => {
-  return vtags("ul", id, classNames, data, children, text);undefined
+  return vtags("ul", id, classNames, data, children, text);
 }
 
 export const li = (id, classNames, data, children, text) => {

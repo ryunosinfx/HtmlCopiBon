@@ -4,19 +4,29 @@ import {ImageActionCreator} from '../action/imageActionCreator'
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
+let imageViewReducer=null;
 export class ImageViewReducer extends BaseReducer {
   constructor() {
     super();
     this.ms = MainService.getInstance();
     this.vpl = this.ms.getViewPartsLoader();
     this.ip = this.ms.ip;
-    this.em = this.ms.em;;
-    this.tm = this.ms.tm;;
+    this.em = this.ms.em;
+    this.tm = this.ms.tm;
+    alert(this.tm)
     this.imagAddAction = ImageActionCreator.creatAddAction();
     this.imageRemoveAction = ImageActionCreator.creatRemoveAction();
     this.imagesLoadAction = ImageActionCreator.creatLoadImagesAction();
     this.imagesSortAction = ImageActionCreator.creatSortImagesAction();
     this.atatch(this.imagAddAction);
+    this.atatch(this.imageRemoveAction);
+    this.atatch(this.imagesLoadAction);
+    this.atatch(this.imagesSortAction);
+  }
+  static register(){
+    if(!imageViewReducer){
+      imageViewReducer = new ImageViewReducer();
+    }
   }
   async reduce(store, action) {
     if (this.imagAddAction.type === action.type) {
@@ -98,6 +108,5 @@ export class ImageViewReducer extends BaseReducer {
   async remove(pk) {
       await this.tm.removeImage(pk);
   }
-
 }
-const imageViewReducer = new ImageViewReducer();
+// setTimeout(ImageViewReducer.register,1);

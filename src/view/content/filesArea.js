@@ -33,7 +33,7 @@ export class FilesArea extends BaseView {
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
     this.thumbnails.attach(this);
-    this.fp.showFilesInit();
+    //this.fp.showFilesInit();
   }
   render() {
     return div(this.id, "FilesArea", [
