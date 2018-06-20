@@ -106,8 +106,8 @@ export default class ViewUtil {
     elm.textContent = text;
   }
   static emit(elm, eventType, isBubbling = true, isCancelable = true) {
-    const evt = document.createEvent("HTMLEvents");
-    evt.initEvent(eventType, isBubbling, isCancelable);
-    return elm.dispatchEvent(evt);
+    const event = document.createEvent("HTMLEvents");
+    event.initEvent(eventType, isBubbling, isCancelable);
+    return elm.dispatchEvent(event);
   }
 }

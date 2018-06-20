@@ -177,6 +177,10 @@ export class BaseView {
   dispatch(action){
     this.dispatcher.dispatch(action);
   }
+  getElementById(id){
+    const elements = this.es.getElements(this.currentVnode, '#' + id);
+    return elements && elements.length > 0 ? elements[0]:null;
+  }
   onAfterAttachWrap(store, actionData) {
     this.updateCount++;
     if (this.updateCount > 2) {

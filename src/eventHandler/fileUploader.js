@@ -5,30 +5,32 @@ import {ImageViewReducer} from '../reduxy/reducer/imageViewReducer'
 export class FileUploader extends BaseEventHandler {
   constructor(fileProcessor) {
     super();
-    this.fileProcessor = fileProcessor;
+    // this.fileProcessor = fileProcessor;
     this.name = "FileUploader";
-    ImageViewReducer.register()
+    ImageViewReducer.register();
   }
-  handleFileSelect() {
+  handleFileSelect(view) {
     return (event)=>{
+      alert("handleFileSelect");
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const files = event.target.files; // FileList object
-      this.handleFiles(files);
+      this.handleFiles(view,files);
     }
   }
 
-  handleDrop(){
+  handleDrop(view){
     return (event)=>{
+      alert("handleDrop");
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const files = event.dataTransfer.files;
-      this.handleFiles(files);
+      this.handleFiles(view,files);
     }
   }
-  handleFiles(files){
-    const actin = ImageActionCreator.creatAddAction(this.fileProcessor,{files:files});
-    this.fileProcessor.dispathc(actin);
+  handleFiles(view,files){
+    const actin = ImageActionCreator.creatAddAction(view,{files:files});
+    view.dispathc(actin);
     //this.fileProcessor.processFiles(files);
   }
   async areadParFile(file){

@@ -13,7 +13,6 @@ export class ImageViewReducer extends BaseReducer {
     this.ip = this.ms.ip;
     this.em = this.ms.em;
     this.tm = this.ms.tm;
-    alert(this.tm)
     this.imagAddAction = ImageActionCreator.creatAddAction();
     this.imageRemoveAction = ImageActionCreator.creatRemoveAction();
     this.imagesLoadAction = ImageActionCreator.creatLoadImagesAction();
@@ -67,13 +66,14 @@ export class ImageViewReducer extends BaseReducer {
     const title = await this.tm.load();
     const images = title.images;
     const imageEntitis = [];
+    
     for (let index in images) {
       const pk = images[index];
       if (!pk) {
         continue;
       }
-      const iamageEntit = await this.em.get(pk);
-      imageEntitis.push(iamageEntit);
+      const iamageEntity = await this.em.get(pk);
+      imageEntitis.push(iamageEntity);
     }
     Sorter.orderBy(imageEntitis, [
       {

@@ -34,6 +34,9 @@ export class ObjectUtil {
     return retObj;
   }
   static deepVnodeClone(target) {
+    if(!target){
+      return target;
+    }
     const obj = {
       sel: target.sel,
       data: ObjectUtil.simpleDeepClone(target.data),

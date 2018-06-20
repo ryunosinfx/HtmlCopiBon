@@ -16,6 +16,7 @@ export class FileProcessor extends BaseView {
     // this.em = this.ms.em;;
     // this.tm = this.ms.tm;;
     this.pb = this.vpl.getIndigator(this);
+    ImageViewReducer.register();
   }
   onAfterAttach(store, data) {
     const action = ImageActionCreator.creatLoadImagesAction(this,{});
@@ -24,7 +25,7 @@ export class FileProcessor extends BaseView {
 
   onViewShow(store, actionData) {
     if(store.imagesData){
-      alert(store.imagesData)
+      alert("store.imagesData)!"+store.imagesData)
     }
   }
   render() {

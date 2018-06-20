@@ -45,7 +45,12 @@ div.title {
   padding: 0.5em;
 }
 
-label.FileUploadArea {
+div.FileUploadArea input {
+  position:absolute;
+  left:-100;
+
+}
+div.FileUploadArea {
   display: block;
   min-height: 100%;
   width: 100%;

@@ -12,7 +12,7 @@ export class V {
 // ]);
 const setProps = (data, inputs) => {
   let newData = {};
-  if (data) {
+  if (data && typeof data === "object") {
     if (!data.props) {
       data.props = {};
     }
@@ -68,7 +68,9 @@ const vtags = (tagName, id, classNames, data = {}, children, text) => {
   }
   const toString = Object.prototype.toString
   //console.log("●id2:" + id2 + "/" + typeof currentData + "/currentData:" + currentData + "/toString:" + toString.call(currentData)+"/children:"+childrenArray+"/"+Array.isArray(childrenArray)+"/text:"+currentText);
-  const childNode = childrenArray.length > 0 ? childrenArray:currentText;
+  const childNode = childrenArray.length > 0
+    ? childrenArray
+    : currentText;
   const newVnode = h(id2, currentData, childNode);
   //console.log(newVnode);
   return newVnode;
@@ -100,8 +102,14 @@ export const li = (id, classNames, data, children, text) => {
   return vtags("li", id, classNames, data, children, text);
 }
 
-export const input = (id, classNames, data, children, text) => {
-  return vtags("input", id, classNames, data, children, text);
+export const file = (id, classNames, data, value, text) => {
+  return vtags("input", id, classNames, setProps(data, {type: "file"}), null, text);
+}
+export const input = (id, classNames, data, type, text) => {
+  return vtags("input", id, classNames, setProps(data, {
+    type: type,
+    value: text
+  }), null, text);
 }
 export const label = (id, classNames, data, children, text) => {
   return vtags("label", id, classNames, data, children, text);

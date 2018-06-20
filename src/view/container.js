@@ -22,18 +22,18 @@ export class Container extends BaseView {
     this.filesArea = new FilesArea();
     this.exportButton = new ExportButton();
   }
-  updateAsAttach(store, actionData) {
-    super.updateAsAttachExecute(store, actionData);
-    console.log("Container@updateAsAttach");
-    this.fileUploadArea.addEventListeners(this.filesArea.fp);
-  }
-  renderA() {
-    this.fileUploadArea.attach(this);
-    this.titleSettings.attach(this);
-    this.filesArea.attach(this);
-    this.exportButton.attach(this);
-    return this.elm;
-  }
+  // updateAsAttach(store, actionData) {
+  //   super.updateAsAttachExecute(store, actionData);
+  //   console.log("Container@updateAsAttach");
+  //   this.fileUploadArea.addEventListeners(this.filesArea.fp);
+  // }
+  // renderA() {
+  //   this.fileUploadArea.attach(this);
+  //   this.titleSettings.attach(this);
+  //   this.filesArea.attach(this);
+  //   this.exportButton.attach(this);
+  //   return this.elm;
+  // }
 
   onAfterAttach(store, data) {
     this.fileUploadArea.attach(this);
