@@ -12,7 +12,7 @@ export class ImageDetail  extends BaseView {
   //   return this.elm;
   // }
   render(store, actionData) {
-    this.setting = div(this.id+"child", "ImageDetailA", this.id);
-    return div(this.id, "ImageDetail", [this.setting]);
+    this.setting = div(this.id+"child", "ImageDetailA", this.id+"aaaaa");
+    return div("", [this.setting]);
   }
 }

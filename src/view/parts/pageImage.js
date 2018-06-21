@@ -12,6 +12,6 @@ export class PageImage  extends BaseView {
   // }
   render() {
     this.button = div(this.id+"child", "PageImageA", this.id);
-    return div(this.id, "PageImage", [this.button]);
+    return div( [this.button]);
   }
 }

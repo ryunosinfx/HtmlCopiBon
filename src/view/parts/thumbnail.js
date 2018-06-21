@@ -15,7 +15,7 @@ export class Thumnail  extends BaseView {
   render(store, actionData) {
     this.dataLine = div(this.id+"_dataLine_"+this.index);
     this.delButton = span(this.id+"_delButton_"+this.index, "delButton", "☓");
-    return div(this.id, "Thumnails");
+    return div();
   }
 
   async crateDataLine(iamageEntity) {

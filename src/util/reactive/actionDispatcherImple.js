@@ -92,11 +92,11 @@ export class ActionDispatcherImple {
     for (let activeView of activViews) {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
-        // console.log('A0 callUpdate update id:' + activeView.id);
+        console.log('A0 callUpdate update id:' + activeView.id);
         targetView.update(store, actionData);
         //this.callUpdateExecute(()=>{targetView.update(store,actionData)});
       } else {
-        // console.log('A0 callUpdate updateReactive id:' + activeView.id);
+         console.log('A0 callUpdate updateReactive id:' + activeView.id);
         activeView.updateReactive(store, actionData);
       }
     }

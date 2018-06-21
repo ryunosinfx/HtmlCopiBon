@@ -17,10 +17,10 @@ import {Thumbnails} from "../parts/thumbnails";
 export class FilesArea extends BaseView {
   constructor() {
     super("FilesArea", "FilesArea");
-    this.fp = new FileProcessor(this);
-    this.imageDetail = new ImageDetail(this);
-    this.pageImages = new PageImages(this);
-    this.thumbnails = new Thumbnails(this);
+    this.fileProcessor = new FileProcessor();
+    this.imageDetail = new ImageDetail();
+    this.pageImages = new PageImages();
+    this.thumbnails = new Thumbnails();
   }
   // updateAsAttach(store, actionData) {
   //   super.updateAsAttachExecute(store, actionData);
@@ -29,17 +29,17 @@ export class FilesArea extends BaseView {
   // }
 
   onAfterAttach(store, data) {
-    this.fp.attach(this);
+    this.fileProcessor.attach(this);
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
     this.thumbnails.attach(this);
     //this.fp.showFilesInit();
   }
   render() {
-    return div(this.id, "FilesArea", [
-      div(this.fp.id),
+    return div("", [
       div(this.imageDetail.id),
       div(this.pageImages.id),
+      div(this.fileProcessor.id),
       div(this.thumbnails.id)
     ])
 
