@@ -20,7 +20,7 @@ export class FileUploadExecuter {
   read(file, type = "binaryString") {
     return new Promise((resolve, reject) => {
       this.reader = new FileReader();
-      this.progress.init();
+      //this.progress.init();
       this.reader.onerror = (event) => {
         reject(this.errorHandler(event));
       };
@@ -71,13 +71,13 @@ export class FileUploadExecuter {
   updateProgress(event) {
     const percentLoaded = Math.round((event.loaded / event.total) * 100);
     if (percentLoaded < 100) {
-      this.progress.progress(percentLoaded);
+      //this.progress.progress(percentLoaded);
     }
   }
   onload(event) {
     return this.reader.result;
   }
   onLoadStart() {
-    this.progress.start();
+    //this.progress.start();
   }
 }

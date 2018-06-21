@@ -65,8 +65,8 @@ export class BaseView {
     result.data['name'] = this.name + Date.now();
     nodeFrame.rootVnode = result;
     this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
-    console.log('C01 this.id:' + this.id);
-    console.log('C01 --baseView.patchFromOtherVnode currentVnode;' + currentVnode + '/selector:' + selector + '/currentSelector:' + currentSelector + '/this:' + this.currentVnode + '/' + this.es.getElements(result, selector));
+    // console.log('C01 this.id:' + this.id);
+    // console.log('C01 --baseView.patchFromOtherVnode currentVnode;' + currentVnode + '/selector:' + selector + '/currentSelector:' + currentSelector + '/this:' + this.currentVnode + '/' + this.es.getElements(result, selector));
     return result;
   }
   prePatch(selector, newVnode) {
@@ -76,9 +76,9 @@ export class BaseView {
     if (!this.currentVnode) {
       console.log('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
     }
-    console.log('!!A!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
+    // console.log('!!A!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
     this.currentVnode.data['name'] = this.name + Date.now();
-    console.log('!!B!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
+    // console.log('!!B!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
     this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
     return this.currentVnode;
   }
@@ -93,10 +93,10 @@ export class BaseView {
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode + "/" + typeof this.currentVnode);
+    // console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode + "/" + typeof this.currentVnode);
     if (isOrverride) {
       this.onPreViewBuild(oldVnode, store);
-      console.log('A01 update --baseView.goAnotherView view;' + this.className);
+      // console.log('A01 update --baseView.goAnotherView view;' + this.className);
       this.currentVnode = !this.currentVnode
         ? this.renderWrap(store)
         : this.currentVnode;
@@ -105,14 +105,14 @@ export class BaseView {
     }
     this.onViewShow(store, actionData);
     if (isOrverride) {
-      console.log(oldVnode);
-      console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode + '/id;' + this.id + '/selector;' + selector + "/ this.currentVnode:" + this.currentVnode);
+      // console.log(oldVnode);
+      // console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode + '/id;' + this.id + '/selector;' + selector + "/ this.currentVnode:" + this.currentVnode);
       //  alert('A02 update --baseView.goAnotherView selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
       if (oldVnode) {
-        console.log('A02a update --baseView.goAnotherView selector;' + selector);
+        // console.log('A02a update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(oldVnode, selector, this.currentVnode);
       } else {
-        console.log('A02b update --baseView.goAnotherView selector;' + selector);
+        // console.log('A02b update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(this.currentVnode, '#' + this.id, this.currentVnode);
       }
     } else {
@@ -136,15 +136,15 @@ export class BaseView {
     this.currentVnode = !this.currentVnode
       ? this.renderWrap(store)
       : this.currentVnode;
-    console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    // console.log('A101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.onViewShow(store, actionData);
-    console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    // console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.patch("#" + this.id, this.currentVnode);
-    console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    // console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     //this.onAfterAttach(store);
-    console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    // console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
     this.onViewShown(store, actionData);
-    console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+    // console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
   }
   init() {}
   // attache to
@@ -152,7 +152,7 @@ export class BaseView {
     this.parentView = parentView;
     let taregetSelecotor = selector;
     if (!selector) {
-      console.log("★attach selector is null :" + selector);
+      // console.log("★attach selector is null :" + selector);
       taregetSelecotor = this.id;
     }
     if (this.isAttached()) {
@@ -163,7 +163,7 @@ export class BaseView {
     const store = Store.getStore();
     this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
-    console.log('A08---show selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
+    // console.log('A08---show selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatch(action);
   }
@@ -231,9 +231,9 @@ export class BaseView {
     return elm;
   }
   renderWrap(store, data) {
-    console.log('renderWrap');
+    // console.log('renderWrap');
     const newVnode = div(this.id, [this.className], {}, [this.render(store, data)]);
-    console.log(newVnode)
+    // console.log(newVnode)
     return newVnode;
   }
   getAnker() {

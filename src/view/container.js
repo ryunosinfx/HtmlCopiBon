@@ -52,7 +52,7 @@ export class Container extends BaseView {
       div(this.filesArea.id),
       div(this.exportButton.id)
     ], "container");
-    console.log('container!render!!!!!!!!!!!')
+    // console.log('container!render!!!!!!!!!!!')s
     return newVnode;
   }
 }

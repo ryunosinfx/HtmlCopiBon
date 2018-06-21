@@ -11,7 +11,6 @@ export class FileUploader extends BaseEventHandler {
   }
   handleFileSelect(view) {
     return (event)=>{
-      alert("handleFileSelect");
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const files = event.target.files; // FileList object
@@ -21,7 +20,6 @@ export class FileUploader extends BaseEventHandler {
 
   handleDrop(view){
     return (event)=>{
-      alert("handleDrop");
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const files = event.dataTransfer.files;
@@ -30,7 +28,7 @@ export class FileUploader extends BaseEventHandler {
   }
   handleFiles(view,files){
     const actin = ImageActionCreator.creatAddAction(view,{files:files});
-    view.dispathc(actin);
+    view.dispatch(actin);
     //this.fileProcessor.processFiles(files);
   }
   async areadParFile(file){

@@ -3,7 +3,7 @@ import {ActionDispatcherImple} from './actionDispatcherImple'
 export class BaseReducer {
   constructor(isBaseUse) {
     this.isBaseUse = isBaseUse;
-    console.log('BaseReducer constructor:' + isBaseUse);
+    // console.log('BaseReducer constructor:' + isBaseUse);
     if (isBaseUse) {
       const baseActions = ActionCreator.getBaseActions();
       for (let index in baseActions) {
@@ -13,20 +13,20 @@ export class BaseReducer {
     }
   }
   atatch(action) {
-    console.log('A0 BaseReducer atatch action:' + action);
-    console.log(this);
+    // console.log('A0 BaseReducer atatch action:' + action);
+    // console.log(this);
     ActionDispatcherImple.add(action, this);
   }
   detach(action) {
     ActionDispatcherImple.delete(action, this);
   }
   async preReduce(store, action) {
-    console.log('A0 BaseReducer preReduce:' + action);
+    // console.log('A0 BaseReducer preReduce:' + action);
     store.isOrverride = false;
     return store;
   }
   async reduce(store, action) {
-    console.log('A0 BaseReducer reduce:' + action);
+    // console.log('A0 BaseReducer reduce:' + action);
     store.isOrverride = true;
 
     store.oldVnode = action.data.oldVnode;
@@ -35,7 +35,7 @@ export class BaseReducer {
     return store;
   }
   async postReduce(store, action) {
-    console.log('A0 BaseReducer postReduce:' + action);
+    // console.log('A0 BaseReducer postReduce:' + action);
     return store;
   }
 }

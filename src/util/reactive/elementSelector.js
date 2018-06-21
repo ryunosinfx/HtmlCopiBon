@@ -14,20 +14,20 @@ export class ElementSelector {
     return this.getElements(vnode, "." + className);
   }
   patch(vnode, selector, newNode) {
-    console.log('patch00 START of Patch newNode:' + newNode);
+    // console.log('patch00 START of Patch newNode:' + newNode);
 
     if (!newNode && typeof selector==="string") {
       console.log('patch00a ★ERROR★ of Patch newNode:' + newNode+"/selector:"+selector);
       return vnode;
     }
     if (!newNode ) {
-      console.log('patch01a of Patch newNode:' + newNode);
+      // console.log('patch01a of Patch newNode:' + newNode);
       this.isValidNode(vnode, "vnode");
       const re = patch(vnode, selector);
       return selector;
     }
     if (!selector ) {
-      console.log('patch01b of Patch newNode:' + newNode);
+      // console.log('patch01b of Patch newNode:' + newNode);
       this.isValidNode(vnode, "vnode");
       const re = patch(vnode, newNode);
       return newNode;
@@ -35,13 +35,13 @@ export class ElementSelector {
     const cloneNode = this.prePatch(vnode, selector, newNode);
     const re = patch(vnode, cloneNode);
     const nodes = this.getElements(cloneNode, selector, false, new Map(), null);
-    console.log('patch02 END of Patch ====' + "/node:" + newNode.elm + "/parent:" + (
-      newNode.elm
-      ? newNode.elm.parentNode
-      : null) + "/count:" + nodes.length + "/" + (
-      nodes.length > 0
-      ? nodes[0].elm.parentNode
-      : null));
+    // console.log('patch02 END of Patch ====' + "/node:" + newNode.elm + "/parent:" + (
+      // newNode.elm
+      // ? newNode.elm.parentNode
+      // : null) + "/count:" + nodes.length + "/" + (
+      // nodes.length > 0
+      // ? nodes[0].elm.parentNode
+      // : null));
     this.isValidNode(cloneNode, "cloneNode");
     return cloneNode;
   }
@@ -52,7 +52,7 @@ export class ElementSelector {
       return;
     }
     if (vnode.elm && !vnode.elm.parentNode) {
-      console.log(vnode.elm);
+      // console.log(vnode.elm);
       if (parentNode) {
         const length = parentNode.childNodes.length;
         if (length > index) {
@@ -61,7 +61,7 @@ export class ElementSelector {
           parentNode.appendChild(vnode.elm);
         }
       }
-      console.log("★★★invalid node!" + name);
+      // console.log("★★★invalid node!" + name);
     } else if (!vnode.elm) {
       if (parentNode) {
         const length = parentNode.childNodes.length;
@@ -89,13 +89,13 @@ export class ElementSelector {
   prePatch(vnode, selector, newNode) {
     const cloneNode = ObjectUtil.deepVnodeClone(vnode);
     const parentMap = new Map();
-    console.log('prepatch01aa:' + JSON.stringify(vnode));
+    // console.log('prepatch01aa:' + JSON.stringify(vnode));
     const nodes = this.getElements(cloneNode, selector, false, parentMap, null);
     let isShouldPatch = false;
     for (let node of nodes) {
-      console.log('prepatch01a');
+      // console.log('prepatch01a');
       let newOne = ObjectUtil.deepVnodeClone(newNode);
-      console.log('prepatch01b');
+      // console.log('prepatch01b');
 
       for (let [key, parentNode] of parentMap) {
         if (key === node) {
@@ -106,17 +106,17 @@ export class ElementSelector {
               children[index] = newOne;
               //newOne.text = newOne.text+"/"+Date.now();
               isShouldPatch = true;
-              console.log('★patch01c AS REPLACE! children.length:' + children.length + "/index:" + index + "/target.sel:" + target.sel + "/newOne.sel:" + newOne.sel + "/text:" + newOne.text);
+              // console.log('★patch01c AS REPLACE! children.length:' + children.length + "/index:" + index + "/target.sel:" + target.sel + "/newOne.sel:" + newOne.sel + "/text:" + newOne.text);
               break;
             } else {
-              console.log('-patch01d ! children.length:' + children.length + "/index:" + index + "/target.sel:" + target.sel);
+              // console.log('-patch01d ! children.length:' + children.length + "/index:" + index + "/target.sel:" + target.sel);
             }
           }
           break;
         }
       }
     }
-    console.log('patch02 END of prePatch');
+    // console.log('patch02 END of prePatch');
     return isShouldPatch
       ? cloneNode
       : vnode;
@@ -124,7 +124,7 @@ export class ElementSelector {
   getElements(vnode, selector, isEnd = false, parentMap = new Map(), parentVnode) {
     let result = [];
     if (!selector || typeof selector !== 'string') {
-      console.log('getElements selector:'+selector);
+      // console.log('getElements selector:'+selector);
       return result;
     }
     let selectors = selector.split(/ |>/);

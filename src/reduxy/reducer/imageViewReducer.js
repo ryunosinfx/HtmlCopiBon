@@ -4,6 +4,7 @@ import {ImageActionCreator} from '../action/imageActionCreator'
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
+import {FileUploadExecuter} from "../../service/fileUploadExecuter";
 let imageViewReducer=null;
 export class ImageViewReducer extends BaseReducer {
   constructor() {
@@ -59,6 +60,8 @@ export class ImageViewReducer extends BaseReducer {
     for(let imageEntity of imageEntitis){
       retList.push(await this.processParImage(imageEntity));
     }
+
+      alert("handleDrop saveFiles"+retList.length);
     return retList;
   }
 
@@ -66,7 +69,7 @@ export class ImageViewReducer extends BaseReducer {
     const title = await this.tm.load();
     const images = title.images;
     const imageEntitis = [];
-    
+
     for (let index in images) {
       const pk = images[index];
       if (!pk) {

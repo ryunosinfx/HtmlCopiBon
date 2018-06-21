@@ -16,13 +16,6 @@ export class FileUploadArea extends BaseView {
   constructor() {
     super("fuaPArent", "FileUploadArea");
   }
-  // renderA() {
-  //   this.fileInput = vu.createFile("FileUploadFile", "FileUploadFile", text);
-  //   const area = vu.createLabel("FileUploadArea", "FileUploadArea", text,"FileUploadFile");
-  //   vu.append(this.elm, area);
-  //   vu.append(this.elm, this.fileInput);
-  //   return this.elm;
-  // }
   render() {
     this.fileUploadArea = div("FileUploadArea", ["FileUploadAreaA"], text);
     this.FileUploadFile = file("FileUploadFile", ["FileUploadFile"], text);
@@ -37,9 +30,9 @@ export class FileUploadArea extends BaseView {
     const fileUploadArea = this.getElementById(this.id);
     this.fu = new FileUploader();
     const target = fileInput.elm;
-    vu.on(target, 'change', this.fu.handleFileSelect());
-    vu.on(fileUploadArea.elm, 'dragover', this.fu.handleDrop());
-    vu.on(fileUploadArea.elm, 'drop', this.fu.handleDrop());
+    vu.on(target, 'change', this.fu.handleFileSelect(this));
+    vu.on(fileUploadArea.elm, 'dragover', this.fu.handleDrop(this));
+    vu.on(fileUploadArea.elm, 'drop', this.fu.handleDrop(this));
     vu.on(fileUploadArea.elm, 'click', (e) => {
       //alert(target);
       //vu.emit(target, 'change', false, false);
