@@ -28,9 +28,9 @@ const setProps = (data, inputs) => {
   return newData;
 }
 const vtags = (tagName, id, classNames, data = {}, children, text) => {
-  const id1 = tagName + "#" + (
+  const id1 = tagName + (
     id && typeof id === "string"
-    ? id
+    ? "#"+id
     : "");
   const id2 = id1 + (
     classNames
@@ -57,6 +57,9 @@ const vtags = (tagName, id, classNames, data = {}, children, text) => {
       ? children
       : data && typeof data === "string"
         ? data
+
+        : classNames && typeof classNames === "string"
+          ? classNames
         : "");
   let currentData = typeof data === "string" || Array.isArray(data)
     ? {}
