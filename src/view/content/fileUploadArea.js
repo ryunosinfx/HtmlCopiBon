@@ -37,18 +37,7 @@ export class FileUploadArea extends BaseView {
     }, [this.fileUploadArea, this.FileUploadFile]);
   }
   onAfterAttach(store, data) {
+    //alert('FileUploadArea onAfterAttach')
     //this.addEventListeners();
-  }
-  addEventListeners() {
-    const fileUploadArea = this.getElementById(this.id);
-    const target = fileInput.elm;
-    vu.on(target, 'change', this.fu.handleFileSelect(this));
-    vu.on(fileUploadArea.elm, 'dragover', this.fu.handleDrop(this));
-    vu.on(fileUploadArea.elm, 'drop', this.fu.handleDrop(this));
-    vu.on(fileUploadArea.elm, 'click', (e) => {
-      //alert(target);
-      //vu.emit(target, 'change', false, false);
-      target.click();
-    });
   }
 }

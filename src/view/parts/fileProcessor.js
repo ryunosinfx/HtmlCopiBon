@@ -33,11 +33,8 @@ export class FileProcessor extends BaseView {
   }
 
   onViewShow(store, actionData) {
-    // console.log("A0 FileProcessor onViewShow------------------");
-    // console.log(store);
-    // console.log(actionData);
     if (store.imagesData) {
-      // alert("store.imagesData)!"+store.imagesData)
+      alert("store.imagesData)!"+store.imagesData)
       this.showImages(store.imagesData);
     }
   }
@@ -46,31 +43,6 @@ export class FileProcessor extends BaseView {
     const imageArea = div("imageArea","AAAAAAAAAAAAAAAAAAAAAAAA");
     return div("",[imageArea]);
   }
-  // async processFiles(files) {
-  //   const fue = new FileUploadExecuter(this.pb);
-  //   const iamageEntitis =  await this.tm.addImageFiles(fue,files);
-  //   for(let imageEntity of iamageEntitis){
-  //     const imagePk = imageEntity.getPk();
-  //     loaded.set(imagePk, imageEntity.name);
-  //   }
-  //   console.log("=★=processFiles");
-  //   await this.showImages(iamageEntitis);
-  // }
-  // async showFilesInit() {
-  //   const title = await this.tm.load();
-  //   const images = title.images;
-  //   const iamageEntitis = [];
-  //   for (let index in images) {
-  //     const pk = images[index];
-  //     if(!pk){
-  //       continue;
-  //     }
-  //     const iamageEntit = await this.em.get(pk);
-  //     iamageEntitis.push(iamageEntit);
-  //   }
-  //   await this.showImages(iamageEntitis);
-  //   console.log("=★=showFilesInit iamageEntitis:"+iamageEntitis.length);
-  // }
   async showImages(iamageEntitis) {
     Sorter.orderBy(iamageEntitis, [
       {
@@ -88,9 +60,6 @@ export class FileProcessor extends BaseView {
       }
       console.log(imageData);
       console.log(this.currentVnode.elm.parentNode);
-      // const dataStrings = vu.createSpan(null, "imageDataLine", "imageText");
-      // vu.append(this.currentVnode.elm, dataStrings);
-      // vu.append(this.currentVnode.elm, await this.crateDataLine(imageData));
       images.push(await this.crateDataLine(imageData))
     }
     this.prePatch("#"+imageArea, div("",images)) ;

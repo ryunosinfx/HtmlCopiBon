@@ -60,8 +60,6 @@ export class ImageViewReducer extends BaseReducer {
     for(let imageEntity of imageEntitis){
       retList.push(await this.processParImage(imageEntity));
     }
-
-      alert("handleDrop saveFiles"+retList.length);
     return retList;
   }
 

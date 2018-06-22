@@ -100,7 +100,7 @@ export class BaseView {
         ? this.renderWrap(store)
         : this.currentVnode;
     } else if (!this.currentVnode) {
-      //this.currentVnode=this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
+      this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
     }
     this.onViewShow(store, actionData);
     if (isOrverride) {
@@ -116,9 +116,9 @@ export class BaseView {
         this.patchFromOtherVnode(null , '#' + this.id, this.currentVnode);
       }
     } else {
-     console.log('A02c update --baseView.goAnotherView selector;' + selector);
+     console.log('A02c update --baseView.goAnotherView selector;' + selector+'/'+this.id);
       console.log(this.currentVnode);
-      this.patch(selector, this.currentVnode);
+      this.patch('#'+this.id, this.currentVnode);
     }
       this.updateCount++;
       if (this.updateCount < 2) {
