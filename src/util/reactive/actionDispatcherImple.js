@@ -71,8 +71,14 @@ export class ActionDispatcherImple {
         store = await reducer.reduce(store, action);
         store = await reducer.postReduce(store, action);
       }
+      console.log("A01 dispatch ")
+      console.log(store)
       Store.setStore(store);
     }
+
+    let storeB = Store.getStore(storeKey);
+    console.log("A01 dispatch ")
+    console.log(storeB)
     // console.log('dispatch02');
     if (store.isOrverride && action.data.view) {
       targetView = action.data.views;

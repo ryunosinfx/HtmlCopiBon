@@ -1,4 +1,16 @@
+const baseClasses = [];
 export class ObjectUtil {
+  static addBaseCLassese(baseClassesList) {
+    if (baseClassesList) {
+      if (Array.isArray(baseClassesList)) {
+        for (let baseClass of baseClassesList) {
+          baseClasses.push(baseClass);
+        }
+      } else {
+        baseClasses.push(baseClassesList);
+      }
+    }
+  }
   static deepClone(obj) {
     const channel = new MessageChannel();
     const inPort = channel.port1;
@@ -11,12 +23,43 @@ export class ObjectUtil {
       outPort.postMessage(obj);
     });
   }
-  static simpleDeepClone(obj) {
+  static simpleDeepCloneSerialized(obj) {
     return JSON.parse(JSON.stringify(obj));
+  }
+  static simpleDeepClone(obj, newObj) {
+    const output = newObj
+      ? newObj
+      : Array.isArray(obj)
+        ? []
+        : {};
+    for (let key in obj) {
+      const value = obj[key];
+      if (value && typeof value === "object" && !value.byteLength) {
+        let baseType = null;
+        for (let baseClass of baseClasses) {
+          if (value instanceof baseClass) {
+            baseType = new baseClass();
+            break;
+          }
+        }
+        output[key] = ObjectUtil.simpleDeepClone(value, baseType);
+      } else {
+        try {
+
+          output[key] = value;
+        } catch (e) {
+          console.log(e);
+
+          console.log(output);
+          throw e;
+        }
+      }
+    }
+    return output;
   }
   static singleDeepClone(obj) {
     const retObj = {};
-    for(let key in obj){
+    for (let key in obj) {
       let value = obj[key];
       retObj[key] = value;
     }
@@ -24,9 +67,9 @@ export class ObjectUtil {
   }
   static singleDeepCloneWithoutFuncs(obj) {
     const retObj = {};
-    for(let key in obj){
+    for (let key in obj) {
       let value = obj[key];
-      if(typeof value === 'function'){
+      if (typeof value === 'function') {
         continue;
       }
       retObj[key] = value;
@@ -34,7 +77,7 @@ export class ObjectUtil {
     return retObj;
   }
   static deepVnodeClone(target) {
-    if(!target){
+    if (!target) {
       return target;
     }
     const obj = {
@@ -45,7 +88,7 @@ export class ObjectUtil {
       elm: target.elm,
       key: target.key
     };
-    for(let key in target.data){
+    for (let key in target.data) {
       if (target.data[key]) {
         obj.data[key] = target.data[key];
       }

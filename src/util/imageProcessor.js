@@ -46,16 +46,27 @@ export class ImageProcessor {
       let {name, ab, type} = data;
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
+
+        console.log("createImageNodeByData A00data!"+data+"/ab.byteLength:"+ab.byteLength)
       if (type && type.match(imgRe)) {
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
         imgElm.onload = () => {
           data.height = imgElm.height;
           data.width = imgElm.width;
+          console.log("createImageNodeByData A01 imgElm!"+type)
           resolve(imgElm);
         }
+        imgElm.onerror = (e) => {
+          console.log('失敗');
+          console.log(e);
+          reject(e);
+        };
+        return
       } else {
+              console.log("createImageNodeByData A02 imgElm!"+type)
         resolve(imgElm);
       }
+
     });
   }
 }

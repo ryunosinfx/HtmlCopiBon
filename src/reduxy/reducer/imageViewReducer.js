@@ -43,7 +43,7 @@ export class ImageViewReducer extends BaseReducer {
     return store;
   }
   async saveFiles(files) {
-    const fue = new FileUploadExecuter(this.pb);
+    const fue = new FileUploadExecuter();
     const imageEntitis =  await this.tm.addImageFiles(fue,files);
     console.log("=★=processFiles");
     Sorter.orderBy(imageEntitis, [
@@ -73,8 +73,8 @@ export class ImageViewReducer extends BaseReducer {
       if (!pk) {
         continue;
       }
-      const iamageEntity = await this.em.get(pk);
-      imageEntitis.push(iamageEntity);
+      const imageEntity = await this.em.get(pk);
+      imageEntitis.push(imageEntity);
     }
     Sorter.orderBy(imageEntitis, [
       {
@@ -92,18 +92,21 @@ export class ImageViewReducer extends BaseReducer {
     }
     return retList;
   }
-  async processParImage(iamageEntity){
-      const imagePk = iamageEntity.getPk();
-      const binaryEntity = await this.em.get(iamageEntity.binary);
-      const imgElm = await this.ip.createImageNodeByData({name:iamageEntity.name, ab:binaryEntity.ab, type:iamageEntity.type});
+  async processParImage(imageEntity){
+      const imagePk = imageEntity.getPk();
+      const binaryEntity = await this.em.get(imageEntity.binary);
+
+            console.log("binaryEntity");
+      console.log(binaryEntity);
+      const imgElm = await this.ip.createImageNodeByData({name:imageEntity.name, ab:binaryEntity.ab, type:imageEntity.type});
       const size = (
         binaryEntity.ab
         ? (new Uint8Array(binaryEntity.ab)).length
         : 0);
-      const imageText =  escape(iamageEntity.name) + ' (' + (
-      iamageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + iamageEntity.modifyDate + ' size:' + iamageEntity.width + 'x' + iamageEntity.height
+      const imageText =  escape(imageEntity.name) + ' (' + (
+      imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
 
-      const retObj = {iamageEntity:iamageEntity,binaryEntity:binaryEntity,size:size,imageText:imageText};
+      const retObj = {imageEntity:imageEntity,binaryEntity:binaryEntity,size:size,imageText:imageText};
       return retObj;
   }
   async remove(pk) {

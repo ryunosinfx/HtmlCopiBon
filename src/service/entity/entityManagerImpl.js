@@ -24,7 +24,13 @@ export class EntityManagerImpl {
     return await this.ss.setStore(this.userId);
   }
   async save(data) {
-    console.log("EntityManagerImpl save!!A!! data:" + data);
+    return await this.saveExecute(data,false);
+  }
+  async saveWithBinary(data) {
+    return await this.saveExecute(data,true);
+  }
+  async saveExecute(data,isWithBinary) {
+    console.log("EntityManagerImpl save!!A!! data:" + data+"/isWithBinary:"+isWithBinary);
     if (!data || !data.getEntityName || !data.getPk || data.getEntityName() !== this.entityName) {
       console.log("EntityManagerImpl save!!Z!! data:" + data.getEntityName() + "/this.entityName:" + this.entityName + "/data.getPk:" + data.getPk);
       return;
@@ -33,17 +39,26 @@ export class EntityManagerImpl {
     if (!currentPK) {
       currentPK = PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
     }
-    await this.saveArrayBufferCols(data);
+    if(!isWithBinary){
+      await this.saveArrayBufferCols(data);
+    }else{
+      console.log("EntityManagerImpl saveBinary!!A!! data:" + data+"/isWithBinary:"+isWithBinary);
+      console.log(data);
+      console.log("EntityManagerImpl saveBinary!!B!! data:" + data+"/isWithBinary:"+isWithBinary);
+    }
     data.setPk(currentPK);
     console.log(data);
     const savedData = await this.ss.save(currentPK, data);
     console.log("EntityManagerImpl save!!B!! savedData:" + savedData);
     return savedData;
   }
-  async saveArrayBufferCols(data){
-    if(binaryEntity.getEntityName() === data.getEntityName()){
+  async saveArrayBufferCols(data) {
+    if (binaryEntity.getEntityName() === data.getEntityName()) {
       return;
     }
+    console.log("saveArrayBufferCols save!!A!! data:" + data);
+    console.log(data);
+    console.log("saveArrayBufferCols save!!B!! data:" + data);
     for (let key in data) {
       const column = data[key];
       if (!column) {
@@ -65,11 +80,16 @@ export class EntityManagerImpl {
     }
   }
   async saveArrayBufferData(item) {
+    console.log("saveArrayBufferData save!!A!! item:" + item);
+    console.log(item);
+    console.log("saveArrayBufferData save!!B!! item:" + item);
     if (!item.getEntityName && item.byteLength) {
       const data = new Binary(item);
       const newPK = await this.getBinaryPK();
       data.setPk(newPK);
-      await this.em.Binary.save(data);
+        console.log("saveArrayBufferData save!!C!! data:" + data);
+        console.log(data);
+      await this.em.Binary.saveWithBinary(data);
       return newPK;
     } else if (item.getEntityName && item.getEntityName() === "PrimaryKey") {
       return item;
@@ -77,19 +97,21 @@ export class EntityManagerImpl {
       const currentPK = item.getPk();
       if (currentPK) {
         item.setPk(currentPK);
-        await this.em.Binary.save(item);
+          console.log("saveArrayBufferData save!!D!! item:" + item);
+        await this.em.Binary.saveWithBinary(item);
         return currentPK;
       } else {
+        console.log("saveArrayBufferData save!!E!! item:" + item);
         const newPK = await this.getBinaryPK();
         item.setPk(newPK);
-        await this.em.Binary.save(item);
+        await this.em.Binary.saveWithBinary(item);
         return newPK;
       }
     }
   }
   async getBinaryPK() {
     const newNumber = await this.pkais.acquirePKNo(this.userId, binaryEntity, BINALY_PK_ROW);
-    return PrimaryKey.assemblePK(binaryEntity,newNumber);
+    return PrimaryKey.assemblePK(binaryEntity, newNumber);
   }
   async loadAll() {
     return await this.ss.loadAll(this.entity);

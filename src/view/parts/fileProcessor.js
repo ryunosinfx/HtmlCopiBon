@@ -34,7 +34,6 @@ export class FileProcessor extends BaseView {
 
   onViewShow(store, actionData) {
     if (store.imagesData) {
-      alert("store.imagesData)!"+store.imagesData)
       this.showImages(store.imagesData);
     }
   }
@@ -60,9 +59,13 @@ export class FileProcessor extends BaseView {
       }
       console.log(imageData);
       console.log(this.currentVnode.elm.parentNode);
-      images.push(await this.crateDataLine(imageData))
+        //alert("showImages imageData!"+imageData)
+      images.push(await this.crateDataLine(imageData).catch((e)=>{console.log(e)}))
+        //alert("showImages imageData!"+imageData)
     }
-    this.prePatch("#"+imageArea, div("",images)) ;
+    console.log(images);
+    //alert("aaa")
+    this.prePatch("#imageArea", div("imageArea",images)) ;
   }
   async remove(event, pk) {
     if (window.confirm("delete ok?")) {
@@ -72,28 +75,19 @@ export class FileProcessor extends BaseView {
     }
   }
   async crateDataLine(imageData) {
-    const iamageEntity = imageData.iamageEntity;
+    const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
-    const imgElm = await this.ip.createImageNodeByData({name: iamageEntity.name, ab: binaryEntity.ab, type: iamageEntity.type});
+      console.log(binaryEntity)
+      //alert("crateDataLine imageData!"+binaryEntity.data)
+    const imgElm = await this.ip.createImageNodeByData({name: imageEntity.name, ab: binaryEntity._ab, type: imageEntity.type}).catch((e)=>{console.log(e)});
 
-    const imgVnode =img(iamageEntity.getPk(), iamageEntity.name, iamageEntity.name, imgElm.src, {}) ;
-    const textVnode = span(iamageEntity.getPk()+"_",[],imageData.imageText);
-    const delButton = span(iamageEntity.getPk()+"_delButton",["delButton"],"x");
+      //alert("crateDataLine imageData! ok01 "+imgElm)
+    const imgVnode =img(imageEntity.getPk(), imageEntity.name, imageEntity.name, imgElm.src, {}) ;
+          //alert("crateDataLine imageData! ok02 "+imageData)
+    const textVnode = span(imageEntity.getPk()+"_",[],imageData.imageText);
+    const delButton = span(imageEntity.getPk()+"_delButton",["delButton"],"x");
     const dataLineVnode = div("",["dataLine"],[delButton,imgVnode,textVnode]);
     const rowVnode = div("",["row"][dataLineVnode]);
-    //
-    // const row = vu.createLi();
-    // const delButton = vu.create(null, "delButton", "☓");
-    // vu.on(delButton, "click", (e) => {
-    //   this.remove(e, iamageEntity.getPk())
-    // });
-    // const dataLine = vu.create();
-    // const dataStrings = vu.createSpan(null, "imageDataLine", imageData.imageText);
-    //
-    // vu.append(dataLine, dataStrings);
-    // vu.append(dataLine, delButton);
-    // vu.append(row, dataLine);
-    // vu.append(row, imgElm);
     return rowVnode;
   }
 }

@@ -1,6 +1,7 @@
 import {StorageService} from "./storageService"
 import {EntityManagerImpl} from "./entityManagerImpl"
 import {Binary} from "./binary";
+import {ObjectUtil} from '../../util/objectUtil';
 import {PrimaryKey} from "./primaryKey";
 const USER_ID = "default";
 export class EntityManager {
@@ -14,6 +15,7 @@ export class EntityManager {
     await this.initParEntity(Binary, userId);
   }
   async initParEntity(entityClass, userId) {
+    ObjectUtil.addBaseCLassese(entityClass);
     const entity = new entityClass();
     const entityName = entity.getEntityName();
     this[entityName] = new EntityManagerImpl(this, entityClass, userId);

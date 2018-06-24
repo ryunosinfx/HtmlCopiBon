@@ -12,19 +12,24 @@ export default class BinaryManager {
     return await this.em.Binary.get(binaryPk);
   }
   async save(pk, name, binary) {
-    let image = null;
+    console.log("BinaryManager save!!A!! pk:" + pk);
+    console.log(binary);
+    console.log("BinaryManager save!!B!! name:" + name);
+    let binEntity = null;
     if (pk) {
-      image = await this.em.Binary.get(pk);
+      binEntity = await this.em.Binary.get(pk);
     }
+    console.log(binary);
+    alert(binary);
     let binaryPk = PrimaryKey.getPrimaryKey(binary);
-    if (!image) {
-      image = new Binary();
+    if (!binEntity) {
+      binEntity = new Binary();
     } else {
-      image.updateDate = Date.now();
+      binEntity.updateDate = Date.now();
     }
-    image.binary = binaryPk
+    binEntity.binary = binaryPk
       ? binaryPk
       : binary;
-    return await this.em.Binary.save(image);
+    return await this.em.Binary.save(binEntity);
   }
 }

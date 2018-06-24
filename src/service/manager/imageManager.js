@@ -60,6 +60,7 @@ export default class ImageManager {
     if (pk) {
       image = await this.em.Images.get(pk);
     }
+        console.log("ImageManager save!!9!! binary:" + binary);
     let binaryPk = PrimaryKey.getPrimaryKey(binary);
     if (!image) {
       image = new Images();

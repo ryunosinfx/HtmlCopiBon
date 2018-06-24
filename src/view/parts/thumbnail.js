@@ -15,13 +15,13 @@ export class Thumnail  extends BaseView {
   render(store, actionData) {
     this.dataLine = div(this.id+"_dataLine_"+this.index);
     this.delButton = span(this.id+"_delButton_"+this.index, "delButton", "☓");
-    return div();
+    return div(this.id, "Thumnails");
   }
 
-  async crateDataLine(iamageEntity) {
-    const imagePk = iamageEntity.getPk();
-    const binaryEntity = await this.em.get(iamageEntity.binary);
-    const imgElm = await this.ip.createImageNodeByData({name:iamageEntity.name, ab:binaryEntity.ab, type:iamageEntity.type});
+  async crateDataLine(imageEntity) {
+    const imagePk = imageEntity.getPk();
+    const binaryEntity = await this.em.get(imageEntity.binary);
+    const imgElm = await this.ip.createImageNodeByData({name:imageEntity.name, ab:binaryEntity.ab, type:imageEntity.type});
     const row = vu.createLi();
     const delButton = vu.create(null, "delButton", "☓");
     vu.on(delButton, "click", (e) => {
@@ -32,8 +32,8 @@ export class Thumnail  extends BaseView {
       ? (new Uint8Array(binaryEntity.ab)).length
       : 0);
     const dataLine = vu.create();
-    const dataStrings = vu.createSpan(null, "imageDataLine", escape(iamageEntity.name) + ' (' + (
-    iamageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + iamageEntity.modifyDate + ' size:' + iamageEntity.width + 'x' + iamageEntity.height);
+    const dataStrings = vu.createSpan(null, "imageDataLine", escape(imageEntity.name) + ' (' + (
+    imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height);
 
     vu.append(dataLine, dataStrings);
     vu.append(dataLine, delButton);

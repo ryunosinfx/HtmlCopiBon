@@ -51,7 +51,7 @@ export class BaseView {
   }
   initialPatch() {
     let elements = document.getElementsByTagName("body");
-    elements[0].innerHTML = '<div id="rootNodeA"><p>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></div>';
+    elements[0].innerHTML = '<div id="rootNodeA"><p>ｘ</p></div>';
     let currentVnode = document.getElementById('rootNodeA');
     this.patchFromOtherVnode(currentVnode, null, this.render());
     this.update({oldVnode: this.currentVnode, selector: null, isOrverride: true});
@@ -66,11 +66,11 @@ export class BaseView {
     const result = this.es.patch(currentRootNode, currentSelector, currentNewNode);
     result.data['name'] = this.name + Date.now();
     nodeFrame.rootVnode = result;
-    console.log(newVnode);
+    // console.log(newVnode);
     this.currentVnode = this.es.getElements(result, '#' + this.id)[0];
 
-    console.log(selector+'/#' + this.id);
-    console.log(result);
+    // console.log(selector+'/#' + this.id);
+    // console.log(result);
     // console.log('C01 this.id:' + this.id);
     // console.log('C01 --baseView.patchFromOtherVnode currentVnode;' + currentVnode + '/selector:' + selector + '/currentSelector:' + currentSelector + '/this:' + this.currentVnode + '/' + this.es.getElements(result, selector));
     return result;
@@ -105,19 +105,19 @@ export class BaseView {
     this.onViewShow(store, actionData);
     if (isOrverride) {
       // console.log(oldVnode);
-       console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode + '/id;' + this.id + '/selector;' + selector + "/ this.currentVnode:" + this.currentVnode);
+       // console.log('A02 update --baseView.goAnotherView --oldVnode:' + oldVnode + '/id;' + this.id + '/selector;' + selector + "/ this.currentVnode:" + this.currentVnode);
       //  alert('A02 update --baseView.goAnotherView selector;' + selector+"/ this.currentVnode:"+ this.currentVnode);
       if (oldVnode) {
         // console.log('A02a update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(oldVnode, selector, this.currentVnode);
       } else {
         //const currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
-         console.log('A02b update --baseView.goAnotherView selector;' + selector);
+         // console.log('A02b update --baseView.goAnotherView selector;' + selector);
         this.patchFromOtherVnode(null , '#' + this.id, this.currentVnode);
       }
     } else {
-     console.log('A02c update --baseView.goAnotherView selector;' + selector+'/'+this.id);
-      console.log(this.currentVnode);
+     // console.log('A02c update --baseView.goAnotherView selector;' + selector+'/'+this.id);
+     //  console.log(this.currentVnode);
       this.patch('#'+this.id, this.currentVnode);
     }
       this.updateCount++;
@@ -140,7 +140,7 @@ export class BaseView {
       const selector = store.selector;
       const isOrverride = store.isOrverride;
       this.currentVnode = this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];;
-      console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+      // console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
       this.onViewShow(store, actionData);
       // console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
       this.patch("#" + this.id, this.currentVnode);

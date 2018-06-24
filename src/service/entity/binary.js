@@ -2,7 +2,7 @@ import {BaseEntity} from "./baseEntity";
 export class Binary extends BaseEntity {
   constructor(arrayBuffer) {
     super();
-    this.data = arrayBuffer;
+    this._ab = arrayBuffer;
     this.createDate = Date.now();
     this.updateDate = Date.now();
   }
@@ -10,12 +10,16 @@ export class Binary extends BaseEntity {
     if(buffer && !buffer.byteLength){
       alert("not arrayBuffer!");
     }
-    this.data=_ab;
+    this._ab=_ab;
   }
   get ab(){
-    return this.data;
+    return this._ab;
   }
 
+  load(obj) {
+    super.load(obj)
+    this._ab =new Uint8Array(this._ab).buffer
+  }
   create() {
     return new Binary();
   }
