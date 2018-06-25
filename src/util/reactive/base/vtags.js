@@ -2,14 +2,6 @@ import {patch, h} from './preLoader'
 export class V {
   static div() {}
 }
-// const vnode = h('div', {
-//   style: {
-//     color: '#000'
-//   }
-// }, [
-//   h('h1', 'Headline'),
-//   h('p', 'A paragraph')
-// ]);
 const setProps = (data, inputs) => {
   let newData = {};
   if (data && typeof data === "object") {
