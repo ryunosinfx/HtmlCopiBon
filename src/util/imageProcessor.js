@@ -51,14 +51,11 @@ export class ImageProcessor {
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 
-      console.log("createImageNodeByData A00data!" + data + "/ab.byteLength:" + ab.byteLength)
-      console.log(data)
       if (type && type.match(imgRe)) {
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
         imgElm.onload = () => {
           data.height = imgElm.height;
           data.width = imgElm.width;
-          console.log("createImageNodeByData A01 imgElm!" + type)
           resolve(imgElm);
         }
         imgElm.onerror = (e) => {
@@ -68,7 +65,6 @@ export class ImageProcessor {
         };
         return
       } else {
-        console.log("createImageNodeByData A02 imgElm!" + type)
         resolve(imgElm);
       }
 

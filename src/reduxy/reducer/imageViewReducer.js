@@ -6,6 +6,7 @@ import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
 import {FileUploadExecuter} from "../../service/fileUploadExecuter";
 let imageViewReducer=null;
+const loadedImageMap = new Map();
 export class ImageViewReducer extends BaseReducer {
   constructor() {
     super();
