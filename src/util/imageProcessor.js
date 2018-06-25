@@ -17,9 +17,9 @@ export class ImageProcessor {
       imgElm.onload = () => {
         const widthScale = width / imgElm.width;
         const heightScale = height / imgElm.height;
-        const scale = widthScale <= heightScale
-          ? widthScale
-          : heightScale;
+        const scale = widthScale <= heightScale ?
+          widthScale :
+          heightScale;
         this.canvas.height = imgElm.height * scale;
         this.canvas.width = imgElm.width * scale;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -43,17 +43,22 @@ export class ImageProcessor {
 
   createImageNodeByData(data) {
     return new Promise((resolve, reject) => {
-      let {name, ab, type} = data;
+      let {
+        name,
+        ab,
+        type
+      } = data;
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 
-        console.log("createImageNodeByData A00data!"+data+"/ab.byteLength:"+ab.byteLength)
+      console.log("createImageNodeByData A00data!" + data + "/ab.byteLength:" + ab.byteLength)
+      console.log(data)
       if (type && type.match(imgRe)) {
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
         imgElm.onload = () => {
           data.height = imgElm.height;
           data.width = imgElm.width;
-          console.log("createImageNodeByData A01 imgElm!"+type)
+          console.log("createImageNodeByData A01 imgElm!" + type)
           resolve(imgElm);
         }
         imgElm.onerror = (e) => {
@@ -63,7 +68,7 @@ export class ImageProcessor {
         };
         return
       } else {
-              console.log("createImageNodeByData A02 imgElm!"+type)
+        console.log("createImageNodeByData A02 imgElm!" + type)
         resolve(imgElm);
       }
 
