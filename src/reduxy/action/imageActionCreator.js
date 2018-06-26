@@ -20,5 +20,8 @@ export class ImageActionCreator {
   static creatSortImagesAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("sortImages", targetView, data, storeKey);
   }
+  static creatChangeTitleImagesAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("changeTitle", targetView, data, storeKey);
+  }
 
 }
