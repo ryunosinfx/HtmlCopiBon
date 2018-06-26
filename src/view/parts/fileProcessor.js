@@ -26,12 +26,12 @@ import {
 import {
   ImageViewReducer
 } from '../../reduxy/reducer/imageViewReducer'
-const loaded = new Map();
 export class FileProcessor extends BaseView {
   constructor() {
     super("FileProcessor", "FileProcessor");
     this.ip = this.ms.ip;
     ImageViewReducer.register();
+    this.loaded = new Map();
   }
   onAfterAttach(store, data) {
     const action = ImageActionCreator.creatLoadImagesAction(this, {});
@@ -71,11 +71,12 @@ export class FileProcessor extends BaseView {
   remove(pk) {
     return (event)=>{
       if (window.confirm("delete ok?")) {
-        const action = ImageActionCreator.creatRemoveAction(this, {imagePK:pk});
+        const action = ImageActionCreator.creatRemoveAction(this, {imagePKforDelete:pk});
         this.dispatch(action);
       }
     }
   }
+
   async crateDataLine(imageData) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;

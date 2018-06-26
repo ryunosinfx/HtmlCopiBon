@@ -48,7 +48,7 @@ export class ImageViewReducer extends BaseReducer {
       const imagesData = await this.saveFiles(action.data.files);
       store["imagesData"] = imagesData;
     } else if (this.imageRemoveAction.type === action.type) {
-      await this.remove(action.data.imagePK);
+      await this.remove(action.data.imagePKforDelete);
     } else if (this.imagesLoadAction.type === action.type) {
       const imagesData = await this.loadImages();
       store["imagesData"] = imagesData;
