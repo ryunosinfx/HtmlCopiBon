@@ -63,7 +63,11 @@ export class ImageViewReducer extends BaseReducer {
     const fue = new FileUploadExecuter();
     const imageEntitis = await this.tm.addImageFiles(fue, files);
     console.log("=★=processFiles");
-    return await this.createRetList(imageEntitis);
+    const retList = this.getEntitisAsList();
+    for(let imageEntity of imageEntitis){
+      retList.unshift(imageEntity);
+    }
+    return await this.createRetList(retList);
   }
 
   async loadImages() {
@@ -129,6 +133,22 @@ export class ImageViewReducer extends BaseReducer {
   }
   async remove(pk) {
     await this.tm.removeImage(pk);
+    loadedImageMap.delete(pk);
+    return this.getRetObjsAsList();
+  }
+  getRetObjsAsList(){
+    const retList = [];
+    for (let [key, retObj] of loadedImageMap.entries()) {
+      retList.push(retObj);
+    }
+    return retList;
+  }
+  getEntitisAsList(){
+    const retList = [];
+    for (let [key, retObj] of loadedImageMap.entries()) {
+      retList.push(retObj.imageEntity);
+    }
+    return retList;
   }
 }
 // setTimeout(ImageViewReducer.register,1);

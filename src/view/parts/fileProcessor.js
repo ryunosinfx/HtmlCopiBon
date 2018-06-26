@@ -68,11 +68,12 @@ export class FileProcessor extends BaseView {
     }
     this.prePatch("#imageArea", div("imageArea", images));
   }
-  async remove(event, pk) {
-    if (window.confirm("delete ok?")) {
-      await this.tm.removeImage(pk);
-      vu.removeChild(event.target.parentNode.parentNode);
-      loaded.delete(pk);
+  remove(pk) {
+    return (event)=>{
+      if (window.confirm("delete ok?")) {
+        const action = ImageActionCreator.creatRemoveAction(this, {imagePK:pk});
+        this.dispatch(action);
+      }
     }
   }
   async crateDataLine(imageData) {
@@ -88,10 +89,10 @@ export class FileProcessor extends BaseView {
       console.log(e);
       throw e
     });
-
-    const imgVnode = img(imageEntity.getPk(), imageEntity.name, imageEntity.name, imgElm.src, {});
-    const textVnode = span(imageEntity.getPk() + "_", ["images"], imageData.imageText);
-    const delButton = span(imageEntity.getPk() + "_delButton", ["delButton"], "x");
+    const pk = imageEntity.getPk();
+    const imgVnode = img(pk, imageEntity.name, imageEntity.name, imgElm.src, {});
+    const textVnode = span(pk + "_", ["images"], imageData.imageText);
+    const delButton = span(pk + "_delButton", ["delButton"], {on:{"click":this.remove(pk)}},"x");
     const dataLineVnode = div("", ["dataLine"], [delButton, imgVnode, textVnode]);
     const rowVnode = div("", ["row"],[dataLineVnode]);
     return rowVnode;
