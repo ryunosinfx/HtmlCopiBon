@@ -18,7 +18,7 @@ export class Thumbnails extends BaseView {
     super("Thumnails", "Thumnails");
     this.imageAreaID = "thumnailsImageArea";
     this.thumbnails = {};
-    this.thumbnail = new Thumbnail();
+    this.thumbnail = new Thumbnail(this);
   }
   onAfterAttach(store, data) {}
   async onViewShow(store, actionData) {
