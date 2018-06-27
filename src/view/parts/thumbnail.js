@@ -2,16 +2,17 @@ import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
-export class Thumnail  extends BaseView {
+export class Thumbnail  extends BaseView {
   constructor(pk) {
     super("Thumnail"+pk, "Thumnail");
     this.pk = pk ;
+    this.ip = this.ms.ip;
   }
   setImageData(imageData){
     this.imageData = imageData;
   }
   render(store, actionData) {
-    return div('' ,"Thumnails");
+    return div('' ,"");
   }
   remove(pk) {
     return (event)=>{
@@ -22,7 +23,7 @@ export class Thumnail  extends BaseView {
     }
   }
 
-  async crateDataLine(imageData,currentVnode) {
+  async crateDataLine(imageData) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
     console.log(binaryEntity)

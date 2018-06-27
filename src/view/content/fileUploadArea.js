@@ -28,8 +28,6 @@ export class FileUploadArea extends BaseView {
         'dragover': this.fu.handleDrop(this),
         'drop': this.fu.handleDrop(this),
         'click': (e) => {
-          //alert(target);
-          //vu.emit(target, 'change', false, false);
           const fileInput = this.getElementById("FileUploadFile");
           fileInput.elm.click();
         }
