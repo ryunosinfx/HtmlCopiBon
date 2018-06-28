@@ -110,7 +110,8 @@ export class ImageViewReducer extends BaseReducer {
   }
   async processParImage(imageEntity) {
     const imagePk = imageEntity.getPk();
-    const binaryEntity = await this.em.get(imageEntity.binary);
+    const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
+    const binaryEntity = await this.em.get(thumbnailEntity.binary);
     const imgElm = await this.ip.createImageNodeByData({
       name: imageEntity.name,
       ab: binaryEntity.ab,

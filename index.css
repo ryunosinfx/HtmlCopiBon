@@ -139,3 +139,19 @@ canvas.hidden {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
+.thumbnail_block{
+  display: flex;
+  flex-direction: row;
+  background-color: green;
+  border: 1px solid #fdd;
+  width:150px;
+  float:left;
+  cursor: pointer;
+}
+.thumbnail_text{
+  display: block;
+  background-color: blue;
+  border: 1px solid #fdd;
+  font-size: 0.5em
+}
