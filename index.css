@@ -140,14 +140,24 @@ canvas.hidden {
   border-top-right-radius: 10px;
 }
 
-.thumbnail_block{
+.thumbnail_block {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: green;
   border: 1px solid #fdd;
   width:150px;
-  float:left;
   cursor: pointer;
+}
+.thumbnail_block.over {
+  background-color: rgba(24, 129, 12, 0.8);
+  width:148px;
+  border: 2px dotted #dfd;
+}
+
+.thumbnail_block div{
+  display: flex;
+  height:auto;
+  margin:auto;
 }
 .thumbnail_text{
   display: block;

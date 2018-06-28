@@ -21,6 +21,7 @@ export class Thumbnail extends BaseView {
     this.parent = parent;
     this.ip = this.ms.ip;
     this.dragElm = null;
+    this.thumbnail_block = "thumbnail_block";
   }
   setImageData(imageData) {
     this.imageData = imageData;
@@ -41,7 +42,10 @@ export class Thumbnail extends BaseView {
   handleDragStart(dragImageSrc) {
     return (event) => {
       const elm = event.target;
-      elm.stylevent.opacity = '0.4'; // this / event.target is the source nodevent.
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
+      elm.style.opacity = '0.4'; // this / event.target is the source nodevent.
       this.dragElm = elm;
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/html', elm.innerHTML);
@@ -53,6 +57,10 @@ export class Thumbnail extends BaseView {
   }
   handleDragOver() {
     return (event) => {
+      const elm = event.target;
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
       event.preventDefault(); // Necessary. Allows us to drop.
       event.dataTransfer.dropEffect = 'move'; // See the section on the DataTransfer object.
       return false;
@@ -60,12 +68,20 @@ export class Thumbnail extends BaseView {
   }
   handleDragEnter() {
     return (event) => {
-      this.classList.add('over');
+      const elm = event.target;
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
+      elm.classList.add('over');
     }
   }
   handleDragLeave() {
     return (event) => {
-      this.classList.remove('over'); // this / event.target is previous target element.
+      const elm = event.target;
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
+      elm.classList.remove('over'); // this / event.target is previous target element.
     }
   }
   handleDrop(event) {
@@ -73,18 +89,34 @@ export class Thumbnail extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
       if (this.dragElm !== elm) { // Don't do anything if dropping the same column we're dragging.
-        this.dragElm.innerHTML = elm.innerHTML; // Set the source column's HTML to the HTML of the columnwe dropped on.
-        elm.innerHTML = event.dataTransfer.getData('text/html');
+        // this.dragElm.innerHTML = elm.innerHTML; // Set the source column's HTML to the HTML of the columnwe dropped on.
+        // elm.innerHTML = event.dataTransfer.getData('text/html');
+
+        const action = ImageActionCreator.creatSortImagesAction(this, {
+          imagePKmove: this.dragElm.dataset.pk,
+          imagePKdrop:elm.dataset.pk
+        });
+        this.dispatch(action);
       }
       return false;
     }
   }
   handleDragEnd(event) {
     return (event) => {
-      // [].forEach.call(cols, function(this.cals) {
-      //   col.classList.remove('over');
-      // });
+      const elm = event.target;
+      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+        return
+      }
+      elm.style.opacity = '1';
+      const childNodes = elm.parentNode.childNodes;
+      for(let i = 0; i< childNodes.length ; i++) {
+        const col = childNodes[i];
+        col.classList.remove('over');
+      }
     }
   }
   async crateDataLine(imageData) {
@@ -108,8 +140,7 @@ export class Thumbnail extends BaseView {
         "click": this.remove(pk)
       }
     }, "x");
-    const dataLineVnode = div("", ["thumbnail_block"], [delButton, imgVnode, textVnode]);
-    const rowVnode = div("", ["row"], {
+    const rowVnode = div("", [this.thumbnail_block], {
       on: {
         dragstart: this.handleDragStart(imgElm.src),
         dragover: this.handleDragOver(),
@@ -117,8 +148,10 @@ export class Thumbnail extends BaseView {
         dragleave: this.handleDragLeave(),
         drop: this.handleDrop(),
         dragend:this.handleDragEnd()
-      }
-    },[dataLineVnode]);
+      },
+      dataset:{pk:pk},
+      props:{ "draggable":"true"}
+    }, [delButton, div("", ["image_block"],[imgVnode]), textVnode]);
     return rowVnode;
   }
 }

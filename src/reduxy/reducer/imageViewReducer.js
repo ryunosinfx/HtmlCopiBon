@@ -1,22 +1,10 @@
-import {
-  ActionCreator
-} from '../../util/reactive/actionCreator'
-import {
-  ImageActionCreator
-} from '../action/imageActionCreator'
+import {ActionCreator} from '../../util/reactive/actionCreator'
+import {ImageActionCreator} from '../action/imageActionCreator'
 
-import {
-  Sorter
-} from "../../util/sorter";
-import {
-  MainService
-} from "../../service/mainService"
-import {
-  BaseReducer
-} from '../../util/reactive/baseReducer'
-import {
-  FileUploadExecuter
-} from "../../service/fileUploadExecuter";
+import {Sorter} from "../../util/sorter";
+import {MainService} from "../../service/mainService"
+import {BaseReducer} from '../../util/reactive/baseReducer'
+import {FileUploadExecuter} from "../../service/fileUploadExecuter";
 let imageViewReducer = null;
 const loadedImageMap = new Map();
 export class ImageViewReducer extends BaseReducer {
@@ -48,11 +36,14 @@ export class ImageViewReducer extends BaseReducer {
       const imagesData = await this.saveFiles(action.data.files);
       store["imagesData"] = imagesData;
     } else if (this.imageRemoveAction.type === action.type) {
-      await this.remove(action.data.imagePKforDelete);
+      const imagesData = await this.remove(action.data.imagePKforDelete);
+      store["imagesData"] = imagesData;
     } else if (this.imagesLoadAction.type === action.type) {
       const imagesData = await this.loadImages();
       store["imagesData"] = imagesData;
     } else if (this.imagesSortAction.type === action.type) {
+      const imagesData = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
+      store["imagesData"] = imagesData;
       //todo db add
     } else if (this.imagesChangeTitleAction.type === action.type) {
       //todo db add
@@ -64,10 +55,42 @@ export class ImageViewReducer extends BaseReducer {
     const imageEntitis = await this.tm.addImageFiles(fue, files);
     console.log("=★=processFiles");
     const retList = this.getEntitisAsList();
-    for(let imageEntity of imageEntitis){
+    for (let imageEntity of imageEntitis) {
       retList.unshift(imageEntity);
     }
     return await this.createRetList(retList);
+  }
+
+  async sort(movePk, dropPk) {
+    const imageEntitis = this.getEntitisAsList();
+    Sorter.orderBy(imageEntitis, [
+      {
+        colName: "listing",
+        isDESC: false
+      }, {
+        colName: "updateDate",
+        isDESC: true
+      }
+    ]);
+    const converterMap = {};
+    converterMap[movePk] = dropPk;
+    converterMap[dropPk] = movePk;
+    for (let index in imageEntitis) {
+      const imageEntity = imageEntitis[index];
+      const pk = imageEntity.getPk();
+      const convertedPk = converterMap[pk]
+        ? converterMap[pk]
+        : pk;
+      if (convertedPk !== pk) {
+        const imageEntityConverted = loadedImageMap.get(convertedPk).imageEntity;
+        imageEntityConverted.listing = index;
+        imageEntityConverted.updateDate = Date.now();
+        await this.em.save(imageEntityConverted);
+      } else {
+        imageEntity.listing = index;
+      }
+    }
+    return await this.createRetList(imageEntitis);
   }
 
   async loadImages() {
@@ -85,24 +108,26 @@ export class ImageViewReducer extends BaseReducer {
     return await this.createRetList(imageEntitis);
   }
 
-  async createRetList(imageEntitis){
-    Sorter.orderBy(imageEntitis, [{
-      colName: "listing",
-      isDESC: false
-    }, {
-      colName: "updateDate",
-      isDESC: true
-    }]);
+  async createRetList(imageEntitis) {
+    Sorter.orderBy(imageEntitis, [
+      {
+        colName: "listing",
+        isDESC: false
+      }, {
+        colName: "updateDate",
+        isDESC: true
+      }
+    ]);
     console.log("=★=showFilesInit imageEntitis:" + imageEntitis.length);
     const retList = [];
     for (let imageEntity of imageEntitis) {
       const pk = imageEntity.getPk();
-      if(loadedImageMap.has(pk)){
+      if (loadedImageMap.has(pk)) {
         const retObj = loadedImageMap.get(pk);
         retList.push(retObj);
-      }else{
+      } else {
         const retObj = await this.processParImage(imageEntity);
-        loadedImageMap.set(pk,retObj);
+        loadedImageMap.set(pk, retObj);
         retList.push(retObj);
       }
     }
@@ -112,17 +137,13 @@ export class ImageViewReducer extends BaseReducer {
     const imagePk = imageEntity.getPk();
     const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
     const binaryEntity = await this.em.get(thumbnailEntity.binary);
-    const imgElm = await this.ip.createImageNodeByData({
-      name: imageEntity.name,
-      ab: binaryEntity.ab,
-      type: imageEntity.type
-    });
+    const imgElm = await this.ip.createImageNodeByData({name: imageEntity.name, ab: binaryEntity.ab, type: imageEntity.type});
     const size = (
-      binaryEntity.ab ?
-      (new Uint8Array(binaryEntity.ab)).length :
-      0);
+      binaryEntity.ab
+      ? (new Uint8Array(binaryEntity.ab)).length
+      : 0);
     const imageText = escape(imageEntity.name) + ' (' + (
-      imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
+    imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
 
     const retObj = {
       imageEntity: imageEntity,
@@ -137,19 +158,20 @@ export class ImageViewReducer extends BaseReducer {
     loadedImageMap.delete(pk);
     return this.getRetObjsAsList();
   }
-  getRetObjsAsList(){
+  getRetObjsAsList() {
     const retList = [];
     for (let [key, retObj] of loadedImageMap.entries()) {
       retList.push(retObj);
     }
     return retList;
   }
-  getEntitisAsList(){
+  getEntitisAsList() {
     const retList = [];
     for (let [key, retObj] of loadedImageMap.entries()) {
       retList.push(retObj.imageEntity);
     }
     return retList;
   }
+
 }
 // setTimeout(ImageViewReducer.register,1);
