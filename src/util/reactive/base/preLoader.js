@@ -9,4 +9,4 @@ let snabbdom = require('snabbdom');
 console.log(snabbdom);
 export const h = hz;
 export const toVNode = toVNodez;
-export const patch = snabbdom.init([snabbdomClass, snabbdomStyle, snabbdomProps, snabbdomEventlisteners])
+export const patch = snabbdom.init([snabbdomClass, snabbdomStyle, snabbdomProps, snabbdomDataset,snabbdomEventlisteners])

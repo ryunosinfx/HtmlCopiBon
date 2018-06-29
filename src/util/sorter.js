@@ -41,24 +41,25 @@ export class Sorter {
         }
         if(!objA){
           return isDESC
-            ? -1
-            : 1;
+            ? 1
+            : -1;
         }
         if(!objB){
           return isDESC
-            ? 1
-            : -1;
+            ? -1
+            : 1;
         }
         let a = objA[colName];
         let b = objB[colName];
+        console.log("a:"+a+"/b:"+b);
         if (a < b) {
-          return isDESC
-            ? -1
-            : 1;
-        } else if (a > b) {
           return isDESC
             ? 1
             : -1;
+        } else if (a > b) {
+          return isDESC
+            ? -1
+            : 1;
         }
       }
       return 0;

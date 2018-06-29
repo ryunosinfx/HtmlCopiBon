@@ -53,7 +53,7 @@ export class ImageViewReducer extends BaseReducer {
   async saveFiles(files) {
     const fue = new FileUploadExecuter();
     const imageEntitis = await this.tm.addImageFiles(fue, files);
-    console.log("=★=processFiles");
+    // console.log("=★=processFiles");
     const retList = this.getEntitisAsList();
     for (let imageEntity of imageEntitis) {
       retList.unshift(imageEntity);
@@ -62,13 +62,15 @@ export class ImageViewReducer extends BaseReducer {
   }
 
   async sort(movePk, dropPk) {
-    console.log('sort movePk:'+movePk+'/dropPk:'+dropPk)
+    console.log('sort movePk:' + movePk + '/dropPk:' + dropPk+"/this.em.save:"+this.em)
+      console.log(this.em)
     const imageEntitis = this.getEntitisAsList();
 
     for (let index in imageEntitis) {
       const imageEntity = imageEntitis[index];
       const pk = imageEntity.getPk();
-        console.log('sort pk:'+pk+'/index:'+index+'/imageEntity.listing:'+imageEntity.listing)
+      imageEntity.listing = index;
+      console.log('sort pk:' + pk + '/index:' + index + '/imageEntity.listing:' + imageEntity.listing)
     }
     Sorter.orderBy(imageEntitis, [
       {
@@ -85,7 +87,7 @@ export class ImageViewReducer extends BaseReducer {
     for (let index in imageEntitis) {
       const imageEntity = imageEntitis[index];
       const pk = imageEntity.getPk();
-        console.log('sort pk:'+pk+'/index:'+index+'/imageEntity.listing:'+imageEntity.listing)
+      console.log('sort pk:' + pk + '/index:' + index + '/imageEntity.listing:' + imageEntity.listing)
       const convertedPk = converterMap[pk]
         ? converterMap[pk]
         : pk;
@@ -93,7 +95,7 @@ export class ImageViewReducer extends BaseReducer {
         const imageEntityConverted = loadedImageMap.get(convertedPk).imageEntity;
         imageEntityConverted.listing = index;
         imageEntityConverted.updateDate = Date.now();
-        await this.em.save(imageEntityConverted);
+        await this.em.Images.save(imageEntityConverted);
       } else {
         imageEntity.listing = index;
       }
