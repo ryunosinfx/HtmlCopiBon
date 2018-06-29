@@ -1,6 +1,7 @@
 import snabbdomClass from 'snabbdom/modules/class'
 import snabbdomStyle from 'snabbdom/modules/style'
 import snabbdomProps from 'snabbdom/modules/props'
+import snabbdomDataset from 'snabbdom/modules/dataset'
 import snabbdomEventlisteners from 'snabbdom/modules/eventlisteners'
 import hz from 'snabbdom/h'
 import toVNodez from 'snabbdom/tovnode'

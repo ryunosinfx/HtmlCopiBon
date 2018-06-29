@@ -62,7 +62,14 @@ export class ImageViewReducer extends BaseReducer {
   }
 
   async sort(movePk, dropPk) {
+    console.log('sort movePk:'+movePk+'/dropPk:'+dropPk)
     const imageEntitis = this.getEntitisAsList();
+
+    for (let index in imageEntitis) {
+      const imageEntity = imageEntitis[index];
+      const pk = imageEntity.getPk();
+        console.log('sort pk:'+pk+'/index:'+index+'/imageEntity.listing:'+imageEntity.listing)
+    }
     Sorter.orderBy(imageEntitis, [
       {
         colName: "listing",
@@ -78,6 +85,7 @@ export class ImageViewReducer extends BaseReducer {
     for (let index in imageEntitis) {
       const imageEntity = imageEntitis[index];
       const pk = imageEntity.getPk();
+        console.log('sort pk:'+pk+'/index:'+index+'/imageEntity.listing:'+imageEntity.listing)
       const convertedPk = converterMap[pk]
         ? converterMap[pk]
         : pk;

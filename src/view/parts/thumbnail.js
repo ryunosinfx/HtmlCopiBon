@@ -95,7 +95,7 @@ export class Thumbnail extends BaseView {
       if (this.dragElm !== elm) { // Don't do anything if dropping the same column we're dragging.
         // this.dragElm.innerHTML = elm.innerHTML; // Set the source column's HTML to the HTML of the columnwe dropped on.
         // elm.innerHTML = event.dataTransfer.getData('text/html');
-
+        console.log('sort handleDrop imagePKmove:'+this.dragElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
         const action = ImageActionCreator.creatSortImagesAction(this, {
           imagePKmove: this.dragElm.dataset.pk,
           imagePKdrop:elm.dataset.pk
@@ -133,7 +133,7 @@ export class Thumbnail extends BaseView {
       throw e
     });
     const pk = imageEntity.getPk();
-    const imgVnode = img(pk, imageEntity.name, imageEntity.name, imgElm.src, {});
+    const imgVnode = img(pk + "_image", imageEntity.name, imageEntity.name, imgElm.src, {});
     const textVnode = span(pk + "_text", ["thumbnail_text"], imageData.imageText);
     const delButton = span(pk + "_delButton", ["delButton"], {
       on: {
@@ -150,7 +150,7 @@ export class Thumbnail extends BaseView {
         dragend:this.handleDragEnd()
       },
       dataset:{pk:pk},
-      props:{ "draggable":"true"}
+      props:{ "draggable":"true",'data-pk':pk}
     }, [delButton, div("", ["image_block"],[imgVnode]), textVnode]);
     return rowVnode;
   }
