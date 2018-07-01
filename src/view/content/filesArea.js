@@ -10,17 +10,19 @@ import {
   input,
   label
 } from "../../util/reactive/base/vtags";
-import {FileProcessor} from "../parts/fileProcessor";
 import {ImageDetail} from "../parts/imageDetail";
 import {PageImages} from "../parts/pageImages";
 import {Thumbnails} from "../parts/thumbnails";
+import {
+  ImageViewReducer
+} from '../../reduxy/reducer/imageViewReducer'
 export class FilesArea extends BaseView {
   constructor() {
     super("FilesArea", "FilesArea");
-    this.fileProcessor = new FileProcessor();
     this.imageDetail = new ImageDetail();
     this.pageImages = new PageImages();
     this.thumbnails = new Thumbnails();
+    ImageViewReducer.register();
   }
   // updateAsAttach(store, actionData) {
   //   super.updateAsAttachExecute(store, actionData);
@@ -29,7 +31,6 @@ export class FilesArea extends BaseView {
   // }
 
   onAfterAttach(store, data) {
-    this.fileProcessor.attach(this);
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
     this.thumbnails.attach(this);
@@ -37,10 +38,9 @@ export class FilesArea extends BaseView {
   }
   render() {
     return div("", [
-      div(this.imageDetail.id),
       div(this.pageImages.id),
-      div(this.fileProcessor.id),
-      div(this.thumbnails.id)
+      div(this.thumbnails.id),
+        div(this.imageDetail.id)
     ])
 
   }

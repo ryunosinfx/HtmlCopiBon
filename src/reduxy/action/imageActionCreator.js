@@ -23,5 +23,7 @@ export class ImageActionCreator {
   static creatChangeTitleImagesAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("changeTitle", targetView, data, storeKey);
   }
-
+  static creatDetailAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("detail", targetView, data, storeKey);
+  }
 }

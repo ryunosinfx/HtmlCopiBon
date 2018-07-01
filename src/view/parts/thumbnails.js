@@ -19,8 +19,12 @@ export class Thumbnails extends BaseView {
     this.imageAreaID = "thumnailsImageArea";
     this.thumbnails = {};
     this.thumbnail = new Thumbnail(this);
+    this.ip = this.ms.ip;
   }
-  onAfterAttach(store, data) {}
+  onAfterAttach(store, data) {
+    const action = ImageActionCreator.creatLoadImagesAction(this, {});
+    this.dispatch(action);
+  }
   async onViewShow(store, actionData) {
     if (store.imagesData) {
       await this.showImages(store.imagesData);

@@ -20,11 +20,13 @@ export class ImageViewReducer extends BaseReducer {
     this.imagesLoadAction = ImageActionCreator.creatLoadImagesAction();
     this.imagesSortAction = ImageActionCreator.creatSortImagesAction();
     this.imagesChangeTitleAction = ImageActionCreator.creatChangeTitleImagesAction();
+    this.imagesDetailAction = ImageActionCreator.creatDetailAction();
     this.atatch(this.imagAddAction);
     this.atatch(this.imageRemoveAction);
     this.atatch(this.imagesLoadAction);
     this.atatch(this.imagesSortAction);
     this.atatch(this.imagesChangeTitleAction);
+    this.atatch(this.imagesDetailAction);
   }
   static register() {
     if (!imageViewReducer) {
@@ -44,9 +46,10 @@ export class ImageViewReducer extends BaseReducer {
     } else if (this.imagesSortAction.type === action.type) {
       const imagesData = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
       store["imagesData"] = imagesData;
-      //todo db add
     } else if (this.imagesChangeTitleAction.type === action.type) {
-      //todo db add
+    } else if (this.imagesDetailAction.type === action.type) {
+      const imagesDetailData = await this.loadAImage(action.data.imagePK);
+      store["imagesDetailData"] = imagesDetailData;
     }
     return store;
   }
@@ -103,6 +106,18 @@ export class ImageViewReducer extends BaseReducer {
     return await this.createRetList(imageEntitis);
   }
 
+  async loadAImage(pk) {
+    if(!pk){
+      return
+    }
+    const imageEntity = await this.em.get(pk);
+    const binaryEntity = await this.em.get(imageEntity.binary);
+    const size = binaryEntity._ab.byteLength;
+    const imageText = escape(imageEntity.name) + ' (' + (
+    imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
+
+    return {imageEntity:imageEntity,binaryEntity:binaryEntity,imageText:imageText}
+  }
   async loadImages() {
     const title = await this.tm.load();
     const images = title.images;

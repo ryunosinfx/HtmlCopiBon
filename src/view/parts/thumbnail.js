@@ -92,9 +92,7 @@ export class Thumbnail extends BaseView {
       if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
         return
       }
-      if (this.dragElm !== elm) { // Don't do anything if dropping the same column we're dragging.
-        // this.dragElm.innerHTML = elm.innerHTML; // Set the source column's HTML to the HTML of the columnwe dropped on.
-        // elm.innerHTML = event.dataTransfer.getData('text/html');
+      if (this.dragElm !== elm) {
         console.log('sort handleDrop imagePKmove:'+this.dragElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
         const action = ImageActionCreator.creatSortImagesAction(this, {
           imagePKmove: this.dragElm.dataset.pk,
@@ -117,6 +115,19 @@ export class Thumbnail extends BaseView {
         const col = childNodes[i];
         col.classList.remove('over');
       }
+    }
+  }
+  selectImage(event) {
+    return (event) => {
+      event.stopPropagation(); // Stops some browsers from redirecting.
+      event.preventDefault();
+      const elm = event.target;
+        console.log('sort selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
+        const action = ImageActionCreator.creatDetailAction(this, {
+          imagePK: elm.dataset.pk
+        });
+        this.dispatch(action);
+      return false;
     }
   }
   async crateDataLine(imageData) {
@@ -147,7 +158,8 @@ export class Thumbnail extends BaseView {
         dragenter: this.handleDragEnter(),
         dragleave: this.handleDragLeave(),
         drop: this.handleDrop(),
-        dragend:this.handleDragEnd()
+        dragend:this.handleDragEnd(),
+        click:this.selectImage()
       },
       dataset:{pk:pk},
       props:{ "draggable":"true",'data-pk':pk}
