@@ -26,7 +26,10 @@ export class ImageDetail extends BaseView {
   async onViewShow(store, actionData) {
     if (store.imagesDetailData) {
       await this.showImage(store.imagesDetailData);
-      console.log("Thumnails onViewShow");
+      this.startX = 0;
+      this.startY = 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
     }
   }
 
@@ -43,7 +46,7 @@ export class ImageDetail extends BaseView {
     this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, ["image_detail_block"], {
       on: {
         mousedown: this.onMouseOn(),
-        mouseup: this.onMouseOff(),
+        //mouseup: this.onMouseOff(),
         mouseleave: this.onMouseOff(),
         mousemove: this.onMouseMove()
       }
@@ -57,11 +60,11 @@ export class ImageDetail extends BaseView {
   onMouseOn() {
     return(event) => {
       // alert("onMouseOn");
-      this.startX = this.startX
-        ? this.startX
+      this.startX = this.offsetX
+        ? this.offsetX*-1
         : event.clientX;
-      this.startY = this.startX
-        ? this.startX
+      this.startY = this.offsetY
+        ? this.offsetY*-1
         : event.clientY;
       const elm = event.target;
       this.isOnScroll = true;
@@ -72,9 +75,6 @@ export class ImageDetail extends BaseView {
       // alert("onMouseOff");
       const elm = event.target;
       this.isOnScroll = false;
-      // this.startX =this.offsetX ;
-      // this.startY =this.offsetY;
-
     }
   }
   onMouseMove() {
@@ -86,7 +86,9 @@ export class ImageDetail extends BaseView {
         const offsetX = currentX - this.startX;
         const offsetY = currentY - this.startY;
         const targetNode = elm.parentNode.parentNode;
-        console.log("elm.tagName:" + elm.tagName + "/offsetX:" + offsetX + "/offsetY:" + offsetY);
+        console.log("elm.tagName:" + elm.tagName + "/(offsetX:" + offsetX + "/offsetY:" + offsetY
+        + ")/(currentX:" + currentX + "/currentY:" + currentY
+        + ")/(this.startX:" + this.startX + "/this.startY:" + this.startY);
         targetNode.style.top = offsetY + "px";
         targetNode.style.left = offsetX + "px";
         this.offsetX = offsetX;
