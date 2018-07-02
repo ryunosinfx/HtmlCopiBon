@@ -150,6 +150,18 @@ canvas.hidden {
   width:160px;
   overflow: hidden;
 }
+.FilesArea> div> div.ImageDetail{
+width:320px;
+
+}
+.ImageDetail .ImageDetailTitle{
+  position: relative;
+  z-index: 1000;
+  font-size: 12px;
+  background-color: rgb(227, 169, 159);
+  text-align: left;
+  padding: 10px;
+}
 .Thumnails{
   flex-direction:column;
 }

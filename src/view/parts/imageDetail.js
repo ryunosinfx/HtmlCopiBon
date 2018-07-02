@@ -21,7 +21,7 @@ export class ImageDetail extends BaseView {
     this.startY = 0;
   }
   render(store, actionData) {
-    return div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa");
+    return div("",[""],[div("", ["ImageDetailTitle"],"ImageDetailTitle"),div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
   }
   async onViewShow(store, actionData) {
     if (store.imagesDetailData) {
@@ -47,7 +47,7 @@ export class ImageDetail extends BaseView {
       on: {
         mousedown: this.onMouseOn(),
         //mouseup: this.onMouseOff(),
-        mouseleave: this.onMouseOff(),
+        //mouseleave: this.onMouseOff(),
         mousemove: this.onMouseMove()
       }
     }, image));
@@ -61,13 +61,13 @@ export class ImageDetail extends BaseView {
     return(event) => {
       // alert("onMouseOn");
       this.startX = this.offsetX
-        ? this.offsetX*-1
+        ? event.clientX+this.offsetX*0-this.offsetX１
         : event.clientX;
       this.startY = this.offsetY
-        ? this.offsetY*-1
+        ? event.clientY+this.offsetY*0-this.offsetY１
         : event.clientY;
       const elm = event.target;
-      this.isOnScroll = true;
+      this.isOnScroll = this.isOnScroll?false:true;
     }
   }
   onMouseOff() {
@@ -86,13 +86,15 @@ export class ImageDetail extends BaseView {
         const offsetX = currentX - this.startX;
         const offsetY = currentY - this.startY;
         const targetNode = elm.parentNode.parentNode;
-        console.log("elm.tagName:" + elm.tagName + "/(offsetX:" + offsetX + "/offsetY:" + offsetY
-        + ")/(currentX:" + currentX + "/currentY:" + currentY
-        + ")/(this.startX:" + this.startX + "/this.startY:" + this.startY);
+        // console.log("elm.tagName:" + elm.tagName + "/(offsetX:" + offsetX + "/offsetY:" + offsetY
+        // + ")/(currentX:" + currentX + "/currentY:" + currentY
+        // + ")/(this.startX:" + this.startX + "/this.startY:" + this.startY);
         targetNode.style.top = offsetY + "px";
         targetNode.style.left = offsetX + "px";
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+        this.offsetX = this.startX;
+        this.offsetY = this.startY;
+        this.offsetX１ = offsetX;
+        this.offsetY１ = offsetY;
       }
     }
   }
