@@ -41,13 +41,11 @@ export class ImageDetail extends BaseView {
     const textVnode = span(pk + "_text", ["thumbnail_text"], imageData.imageText);
     const image = [
       div("", [""], [imgVnode]),
-      div("", textVnode)
+      div("", [textVnode])
     ]
     this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, ["image_detail_block"], {
       on: {
         mousedown: this.onMouseOn(),
-        //mouseup: this.onMouseOff(),
-        //mouseleave: this.onMouseOff(),
         mousemove: this.onMouseMove()
       }
     }, image));

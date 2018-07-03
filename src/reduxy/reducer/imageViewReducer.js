@@ -174,7 +174,8 @@ export class ImageViewReducer extends BaseReducer {
       imageEntity: imageEntity,
       binaryEntity: binaryEntity,
       size: size,
-      imageText: imageText
+      imageText: imageText,
+      isOnPage:false
     };
     return retObj;
   }
