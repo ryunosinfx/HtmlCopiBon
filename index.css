@@ -46,10 +46,10 @@ div.title {
 }
 
 div.FileUploadArea input {
-  position:absolute;
-  left:-100;
-
+  position: absolute;
+  left: -100;
 }
+
 div.FileUploadArea {
   display: block;
   min-height: 100%;
@@ -105,9 +105,10 @@ div.delButton:hover {
   color: #d48a60;
   background-color: #7b4f99;
 }
+
 canvas.hidden {
-  position:absolute;
-  top:-10000px;
+  position: absolute;
+  top: -10000px;
 }
 
 [draggable] {
@@ -139,22 +140,26 @@ canvas.hidden {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.FilesArea> div{
+
+.FilesArea>div {
   width: 100%;
-    display: flex;
-  flex-wrap:wrap;
-    flex-direction:row;
-}
-.FilesArea> div> div{
   display: flex;
-  width:160px;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.FilesArea>div>div {
+  display: flex;
+  min-width: 160px;
   overflow: hidden;
 }
-.FilesArea> div> div.ImageDetail{
-width:320px;
 
+.FilesArea>div>div.ImageDetail {
+  min-width: 160px;
+  max-width: 25%;
 }
-.ImageDetail .ImageDetailTitle{
+
+.ImageDetail .ImageDetailTitle {
   position: relative;
   z-index: 1000;
   font-size: 12px;
@@ -162,8 +167,9 @@ width:320px;
   text-align: left;
   padding: 10px;
 }
-.Thumnails{
-  flex-direction:column;
+
+.Thumnails {
+  flex-direction: column;
 }
 
 .thumbnail_block {
@@ -171,28 +177,31 @@ width:320px;
   flex-direction: column;
   background-color: green;
   border: 1px solid #fdd;
-  width:150px;
+  width: 150px;
   cursor: pointer;
 }
+
 .thumbnail_block.over {
   background-color: rgba(24, 129, 12, 0.8);
-  width:148px;
+  width: 148px;
   border: 2px dotted #dfd;
 }
 
-.thumbnail_block div{
+.thumbnail_block div {
   display: flex;
-  height:auto;
-  margin:auto;
+  height: auto;
+  margin: auto;
 }
-.thumbnail_text{
+
+.thumbnail_text {
   display: block;
   background-color: blue;
   border: 1px solid #fdd;
   font-size: 0.5em
 }
-.image_detail_block{
+
+.image_detail_block {
   position: relative;
-  top:-10px;
-  left:-30px;
+  top: -10px;
+  left: -30px;
 }
