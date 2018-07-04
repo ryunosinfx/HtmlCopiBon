@@ -1,10 +1,22 @@
-import {ActionCreator} from '../../util/reactive/actionCreator'
-import {ProgressActionCreator} from '../action/proggressActionCreator'
+import {
+  ActionCreator
+} from '../../util/reactive/actionCreator'
+import {
+  ProgressActionCreator
+} from '../action/proggressActionCreator'
 
-import {Sorter} from "../../util/sorter";
-import {MainService} from "../../service/mainService"
-import {BaseReducer} from '../../util/reactive/baseReducer'
-import {FileUploadExecuter} from "../../service/fileUploadExecuter";
+import {
+  Sorter
+} from "../../util/sorter";
+import {
+  MainService
+} from "../../service/mainService"
+import {
+  BaseReducer
+} from '../../util/reactive/baseReducer'
+import {
+  FileUploadExecuter
+} from "../../service/fileUploadExecuter";
 let imageViewReducer = null;
 const loadedImageMap = new Map();
 export class ProgressViewReducer extends BaseReducer {
@@ -31,14 +43,21 @@ export class ProgressViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.progressBarAddAction.type === action.type) {
-      store["imagesData"] = imagesData;
+      store["progress"] = this.createProgress(true, 0, false);
     } else if (this.progressBarRemoveAction.type === action.type) {
-      store["imagesData"] = imagesData;
+      store["progress"] = this.createProgress(false, 0, false);
     } else if (this.progressBarUpdateAction.type === action.type) {
-      store["imagesData"] = imagesData;
+      store["progress"] = this.createProgress(true, action.data.progress, false);
     } else if (this.progressBarCompleatSortAction.type === action.type) {
-      store["imagesData"] = imagesData;
+      store["progress"] = this.createProgress(true, 100, true);
     }
     return store;
+  }
+  createProgress(isVisible, progress, isComple) {
+    return {
+      isVisible: isVisible,
+      progress: progress,
+      isComple: isComple
+    }
   }
 }

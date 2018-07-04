@@ -5,12 +5,9 @@ export class ProgressBar  extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
   }
-  renderA() {
-    return this.elm;
-  }
 
   render() {
-    return div(this.id, "ProgressBar");
+    return div(this.id, ["ProgressBar"],[dev('',['progeress']),dev('',['progeressPoints'])]);
   }
   init() {
     this.elm.style.width = '0%';

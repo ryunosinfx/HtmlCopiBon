@@ -1,7 +1,7 @@
 import {MainService} from "./mainService";
 export class FileUploadExecuter {
-  constructor(indigator) {
-    this.progress = indigator;
+  constructor(dispatcher) {
+    this.progress = dispatcher;
     this.name = "FileUploader";
     this.ms = MainService.getInstance();
   }
