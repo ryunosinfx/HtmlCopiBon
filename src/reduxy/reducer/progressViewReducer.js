@@ -1,22 +1,12 @@
 import {
-  ActionCreator
-} from '../../util/reactive/actionCreator'
-import {
   ProgressActionCreator
 } from '../action/proggressActionCreator'
-
-import {
-  Sorter
-} from "../../util/sorter";
 import {
   MainService
 } from "../../service/mainService"
 import {
   BaseReducer
 } from '../../util/reactive/baseReducer'
-import {
-  FileUploadExecuter
-} from "../../service/fileUploadExecuter";
 let imageViewReducer = null;
 const loadedImageMap = new Map();
 export class ProgressViewReducer extends BaseReducer {
@@ -24,7 +14,6 @@ export class ProgressViewReducer extends BaseReducer {
     super();
     this.ms = MainService.getInstance();
     this.vpl = this.ms.getViewPartsLoader();
-    this.ip = this.ms.ip;
     this.em = this.ms.em;
     this.tm = this.ms.tm;
     this.progressBarAddAction = ProgressActionCreator.creatAddAction();
@@ -35,6 +24,7 @@ export class ProgressViewReducer extends BaseReducer {
     this.atatch(this.progressBarRemoveAction);
     this.atatch(this.progressBarUpdateAction);
     this.atatch(this.progressBarCompleatSortAction);
+    this.storeKey = "progress";
   }
   static register() {
     if (!imageViewReducer) {
@@ -43,13 +33,13 @@ export class ProgressViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.progressBarAddAction.type === action.type) {
-      store["progress"] = this.createProgress(true, 0, false);
+      store[this.storeKey] = this.createProgress(true, 0, false);
     } else if (this.progressBarRemoveAction.type === action.type) {
-      store["progress"] = this.createProgress(false, 0, false);
+      store[this.storeKey] = this.createProgress(false, 0, false);
     } else if (this.progressBarUpdateAction.type === action.type) {
-      store["progress"] = this.createProgress(true, action.data.progress, false);
+      store[this.storeKey] = this.createProgress(true, action.data.progress, false);
     } else if (this.progressBarCompleatSortAction.type === action.type) {
-      store["progress"] = this.createProgress(true, 100, true);
+      store[this.storeKey] = this.createProgress(true, 100, true);
     }
     return store;
   }

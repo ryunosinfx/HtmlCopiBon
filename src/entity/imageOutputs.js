@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export default class ImageOutputs extends BaseEntity {
+export class ImageOutputs extends BaseEntity {
   constructor() {
     super();
     this.name = null;

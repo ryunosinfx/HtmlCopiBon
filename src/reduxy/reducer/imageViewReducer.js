@@ -1,4 +1,3 @@
-import {ActionCreator} from '../../util/reactive/actionCreator'
 import {ImageActionCreator} from '../action/imageActionCreator'
 
 import {Sorter} from "../../util/sorter";

@@ -1,14 +1,16 @@
 import {EntityManager} from "./entity/entityManager";
 import {ViewPartsLoader} from "./viewPartsLoader";
-import TitleManager from "./manager/titleManager";
-import BinaryManager from "./manager/binaryManager";
-import ImageManager from "./manager/imageManager";
-import ThumbnaleManager from "./manager/thumbnailManager";
-import Images from "../entity/images";
-import Pdfs from "../entity/pdfs";
-import Series from "../entity/series";
-import Thumbnales from "../entity/thumbnales";
-import Title from "../entity/title";
+import {TitleManager} from "./manager/titleManager";
+import {BinaryManager} from "./manager/binaryManager";
+import {PagesManager} from "./manager/pagesManager";
+import {SettingsManager} from "./manager/settingsManager";
+import {ImageManager} from "./manager/imageManager";
+import {ThumbnaleManager} from "./manager/thumbnailManager";
+import {Images} from "../entity/images";
+import {Pdfs} from "../entity/pdfs";
+import {Series} from "../entity/series";
+import {Thumbnales} from "../entity/thumbnales";
+import {Title} from "../entity/title";
 import {ImageProcessService} from "./imageProcessService"
 
 const title = "CopiBon";
@@ -23,6 +25,8 @@ export class MainServiceImpl {
     await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title]);
     this.ip = new ImageProcessService();
     this.bm = new BinaryManager(this.em);
+    this.tbm = new ThumbnaleManager(this.em);
+    this.pb = new ThumbnaleManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);
     this.im = new ImageManager(this.em);
     this.tm = new TitleManager(this.em);

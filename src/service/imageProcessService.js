@@ -1,4 +1,3 @@
-
 import {ImageProcessor} from "../util/imageProcessor";
 export class ImageProcessService {
   constructor() {

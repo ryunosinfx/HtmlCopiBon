@@ -1,7 +1,7 @@
-import Title from "../../entity/title";
-import Images from "../../entity/images";
-import Thumbnales from "../../entity/thumbnales";
-import Series from "../../entity/series";
+import {Title} from "../../entity/title";
+import {Images} from "../../entity/images";
+import {Thumbnales} from "../../entity/thumbnales";
+import {Series} from "../../entity/series";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService";
@@ -10,7 +10,7 @@ const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
 const defaultName = "DefaultName";
 const defaultTitlePrefix = "title_";
-export default class TitleManager {
+export class TitleManager {
   constructor(entityManager, titleId) {
     this.em = entityManager;
     this.ms = MainService.getInstance();

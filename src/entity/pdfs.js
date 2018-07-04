@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export default class Pdfs extends BaseEntity{
+export class Pdfs extends BaseEntity{
   constructor() {
     super();
     this.name = null;

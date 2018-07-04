@@ -1,9 +1,9 @@
-import Images from "../../entity/images";
+import {Images} from "../../entity/images";
 import {MainService} from "../../service/mainService";
 import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
-export default class ImageManager {
+export class ImageManager {
   constructor(entityManager) {
     this.ms = MainService.getInstance();
     this.em = entityManager;

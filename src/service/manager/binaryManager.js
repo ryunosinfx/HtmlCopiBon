@@ -1,6 +1,6 @@
 import {Binary} from "../entity/binary";
 import {PrimaryKey} from "../entity/primaryKey";
-export default class BinaryManager {
+export class BinaryManager {
   constructor(entityManager) {
     this.em = entityManager;
   }

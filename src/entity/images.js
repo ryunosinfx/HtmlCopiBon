@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export default class Images extends BaseEntity {
+export class Images extends BaseEntity {
   constructor() {
     super();
     this.name = null;

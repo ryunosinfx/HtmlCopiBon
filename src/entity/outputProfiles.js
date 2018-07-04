@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export default class OutputProfile extends BaseEntity {
+export class OutputProfile extends BaseEntity {
   constructor(titleId, titlePrefix, name) {
     super();
     //console.log("!=!titleId:"+titleId+"!=!titleId:"+titleId+"!=!name:"+name+"!=!"+Date.now());

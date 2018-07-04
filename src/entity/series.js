@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export default class Series extends BaseEntity{
+export class Series extends BaseEntity{
   constructor(name) {
     super();
     this.name=name;
