@@ -3,7 +3,6 @@ import {ImageActionCreator} from '../action/imageActionCreator'
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
-import {FileUploadExecuter} from "../../service/fileUploadExecuter";
 let imageViewReducer = null;
 const loadedImageMap = new Map();
 export class ImageViewReducer extends BaseReducer {
@@ -53,9 +52,7 @@ export class ImageViewReducer extends BaseReducer {
     return store;
   }
   async saveFiles(files) {
-    const fue = new FileUploadExecuter();
-    const imageEntitis = await this.tm.addImageFiles(fue, files);
-    // console.log("=★=processFiles");
+    const imageEntitis = await this.tm.addImageFiles(files);
     const retList = this.getEntitisAsList();
     for (let imageEntity of imageEntitis) {
       retList.unshift(imageEntity);

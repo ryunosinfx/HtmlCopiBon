@@ -5,6 +5,7 @@ import {Series} from "../../entity/series";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService";
+import {FileUploadExecuter} from "../../service/fileUploadExecuter";
 
 const TITLE_STORE_NAME = "CopiBonTitles";
 const defaultTitle = "CopiBon";
@@ -69,7 +70,7 @@ export class TitleManager {
     const titelId = this.titelId;
     const titelPrefix = this.titelPrefix;
   }
-  async addImageFiles(fue, files) {
+  async addImageFiles(files) {
     const title = await this.loadCurrent();
     const images = title.images;
     Sorter.thinningNullData(images);

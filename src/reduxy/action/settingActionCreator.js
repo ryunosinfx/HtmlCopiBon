@@ -1,5 +1,4 @@
 import {ActionCreator} from '../../util/reactive/actionCreator'
-const baseActions = ["addImage", "removeImage", "sortImages", 'loadImages'];
 export class SettingActionCreator {
   constructor() {}
   static creatAction(targetView, data, storeKey = null) {

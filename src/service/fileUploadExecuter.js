@@ -1,7 +1,9 @@
 import {MainService} from "./mainService";
+import {ProgressActionCreator} from "../reduxy/action/progressActionCreator";
+import {ActionDispatcher} from "../util/reactive/actionDispatcher";
 export class FileUploadExecuter {
-  constructor(dispatcher) {
-    this.progress = dispatcher;
+  constructor() {
+    this.actionDispatcher = ActionDispatcher.createStandAlon();
     this.name = "FileUploader";
     this.ms = MainService.getInstance();
   }
@@ -72,12 +74,16 @@ export class FileUploadExecuter {
     const percentLoaded = Math.round((event.loaded / event.total) * 100);
     if (percentLoaded < 100) {
       //this.progress.progress(percentLoaded);
+      this.actionDispatcher(ProgressActionCreator.createAction(null,{progress:percentLoaded}));
+
     }
   }
   onload(event) {
+    this.actionDispatcher(ProgressActionCreator.createAction());
     return this.reader.result;
   }
   onLoadStart() {
+    this.actionDispatcher(ProgressActionCreator.createAction());
     //this.progress.start();
   }
 }

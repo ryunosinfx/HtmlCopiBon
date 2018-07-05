@@ -5,10 +5,21 @@ export class ProgressBar  extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
     this.storeKey = "progress";
+    this.initPoint = '0%';
   }
 
   render() {
-    return div(this.id, ["ProgressBar"],[dev('',['progeressFrame'],[dev('',['progeress'])]),dev('',['progeressPoints'])]);
+    return div(this.id, ["ProgressBar"],
+      {
+        style:｛
+          display:"none"
+        ｝
+      },[
+      dev('',['progeressFrame'],[
+        dev('',['progeress'],{style:{width:this.initPoint}})
+      ]),
+      dev('',['progeressPoints']、this.initPoint)]
+    );
   }
   async onViewShow(store, actionData) {
     if (store.progress) {
@@ -19,7 +30,17 @@ export class ProgressBar  extends BaseView {
   showProgress(data){
     const {isVisible, progress, isComple} = data;
     if(isVisible){
-
+      this.currentVnode.elm.style.display = 'block';
+      this.prePatch(".progeress", div("", ["progeress"], {
+        style:{width:progress+"%"}
+      },));
+      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {
+      },progress+"%"));
+      if(isComple){
+        setTimeout(()=>{
+            this.currentVnode.elm.style.display = 'none';
+        },1000)
+      }
     }else{
       this.currentVnode.elm.style.display = 'none';
       this.prePatch(".progeress", div("", ["progeress"], {
@@ -28,7 +49,7 @@ export class ProgressBar  extends BaseView {
         }
       }));
       this.prePatch(".progeressPoints", div("", ["progeressPoints"], {
-      },"0%"));
+      },this.initPoint));
     }
   }
   ProgressBar() {

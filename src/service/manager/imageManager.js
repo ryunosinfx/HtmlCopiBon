@@ -3,6 +3,7 @@ import {MainService} from "../../service/mainService";
 import bc from "../../util/binaryConverter";
 import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
+
 export class ImageManager {
   constructor(entityManager) {
     this.ms = MainService.getInstance();
@@ -35,7 +36,8 @@ export class ImageManager {
     await this.em.delete(binaryPk);
     await this.em.delete(pk);
   }
-  async saveImageFile(fue, file, count = 0) {
+  async saveImageFile(file, count = 0) {
+    const fue = new FileUploadExecuter();
     const arrayBuffer = await fue.readAsArrayBuffer(file);
     const data = {
       name: file.name,
