@@ -76,14 +76,6 @@ export class ViewAttachQueue {
 
   findActivViews(activeViewsTree, id, callback, count) {
     let retView = null;
-
-    // console.log("findActivViews id:" + id + "/count:" + count + "/activeViewsTree:" + activeViewsTree.primaryView + "/" + activeViewsTree.parent);
-    //
-    // try {
-    //   console.log(activeViewsTree);
-    // } catch (e) {
-    //   console.log(e);
-    // }
     const next = count
       ? count + 1
       : 1;

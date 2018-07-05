@@ -4,12 +4,34 @@ import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class ProgressBar  extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
+    this.storeKey = "progress";
   }
 
   render() {
-    return div(this.id, ["ProgressBar"],[dev('',['progeress']),dev('',['progeressPoints'])]);
+    return div(this.id, ["ProgressBar"],[dev('',['progeressFrame'],[dev('',['progeress'])]),dev('',['progeressPoints'])]);
   }
-  init() {
+  async onViewShow(store, actionData) {
+    if (store.progress) {
+      await this.showProgress(store.progress);
+      console.log("ProgressBar onViewShow");
+    }
+  }
+  showProgress(data){
+    const {isVisible, progress, isComple} = data;
+    if(isVisible){
+
+    }else{
+      this.currentVnode.elm.style.display = 'none';
+      this.prePatch(".progeress", div("", ["progeress"], {
+        style: {
+          width:0%
+        }
+      }));
+      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {
+      },"0%"));
+    }
+  }
+  ProgressBar() {
     this.elm.style.width = '0%';
     this.elm.textContent = '0%';
   }
