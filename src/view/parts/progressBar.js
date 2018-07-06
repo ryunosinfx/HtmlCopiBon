@@ -1,7 +1,18 @@
 import vu from "../../util/viewUtil";
-import {BaseView} from "../../util/reactive/baseView";
-import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
-export class ProgressBar  extends BaseView {
+import {
+  BaseView
+} from "../../util/reactive/baseView";
+import {
+  a,
+  div,
+  li,
+  ul,
+  img,
+  span,
+  input,
+  label
+} from "../../util/reactive/base/vtags";
+export class ProgressBar extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
     this.storeKey = "progress";
@@ -9,17 +20,20 @@ export class ProgressBar  extends BaseView {
   }
 
   render() {
-    return div(this.id, ["ProgressBar"],
-      {
-        style:｛
-          display:"none"
-        ｝
-      },[
-      dev('',['progeressFrame'],[
-        dev('',['progeress'],{style:{width:this.initPoint}})
+    return div(this.id, ["ProgressBar"], {
+      style: {
+        display: "none"
+      }
+    }, [
+      dev('', ['progeressFrame'], [
+        dev('', ['progeress'], {
+          style: {
+            width: this.initPoint
+          }
+        })
       ]),
-      dev('',['progeressPoints']、this.initPoint)]
-    );
+      dev('', ['progeressPoints'], this.initPoint)
+    ]);
   }
   async onViewShow(store, actionData) {
     if (store.progress) {
@@ -27,45 +41,33 @@ export class ProgressBar  extends BaseView {
       console.log("ProgressBar onViewShow");
     }
   }
-  showProgress(data){
-    const {isVisible, progress, isComple} = data;
-    if(isVisible){
+  showProgress(data) {
+    const {
+      isVisible,
+      progress,
+      isComple
+    } = data;
+    if (isVisible) {
       this.currentVnode.elm.style.display = 'block';
       this.prePatch(".progeress", div("", ["progeress"], {
-        style:{width:progress+"%"}
-      },));
-      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {
-      },progress+"%"));
-      if(isComple){
-        setTimeout(()=>{
-            this.currentVnode.elm.style.display = 'none';
-        },1000)
+        style: {
+          width: progress + "%"
+        }
+      }, ));
+      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, progress + "%"));
+      if (isComple) {
+        setTimeout(() => {
+          this.currentVnode.elm.style.display = 'none';
+        }, 1000)
       }
-    }else{
+    } else {
       this.currentVnode.elm.style.display = 'none';
       this.prePatch(".progeress", div("", ["progeress"], {
         style: {
-          width:0%
+          width: "0%"
         }
       }));
-      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {
-      },this.initPoint));
+      this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, this.initPoint));
     }
-  }
-  ProgressBar() {
-    this.elm.style.width = '0%';
-    this.elm.textContent = '0%';
-  }
-  progress(percent) {
-    this.elm.style.width = percent + '%';
-    this.elm.textContent = percent + '%';
-  }
-  compliet() {
-    this.elm.style.width = '100%';
-    this.elm.textContent = '100%';
-    setTimeout(()=>{this.elm.className='';}, 2000);
-  }
-  start() {
-    this.elm  .className = 'loading';
   }
 }

@@ -24,17 +24,11 @@ export class FilesArea extends BaseView {
     this.thumbnails = new Thumbnails();
     ImageViewReducer.register();
   }
-  // updateAsAttach(store, actionData) {
-  //   super.updateAsAttachExecute(store, actionData);
-  //   console.log("FilesArea@updateAsAttach");
-  //   this.fp.showFilesInit();
-  // }
 
   onAfterAttach(store, data) {
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
     this.thumbnails.attach(this);
-    //this.fp.showFilesInit();
   }
   render() {
     return div("", [

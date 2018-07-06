@@ -143,6 +143,7 @@ canvas.hidden {
 
 .FilesArea>div {
   width: 100%;
+  min-width: 630px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

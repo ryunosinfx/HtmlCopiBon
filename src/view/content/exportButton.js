@@ -6,11 +6,6 @@ export class ExportButton  extends BaseView {
     super("ExportButton", "ExportButton");
     this.text="ExportButton";
   }
-  // renderA() {
-  //   const button = vu.create("ExportButtonA", "ExportButtonA", this.text);
-  //   vu.append(this.elm, button);
-  //   return this.elm;
-  // }
   render() {
     const button = div(this.id, "ExportButton", this.text);
     return button;

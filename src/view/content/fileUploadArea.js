@@ -35,7 +35,9 @@ export class FileUploadArea extends BaseView {
     }, [this.fileUploadArea, this.FileUploadFile]);
   }
   onAfterAttach(store, data) {
+
     //alert('FileUploadArea onAfterAttach')
     //this.addEventListeners();
+
   }
 }

@@ -13,6 +13,7 @@ import {
   input,
   label
 } from "../util/reactive/base/vtags";
+import {ProgressBar} from "./parts/progressBar";
 export class MainFrame extends BaseView {
   constructor(ms,title) {
     super("frame", "frame");
@@ -21,6 +22,7 @@ export class MainFrame extends BaseView {
     this.initialize(title);
   }
   initialize(title) {
+  this.progressBar = new ProgressBar()
     this.header = new Header(title);
     this.footer = new Footer();
     this.container = new Container();
@@ -32,6 +34,7 @@ export class MainFrame extends BaseView {
     this.header.attach(this,'#header');
     this.container.attach(this,'#container');
     this.footer.attach(this,'#footer');
+          this.imageDetail.attach(this);
   }
   render(titleText) {
     let newVnode = div('frame', ['frame'], {}, [
