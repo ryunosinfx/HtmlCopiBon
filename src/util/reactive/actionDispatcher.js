@@ -5,7 +5,7 @@ export class ActionDispatcher {
   static create(view){
     return new ActionDispatcherImple(view);
   }
-  static createStandAlon(){
+  static createStandAlone(){
     return new ActionDispatcherImple(false);
   }
 }

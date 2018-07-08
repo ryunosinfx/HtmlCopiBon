@@ -20,19 +20,19 @@ export class ProgressBar extends BaseView {
   }
 
   render() {
-    return div(this.id, ["ProgressBar"], {
+    return div("" ["ProgressBarView"], {
       style: {
         display: "none"
       }
     }, [
-      dev('', ['progeressFrame'], [
-        dev('', ['progeress'], {
+      div('', ['progeressFrame'], [
+        div('', ['progeress'], {
           style: {
             width: this.initPoint
           }
         })
       ]),
-      dev('', ['progeressPoints'], this.initPoint)
+      div('', ['progeressPoints'], this.initPoint)
     ]);
   }
   async onViewShow(store, actionData) {

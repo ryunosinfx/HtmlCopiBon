@@ -77,7 +77,7 @@ export class TitleManager {
     const iamageEntitis = [];
     let count = images.length;
     for (let file of files) {
-      let {imagePk, imageEntity} = await this.im.saveImageFile(fue, file, count);
+      let {imagePk, imageEntity} = await this.im.saveImageFile(file, count);
       count++;
       images.push(imagePk);
       iamageEntitis.push(imageEntity);

@@ -14,6 +14,7 @@ import {FileUploadArea} from "./content/fileUploadArea";
 import {TitleSettings} from "./content/titleSettings";
 import {ExportButton} from "./content/exportButton";
 import {FilesArea} from "./content/filesArea";
+import {ProgressBar} from "./parts/progressBar";
 export class Container extends BaseView {
   constructor() {
     super("container", "container");
@@ -21,6 +22,7 @@ export class Container extends BaseView {
     this.titleSettings = new TitleSettings();
     this.filesArea = new FilesArea();
     this.exportButton = new ExportButton();
+    this.progressBar = new ProgressBar();
   }
 
   onAfterAttach(store, data) {
@@ -28,6 +30,7 @@ export class Container extends BaseView {
     this.titleSettings.attach(this);
     this.filesArea.attach(this);
     this.exportButton.attach(this);
+    this.progressBar.attach(this);
   }
   render() {
     const newVnode = div({
@@ -36,6 +39,7 @@ export class Container extends BaseView {
       }
     }, [
       div(this.fileUploadArea.id),
+      div(this.progressBar.id),
       div(this.titleSettings.id),
       div(this.filesArea.id),
       div(this.exportButton.id)
