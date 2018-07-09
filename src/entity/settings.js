@@ -1,5 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
-export class Setting extends BaseEntity{
+export class Settins extends BaseEntity{
   constructor() {
     super();
     this.pageNum = 0;

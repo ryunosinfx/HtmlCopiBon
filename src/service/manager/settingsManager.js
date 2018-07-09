@@ -9,8 +9,12 @@ export class SettingsManager {
     const settingEntity = await this.em.get(settingPk);
     return settingEntity;
   }
-  createDefault(titile){
+  async createDefault(titile){
       const setting = new Setting();
+      setting.pageNum = 8;
+      setting.startPage = l;
+      setting.OutputProfile = null;
+      setting.listing = 0;
       const saved = await this.em.Thumbnales.save(image);
       return saved;
   }
