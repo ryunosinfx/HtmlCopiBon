@@ -9,6 +9,11 @@ export class SettingsManager {
     const settingEntity = await this.em.get(settingPk);
     return settingEntity;
   }
+  createDefault(titile){
+      const setting = new Setting();
+      const saved = await this.em.Thumbnales.save(image);
+      return saved;
+  }
   async save(pk, name, binary, type, width, height, listing = 0) {
     let image = null;
     if (pk) {
