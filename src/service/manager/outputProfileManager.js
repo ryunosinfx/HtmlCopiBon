@@ -1,43 +1,39 @@
-import {Pages} from "../../entity/pages";
+import {OutputProfile} from "../../entity/outputProfile";
 import {PrimaryKey} from "../entity/primaryKey";
-export class PagesManager {
+export class OutputProfileManager {
   constructor(entityManager) {
     this.em = entityManager;
   }
-  async loadFromImagePk(pk) {
-    const imagePk = PrimaryKey.getPrimaryKey(pk);
-    const imageEntity = await this.em.get(imagePk);
-    if(!imageEntity || !imageEntity.thumbnail){
-      return null;
-    }
-    const thumbnailPk  = PrimaryKey.getPrimaryKey(imageEntity.thumbnail);
-    const thumbnailEntity = await this.em.get(thumbnailPk);
-    thumbnailEntity.parentPk = imagePk;
-    return thumbnailEntity
+  static getDefault(){
+    const outputProfileEntity="";
+    return outputProfileEntity;
   }
   async loadAll() {
     const retList = [];
-    const pages = this.em.Pages.loadAll();
+    const outputProfile = this.em.OutputProfile.loadAll();
     for(let page of pages){
       retList.push(page);
     }
     return retList;
   }
-  async load(pk) {
-    let binaryPk = pk;
-    if (!pk) {
-      binaryPk = PrimaryKey.getPrimaryKey(pk);
-    }
-    return await this.em.Thumbnales.get(binaryPk);
+  async loadByPk(pk) {
+    const outputProfilePK = PrimaryKey.getPrimaryKey(pk);
+    const outputProfileEntity = await this.em.get(outputProfilePK);
+    return outputProfileEntity;
+  }
+  async createDefault(){
+      const outputProfile = new OutputProfile();
+      const saved = await this.em.OutputProfile.save(outputProfile);
+      return saved;
   }
   async save(pk, name, binary, type, width, height, listing = 0) {
     let image = null;
     if (pk) {
-      image = await this.em.Thumbnales.get(pk);
+      image = await this.em.OutputProfile.get(pk);
     }
     let binaryPk = PrimaryKey.getPrimaryKey(binary);
     if (!image) {
-      image = new Thumbnales();
+      image = new Setting();
     } else {
       image.updateDate = Date.now();
     }

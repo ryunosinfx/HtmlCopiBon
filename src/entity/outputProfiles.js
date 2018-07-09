@@ -1,10 +1,11 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class OutputProfile extends BaseEntity {
-  constructor(titleId, titlePrefix, name) {
+  constructor(id, prefix, name) {
     super();
     //console.log("!=!titleId:"+titleId+"!=!titleId:"+titleId+"!=!name:"+name+"!=!"+Date.now());
-    this.id = titleId;
-    this.prefix = titlePrefix;
+    this.id = id;
+    this.prefix = prefix;
+    this.pageSize = "A5";
     this.direction = "r2l";
     this.createDate = Date.now();
     this.updateDate = Date.now();

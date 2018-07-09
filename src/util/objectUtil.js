@@ -45,11 +45,9 @@ export class ObjectUtil {
         output[key] = ObjectUtil.simpleDeepClone(value, baseType);
       } else {
         try {
-
           output[key] = value;
         } catch (e) {
           console.log(e);
-
           console.log(output);
           throw e;
         }
