@@ -13,4 +13,10 @@ export class SettingActionCreator {
   static creatUpdateAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("updateSetting", targetView, data, storeKey);
   }
+  static getStoreKey(){
+    return "settings";
+  }
+  static getStoreKeyOpm(){
+    return "settingsOpm";
+  }
 }

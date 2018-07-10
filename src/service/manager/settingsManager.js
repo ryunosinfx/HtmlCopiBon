@@ -1,17 +1,12 @@
-import {
-  Settings
-} from "../../entity/settings";
-import {
-  PrimaryKey
-} from "../entity/primaryKey";
+import {Settings} from "../../entity/settings";
+import {PrimaryKey} from "../entity/primaryKey";
 export class SettingsManager {
   constructor(entityManager, opm) {
     this.em = entityManager;
     this.opm = opm;
   }
-  async loadByPk(pk) {
-    const settingPk = PrimaryKey.getPrimaryKey(pk);
-    const settingEntity = await this.em.get(settingPk);
+  async loadByPk(titilePk) {
+    const settingEntity = await this.em.Settings.get(titilePk);
     return settingEntity;
   }
   async loadAll() {
@@ -22,44 +17,41 @@ export class SettingsManager {
     }
     return retList;
   }
-  async createDefault(titile) {
+  async createDefault(titilePk) {
     const setting = new Settings();
+    setting.setPk(titilePk);
     setting.pageNum = 8;
     setting.startPage = l;
-    setting.OutputProfile = null;
+    setting.outputProfile = this.opm.getDefaultPk();
     setting.listing = 0;
     const saved = await this.em.Settings.save(setting);
     return saved;
   }
-  async save(pk, name, binary, type, width, height, listing = 0) {
-    let image = null;
+  async save(pk, name, pageNum, startPage, outputProfile, listing = 0) {
+    let settings = null;
     if (pk) {
-      image = await this.em.Settings.get(pk);
+      settings = await this.em.Settings.get(pk);
     }
-    let binaryPk = PrimaryKey.getPrimaryKey(binary);
-    if (!image) {
-      image = new Settings();
+    if (!settings) {
+      settings = new Settings();
     } else {
-      image.updateDate = Date.now();
+      settings.updateDate = Date.now();
     }
-    image.name = name || name === null ?
-      name :
-      image.name;
-    image.binary = binaryPk ?
-      binaryPk :
-      binary;
-    image.type = type || type === null ?
-      type :
-      image.type;
-    image.width = width || width === null ?
-      width :
-      image.width;
-    image.height = height || height === null ?
-      height :
-      image.height;
-    image.listing = listing || listing === null ?
-      listing :
-      image.listing;
-    return await this.em.Thumbnales.save(image);
+    settings.name = name || name === null
+      ? name
+      : settings.name;
+    settings.pageNum = pageNum
+      ? pageNum
+      : 8;
+    settings.startPage = startPage || startPage === null
+      ? startPage
+      : settings.startPage;
+    settings.outputProfile = outputProfile || outputProfile === null
+      ? outputProfile
+      : settings.outputProfile;
+    settings.listing = listing || listing === null
+      ? listing
+      : settings.listing;
+    return await this.em.Settings.save(settings);
   }
 }

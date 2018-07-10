@@ -1,17 +1,13 @@
-import {
-  OutputProfiles
-} from "../../entity/outputProfiles";
-import {
-  PrimaryKey
-} from "../entity/primaryKey";
+import {OutputProfiles} from "../../entity/outputProfiles";
+import {PrimaryKey} from "../entity/primaryKey";
 const defaultPk = 'copibondefa'
 export class OutputProfilesManager {
   constructor(entityManager) {
     this.em = entityManager;
+    this.createDefault();
   }
-  static getDefault() {
-    const outputProfileEntity = "";
-    return outputProfileEntity;
+  getDefaultPk() {
+    return defaultPk;
   }
   async loadAll() {
     const retList = [];
@@ -19,19 +15,24 @@ export class OutputProfilesManager {
     for (let page of pages) {
       retList.push(page);
     }
-    if(retlist.length <1){
+    if (retlist.length < 1) {
       retList.push(await this.createDefault());
     }
     return retList;
   }
   async loadByPk(pk) {
     const outputProfilePK = PrimaryKey.getPrimaryKey(pk);
-    const outputProfileEntity = await this.em.get(outputProfilePK);
-    return outputProfileEntity;
+    if (!outputProfilePK) {
+      const outputProfileEntity = await this.em.OutputProfiles.get(pk);
+      return outputProfileEntity;
+    } else {
+      const outputProfileEntity = await this.em.OutputProfiles.get(outputProfilePK);
+      return outputProfileEntity;
+    }
   }
   async createDefault() {
     const savedOne = await this.loadByPk(defaultPk);
-    if(savedOne){
+    if (savedOne) {
       return savedOne;
     }
     const outputProfiles = new OutputProfiles();
@@ -50,24 +51,24 @@ export class OutputProfilesManager {
     } else {
       image.updateDate = Date.now();
     }
-    image.name = name || name === null ?
-      name :
-      image.name;
-    image.binary = binaryPk ?
-      binaryPk :
-      binary;
-    image.type = type || type === null ?
-      type :
-      image.type;
-    image.width = width || width === null ?
-      width :
-      image.width;
-    image.height = height || height === null ?
-      height :
-      image.height;
-    image.listing = listing || listing === null ?
-      listing :
-      image.listing;
+    image.name = name || name === null
+      ? name
+      : image.name;
+    image.binary = binaryPk
+      ? binaryPk
+      : binary;
+    image.type = type || type === null
+      ? type
+      : image.type;
+    image.width = width || width === null
+      ? width
+      : image.width;
+    image.height = height || height === null
+      ? height
+      : image.height;
+    image.listing = listing || listing === null
+      ? listing
+      : image.listing;
     return await this.em.Thumbnales.save(image);
   }
 }

@@ -29,7 +29,7 @@ export class EntityManager {
   }
   async get(pk) {
     if(!pk){
-      alert(pk);
+      alert("pk:"+pk);
       return null;
     }
     const truePk = PrimaryKey.getPrimaryKey(pk);

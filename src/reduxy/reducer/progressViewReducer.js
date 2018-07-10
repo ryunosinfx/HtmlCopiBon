@@ -1,14 +1,13 @@
 import {
   ProgressActionCreator
-} from '../action/proggressActionCreator'
+} from '../action/progressActionCreator'
 import {
   MainService
 } from "../../service/mainService"
 import {
   BaseReducer
 } from '../../util/reactive/baseReducer'
-let imageViewReducer = null;
-const loadedImageMap = new Map();
+let progressViewReducer = null;
 export class ProgressViewReducer extends BaseReducer {
   constructor() {
     super();
@@ -27,8 +26,8 @@ export class ProgressViewReducer extends BaseReducer {
     this.storeKey = "progress";
   }
   static register() {
-    if (!imageViewReducer) {
-      imageViewReducer = new ImageViewReducer();
+    if (!progressViewReducer) {
+      progressViewReducer = new ProgressViewReducer();
     }
   }
   async reduce(store, action) {

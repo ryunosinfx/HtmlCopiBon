@@ -18,6 +18,7 @@ export class TitleManager {
     this.ip = this.ms.ip;
     this.im = this.ms.im;
     this.tbm = this.ms.tbm;
+    this.sm = this.ms.sm;
     console.log("title is new!!" + this.tbm);
     //this.load(titleId).then((title)=>{this.currentTitle=title;console.log("title is new!")});
   }
@@ -39,6 +40,8 @@ export class TitleManager {
   async createTitle(titleId = defaultTitle, titlePrefix = defaultTitlePrefix, name = defaultName) {
     const title = new Title(titleId, titlePrefix, name);
     title.setPk(titleId);
+    title.setting = titleId;
+    await this.sm.createDefault(titleId);
     await this.em.Title.save(title);
     return title;
   }

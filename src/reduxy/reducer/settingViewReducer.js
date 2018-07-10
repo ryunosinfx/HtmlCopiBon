@@ -11,8 +11,7 @@ import {
 import {
   BaseReducer
 } from '../../util/reactive/baseReducer'
-let imageViewReducer = null;
-const loadedImageMap = new Map();
+let settingViewReducer = null;
 export class SettingViewReducer extends BaseReducer {
   constructor() {
     super();
@@ -20,6 +19,8 @@ export class SettingViewReducer extends BaseReducer {
     this.vpl = this.ms.getViewPartsLoader();
     this.em = this.ms.em;
     this.tm = this.ms.tm;
+    this.sm = this.ms.sm;
+    this.opm = this.ms.opm;
     this.creatAction = SettingActionCreator.creatAction();
     this.creatRemoveAction = SettingActionCreator.creatRemoveAction();
     this.creatLoadAction = SettingActionCreator.creatLoadAction();
@@ -28,44 +29,51 @@ export class SettingViewReducer extends BaseReducer {
     this.atatch(this.creatRemoveAction);
     this.atatch(this.creatLoadAction);
     this.atatch(this.creatUpdateAction);
-    this.storeKey = "settings";
+    this.storeKey = SettingActionCreator.getStoreKey();
+    this.storeKeyOpm = SettingActionCreator.getStoreKeyOpm();
   }
   static register() {
-    if (!imageViewReducer) {
-      imageViewReducer = new ImageViewReducer();
+    if (!settingViewReducer) {
+      settingViewReducer = new SettingViewReducer();
     }
   }
   async reduce(store, action) {
     if (this.creatAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 0, false);
+      store[this.storeKey] = this.sm.load() ;
+      store[this.storeKeyOpm] = this.opm.loadAll() ;
     } else if (this.creatRemoveAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(false, 0, false);
+      store[this.storeKey] = this.reset(action.data);
+      store[this.storeKeyOpm] = this.opm.loadAll() ;
     } else if (this.creatLoadAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, action.data.progress, false);
+
+      alert("creatLoadAction");
+      store[this.storeKey] = this.sm.load() ;
+      store[this.storeKeyOpm] = this.opm.loadAll() ;
     } else if (this.creatUpdateAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 100, true);
+      store[this.storeKey] = this.update(action.data);
+      store[this.storeKeyOpm] = this.opm.loadAll() ;
     }
     return store;
   }
-  createSetting(isVisible, progress, isComple) {
-    return {
-      isVisible: isVisible,
-      progress: progress,
-      isComple: isComple
-    }
+  async update(data) {
+    const title = await this.tm.load();
+    const pk = title.getPk();
+    this.sm.save(pk, data.name, data.pageNum, data.startPage, data.outputProfile, data.listing);
+  }
+  async reset() {
+    const title = await this.tm.load();
+    const pk = title.getPk();
+    const settingEntity =  await this.sm.createDefault(pk);
+    return settingEntity;
   }
   async load() {
     const title = await this.tm.load();
-    const pk = title.setting;
-    if(!pk){
-      const settingEntity = new Setting();
+    const pk = title.getPk();
+    const settingEntityLoad = await this.sm.loadByPk(pk);
+    if(!settingEntityLoad){
+      const settingEntity =  await this.sm.createDefault(pk);
       return settingEntity;
     }
-    const settingEntity = await this.em.get(pk);
-    const size = binaryEntity._ab.byteLength;
-    const imageText = escape(imageEntity.name) + ' (' + (
-    imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
-
-    return {imageEntity:imageEntity,binaryEntity:binaryEntity,imageText:imageText}
+    return settingEntityLoad;
   }
 }

@@ -1,7 +1,5 @@
 import vu from "../../util/viewUtil";
-import {
-  BaseView
-} from "../../util/reactive/baseView";
+import {BaseView} from "../../util/reactive/baseView";
 import {
   a,
   div,
@@ -12,6 +10,9 @@ import {
   input,
   label
 } from "../../util/reactive/base/vtags";
+import {
+  ProgressViewReducer
+} from '../../reduxy/reducer/progressViewReducer'
 export class ProgressBar extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
@@ -19,19 +20,20 @@ export class ProgressBar extends BaseView {
     this.initPoint = '0%';
   }
 
+  onAfterAttach(store, data) {
+    ProgressViewReducer.register();
+  }
   render() {
     return div("" ["ProgressBarView"], {
       style: {
         display: "none"
       }
     }, [
-      div('', ['progeressFrame'], [
-        div('', ['progeress'], {
+      div('', ['progeressFrame'], [div('', ['progeress'], {
           style: {
             width: this.initPoint
           }
-        })
-      ]),
+        })]),
       div('', ['progeressPoints'], this.initPoint)
     ]);
   }
@@ -42,18 +44,14 @@ export class ProgressBar extends BaseView {
     }
   }
   showProgress(data) {
-    const {
-      isVisible,
-      progress,
-      isComple
-    } = data;
+    const {isVisible, progress, isComple} = data;
     if (isVisible) {
       this.currentVnode.elm.style.display = 'block';
       this.prePatch(".progeress", div("", ["progeress"], {
         style: {
           width: progress + "%"
         }
-      }, ));
+      },));
       this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, progress + "%"));
       if (isComple) {
         setTimeout(() => {
