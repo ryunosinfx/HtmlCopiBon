@@ -4,7 +4,7 @@ import {TitleManager} from "./manager/titleManager";
 import {BinaryManager} from "./manager/binaryManager";
 import {PagesManager} from "./manager/pagesManager";
 import {SettingsManager} from "./manager/settingsManager";
-import {OutputProfileManager} from "./manager/outputProfileManager";
+import {OutputProfilesManager} from "./manager/outputProfilesManager";
 import {ImageManager} from "./manager/imageManager";
 import {ThumbnaleManager} from "./manager/thumbnailManager";
 import {Images} from "../entity/images";
@@ -14,7 +14,7 @@ import {Thumbnales} from "../entity/thumbnales";
 import {Title} from "../entity/title";
 import {Pages} from "../entity/pages";
 import {Settings} from "../entity/settings";
-import {OutputProfile} from "../entity/outputProfile";
+import {OutputProfiles} from "../entity/outputProfiles";
 import {ImageProcessService} from "./imageProcessService"
 
 const title = "CopiBon";
@@ -26,7 +26,7 @@ export class MainServiceImpl {
     this.ip = new ImageProcessService();
   }
   async init() {
-    await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title, Pages, Settings, OutputProfile]);
+    await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title, Pages, Settings, OutputProfiles]);
     this.ip = new ImageProcessService();
     this.bm = new BinaryManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);
@@ -35,7 +35,7 @@ export class MainServiceImpl {
     this.im = new ImageManager(this.em);
     this.tm = new TitleManager(this.em);
     this.pm = new PagesManager(this.em);
-    this.opm = new OutputProfileManager(this.em);
+    this.opm = new OutputProfilesManager(this.em);
     this.sm = new SettingsManager(this.em,this.opm );
     await this.tm.load();
   }
