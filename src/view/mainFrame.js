@@ -28,7 +28,7 @@ export class MainFrame extends BaseView {
     this.view = '';
     this.initialPatch();
   }
-  onViewShow(store, data){
+  async onViewShow(store, data){
     this.header.attach(this,'#header');
     this.container.attach(this,'#container');
     this.footer.attach(this,'#footer');

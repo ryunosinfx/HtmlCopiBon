@@ -51,7 +51,6 @@ export class SettingViewReducer extends BaseReducer {
       store[this.storeKey] = await this.update(action.data).catch((e)=>{console.log(e)});
       store[this.storeKeyOpm] = await this.opm.loadAll() ;
     }
-    return store;
   }
   async update(data) {
     const title = await this.tm.load();

@@ -171,12 +171,13 @@ export class ElementSelector {
     if (!selector) {
       return map;
     }
-    let tokens = selector.split(/\.|#/g);
-    let classes = [];
+    const tokens = selector.split(/\.|#/g);
+    const selectorId = selector.indexOf("#" )>=0 ? selector.split(/#/g)[1].split(/\./g)[0]:"";
+    const classes = [];
     let id = "";
     let tag = "";
     for (let token of tokens) {
-      if (selector.indexOf("#" + token) >= 0) {
+      if (selectorId===token) {
         id = token;
       } else if (selector.indexOf("." + token) >= 0) {
         classes.push(token);
@@ -191,20 +192,22 @@ export class ElementSelector {
     return map;
   }
   isMatch(sel, selector) {
-    //console.log("sel:" + sel + "/selector:" + selector);
-    let mapA = this.getSelectorMap(sel);
-    let mapB = this.getSelectorMap(selector);
-    let tagName = mapB.get("tag");
-    let id = mapB.get("id");
+    // console.log("sel:" + sel + "/selector:" + selector);
+    const mapA = this.getSelectorMap(sel);
+    const mapB = this.getSelectorMap(selector);
+    const tagName = mapB.get("tag");
+    const id = mapB.get("id");
     if (tagName !== "" && mapA.get("tag") !== tagName) {
+    // console.log("false:01 sel:" + sel + "/selector:" + selector);
       return false;
     }
     if (id !== "" && mapA.get("id") !== id) {
+    // console.log("false:02 sel:" + mapA.get("id") + "/selector:" + id);
       return false;
     }
 
-    let classesA = mapA.get("class");
-    let classesB = mapB.get("class");
+    const classesA = mapA.get("class");
+    const classesB = mapB.get("class");
     for (let classB of classesB) {
       let isMatched = false;
       for (let classA of classesA) {
@@ -213,12 +216,15 @@ export class ElementSelector {
         }
       }
       if (isMatched === false) {
+      // console.log("false:03 sel:" + sel + "/selector:" + selector);
         return false;
       }
     }
     if (selector === "") {
+    // console.log("false:04 sel:" + sel + "/selector:" + selector);
       return false;
     }
+    // console.log("sel:" + sel + "/selector:" + selector);
     return true;
   }
 }

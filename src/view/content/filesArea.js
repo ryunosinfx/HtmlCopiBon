@@ -13,9 +13,7 @@ import {
 import {ImageDetail} from "../parts/imageDetail";
 import {PageImages} from "../parts/pageImages";
 import {Thumbnails} from "../parts/thumbnails";
-import {
-  ImageViewReducer
-} from '../../reduxy/reducer/imageViewReducer'
+import {ImageViewReducer} from '../../reduxy/reducer/imageViewReducer'
 export class FilesArea extends BaseView {
   constructor() {
     super("FilesArea", "FilesArea");
@@ -34,7 +32,7 @@ export class FilesArea extends BaseView {
     return div("", [
       div(this.pageImages.id),
       div(this.thumbnails.id),
-        div(this.imageDetail.id)
+      div(this.imageDetail.id)
     ])
 
   }

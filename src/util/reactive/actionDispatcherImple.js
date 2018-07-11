@@ -49,8 +49,6 @@ export class ActionDispatcherImple {
   }
   async dispatch(action) {
     const type = action.type;
-    // console.log(action);
-    //alert('dispatch00 type=' + type + '/action=' + JSON.stringify(action));
     if (!type) {
       return false;
     }
@@ -58,21 +56,16 @@ export class ActionDispatcherImple {
     const storeKey = action.storeKey;
     let store = Store.getStore(storeKey);
     let targetView = this.view;
-    // console.log('dispatch01 type:' + type);
-    // console.log(action);
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
-      // console.log('A0 dispatch01a' + reducers);
-      // console.log(reducers);
       for (let reducer of reducers) {
-        // console.log('A0 dispatch01 b reducer : ' + reducer);
-        // console.log(reducer);
-        store = await reducer.preReduce(store, action);
-        store = await reducer.reduce(store, action);
-        store = await reducer.postReduce(store, action);
+        console.log("A01 dispatch type:"+type+"/reducer.reduce:"+reducer.reduce)
+        await reducer.preReduce(store, action).catch((e)=>{console.log(e)});
+        await reducer.reduce(store, action).catch((e)=>{console.log(e)});
+        await reducer.postReduce(store, action).catch((e)=>{console.log(e)});
       }
-      console.log("A01 dispatch ")
-      console.log(store)
+      console.log("A01 dispatch type:"+type+"/"+reducers[0])
+      console.log(reducers[0])
       Store.setStore(store);
     }
 
@@ -99,11 +92,28 @@ export class ActionDispatcherImple {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
         console.log('A0 callUpdate update id:' + activeView.id);
-        targetView.update(store, actionData);
-        //this.callUpdateExecute(()=>{targetView.update(store,actionData)});
+        const promise = targetView.updateReactiveTheTargetView(store, actionData);
+        if(promise){
+          if(!promise.then){
+            alert("your view has override method name 'updateReactiveTheTargetView'! activeView.id):"+activeView.id);
+            return ;
+          }
+          promise.then(()=>{},(e)=>{console.log(e)});
+        }else{
+          console.log(activeView);
+        }
       } else {
          console.log('A0 callUpdate updateReactive id:' + activeView.id);
-        activeView.updateReactive(store, actionData);
+        const promise = activeView.updateReactive(store, actionData);
+        if(promise){
+          if(!promise.then){
+            alert("your view has override method name 'updateReactive'! activeView.id):"+activeView.id);
+            return ;
+          }
+          promise.then(()=>{},(e)=>{console.log(e)});
+        }else{
+          console.log(activeView);
+        }
       }
     }
     // console.log('callUpdate END----------------');

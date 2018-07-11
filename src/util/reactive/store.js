@@ -15,7 +15,7 @@ export class Store {
   static setStore(store, key) {
     const newKey = key ? key : mainKey;
     const clonedStore = store ? ObjectUtil.simpleDeepClone(store) : {};
-    clonedStore['oldVnode'] = store['oldVnode'];
+    clonedStore['oldVnode'] = store ?store['oldVnode']:null;
     mainHolder.set(newKey, clonedStore);
   }
 }
