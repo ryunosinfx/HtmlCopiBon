@@ -47,7 +47,7 @@ export class StorageService {
     const retList = [];
     for (let row of list) {
       const cloned = this.getEntity(row);
-      retList.puhs(cloned);
+      retList.push(cloned);
     }
     return retList;
   }

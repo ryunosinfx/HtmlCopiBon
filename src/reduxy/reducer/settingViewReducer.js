@@ -39,19 +39,17 @@ export class SettingViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.creatAction.type === action.type) {
-      store[this.storeKey] = this.sm.load() ;
-      store[this.storeKeyOpm] = this.opm.loadAll() ;
+      store[this.storeKey] = await this.load().catch((e)=>{console.log(e)}) ;
+      store[this.storeKeyOpm] = await this.opm.loadAll() ;
     } else if (this.creatRemoveAction.type === action.type) {
-      store[this.storeKey] = this.reset(action.data);
-      store[this.storeKeyOpm] = this.opm.loadAll() ;
+      store[this.storeKey] = await this.reset(action.data).catch((e)=>{console.log(e)});
+      store[this.storeKeyOpm] = await this.opm.loadAll() ;
     } else if (this.creatLoadAction.type === action.type) {
-
-      alert("creatLoadAction");
-      store[this.storeKey] = this.sm.load() ;
-      store[this.storeKeyOpm] = this.opm.loadAll() ;
+      store[this.storeKey] = await this.load().catch((e)=>{console.log(e)}) ;
+      store[this.storeKeyOpm] = await this.opm.loadAll() ;
     } else if (this.creatUpdateAction.type === action.type) {
-      store[this.storeKey] = this.update(action.data);
-      store[this.storeKeyOpm] = this.opm.loadAll() ;
+      store[this.storeKey] = await this.update(action.data).catch((e)=>{console.log(e)});
+      store[this.storeKeyOpm] = await this.opm.loadAll() ;
     }
     return store;
   }

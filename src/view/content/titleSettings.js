@@ -30,6 +30,7 @@ export class TitleSettings extends BaseView {
     this.dispatch(action);
   }
   async onViewShow(store, actionData) {
+    console.log("TitleSettings onViewShow 01 this.storeKey:"+this.storeKey+'/'+store[this.storeKey]);
     if (store[this.storeKey]) {
       console.log("TitleSettings onViewShow");
       await this.showSettings(store[this.storeKey], store[this.getStoreKeyOpm]);

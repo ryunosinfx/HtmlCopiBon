@@ -11,11 +11,11 @@ export class OutputProfilesManager {
   }
   async loadAll() {
     const retList = [];
-    const outputProfiles = this.em.OutputProfiles.loadAll();
-    for (let page of pages) {
-      retList.push(page);
+    const outputProfiles = await this.em.OutputProfiles.loadAll();
+    for (let outputProfile of outputProfiles) {
+      retList.push(outputProfile);
     }
-    if (retlist.length < 1) {
+    if (retList.length < 1) {
       retList.push(await this.createDefault());
     }
     return retList;

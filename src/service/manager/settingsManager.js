@@ -21,7 +21,7 @@ export class SettingsManager {
     const setting = new Settings();
     setting.setPk(titilePk);
     setting.pageNum = 8;
-    setting.startPage = l;
+    setting.startPage = "l";
     setting.outputProfile = this.opm.getDefaultPk();
     setting.listing = 0;
     const saved = await this.em.Settings.save(setting);
