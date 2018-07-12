@@ -244,5 +244,40 @@ canvas.hidden {
   left: 0;
   height:3em;
   background-color:rgb(120, 231, 194);
+}
+.TitleSettings{
+  background-color: rgb(159, 117, 242);
+  padding:0.1em;
+  margin: 0.1em 0;
+}
+.TitleSettingsTitle{
+  padding:0.3em;
+    margin-bottom: 0.3em;
+  font-weight: bold;
+  font-size: 110%;
+  width:100%;
+  text-align: center;
+    background-color: rgb(139, 87, 242);
+}
+.TitleSettingsFrame{
+  display: flex;
+}
+.TitleSettingsFrame > div{
+  width:50%;
 
+}
+.TitleSettingsRow>span,.TitleSettingsRow>input{
+  display: inline-flex;
+  width:40%;
+}
+.TitleSettingsUpdate{
+  width:70%;
+  background-color: rgb(3, 21, 186);
+  color:white;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.5em auto;
+  padding:0.5em;
+  border-radius: 1em;
+  cursor: pointer;
 }

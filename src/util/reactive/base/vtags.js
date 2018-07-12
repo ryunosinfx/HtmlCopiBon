@@ -109,3 +109,9 @@ export const input = (id, classNames, data, type, text) => {
 export const label = (id, classNames, data, children, text) => {
   return vtags("label", id, classNames, data, children, text);
 }
+export const select = (id, classNames, data, children, text) => {
+  return vtags("select", id, classNames, data, children, text);
+}
+export const option = (id, classNames, data, children, text) => {
+  return vtags("option", id, classNames, data, children, text);
+}

@@ -4,7 +4,8 @@ export class Settings extends BaseEntity{
     super();
     this.name = "";
     this.pageNum = 0;
-    this.startPage = 0;
+    this.startPage = "l";
+    this.pageDelection = 0;
     this.outputProfile = null;
     this.createDate = Date.now();
     this.updateDate = Date.now();

@@ -22,6 +22,7 @@ export class SettingsManager {
     setting.setPk(titilePk);
     setting.pageNum = 8;
     setting.startPage = "l";
+    setting.pageDelection = "r2l";
     setting.outputProfile = this.opm.getDefaultPk();
     setting.listing = 0;
     const saved = await this.em.Settings.save(setting);
