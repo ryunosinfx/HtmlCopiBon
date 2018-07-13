@@ -54,14 +54,10 @@ export class TitleSettings extends BaseView {
     }, "text", setting.name);
     const nameRow = div("", [this.id + "Row"], [nameLabel, nameInput]);
     const pageNumLabel = span("", [this.id + "Label"], 'pageNum:');
-    const pageNumInput = input("", [this.id + "Input"], {
-      props: {
-        name: this.id + "PageNumInput"
-      }
-    }, "text", setting.pageNum);
+    const pageNumInput = this.createSelectVnode("", [], this.id + "pageNumInput", SettingData.pageNums, setting.pageNum);
     const pageNumRow = div("", [this.id + "Row"], [pageNumLabel, pageNumInput]);
-    const startPageLabel = span("", [this.id + "Label"], 'startPage:');
 
+    const startPageLabel = span("", [this.id + "Label"], 'startPage:');
     const startPageInput = this.createSelectVnode("", [], this.id + "StartPageInput", SettingData.pageStart, setting.startPage);
     const startPageRow = div("", [this.id + "Row"], [startPageLabel, startPageInput]);
 
@@ -87,26 +83,26 @@ export class TitleSettings extends BaseView {
     const childlen = [title, frame, button];
     this.prePatch("#" + this.bodyId, div(this.bodyId, ["TitleSettings"], childlen));
   }
-  createSelectVnode(id, classes, name, optionsData, selectedValue) {
+  createSelectVnode(id, classes, name, optionsData, selectedValue,suffix="") {
     const options = [];
-    for (let key in optionsData) {
-      const text = optionsData[key];
+    const isArray =Array.isArray(optionsData);
       for (let key in optionsData) {
+        const text = optionsData[key];
         // alert("selectedValue:" + selectedValue + "/key:" + key + "/" + (        selectedValue === key))
-        if (key === selectedValue) {
+        if (key === selectedValue || (isArray && text === selectedValue)) {
           const optionSelected = option("", [""], {
             attrs: {
-              value: key,
+              value: isArray?text:key,
               selected: "true"
             }
-          }, text);
+          }, text+suffix);
           options.push(optionSelected);
         } else {
           const optionNode = option("", [""], {
             attrs: {
-              value: key
+              value: isArray?text:key
             }
-          }, text);
+          }, text+suffix);
           options.push(optionNode);
         }
       }
@@ -115,6 +111,5 @@ export class TitleSettings extends BaseView {
           name: name
         }
       }, options);
-    }
   }
 }

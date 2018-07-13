@@ -7,5 +7,5 @@ export default {
 export const SettingData = {
   pageStart:{l:"fromLeft",r:"fromRight"},
   pageDirection:{l2r:"LeftToRight",r2l:"RightToLeft"},
-  pageNums:[1,2,4,6,8,10.12,16]
+  pageNums:[1,2,4,6,8,10,12,16]
 }
