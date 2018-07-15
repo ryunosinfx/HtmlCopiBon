@@ -6,9 +6,9 @@ export class ImageProcessor {
     this.canvas = vu.createCanvas(null, "hidden");
     this.ctx = this.canvas.getContext('2d');
     const self = this;
-    window.onload(()=>{
+    window.onload = () => {
       document.body.appendChild(this.canvas);
-    })
+    };
   }
   setDataURI(dataURI) {
     this.dataURI = dataURI;
@@ -20,9 +20,9 @@ export class ImageProcessor {
       imgElm.onload = () => {
         const widthScale = width / imgElm.width;
         const heightScale = height / imgElm.height;
-        const scale = widthScale <= heightScale ?
-          widthScale :
-          heightScale;
+        const scale = widthScale <= heightScale
+          ? widthScale
+          : heightScale;
         this.canvas.height = imgElm.height * scale;
         this.canvas.width = imgElm.width * scale;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -46,11 +46,7 @@ export class ImageProcessor {
 
   createImageNodeByData(data) {
     return new Promise((resolve, reject) => {
-      let {
-        name,
-        ab,
-        type
-      } = data;
+      let {name, ab, type} = data;
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 

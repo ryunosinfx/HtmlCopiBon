@@ -14,7 +14,6 @@ export const unixTimeToDateFormat = (unixtime, format = "yyyy-MM-dd hh:mm:ss") =
   const min = ('0' + d.getMinutes()).slice(-2);
   const sec = ('0' + d.getSeconds()).slice(-2);
   return format.replace(re_yyyy, year).replace(re_MM,month).replace(re_dd,day).replace(re_hh,hour).replace(re_mm,min).replace(re_ss,sec);
-
 }
 export const getNowUnixtime = () => {
   new Date().getTime();
