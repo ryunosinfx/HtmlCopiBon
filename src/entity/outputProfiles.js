@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class OutputProfiles extends BaseEntity {
   constructor(id, prefix, name) {
-    super();
+    super("OutputProfiles");
     //console.log("!=!titleId:"+titleId+"!=!titleId:"+titleId+"!=!name:"+name+"!=!"+Date.now());
     this.id = id;
     this.prefix = prefix;

@@ -17,7 +17,6 @@ export default class CopiBonService {
   static main() {
     const self = new CopiBonService();
     self.init();
-
   }
 }
 CopiBonService.main();

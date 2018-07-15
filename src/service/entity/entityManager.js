@@ -7,7 +7,6 @@ const USER_ID = "default";
 export class EntityManager {
   constructor() {}
   async initAsNewUser(entities, userId = USER_ID) {
-    console.log(entities);
     const promises = [];
     for (let entityClass of entities) {
       await this.initParEntity(entityClass, userId);
@@ -38,7 +37,7 @@ export class EntityManager {
         return null;
     }
     const entityName = PrimaryKey.getEntityName(truePk);
-    console.log("★get entityName:"+entityName+truePk);
+    // console.log("★get entityName:"+entityName+truePk);
     return await this[entityName].get(truePk);
   }
   async delete(pk) {
@@ -47,7 +46,7 @@ export class EntityManager {
       return null;
     }
     const entityName = PrimaryKey.getEntityName(pk);
-    console.log("★remove entityName:"+entityName);
+    // console.log("★remove entityName:"+entityName);
     return await this[entityName].delete(pk);
   }
 }

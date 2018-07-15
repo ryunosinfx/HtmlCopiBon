@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Series extends BaseEntity{
   constructor(name) {
-    super();
+    super("Series");
     this.name=name;
     this.target=null;
     this.no="";

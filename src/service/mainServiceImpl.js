@@ -33,10 +33,10 @@ export class MainServiceImpl {
     this.pb = new ThumbnaleManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);
     this.im = new ImageManager(this.em);
-    this.tm = new TitleManager(this.em);
     this.pm = new PagesManager(this.em);
     this.opm = new OutputProfilesManager(this.em);
     this.sm = new SettingsManager(this.em,this.opm );
+    this.tm = new TitleManager(this.em);
     await this.tm.load();
   }
 

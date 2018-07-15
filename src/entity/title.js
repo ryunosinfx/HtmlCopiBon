@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Title extends BaseEntity {
   constructor(titleId, titlePrefix, name) {
-    super();
+    super("Title");
     //console.log("!=!titleId:"+titleId+"!=!titleId:"+titleId+"!=!name:"+name+"!=!"+Date.now());
     this.id = titleId;
     this.prefix = titlePrefix;

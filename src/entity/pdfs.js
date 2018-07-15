@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Pdfs extends BaseEntity{
   constructor() {
-    super();
+    super("Pdfs");
     this.name = null;
     this.binary = null;
     this.type = null;

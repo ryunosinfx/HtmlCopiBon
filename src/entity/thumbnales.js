@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Thumbnales extends BaseEntity{
   constructor() {
-    super();
+    super("Thumbnales");
     this.name = null;
     this.binary = null;
     this.type = null;

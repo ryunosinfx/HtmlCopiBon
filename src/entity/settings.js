@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Settings extends BaseEntity{
   constructor() {
-    super();
+    super("Settings");
     this.name = "";
     this.pageNum = 0;
     this.startPage = "l";

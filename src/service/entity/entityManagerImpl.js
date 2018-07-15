@@ -117,7 +117,7 @@ export class EntityManagerImpl {
     return await this.ss.loadAll(this.entity);
   }
   async get(pk) {
-    console.log("get this.entityName:" + this.entityName + "/pk:" + pk);
+    // console.log("get this.entityName:" + this.entityName + "/pk:" + pk);
     return await this.ss.get(pk, this.entity);
   }
   async delete(pk) {

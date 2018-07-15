@@ -1,14 +1,15 @@
 import {ObjectUtil} from "../../util/objectUtil";
 export class BaseEntity {
-  constructor(pk = "oid") {
+  constructor(entitiyName = "BaseEntity", pk = "oid") {
     this.pk = pk;
+    this.entitiyName = entitiyName;
     this.refs = [];
   }
   isEntitiy() {
     return true;
   }
   getEntityName() {
-    return this.constructor.name;
+    return this.entitiyName; // this.constructor.name;
   }
   create() {}
   update() {}

@@ -1,7 +1,7 @@
 import {BaseEntity} from "../service/entity/baseEntity";
 export class Pages extends BaseEntity{
   constructor() {
-    super();
+    super("Pages");
     this.image = null;
     this.isDummy = true;
     this.createDate = Date.now();

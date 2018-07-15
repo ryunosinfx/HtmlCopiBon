@@ -1,7 +1,7 @@
 import {BaseEntity} from "./baseEntity";
 export class Binary extends BaseEntity {
   constructor(arrayBuffer) {
-    super();
+    super("Binary");
     this._ab = arrayBuffer;
     this.createDate = Date.now();
     this.updateDate = Date.now();
