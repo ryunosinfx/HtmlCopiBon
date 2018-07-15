@@ -28,7 +28,7 @@ export class SettingsManager {
     const saved = await this.em.Settings.save(setting);
     return saved;
   }
-  async save(pk, name, pageNum, startPage, outputProfile, listing = 0) {
+  async save(pk, name, pageNum, startPage, pageDirection,outputProfile, listing = 0) {
     let settings = null;
     if (pk) {
       settings = await this.em.Settings.get(pk);
@@ -47,6 +47,9 @@ export class SettingsManager {
     settings.startPage = startPage || startPage === null
       ? startPage
       : settings.startPage;
+    settings.pageDirection = pageDirection || pageDirection === null
+      ? pageDirection
+      : settings.pageDirection;
     settings.outputProfile = outputProfile || outputProfile === null
       ? outputProfile
       : settings.outputProfile;

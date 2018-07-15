@@ -1,4 +1,5 @@
 import vu from "../../util/viewUtil";
+import {unixTimeToDateFormat} from "../../util/timeUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {
   a,
@@ -10,7 +11,8 @@ import {
   input,
   label,
   select,
-  option
+  option,
+  createSelectVnode
 } from "../../util/reactive/base/vtags";
 import {SettingViewReducer} from '../../reduxy/reducer/settingViewReducer'
 import {SettingData} from '../../settings/exportSettings'
@@ -38,37 +40,66 @@ export class TitleSettings extends BaseView {
   }
   update() {
     return(event) => {
-      document.getElementByName()[0]
-      alert("update")
+      const nameInput = document.getElementById(this.id + "NameInput").value;
+      const pageNumInput = document.getElementById(this.id + "PageNumInput").value;
+      const startPageInput = document.getElementById(this.id + "StartPageInput").value;
+      const pageDirectionInput = document.getElementById(this.id + "PageDirectionInput").value;
+      const outputProfileInput = document.getElementById(this.id + "OutputProfileInput").value;
+
+      //alert("update NameInput:" + nameInput + "/" + pageNumInput + "/" + startPageInput + "/" + pageDirectionInput + "/" + outputProfileInput)
+      //data.name, data.pageNum, data.startPage,, data.startPage, data.outputProfile, data.listing);
+      const action = SettingActionCreator.creatUpdateAction(this, {
+        name: nameInput,
+        pageNum: pageNumInput,
+        startPage: startPageInput,
+        pageDirection: pageDirectionInput,
+        outputProfile: outputProfileInput,
+        listing: 0
+      });
+      this.dispatch(action);
     }
   }
   async showSettings(setting, outputProfiles) {
     console.log(setting);
     console.log(outputProfiles);
+    const labelClass = this.id + "Label";
+    const inputClass = this.id + "Input";
     const title = div("", [this.id + "Title"], "Setting for Output");
-    const nameLabel = span("", [this.id + "Label"], 'name:');
-    const nameInput = input("", [this.id + "Input"], {
+    const nameLabel = span("", [labelClass], 'name:');
+    const nameInput = input(this.id + "NameInput", [this.id + "NameInput"], {
       props: {
         name: this.id + "NameInput"
       }
     }, "text", setting.name);
     const nameRow = div("", [this.id + "Row"], [nameLabel, nameInput]);
-    const pageNumLabel = span("", [this.id + "Label"], 'pageNum:');
-    const pageNumInput = this.createSelectVnode("", [], this.id + "pageNumInput", SettingData.pageNums, setting.pageNum);
+    const pageNumLabel = span("", [labelClass], 'pageNum:');
+    const idpageNumInput = this.id + "PageNumInput";
+    const pageNumInput = createSelectVnode(idpageNumInput, [
+      inputClass, idpageNumInput
+    ], idpageNumInput, SettingData.pageNums, setting.pageNum);
     const pageNumRow = div("", [this.id + "Row"], [pageNumLabel, pageNumInput]);
 
-    const startPageLabel = span("", [this.id + "Label"], 'startPage:');
-    const startPageInput = this.createSelectVnode("", [], this.id + "StartPageInput", SettingData.pageStart, setting.startPage);
+    const startPageLabel = span("", [labelClass], 'startPage:');
+    const idStartPageInput = this.id + "StartPageInput";
+    const startPageInput = createSelectVnode(idStartPageInput, [
+      inputClass, idStartPageInput
+    ], idStartPageInput, SettingData.pageStart, setting.startPage);
     const startPageRow = div("", [this.id + "Row"], [startPageLabel, startPageInput]);
 
-    const pageDirectionLabel = span("", [this.id + "Label"], 'pageDirection:');
-    const pageDirectionInput = this.createSelectVnode("", [], this.id + "pageDirectionInput", SettingData.pageDirection, setting.pageDirection);
+    const pageDirectionLabel = span("", [labelClass], 'pageDirection:');
+    const idPageDirectionInput = this.id + "PageDirectionInput";
+    const pageDirectionInput = createSelectVnode(idPageDirectionInput, [
+      inputClass, idPageDirectionInput
+    ], idPageDirectionInput, SettingData.pageDirection, setting.pageDirection);
     const pageDirectionRow = div("", [this.id + "Row"], [pageDirectionLabel, pageDirectionInput]);
 
-    const outputProfileLabel = span("", [this.id + "Label"], 'outputProfile:');
-    const outputProfileInput = input("", [this.id + "Input"], {
+    const outputProfileLabel = span("", [labelClass], 'outputProfile:');
+    const idOutputProfileInput = this.id + "OutputProfileInput";
+    const outputProfileInput = input(idOutputProfileInput, [
+      inputClass, idOutputProfileInput
+    ], {
       props: {
-        name: this.id + "NameInput"
+        name: idOutputProfileInput
       }
     }, "text", setting.outputProfile);
     const outputProfileRow = div("", [this.id + "Row"], [outputProfileLabel, outputProfileInput]);
@@ -79,37 +110,8 @@ export class TitleSettings extends BaseView {
       on: {
         click: this.update()
       }
-    }, "Save! LastUpdae:" + setting.updateDate);
+    }, "Save! LastUpdae:" + unixTimeToDateFormat(setting.updateDate));
     const childlen = [title, frame, button];
     this.prePatch("#" + this.bodyId, div(this.bodyId, ["TitleSettings"], childlen));
-  }
-  createSelectVnode(id, classes, name, optionsData, selectedValue,suffix="") {
-    const options = [];
-    const isArray =Array.isArray(optionsData);
-      for (let key in optionsData) {
-        const text = optionsData[key];
-        // alert("selectedValue:" + selectedValue + "/key:" + key + "/" + (        selectedValue === key))
-        if (key === selectedValue || (isArray && text === selectedValue)) {
-          const optionSelected = option("", [""], {
-            attrs: {
-              value: isArray?text:key,
-              selected: "true"
-            }
-          }, text+suffix);
-          options.push(optionSelected);
-        } else {
-          const optionNode = option("", [""], {
-            attrs: {
-              value: isArray?text:key
-            }
-          }, text+suffix);
-          options.push(optionNode);
-        }
-      }
-      return select("", [this.id + "Input"], {
-        props: {
-          name: name
-        }
-      }, options);
   }
 }

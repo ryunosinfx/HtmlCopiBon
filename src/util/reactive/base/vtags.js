@@ -115,3 +115,37 @@ export const select = (id, classNames, data, children, text) => {
 export const option = (id, classNames, data, children, text) => {
   return vtags("option", id, classNames, data, children, text);
 }
+
+export const createSelectVnode = (id, classes, name, optionsData, selectedValue, suffix = "") => {
+  const options = [];
+  const isArray = Array.isArray(optionsData);
+  for (let key in optionsData) {
+    const text = optionsData[key];
+    // alert("selectedValue:" + selectedValue + "/key:" + key + "/" + (        selectedValue === key))
+    if (key === selectedValue || (isArray && text+"" === selectedValue+"")) {
+      const optionSelected = option("", [""], {
+        attrs: {
+          value: isArray
+            ? text
+            : key,
+          selected: "true"
+        }
+      }, text + suffix);
+      options.push(optionSelected);
+    } else {
+      const optionNode = option("", [""], {
+        attrs: {
+          value: isArray
+            ? text
+            : key
+        }
+      }, text + suffix);
+      options.push(optionNode);
+    }
+  }
+  return select(id, classes, {
+    props: {
+      name: name
+    }
+  }, options);
+}

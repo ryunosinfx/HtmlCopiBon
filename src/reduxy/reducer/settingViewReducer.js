@@ -55,7 +55,7 @@ export class SettingViewReducer extends BaseReducer {
   async update(data) {
     const title = await this.tm.load();
     const pk = title.getPk();
-    this.sm.save(pk, data.name, data.pageNum, data.startPage, data.outputProfile, data.listing);
+    this.sm.save(pk, data.name, data.pageNum, data.startPage, data.pageDirection, data.outputProfile, data.listing);
   }
   async reset() {
     const title = await this.tm.load();
