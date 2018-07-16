@@ -16,3 +16,7 @@ This product is pure client side html to build copy book data for FujiXerox copy
  - paper size: B4
  - file format: jpeg
  - file size: 10MiB
+
+## Demo
+Demo？ Now build upping!
+https://ryunosinfx.github.io/HtmlCopiBon/
