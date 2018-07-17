@@ -46,7 +46,6 @@ export class TitleSettings extends BaseView {
       const startPageInput = document.getElementById(this.id + "StartPageInput").value;
       const pageDirectionInput = document.getElementById(this.id + "PageDirectionInput").value;
       const outputProfileInput = document.getElementById(this.id + "OutputProfileInput").value;
-
       //alert("update NameInput:" + nameInput + "/" + pageNumInput + "/" + startPageInput + "/" + pageDirectionInput + "/" + outputProfileInput)
       //data.name, data.pageNum, data.startPage,, data.startPage, data.outputProfile, data.listing);
       const action = SettingActionCreator.creatUpdateAction(this, {
@@ -57,6 +56,7 @@ export class TitleSettings extends BaseView {
         outputProfile: outputProfileInput,
         listing: 0
       });
+
       this.dispatch(action);
     }
   }

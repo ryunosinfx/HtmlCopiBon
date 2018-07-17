@@ -122,7 +122,8 @@ export const createSelectVnode = (id, classes, name, optionsData, selectedValue,
   for (let key in optionsData) {
     const text = optionsData[key];
     // alert("selectedValue:" + selectedValue + "/key:" + key + "/" + (        selectedValue === key))
-    if (key === selectedValue || (isArray && text+"" === selectedValue+"")) {
+    if ((!isArray && key === selectedValue) || (isArray && text+"" === selectedValue+"")) {
+      //console.log("★　matched　selectedValue:"+selectedValue+"/text:"+text)
       const optionSelected = option("", [""], {
         attrs: {
           value: isArray

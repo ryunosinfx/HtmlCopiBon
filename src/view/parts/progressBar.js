@@ -40,7 +40,7 @@ export class ProgressBar extends BaseView {
   async onViewShow(store, actionData) {
     if (store.progress) {
       await this.showProgress(store.progress);
-      console.log("ProgressBar onViewShow");
+      //console.log("ProgressBar onViewShow");
     }
   }
   showProgress(data) {
