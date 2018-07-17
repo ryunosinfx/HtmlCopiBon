@@ -23,6 +23,7 @@ export class TitleSettings extends BaseView {
     this.text = "TitleSettingsAAA";
     this.bodyId = this.id + "Child";
     this.storeKey = SettingActionCreator.getStoreKey();
+    this.getStoreKeyOpm = SettingActionCreator.getStoreKeyOpm();
   }
   render() {
     return div(this.bodyId, ["TitleSettings"], this.text);
