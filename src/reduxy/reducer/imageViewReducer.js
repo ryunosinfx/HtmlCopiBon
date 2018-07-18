@@ -1,5 +1,4 @@
 import {ImageActionCreator} from '../action/imageActionCreator'
-
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
@@ -12,6 +11,7 @@ export class ImageViewReducer extends BaseReducer {
     this.vpl = this.ms.getViewPartsLoader();
     this.ip = this.ms.ip;
     this.em = this.ms.em;
+    this.pm = this.ms.pm;
     this.tm = this.ms.tm;
     this.imagAddAction = ImageActionCreator.creatAddAction();
     this.imageRemoveAction = ImageActionCreator.creatRemoveAction();
@@ -19,12 +19,20 @@ export class ImageViewReducer extends BaseReducer {
     this.imagesSortAction = ImageActionCreator.creatSortImagesAction();
     this.imagesChangeTitleAction = ImageActionCreator.creatChangeTitleImagesAction();
     this.imagesDetailAction = ImageActionCreator.creatDetailAction();
+    this.pageAddAction = ImageActionCreator.creatAddPageAction();
+    this.pageRemoveAction = ImageActionCreator.creatRemovePageAction();
+    this.pagesResetAction = ImageActionCreator.creatResetPagesAction();
+    this.pagesSortAction = ImageActionCreator.creatSortPagesAction();
     this.atatch(this.imagAddAction);
     this.atatch(this.imageRemoveAction);
     this.atatch(this.imagesLoadAction);
     this.atatch(this.imagesSortAction);
     this.atatch(this.imagesChangeTitleAction);
     this.atatch(this.imagesDetailAction);
+    this.atatch(this.pageAddAction);
+    this.atatch(this.pageRemoveAction);
+    this.atatch(this.pagesResetAction);
+    this.atatch(this.pagesSortAction);
   }
   static register() {
     if (!imageViewReducer) {
@@ -45,6 +53,22 @@ export class ImageViewReducer extends BaseReducer {
       const imagesData = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
       store["imagesData"] = imagesData;
     } else if (this.imagesChangeTitleAction.type === action.type) {
+    } else if (this.pageAddAction.type === action.type) {
+      const imagesData = await this.loadImages();
+      store["imagesData"] = imagesData;
+      //
+    } else if (this.pageRemoveAction.type === action.type) {
+      const imagesData = await this.loadImages();
+      store["imagesData"] = imagesData;
+      //
+    } else if (this.pagesResetAction.type === action.type) {
+      const imagesData = await this.loadImages();
+      store["imagesData"] = imagesData;
+      //
+    } else if (this.pagesSortAction.type === action.type) {
+      const imagesData = await this.loadImages();
+      store["imagesData"] = imagesData;
+      //
     } else if (this.imagesDetailAction.type === action.type) {
       const imagesDetailData = await this.loadAImage(action.data.imagePK);
       store["imagesDetailData"] = imagesDetailData;
@@ -139,7 +163,7 @@ export class ImageViewReducer extends BaseReducer {
         isDESC: true
       }
     ]);
-    console.log("=★=showFilesInit imageEntitis:" + imageEntitis.length);
+    //console.log("=★=showFilesInit imageEntitis:" + imageEntitis.length);
     const retList = [];
     for (let imageEntity of imageEntitis) {
       const pk = imageEntity.getPk();

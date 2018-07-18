@@ -14,6 +14,18 @@ export class ImageActionCreator {
   static creatSortImagesAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("sortImages", targetView, data, storeKey);
   }
+  static creatAddPageAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("addPage", targetView, data, storeKey);
+  }
+  static creatRemovePageAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("removePage", targetView, data, storeKey);
+  }
+  static creatResetPagesAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("resetPages", targetView, data, storeKey);
+  }
+  static creatSortPagesAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("sortPages", targetView, data, storeKey);
+  }
   static creatChangeTitleImagesAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("changeTitle", targetView, data, storeKey);
   }

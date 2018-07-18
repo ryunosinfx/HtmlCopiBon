@@ -12,12 +12,18 @@ import {
 } from "../../util/reactive/base/vtags";
 import {SettingData} from '../../settings/exportSettings'
 import {SettingActionCreator} from '../../reduxy/action/settingActionCreator'
+import {PageImage} from './pageImage'
 export class PageImages extends BaseView {
   constructor() {
     super("PageImages", "PageImages");
     this.storeKey = SettingActionCreator.getStoreKey();
     this.childId = this.id + "child";
     this.thumbnails = {};
+    this.dummyClass = "Dummy";
+    this.pages = [];
+    for(let index = 0; index < 32; index++){
+      this.pages.push(new PageImage(index))
+    }
   }
   render() {
     this.setting = div(this.id + "child", ["PageImagesA"], this.id);
@@ -57,6 +63,15 @@ export class PageImages extends BaseView {
     }
     this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, images));
   }
+  creatPageFrame(pageNo,dummyClass,isRight){
+    const frameParts = [];
+    if(dummyClass === this.dummyClass){
+      return frameParts;
+    }
+    frameParts.push(div("",["pageFrameHeader"],pageNo))
+    frameParts.push(this.pages[pageNo].render())
+    return frameParts;
+  }
   buildPageFrames(setting) {
     const frames = [];
     const startPage = setting.startPage;
@@ -73,7 +88,7 @@ export class PageImages extends BaseView {
         ? 0
         : 1;
     const totalPageFrame = frameNum*1 + addPageNum*1;
-    const dummyClass = "Dummy";
+    const dummyClass = this.dummyClass;
     const pageClass = "Page";
     const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR)
     const leftStartDummyClass = !isPageStartR || isStartFull

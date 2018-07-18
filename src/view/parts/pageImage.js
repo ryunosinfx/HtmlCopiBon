@@ -2,7 +2,7 @@ import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class PageImage  extends BaseView {
-  constructor(parent) {
+  constructor(listing) {
     super("PageImage"+listing, "PageImage");
   }
   render() {
@@ -12,7 +12,7 @@ export class PageImage  extends BaseView {
   setImageData(imageData) {
     this.imageData = imageData;
   }
-  render(store, actionData) {
+  renderA(store, actionData) {
     return div('', "");
   }
   remove(pk) {

@@ -299,5 +299,20 @@ canvas.hidden {
   margin: 0.0em auto;
 }
 .PageFrame .Dummy{
-background-color:rgb(106, 91, 115);
+  background-color:rgb(106, 91, 115);
+}
+.MenuFrame{
+  display:flex;
+}
+.MenuFrame div{
+  width:20%;
+  cursor: pointer;
+  padding:5px 10px;
+  margin:2px 1px 0 1px;
+  border:1px solid rgb(83, 122, 134);
+  border-bottom-width: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: rgb(170, 185, 210);
+  color:rgb(222, 240, 222)
 }
