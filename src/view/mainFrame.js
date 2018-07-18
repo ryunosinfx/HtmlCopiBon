@@ -1,5 +1,6 @@
 import vu from "../util/viewUtil";
 import {Header} from "./header";
+import {Menu} from "./menu";
 import {Container} from "./container";
 import {Footer} from "./footer";
 import {BaseView} from "../util/reactive/baseView";
@@ -24,12 +25,14 @@ export class MainFrame extends BaseView {
     this.header = new Header(title);
     this.footer = new Footer();
     this.container = new Container();
+    this.menu = new Menu();
     this.baseFrame = null;
     this.view = '';
     this.initialPatch();
   }
   async onViewShow(store, data){
     this.header.attach(this,'#header');
+    this.menu.attach(this,'#menu');
     this.container.attach(this,'#container');
     this.footer.attach(this,'#footer');
   }
