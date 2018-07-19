@@ -1,23 +1,45 @@
-import {
-  Pages
-} from "../../entity/pages";
-import {
-  PrimaryKey
-} from "../entity/primaryKey";
+import {Pages} from "../../entity/pages";
+import {PrimaryKey} from "../entity/primaryKey";
 export class PagesManager {
   constructor(entityManager) {
     this.em = entityManager;
   }
   async loadFromImagePk(pk) {
-    const imagePk = PrimaryKey.getPrimaryKey(pk);
-    const imageEntity = await this.em.get(imagePk);
-    if (!imageEntity || !imageEntity.thumbnail) {
+    const pagePk = PrimaryKey.getPrimaryKey(pk);
+    const pageEntity = await this.em.get(pagePk);
+    if (!pageEntity || !pageEntity.thumbnail) {
       return null;
     }
-    const thumbnailPk = PrimaryKey.getPrimaryKey(imageEntity.thumbnail);
+    const thumbnailPk = PrimaryKey.getPrimaryKey(pageEntity.thumbnail);
     const thumbnailEntity = await this.em.get(thumbnailPk);
-    thumbnailEntity.parentPk = imagePk;
+    thumbnailEntity.parentPk = pagePk;
     return thumbnailEntity
+  }
+  async remove(pk) {
+    const target = await this.em.Pages.get(pk);
+    if (target) {
+      if (target.previewThumbnail) {
+        await this.em.Binary.delete(target.previewThumbnail);
+      }
+      if (target.outputImage) {
+        await this.em.Binary.delete(target.outputImage);
+      }
+      await this.em.Pages.delete(pk);
+    }
+  }
+  async move(fromPk, toPk) {
+    const targetFrom = await this.em.Pages.get(fromPk);
+    const targetTo = await this.em.Pages.get(toPk);
+    const previewThumbnailFrom = targetFrom.previewThumbnail;
+    const previewThumbnailTo = targetTo.previewThumbnail;
+    const outputImageFrom = targetFrom.outputImage;
+    const outputImageTo = targetTo.outputImage;
+    targetFrom.previewThumbnail= previewThumbnailTo;
+    targetTo.previewThumbnail= previewThumbnailFrom;
+    targetFrom.outputImage= outputImageTo;
+    targetTo.outputImage= outputImageFrom;
+    await this.em.Pages.save(targetFrom);
+    await this.em.Pages.save(targetTo);
   }
   async loadAll() {
     const retList = [];
@@ -28,41 +50,33 @@ export class PagesManager {
     return retList;
   }
   async load(pk) {
-    let binaryPk = pk;
-    if (!pk) {
-      binaryPk = PrimaryKey.getPrimaryKey(pk);
-    }
-    return await this.em.Thumbnales.get(binaryPk);
+    return await this.em.Pages.get(pk);
   }
-  async save(pk, name, binary, type, width, height, listing = 0) {
-    let image = null;
+  /*
+  */
+  async save(pk, previewThumbnail, outputImage, listing = 0) {
+    let page = null;
     if (pk) {
-      image = await this.em.Thumbnales.get(pk);
+      page = await this.em.Pages.get(pk);
     }
-    let binaryPk = PrimaryKey.getPrimaryKey(binary);
-    if (!image) {
-      image = new Thumbnales();
+    //let binaryPk = PrimaryKey.getPrimaryKey(binary);
+    if (!page) {
+      page = new Pages();
     } else {
-      image.updateDate = Date.now();
+      page.updateDate = Date.now();
     }
-    image.name = name || name === null ?
-      name :
-      image.name;
-    image.binary = binaryPk ?
-      binaryPk :
-      binary;
-    image.type = type || type === null ?
-      type :
-      image.type;
-    image.width = width || width === null ?
-      width :
-      image.width;
-    image.height = height || height === null ?
-      height :
-      image.height;
-    image.listing = listing || listing === null ?
-      listing :
-      image.listing;
-    return await this.em.Thumbnales.save(image);
+    page.previewThumbnail = previewThumbnail || previewThumbnail === null
+      ? previewThumbnail
+      : page.previewThumbnail;
+    page.outputImage = binaryPk
+      ? binaryPk
+      : binary;
+    page.outputImage = outputImage || outputImage === null
+      ? outputImage
+      : page.outputImage;
+    page.listing = listing || listing === null
+      ? listing
+      : page.listing;
+    return await this.em.Pages.save(page);
   }
 }

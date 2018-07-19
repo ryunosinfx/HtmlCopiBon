@@ -68,12 +68,29 @@ export class PageImages extends BaseView {
     if(dummyClass === this.dummyClass){
       return frameParts;
     }
-    frameParts.push(div("",["pageFrameHeader"],pageNo))
+    const sideClass="pageFrameHeader"+(isRight?"Right":"Left");
+    frameParts.push(div("",["pageFrameHeader",sideClass],pageNo+""))
     frameParts.push(this.pages[pageNo].render())
     return frameParts;
   }
+  showPreviewSingle(){
+    return (event)=>{
+      alert("showPreviewSingle");
+    }
+  }
+  showPreviewDual(){
+    return (event)=>{
+      alert("showPreviewDual");
+    }
+  }
+  buildPreviewButtons(){
+    const previewSingle = div("",["previewCallButton"],{on:{click:this.showPreviewSingle()}},"Preview Single");
+    const previewDouble = div("",["previewCallButton"],{on:{click:this.showPreviewDual()}},"Preview Dual");
+    return div("",["previewFrame"],[previewSingle,previewDouble]);
+  }
   buildPageFrames(setting) {
     const frames = [];
+    frames.push(this.buildPreviewButtons());
     const startPage = setting.startPage;
     const pageNum = setting.pageNum*1;//SettingData.pageNums[setting.pageNum-1]*1;
     const pageDirection = setting.pageDirection;
@@ -119,6 +136,7 @@ export class PageImages extends BaseView {
         ? 0
         : 1) + pageOffset + pagNo;
       const pagePair = [];
+      //////////////////////////////////
       if (index === 0) { //LR
         const leftPageNoFirst = isPageDirectionR2L && isStartFull
           ? 2
@@ -136,10 +154,10 @@ export class PageImages extends BaseView {
               : 1
         pagePair.push(div("", [
           pageClass, leftStartDummyClass
-        ], totalPageFrame+"L" + leftPageNoFirst+" "+isMatchPageStartSide));
+        ], this.creatPageFrame(leftPageNoFirst,leftStartDummyClass,false),totalPageFrame+"L" + leftPageNoFirst+" "+isMatchPageStartSide));
         pagePair.push(div("", [
           pageClass, rightStartDummyClass
-        ], frameNum+"R" + rightPageNoFirst+" "+isOdd));
+        ], this.creatPageFrame(rightPageNoFirst,rightStartDummyClass,true),frameNum+"R" + rightPageNoFirst+" "+isOdd));
         pageOffset = 1;
         pagNo += isStartFull
           ? 2
@@ -147,13 +165,13 @@ export class PageImages extends BaseView {
       } else if (index === lastIndex) {
         pagePair.push(div("", [
           pageClass, leftEndDummyClass
-        ], "L" + leftPageNo));
+        ], this.creatPageFrame(leftPageNo,leftEndDummyClass,false),"L" + leftPageNo));
         pagePair.push(div("", [
           pageClass, rightEndDummyClass
-        ], "R" + rightPageNo));
+        ], this.creatPageFrame(rightPageNo,rightEndDummyClass,true),"R" + rightPageNo));
       } else {
-        pagePair.push(div("", [pageClass], "L" + leftPageNo));
-        pagePair.push(div("", [pageClass], "R" + rightPageNo));
+        pagePair.push(div("", [pageClass], this.creatPageFrame(leftPageNo,"",false),"L" + leftPageNo));
+        pagePair.push(div("", [pageClass], this.creatPageFrame(rightPageNo,"",true),"R" + rightPageNo));
         pagNo += 2;
       }
       frames.push(div("", ["PageFrame"], pagePair, "pageFrame index:" + index))

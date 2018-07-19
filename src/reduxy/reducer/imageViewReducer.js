@@ -2,6 +2,10 @@ import {ImageActionCreator} from '../action/imageActionCreator'
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 import {BaseReducer} from '../../util/reactive/baseReducer'
+import {PageProcessor} from '../processor/pageProcessor'
+import {
+  SettingActionCreator
+} from '../action/settingActionCreator'
 let imageViewReducer = null;
 const loadedImageMap = new Map();
 export class ImageViewReducer extends BaseReducer {
@@ -33,6 +37,10 @@ export class ImageViewReducer extends BaseReducer {
     this.atatch(this.pageRemoveAction);
     this.atatch(this.pagesResetAction);
     this.atatch(this.pagesSortAction);
+    this.pp = new PageProcessor();
+    this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
+    this.storePagesKey = ImageActionCreator.getStoreImagesKey();
+    this.storeSettingKey = SettingActionCreator.getStoreKey();
   }
   static register() {
     if (!imageViewReducer) {
@@ -40,38 +48,35 @@ export class ImageViewReducer extends BaseReducer {
     }
   }
   async reduce(store, action) {
+    let isCalled = false;
     if (this.imagAddAction.type === action.type) {
-      const imagesData = await this.saveFiles(action.data.files);
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.saveFiles(action.data.files);
     } else if (this.imageRemoveAction.type === action.type) {
-      const imagesData = await this.remove(action.data.imagePKforDelete);
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.remove(action.data.imagePKforDelete);
     } else if (this.imagesLoadAction.type === action.type) {
-      const imagesData = await this.loadImages();
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.loadImages();
+      const setting = store[this.storeSettingKey]
+      if(setting){
+
+      }
     } else if (this.imagesSortAction.type === action.type) {
-      const imagesData = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
     } else if (this.imagesChangeTitleAction.type === action.type) {
     } else if (this.pageAddAction.type === action.type) {
-      const imagesData = await this.loadImages();
-      store["imagesData"] = imagesData;
+      store[this.storePagesKey] = await this.pp(action.data.files);
       //
     } else if (this.pageRemoveAction.type === action.type) {
-      const imagesData = await this.loadImages();
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.loadImages();
       //
     } else if (this.pagesResetAction.type === action.type) {
       const imagesData = await this.loadImages();
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.loadImages();
       //
     } else if (this.pagesSortAction.type === action.type) {
-      const imagesData = await this.loadImages();
-      store["imagesData"] = imagesData;
+      store[this.storeImagesKey] = await this.loadImages();
       //
     } else if (this.imagesDetailAction.type === action.type) {
-      const imagesDetailData = await this.loadAImage(action.data.imagePK);
-      store["imagesDetailData"] = imagesDetailData;
+      store["imagesDetailData"] = await this.loadAImage(action.data.imagePK);
     }
     return store;
   }

@@ -32,4 +32,10 @@ export class ImageActionCreator {
   static creatDetailAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("detail", targetView, data, storeKey);
   }
+  static getStoreImagesKey(){
+    return "imagesData";
+  }
+  static getStorePagesKey(){
+    return "pagesData";
+  }
 }

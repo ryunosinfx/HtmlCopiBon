@@ -281,6 +281,30 @@ canvas.hidden {
   border-radius: 1em;
   cursor: pointer;
 }
+.previewFrame{
+  display: flex;
+}
+ .previewCallButton{
+  width:150px;
+  background-color: rgb(156, 111, 146);
+  font-size: 50%;
+  padding :10px;
+  margin:1px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.pageFrameHeader{
+  font-size: 60%;
+  background-color: rgb(59, 2, 62);
+  color:white;
+  padding:5px;
+}
+.pageFrameHeaderLeft{
+  text-align: left;
+}
+.pageFrameHeaderRight{
+  text-align: right;
+}
 .PageFrame{
   display:inline-block;
     display: flex;

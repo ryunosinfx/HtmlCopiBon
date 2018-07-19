@@ -1,9 +1,7 @@
-
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
 export class PageProcessor {
   constructor() {
-    super();
     this.ms = MainService.getInstance();
     this.em = this.ms.em;
     this.pm = this.ms.pm;
@@ -16,32 +14,38 @@ export class PageProcessor {
     const pageEntitis = [];
     const delPages = [];
     let pageCount = 0;
-    for (let index in pages) {
-      const pk = pages[index];
-      if (!pk) {
-        continue;
-      }
-      const pageEntity = await this.em.get(pk);
-      pageEntitis.push(pageEntity);
-      pageCount++;
-      if(pageCount > pageNum){
-        delPages.push();
-      }
-    }
-    for(let index in delPages){
-      const delTarget = delPages[index];
-      for (let i in pages) {
-        const current = pages[i];
-        if(delTarget === current){
-          delete pages[i];
-          this.pm.remove();
-          break;
+    if (pages.length > pageNum) {
+      for (let index in pages) {
+        const pk = pages[index];
+        if (!pk) {
+          continue;
+        }
+        const pageEntity = await this.em.get(pk);
+        pageEntitis.push(pageEntity);
+        pageCount++;
+        if (pageCount > pageNum) {
+          delPages.push(pk);
         }
       }
-
+      for (let index in delPages) {
+        const delTarget = delPages[index];
+        for (let i in pages) {
+          const current = pages[i];
+          if (delTarget === current) {
+            delete pages[i];
+            this.pm.remove(delTarget);
+            break;
+          }
+        }
+      }
+    } else {
+      const addCount = pageNum - pages.length;
+      for (let index = pages.length; index < pageNum; index++) {
+        const addOne = await this.pm.save(null, null, null, index);
+        pages.push(addOne);
+      }
     }
     await this.tm.saveTitle(title);
-
   }
   async loadPages() {
     const title = await this.tm.load();
@@ -55,6 +59,9 @@ export class PageProcessor {
       const pageEntity = await this.em.get(pk);
       pageEntitis.push(pageEntity);
     }
+  }
+  async move(fromPk,toPk){
+    await this.pm.move(fromPk,toPk)
   }
   async remove(pk) {
     await this.tm.removeImage(pk);
