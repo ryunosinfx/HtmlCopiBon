@@ -9,6 +9,7 @@ export class SettingsManager {
     const settingEntity = await this.em.Settings.get(titilePk);
     return settingEntity;
   }
+
   async loadAll() {
     const retList = [];
     const settings = this.em.Pages.loadAll();

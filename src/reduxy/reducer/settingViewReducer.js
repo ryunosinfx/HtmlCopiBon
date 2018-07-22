@@ -70,13 +70,6 @@ export class SettingViewReducer extends BaseReducer {
     return settingEntity;
   }
   async load() {
-    const title = await this.tm.load();
-    const pk = title.getPk();
-    const settingEntityLoad = await this.sm.loadByPk(pk);
-    if(!settingEntityLoad){
-      const settingEntity =  await this.sm.createDefault(pk);
-      return settingEntity;
-    }
-    return settingEntityLoad;
+    return this.tm.loadSettings();
   }
 }

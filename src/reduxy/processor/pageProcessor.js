@@ -8,6 +8,11 @@ export class PageProcessor {
     this.tm = this.ms.tm;
   }
 
+  async resetPages() {
+    const setting = await this.tm.loadSettings();
+    const pageNum = setting.pageNum;
+    return await this.resetPages(pageNum);
+  }
   async resetPages(pageNum) {
     const title = await this.tm.load();
     const pages = title.pages;
@@ -41,7 +46,7 @@ export class PageProcessor {
     } else {
       const addCount = pageNum - pages.length;
       for (let index = pages.length; index < pageNum; index++) {
-        const addOne = await this.pm.save(null, null, null, index);
+        const addOne = await this.pm.save(null, null, null,null,null, index);
         pages.push(addOne);
       }
     }
@@ -59,6 +64,7 @@ export class PageProcessor {
       const pageEntity = await this.em.get(pk);
       pageEntitis.push(pageEntity);
     }
+    return pageEntitis;
   }
   async move(fromPk,toPk){
     await this.pm.move(fromPk,toPk)

@@ -103,6 +103,17 @@ export class TitleManager {
     console.log(images);
     await this.saveTitle(title);
   }
+
+  async loadSettings() {
+    const title = await this.loadCurrent();
+    const pk = title.getPk();
+    const settingEntityLoad = await this.sm.loadByPk(pk);
+    if(!settingEntityLoad){
+      const settingEntity =  await this.sm.createDefault(pk);
+      return settingEntity;
+    }
+    return settingEntityLoad;
+  }
   async loadThumbnails() {
     const title = await this.loadCurrent();
     return await this.im.loadThumbnails(title.images);

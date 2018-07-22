@@ -27,6 +27,28 @@ export class PagesManager {
       await this.em.Pages.delete(pk);
     }
   }
+  async addPage(imagePｋ,pagePk) {
+    const title = await this.tm.load();
+    const pages = title.pages;
+    const pageEntitis = [];
+    for (let index in pages) {
+      const pk = pages[index];
+      if (!pk) {
+        continue;
+      }
+      const pageEntity = await this.em.get(pk);
+      if(pk === pagePk){
+        const imageEntity = await this.em.get(imagePｋ);
+        const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
+        const binaryEntity = await this.em.get(thumbnailEntity.binary);
+        pageEntity.previewThumbnail = thumbnailEntity.binary;
+        pageEntity.outputImage = imageEntity.binary;
+        await this.em.Pages.save(pageEntity);
+      }
+      pageEntitis.push(pageEntity);
+    }
+    return pageEntitis;
+  }
   async move(fromPk, toPk) {
     const targetFrom = await this.em.Pages.get(fromPk);
     const targetTo = await this.em.Pages.get(toPk);
@@ -34,10 +56,18 @@ export class PagesManager {
     const previewThumbnailTo = targetTo.previewThumbnail;
     const outputImageFrom = targetFrom.outputImage;
     const outputImageTo = targetTo.outputImage;
+    const thumbnailFrom = targetFrom.thumbnail;
+    const thumbnailTo = targetTo.thumbnail;
+    const baseImageFrom = targetFrom.baseImage;
+    const baseImageTo = targetTo.baseImage;
     targetFrom.previewThumbnail= previewThumbnailTo;
     targetTo.previewThumbnail= previewThumbnailFrom;
     targetFrom.outputImage= outputImageTo;
     targetTo.outputImage= outputImageFrom;
+    targetFrom.thumbnail= thumbnailTo;
+    targetTo.thumbnail= thumbnailFrom;
+    targetFrom.baseImage= baseImageTo;
+    targetTo.baseImage= baseImageFrom;
     await this.em.Pages.save(targetFrom);
     await this.em.Pages.save(targetTo);
   }
@@ -54,7 +84,7 @@ export class PagesManager {
   }
   /*
   */
-  async save(pk, previewThumbnail, outputImage, listing = 0) {
+  async save(pk, previewThumbnail=null, outputImage=null,thumbnail=null,baseImage=null, listing = 0) {
     let page = null;
     if (pk) {
       page = await this.em.Pages.get(pk);
@@ -74,6 +104,12 @@ export class PagesManager {
     page.outputImage = outputImage || outputImage === null
       ? outputImage
       : page.outputImage;
+    page.thumbnail = thumbnail || thumbnail === null
+      ? thumbnail
+      : page.thumbnail;
+    page.baseImage = baseImage || baseImage === null
+      ? baseImage
+      : page.baseImage;
     page.listing = listing || listing === null
       ? listing
       : page.listing;

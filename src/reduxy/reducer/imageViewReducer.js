@@ -56,9 +56,6 @@ export class ImageViewReducer extends BaseReducer {
     } else if (this.imagesLoadAction.type === action.type) {
       store[this.storeImagesKey] = await this.loadImages();
       const setting = store[this.storeSettingKey]
-      if(setting){
-
-      }
     } else if (this.imagesSortAction.type === action.type) {
       store[this.storeImagesKey] = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
     } else if (this.imagesChangeTitleAction.type === action.type) {
@@ -91,7 +88,7 @@ export class ImageViewReducer extends BaseReducer {
 
   async sort(movePk, dropPk) {
     console.log('sort movePk:' + movePk + '/dropPk:' + dropPk+"/this.em.save:"+this.em)
-      console.log(this.em)
+      // console.log(this.em)
     const imageEntitis = this.getEntitisAsList();
 
     for (let index in imageEntitis) {
