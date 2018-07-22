@@ -1,3 +1,4 @@
+
 import {
   BaseView
 } from "../../../util/reactive/baseView";
@@ -11,9 +12,9 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-export class TitleList extends BaseView {
+export class ExportOrderRow extends BaseView {
   constructor() {
-    super("TitleList", "TitleList");
+    super("ExportOrderRow", "ExportOrderRow");
   }
 
   render(store, actionData) {

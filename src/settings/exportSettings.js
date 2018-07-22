@@ -9,3 +9,7 @@ export const SettingData = {
   pageDirection:{l2r:"LeftToRight",r2l:"RightToLeft"},
   pageNums:[1,2,4,6,8,10,12,16]
 }
+export const PrefareceData = {
+  previewSizeSingle:{w400:400,w500:500,w800:800,w1000:1000},
+    e:{w400:400,w500:500,w800:800,w1000:1000},
+}
