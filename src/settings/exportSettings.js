@@ -11,5 +11,5 @@ export const SettingData = {
 }
 export const PrefareceData = {
   previewSizeSingle:{w400:400,w500:500,w800:800,w1000:1000},
-    e:{w400:400,w500:500,w800:800,w1000:1000},
+    e:{w400:400,w500:500,w800:800,w1000:1000}
 }

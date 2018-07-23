@@ -37,6 +37,7 @@ export class MainServiceImpl {
     this.opm = new OutputProfilesManager(this.em);
     this.sm = new SettingsManager(this.em,this.opm );
     this.tm = new TitleManager(this.em);
+    this.im.setTitleManager(this.tm);
     await this.tm.load();
   }
 

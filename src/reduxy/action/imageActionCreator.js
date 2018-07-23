@@ -23,7 +23,4 @@ export class ImageActionCreator {
   static getStoreImagesKey(){
     return "imagesData";
   }
-  static getStorePagesKey(){
-    return "pagesData";
-  }
 }

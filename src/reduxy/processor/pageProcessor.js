@@ -72,10 +72,7 @@ export class PageProcessor {
   async add(imagePk,pagePk){
     await this.pm.addPage(imagePｋ,pagePk);
   }
-  async remove(pk) {
-    await this.tm.removeImage(pk);
-    loadedImageMap.delete(pk);
-    return this.getRetObjsAsList();
+  async remove(pagePk) {
+    await this.pm.remove(pagePk);
   }
-
 }

@@ -8,6 +8,7 @@ import {
   BaseReducer
 } from '../../util/reactive/baseReducer'
 import {PageProcessor} from '../processor/pageProcessor'
+import {ImageActionCreator} from '../action/imageActionCreator'
 let pagesViewReducer = null;
 export class PagesViewReducer extends BaseReducer {
   constructor() {
@@ -15,6 +16,7 @@ export class PagesViewReducer extends BaseReducer {
     this.ms = MainService.getInstance();
     this.vpl = this.ms.getViewPartsLoader();
     this.em = this.ms.em;
+    this.im = this.ms.im;
     this.tm = this.ms.tm;
     this.pageAddAction = PageActionCreator.creatAddPageAction();
     this.pageRemoveAction = PageActionCreator.creatRemovePageAction();
@@ -27,6 +29,7 @@ export class PagesViewReducer extends BaseReducer {
 
     this.pp = new PageProcessor();
     this.storeKey = PageActionCreator.getStorePagesKey();
+    this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
   }
   static register() {
     if (!pagesViewReducer) {
@@ -35,15 +38,21 @@ export class PagesViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.pageAddAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 0, false);
+      store[this.storeKey] = await this.add(action.data.imagePk,action.data.pagePk);
+      store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pageRemoveAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(false, 0, false);
+      store[this.storeKey] = this.remove(action.data.pagePk);
+      store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pagesResetAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, action.data.progress, false);
+      store[this.storeKey] = this.reset();
+      store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pagesSortAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 100, true);
+      store[this.storeKey] = this.move(action.data.formPk,action.data.toPk);
     }
     return store;
+  }
+  async loadImages(){
+    return await this.im.loadImages();
   }
   async add(imagePk,pagePk){
     //
@@ -52,13 +61,16 @@ export class PagesViewReducer extends BaseReducer {
   }
   async remove(pagePk){
     //
+    await this.pp.remove(pagePk);
     return await this.pp.loadPages();
   }
   async reset(){
     //
     return await this.pp.resetPages();
   }
-  sort(formPk,toPk){
+  async move(formPk,toPk){
     //
+    await this.pp.move(formPk,toPk);
+    return await this.pp.loadPages();
   }
 }

@@ -5,6 +5,7 @@ import {PrimaryKey} from "../entity/primaryKey";
 import {Sorter} from "../../util/sorter";
 import {FileUploadExecuter} from "../fileUploadExecuter";
 
+const loadedImageMap = new Map();
 export class ImageManager {
   constructor(entityManager) {
     this.ms = MainService.getInstance();
@@ -12,12 +13,32 @@ export class ImageManager {
     this.ip = this.ms.ip;
     this.tbm = this.ms.tbm;
   }
+  setTitleManager(tm){
+    this.tm = tm;
+  }
   async load(pk) {
     let binaryPk = pk;
     if (!pk) {
       binaryPk = PrimaryKey.getPrimaryKey(pk);
     }
     return await this.em.Images.get(binaryPk);
+  }
+  async reloadLoadedImages() {
+    return await this.createRetList(this.getEntitisAsList());
+  }
+  async loadImages() {
+    const title = await this.tm.load();
+    const images = title.images;
+    const imageEntitis = [];
+    for (let index in images) {
+      const pk = images[index];
+      if (!pk) {
+        continue;
+      }
+      const imageEntity = await this.em.get(pk);
+      imageEntitis.push(imageEntity);
+    }
+    return await this.createRetList(imageEntitis);
   }
   async remove(pk) {
     const imageEntity = await this.em.get(pk);
@@ -113,5 +134,71 @@ export class ImageManager {
       retList.push(thumbnailEntity);
     }
     return retList;
+  }
+  async createRetList(imageEntitis) {
+    Sorter.orderBy(imageEntitis, [
+      {
+        colName: "listing",
+        isDESC: false
+      }, {
+        colName: "updateDate",
+        isDESC: true
+      }
+    ]);
+    //console.log("=★=showFilesInit imageEntitis:" + imageEntitis.length);
+    const retList = [];
+    for (let imageEntity of imageEntitis) {
+      const pk = imageEntity.getPk();
+      if (loadedImageMap.has(pk)) {
+        const retObj = loadedImageMap.get(pk);
+        retList.push(retObj);
+      } else {
+        const retObj = await this.processParImage(imageEntity);
+        loadedImageMap.set(pk, retObj);
+        retList.push(retObj);
+      }
+    }
+    return retList;
+  }
+  async processParImage(imageEntity) {
+    const imagePk = imageEntity.getPk();
+    const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
+    const binaryEntity = await this.em.get(thumbnailEntity.binary);
+    const imgElm = await this.ip.createImageNodeByData({name: imageEntity.name, ab: binaryEntity.ab, type: imageEntity.type});
+    const size = (
+      binaryEntity.ab
+      ? (new Uint8Array(binaryEntity.ab)).length
+      : 0);
+    const imageText = escape(imageEntity.name) + ' (' + (
+    imageEntity.type || 'n/a') + ') - ' + size + 'bytes, last modified: ' + imageEntity.modifyDate + ' size:' + imageEntity.width + 'x' + imageEntity.height
+
+    const retObj = {
+      imageEntity: imageEntity,
+      binaryEntity: binaryEntity,
+      size: size,
+      imageText: imageText,
+      isOnPage:false
+    };
+    return retObj;
+  }
+  removeLoaded(pk){
+    loadedImageMap.delete(pk);
+  }
+  getRetObjsAsList() {
+    const retList = [];
+    for (let [key, retObj] of loadedImageMap.entries()) {
+      retList.push(retObj);
+    }
+    return retList;
+  }
+  getEntitisAsList() {
+    const retList = [];
+    for (let [key, retObj] of loadedImageMap.entries()) {
+      retList.push(retObj.imageEntity);
+    }
+    return retList;
+  }
+  getFromLoaded(pk){
+    return loadedImageMap.get(pk);
   }
 }
