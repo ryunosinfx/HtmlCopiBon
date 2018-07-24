@@ -47,12 +47,13 @@ export class ImageViewReducer extends BaseReducer {
     } else if (this.imagesLoadAction.type === action.type) {
       store[this.storeImagesKey] = await this.loadImages();
       store[this.storePagesKey] = await this.loadPages();
+      //alert(store[this.storePagesKey]);
     } else if (this.imagesSortAction.type === action.type) {
       store[this.storeImagesKey] = await this.sort(action.data.imagePKmove, action.data.imagePKdrop);
       store[this.storePagesKey] = await this.loadPages();
     } else if (this.imagesChangeTitleAction.type === action.type) {
       store[this.storePagesKey] = await this.loadPages();
-    } else if (this.imagesDetailAction.type === action.type) {
+    } else if (this.imagesDetailAction.type === action.type) {loadImages
       store["imagesDetailData"] = await this.loadAImage(action.data.imagePK);
     }
     return store;
@@ -124,6 +125,7 @@ export class ImageViewReducer extends BaseReducer {
     return {imageEntity:imageEntity,binaryEntity:binaryEntity,imageText:imageText}
   }
   async loadImages() {
+    const a = await this.pp.resetPagesFull();
     return await this.im.loadImages();
   }
 

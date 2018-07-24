@@ -154,10 +154,12 @@ canvas.hidden {
   min-width: 160px;
   overflow: hidden;
 }
-.FilesArea>div>div.PageImages{
+
+.FilesArea>div>div.PageImages {
   min-width: 320px;
   max-width: 50%;
 }
+
 .FilesArea>div>div.ImageDetail {
   min-width: 160px;
   max-width: 25%;
@@ -209,134 +211,160 @@ canvas.hidden {
   top: -10px;
   left: -30px;
 }
-.ProgressBar{
-  top:0;
-  left:0;
+
+.ProgressBar {
+  top: 0;
+  left: 0;
   position: fixed;
   width: 100%;
-  height:100%;
-  background-color:rgba(118, 118, 118, 0.80);
+  height: 100%;
+  background-color: rgba(118, 118, 118, 0.80);
   z-index: 1001;
-  display:none;
+  display: none;
 }
-.ProgressBar> div{
+
+.ProgressBar>div {
   position: fixed;
-  top:50%;
-  left:5%;
-  margin:0 auto;
+  top: 50%;
+  left: 5%;
+  margin: 0 auto;
   width: 90%;
-  height:5em;
-  background-color:rgba(238, 118, 238, 1);
+  height: 5em;
+  background-color: rgba(238, 118, 238, 1);
   z-index: 1000;
-  padding:10px
+  padding: 10px
 }
-.ProgressBar> div .progeressFrame{
-  margin:0 auto;
+
+.ProgressBar>div .progeressFrame {
+  margin: 0 auto;
   width: 95%;
-  height:3em;
-  background-color:rgb(193, 165, 200);
+  height: 3em;
+  background-color: rgb(193, 165, 200);
   z-index: 1000;
-  padding:0px
+  padding: 0px
 }
-.progeress{
+
+.progeress {
   position: relative;
-  top:0;
+  top: 0;
   left: 0;
-  height:3em;
-  background-color:rgb(120, 231, 194);
+  height: 3em;
+  background-color: rgb(120, 231, 194);
 }
-.TitleSettings{
+
+.TitleSettings {
   background-color: rgb(159, 117, 242);
-  padding:0.1em;
+  padding: 0.1em;
   margin: 0.1em 0;
 }
-.TitleSettingsTitle{
-  padding:0.3em;
-    margin-bottom: 0.3em;
+
+.TitleSettingsTitle {
+  padding: 0.3em;
+  margin-bottom: 0.3em;
   font-weight: bold;
   font-size: 110%;
-  width:100%;
+  width: 100%;
   text-align: center;
-    background-color: rgb(139, 87, 242);
+  background-color: rgb(139, 87, 242);
 }
-.TitleSettingsFrame{
+
+.TitleSettingsFrame {
   display: flex;
 }
-.TitleSettingsFrame > div{
-  width:50%;
 
+.TitleSettingsFrame>div {
+  width: 50%;
 }
-.TitleSettingsRow>span,.TitleSettingsRow>input{
+
+.TitleSettingsRow>span, .TitleSettingsRow>input {
   display: inline-flex;
-  width:40%;
+  width: 40%;
 }
-.TitleSettingsUpdate{
-  width:70%;
+
+.TitleSettingsUpdate {
+  width: 70%;
   background-color: rgb(3, 21, 186);
-  color:white;
+  color: white;
   font-weight: bold;
   text-align: center;
   margin: 0.5em auto;
-  padding:0.5em;
+  padding: 0.5em;
   border-radius: 1em;
   cursor: pointer;
 }
-.previewFrame{
+
+.previewFrame {
   display: flex;
 }
- .previewCallButton{
-  width:150px;
+
+.previewCallButton {
+  width: 150px;
   background-color: rgb(156, 111, 146);
   font-size: 50%;
-  padding :10px;
-  margin:1px;
+  padding: 10px;
+  margin: 1px;
   cursor: pointer;
   border-radius: 5px;
 }
-.pageFrameHeader{
+
+.pageFrameHeader {
   font-size: 60%;
   background-color: rgb(59, 2, 62);
-  color:white;
-  padding:5px;
+  color: white;
+  padding: 5px;
 }
-.pageFrameHeaderLeft{
+
+.pageFrameHeaderLeft {
   text-align: left;
 }
-.pageFrameHeaderRight{
+
+.pageFrameHeaderRight {
   text-align: right;
 }
-.PageFrame{
-  display:inline-block;
-    display: flex;
-  background-color:rgb(166, 121, 191);
-  width:300px;
-  height:150px;
-  font-size:1em;
+
+.PageFrame {
+  display: inline-block;
+  display: flex;
+  background-color: rgb(166, 121, 191);
+  width: 300px;
+  height: 150px;
+  font-size: 1em;
   margin: 0.1em auto;
-  padding:0.25em 1em;
+  padding: 0.25em 1em;
 }
-.PageFrame .Page{
-  width:110px;
-  border:2px solid rgb(126, 100, 113);
-  background-color:rgb(172, 148, 185);
-  height:130px;
+
+.PageFrame .Page {
+  width: 110px;
+  border: 2px solid rgb(126, 100, 113);
+  background-color: rgb(172, 148, 185);
+  height: 130px;
   margin: 0.0em auto;
 }
-.PageFrame .Dummy{
-  background-color:rgb(106, 91, 115);
+
+.PageFrame .Dummy {
+  background-color: rgb(106, 91, 115);
 }
-.MenuFrame{
-  display:flex;
+
+.PageFrame .Page .thumbnail_block {
+  height: 100px;
+  width: 106px;
+  margin: 0.0em auto;
+  background-color: rgb(227, 209, 238);
 }
-.MenuFrame div{
-  width:20%;
+
+.MenuFrame {
+  display: flex;
+}
+
+.MenuFrame div {
+  width: 20%;
   cursor: pointer;
-  padding:5px 10px;
-  margin:2px 1px 0 1px;
-  border:1px solid rgb(83, 122, 134);
+  padding: 5px 10px;
+  margin: 2px 1px 0 1px;
+  border: 1px solid rgb(83, 122, 134);
   border-bottom-width: 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: rgb(170, 185, 210);
-  color:rgb(222, 240, 222)
+  color: rgb(222, 240, 222)
 }

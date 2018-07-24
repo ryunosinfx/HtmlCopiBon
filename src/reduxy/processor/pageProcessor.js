@@ -8,7 +8,7 @@ export class PageProcessor {
     this.tm = this.ms.tm;
   }
 
-  async resetPages() {
+  async resetPagesFull() {
     const setting = await this.tm.loadSettings();
     const pageNum = setting.pageNum;
     return await this.resetPages(pageNum);
@@ -47,7 +47,7 @@ export class PageProcessor {
       const addCount = pageNum - pages.length;
       for (let index = pages.length; index < pageNum; index++) {
         const addOne = await this.pm.save(null, null, null,null,null, index);
-        pages.push(addOne);
+        pages.push(addOne.getPk());
       }
     }
     await this.tm.saveTitle(title);

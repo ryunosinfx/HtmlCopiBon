@@ -27,7 +27,7 @@ export class BinaryManager {
       binEntity = await this.em.Binary.get(pk);
     }
     console.log(binary);
-    alert(binary);
+    //alert(binary);
     let binaryPk = PrimaryKey.getPrimaryKey(binary);
     if (!binEntity) {
       binEntity = new Binary();

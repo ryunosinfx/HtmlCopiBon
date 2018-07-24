@@ -13,8 +13,9 @@ import {
 import {SettingData} from '../../settings/exportSettings'
 import {SettingActionCreator} from '../../reduxy/action/settingActionCreator'
 import {PageImage} from './pageImage'
-import {PageProcessor} from '../../processor/pageProcessor'
-import {ImageActionCreator} from '../../action/imageActionCreator'
+import {PageProcessor} from '../../reduxy/processor/pageProcessor'
+import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
+import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
 export class PageImages extends BaseView {
   constructor() {
     super("PageImages", "PageImages");
@@ -36,36 +37,39 @@ export class PageImages extends BaseView {
   async onViewShow(store, actionData) {
 
     let pageFrames = [];
-    const pagesData = store[this.storePagesKey]
-
-    if (pagesData) {
-      await this.showPages(pagesData);
-      console.log("Thumnails onViewShow");
-    }
-    if (store[this.storePagesKey]) {
+    const pagesData = store[this.storePagesKey];
+    const imagesData = store[this.storeImagesKey]
+    if(imagesData && pagesData){
+      //alert("onViewShow"+imagesData.length+"/"+pagesData.length+"/");
+      await this.showPages(pagesData,imagesData);
+      console.log("Pages onViewShow");
+    }else if (store[this.storeKey]) {
       pageFrames = this.buildPageFrames(store[this.storeKey]);
-
       this.prePatch("#" + this.childId, div(this.childId, pageFrames));
     } else {
       return;
     }
   }
-  async showPages(pagesData) {
-    const pages = [];
-    const index =0;
-    for (let pageEntity of pagesData) {
-      const pk = pageEntity.getPk();
-      let vnode = this.thumbnails[pk];
-      if (!vnode) {
-        vnode = await this.thumbnail.crateDataLine(pageData).catch((e) => {
-          console.log(e)
-        });
-        this.thumbnails[pk] = vnode;
-      }
-      pages.push(vnode);
-      index++;
+  async showPages(pagesData,imagesData) {
+    const imageMap = {};
+    for(let imageData of imagesData){
+      const imageEntity = imageData.imageEntity;
+      const imagePk = imageEntity.getPk();
+      imageMap[imageMap] = imageData;
     }
-    this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, pages));
+    let index =0;
+    for (let pageEntity of pagesData) {
+      const page = this.pages[index];
+      index++;
+      if(!pageEntity){
+        continue;
+      }
+      const pk = pageEntity.getPk();
+      const imagePk = pageEntity.baseImage;
+      const imageData = imageMap[imagePk];
+      await page.setPageData(pageEntity,imageData);
+      page.renderVnode(this);
+    }
   }
   creatPageFrame(pageNo,dummyClass,isRight){
     const frameParts = [];
@@ -74,7 +78,8 @@ export class PageImages extends BaseView {
     }
     const sideClass="pageFrameHeader"+(isRight?"Right":"Left");
     frameParts.push(div("",["pageFrameHeader",sideClass],pageNo+""))
-    frameParts.push(this.pages[pageNo].render())
+    const page = this.pages[pageNo].renderVnode(this);
+    frameParts.push(page)
     return frameParts;
   }
   showPreviewSingle(){

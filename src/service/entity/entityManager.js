@@ -33,7 +33,7 @@ export class EntityManager {
     }
     const truePk = PrimaryKey.getPrimaryKey(pk);
     if(!PrimaryKey.isPrimaryKey(truePk)){
-        alert(truePk);
+        console.log(truePk);
         return null;
     }
     const entityName = PrimaryKey.getEntityName(truePk);

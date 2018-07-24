@@ -66,7 +66,7 @@ export class PagesViewReducer extends BaseReducer {
   }
   async reset(){
     //
-    return await this.pp.resetPages();
+    return await this.pp.resetPagesFull();
   }
   async move(formPk,toPk){
     //

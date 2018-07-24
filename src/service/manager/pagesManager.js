@@ -84,12 +84,12 @@ export class PagesManager {
   }
   /*
   */
-  async save(pk, previewThumbnail=null, outputImage=null,thumbnail=null,baseImage=null, listing = 0) {
+  async save(pk, previewThumbnail=null, outputImage=null,thumbnail=null,baseImage=null, listing = 0,binary = null) {
     let page = null;
     if (pk) {
       page = await this.em.Pages.get(pk);
     }
-    //let binaryPk = PrimaryKey.getPrimaryKey(binary);
+    let binaryPk = binary?PrimaryKey.getPrimaryKey(binary):null;
     if (!page) {
       page = new Pages();
     } else {
