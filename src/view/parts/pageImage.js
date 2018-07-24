@@ -1,4 +1,6 @@
 import vu from "../../util/viewUtil";
+import {PageProcessor} from '../../processor/pageProcessor'
+import {ImageActionCreator} from '../../action/imageActionCreator'
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 export class PageImage  extends BaseView {

@@ -13,6 +13,8 @@ import {
 import {SettingData} from '../../settings/exportSettings'
 import {SettingActionCreator} from '../../reduxy/action/settingActionCreator'
 import {PageImage} from './pageImage'
+import {PageProcessor} from '../../processor/pageProcessor'
+import {ImageActionCreator} from '../../action/imageActionCreator'
 export class PageImages extends BaseView {
   constructor() {
     super("PageImages", "PageImages");
@@ -21,6 +23,8 @@ export class PageImages extends BaseView {
     this.thumbnails = {};
     this.dummyClass = "Dummy";
     this.pages = [];
+    this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
+    this.storePagesKey = PageActionCreator.getStorePagesKey();
     for(let index = 0; index < 32; index++){
       this.pages.push(new PageImage(index))
     }
@@ -32,36 +36,36 @@ export class PageImages extends BaseView {
   async onViewShow(store, actionData) {
 
     let pageFrames = [];
-    if (store[this.storeKey]) {
+    const pagesData = store[this.storePagesKey]
+
+    if (pagesData) {
+      await this.showPages(pagesData);
+      console.log("Thumnails onViewShow");
+    }
+    if (store[this.storePagesKey]) {
       pageFrames = this.buildPageFrames(store[this.storeKey]);
-      if (store.imagesData) {
-        //await this.showImages(store.imagesData);
-        console.log("Thumnails onViewShow");
-      }
 
       this.prePatch("#" + this.childId, div(this.childId, pageFrames));
     } else {
       return;
     }
   }
-  async showImages(imageDatas) {
-    const images = [];
-    for (let imageData of imageDatas) {
-      if (!imageData || !imageData.isOnPage) {
-        continue;
-      }
-      const imageEntity = imageData.imageEntity;
-      const pk = imageEntity.getPk();
+  async showPages(pagesData) {
+    const pages = [];
+    const index =0;
+    for (let pageEntity of pagesData) {
+      const pk = pageEntity.getPk();
       let vnode = this.thumbnails[pk];
       if (!vnode) {
-        vnode = await this.thumbnail.crateDataLine(imageData).catch((e) => {
+        vnode = await this.thumbnail.crateDataLine(pageData).catch((e) => {
           console.log(e)
         });
         this.thumbnails[pk] = vnode;
       }
-      images.push(vnode);
+      pages.push(vnode);
+      index++;
     }
-    this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, images));
+    this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, pages));
   }
   creatPageFrame(pageNo,dummyClass,isRight){
     const frameParts = [];
