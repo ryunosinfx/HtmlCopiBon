@@ -15,12 +15,14 @@ import {
 import {
   ImageActionCreator
 } from '../../reduxy/action/imageActionCreator'
+import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
 export class Thumbnail extends BaseView {
-  constructor(parent) {
+  constructor(parent,draggableArea) {
     super("Thumnail" + parent.id, "Thumnail");
     this.parent = parent;
+    this.draggableArea = draggableArea;
     this.ip = this.ms.ip;
-    this.dragElm = null;
+    this.draggableArea.nowSelectedElm = null;
     this.thumbnail_block = "thumbnail_block";
   }
   setImageData(imageData) {
@@ -46,7 +48,7 @@ export class Thumbnail extends BaseView {
         return
       }
       elm.style.opacity = '0.4'; // this / event.target is the source nodevent.
-      this.dragElm = elm;
+      this.draggableArea.nowSelectedElm = elm;
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/html', elm.innerHTML);
       let dragIcon = document.createElement('img');
@@ -92,12 +94,15 @@ export class Thumbnail extends BaseView {
       if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
         return
       }
-      if (this.dragElm !== elm) {
-        console.log('sort handleDrop imagePKmove:'+this.dragElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
+      const nowSelectedElm = this.draggableArea.nowSelectedElm;
+      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_image && nowSelectedElm !== elm) {
+        const selectedPk = nowSelectedElm.dataset.pk;
+        console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
         const action = ImageActionCreator.creatSortImagesAction(this, {
-          imagePKmove: this.dragElm.dataset.pk,
+          imagePKmove: selectedPk,
           imagePKdrop:elm.dataset.pk
         });
+        this.draggableArea.nowSelectedElm = null;
         this.dispatch(action);
       }
       return false;
@@ -109,6 +114,8 @@ export class Thumbnail extends BaseView {
       if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
         return
       }
+      const nowSelectedElm = this.draggableArea.nowSelectedElm;
+      console.log('handleDragEnd imagePKmove:'+nowSelectedElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
       elm.style.opacity = '1';
       const childNodes = elm.parentNode.childNodes;
       for(let i = 0; i< childNodes.length ; i++) {
@@ -122,7 +129,7 @@ export class Thumbnail extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-        console.log('sort selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
+        console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
         const action = ImageActionCreator.creatDetailAction(this, {
           imagePK: elm.dataset.pk
         });
@@ -161,8 +168,8 @@ export class Thumbnail extends BaseView {
         dragend:this.handleDragEnd(),
         click:this.selectImage()
       },
-      dataset:{pk:pk},
-      props:{ "draggable":"true",'data-pk':pk}
+      dataset:{pk:pk,is_image:true},
+      props:{ "draggable":"true"}
     }, [delButton, div("", ["image_block"],[imgVnode]), textVnode]);
     return rowVnode;
   }

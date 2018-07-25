@@ -70,7 +70,7 @@ export class PageProcessor {
     await this.pm.move(fromPk,toPk)
   }
   async add(imagePk,pagePk){
-    await this.pm.addPage(imagePｋ,pagePk);
+    await this.pm.addPage(imagePk,pagePk);
   }
   async remove(pagePk) {
     await this.pm.remove(pagePk);

@@ -59,19 +59,19 @@ export class ActionDispatcherImple {
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
       for (let reducer of reducers) {
-        console.log("A01 dispatch type:"+type+"/reducer.reduce:"+reducer.reduce)
+        //console.log("A01 dispatch type:"+type+"/reducer.reduce:"+reducer.reduce)
         await reducer.preReduce(store, action).catch((e)=>{console.log(e)});
         await reducer.reduce(store, action).catch((e)=>{console.log(e)});
         await reducer.postReduce(store, action).catch((e)=>{console.log(e)});
       }
-      console.log("A01 dispatch type:"+type+"/"+reducers[0])
-      console.log(reducers[0])
+      //console.log("A01 dispatch type:"+type+"/"+reducers[0])
+      //console.log(reducers[0])
       Store.setStore(store);
     }
 
     let storeB = Store.getStore(storeKey);
-    console.log("A01 dispatch ")
-    console.log(storeB)
+    //console.log("A01 dispatch ")
+    //console.log(storeB)
     // console.log('dispatch02');
     if (store.isOrverride && action.data.view) {
       targetView = action.data.views;
@@ -91,7 +91,7 @@ export class ActionDispatcherImple {
     for (let activeView of activViews) {
       const store = Store.getStore(storeKey);
       if (targetView === activeView) {
-        console.log('A0 callUpdate update id:' + activeView.id);
+        //console.log('A0 callUpdate update id:' + activeView.id);
         const promise = targetView.updateReactiveTheTargetView(store, actionData);
         if(promise){
           if(!promise.then){
@@ -103,7 +103,7 @@ export class ActionDispatcherImple {
           console.log(activeView);
         }
       } else {
-         console.log('A0 callUpdate updateReactive id:' + activeView.id);
+         //console.log('A0 callUpdate updateReactive id:' + activeView.id);
         const promise = activeView.updateReactive(store, actionData);
         if(promise){
           if(!promise.then){
@@ -112,16 +112,10 @@ export class ActionDispatcherImple {
           }
           promise.then(()=>{},(e)=>{console.log(e)});
         }else{
-          console.log(activeView);
+          //console.log(activeView);
         }
       }
     }
     // console.log('callUpdate END----------------');
-  }
-  callUpdateExecute(func) {
-    func();
-    // this.updateQueue.push(func);
-    // const funcExecute = this.updateQueue.unshift();
-    // setTimeout(funcExecute,0);
   }
 }

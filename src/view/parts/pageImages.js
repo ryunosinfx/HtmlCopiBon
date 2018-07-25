@@ -17,7 +17,7 @@ import {PageProcessor} from '../../reduxy/processor/pageProcessor'
 import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
 import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
 export class PageImages extends BaseView {
-  constructor() {
+  constructor(draggableArea) {
     super("PageImages", "PageImages");
     this.storeKey = SettingActionCreator.getStoreKey();
     this.childId = this.id + "child";
@@ -27,8 +27,9 @@ export class PageImages extends BaseView {
     this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
     this.storePagesKey = PageActionCreator.getStorePagesKey();
     for(let index = 0; index < 32; index++){
-      this.pages.push(new PageImage(this.index))
+      this.pages.push(new PageImage(this,index,draggableArea))
     }
+    this.dropElm = null;
   }
   render() {
     this.setting = div(this.id + "child", ["PageImagesA"], this.id);
@@ -37,7 +38,7 @@ export class PageImages extends BaseView {
   async onViewShow(store, actionData) {
     let pageFrames = [];
     const pagesData = store[this.storePagesKey];
-    const imagesData = store[this.storeImagesKey]
+    const imagesData = store[this.storeImagesKey];
     if(imagesData && pagesData){
       //alert("onViewShow"+imagesData.length+"/"+pagesData.length+"/");
       await this.showPages(pagesData,imagesData);
@@ -48,6 +49,10 @@ export class PageImages extends BaseView {
     } else {
       return;
     }
+  }
+  addPage(imagesPk,pagePk){
+      const action = PageActionCreator.creatAddPageAction(this, {imagePk: imagesPk,pagePk:pagePk});
+      this.dispatch(action);
   }
   async showPages(pagesData,imagesData) {
     const imageMap = {};

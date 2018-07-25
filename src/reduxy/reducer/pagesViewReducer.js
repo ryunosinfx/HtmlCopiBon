@@ -22,6 +22,7 @@ export class PagesViewReducer extends BaseReducer {
     this.pageRemoveAction = PageActionCreator.creatRemovePageAction();
     this.pagesResetAction = PageActionCreator.creatResetPagesAction();
     this.pagesSortAction = PageActionCreator.creatSortPagesAction();
+    this.atatch(this.dropImageToPageAction);
     this.atatch(this.pageAddAction);
     this.atatch(this.pageRemoveAction);
     this.atatch(this.pagesResetAction);

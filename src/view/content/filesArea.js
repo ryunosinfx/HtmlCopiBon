@@ -14,13 +14,16 @@ import {ImageDetail} from "../parts/imageDetail";
 import {PageImages} from "../parts/pageImages";
 import {Thumbnails} from "../parts/thumbnails";
 import {ImageViewReducer} from '../../reduxy/reducer/imageViewReducer'
+import {PagesViewReducer} from '../../reduxy/reducer/pagesViewReducer'
 export class FilesArea extends BaseView {
   constructor() {
     super("FilesArea", "FilesArea");
+    this.nowSelectedElm = null;
     this.imageDetail = new ImageDetail();
-    this.pageImages = new PageImages();
-    this.thumbnails = new Thumbnails();
+    this.pageImages = new PageImages(this);
+    this.thumbnails = new Thumbnails(this);
     ImageViewReducer.register();
+    PagesViewReducer.register();
   }
 
   onAfterAttach(store, data) {

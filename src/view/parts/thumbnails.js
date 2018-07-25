@@ -14,11 +14,11 @@ import {
 import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
 import {Thumbnail} from './thumbnail'
 export class Thumbnails extends BaseView {
-  constructor() {
+  constructor(draggableArea) {
     super("Thumnails", "Thumnails");
     this.imageAreaID = "thumnailsImageArea";
     this.thumbnails = {};
-    this.thumbnail = new Thumbnail(this);
+    this.thumbnail = new Thumbnail(this, draggableArea);
     this.ip = this.ms.ip;
   }
   onAfterAttach(store, data) {
@@ -43,14 +43,14 @@ export class Thumbnails extends BaseView {
       const imageEntity = imageData.imageEntity;
       const pk = imageEntity.getPk();
       let vnode = this.thumbnails[pk];
-      if(!vnode){
+      if (!vnode) {
         vnode = await this.thumbnail.crateDataLine(imageData).catch((e) => {
           console.log(e)
-        })
+        });
         this.thumbnails[pk] = vnode;
       }
       images.push(vnode);
     }
-    this.prePatch("#"+this.imageAreaID, div(this.imageAreaID, images));
+    this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, images));
   }
 }

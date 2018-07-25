@@ -4,6 +4,9 @@ export class PagesManager {
   constructor(entityManager) {
     this.em = entityManager;
   }
+  setTitleManager(tm){
+    this.tm = tm;
+  }
   async loadFromImagePk(pk) {
     const pagePk = PrimaryKey.getPrimaryKey(pk);
     const pageEntity = await this.em.get(pagePk);
@@ -27,7 +30,7 @@ export class PagesManager {
       await this.em.Pages.delete(pk);
     }
   }
-  async addPage(imagePｋ,pagePk) {
+  async addPage(imagePk,pagePk) {
     const title = await this.tm.load();
     const pages = title.pages;
     const pageEntitis = [];
@@ -38,12 +41,13 @@ export class PagesManager {
       }
       const pageEntity = await this.em.get(pk);
       if(pk === pagePk){
-        const imageEntity = await this.em.get(imagePｋ);
+        const imageEntity = await this.em.get(imagePk);
         const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
         const binaryEntity = await this.em.get(thumbnailEntity.binary);
-        pageEntity.previewThumbnail = thumbnailEntity.binary;
-        pageEntity.outputImage = imageEntity.binary;
+        pageEntity.thumbnail = imageEntity.thumbnail;
+        pageEntity.baseImage = imagePk;
         await this.em.Pages.save(pageEntity);
+        //alert("pagePk:"+pagePk+"/imagePｋ:"+imagePk+JSON.stringify(pageEntity));
       }
       pageEntitis.push(pageEntity);
     }

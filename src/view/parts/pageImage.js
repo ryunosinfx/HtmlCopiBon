@@ -1,63 +1,74 @@
 import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
-import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
+import {
+  a,
+  div,
+  li,
+  ul,
+  img,
+  span,
+  input,
+  label
+} from "../../util/reactive/base/vtags";
 import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
-export class PageImage  extends BaseView {
-  constructor(parent,listing) {
-    super("PageImage"+listing, "PageImage");
-    this.parent=parent;ss
+import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
+export class PageImage extends BaseView {
+  constructor(parent, listing,draggableArea) {
+    super("PageImage" + listing, "PageImage");
+    this.parent = parent;
+    this.draggableArea = draggableArea;
     this.listing = listing;
     this.thumbnail = null;
-    this.dragElm = null;
     this.thumbnail_block = "thumbnail_block";
   }
   render() {
-    this.button = div(this.id+"child", "PageImageA", this.id);
-    return div( [this.button]);
+    this.button = div(this.id + "child", "PageImageA", this.id);
+    return div([this.button]);
   }
   async setPageData(pageData, imageData) {
     this.pageData = pageData;
     this.imageData = imageData;
-    if(!pageData){
-      return ;
+    if (!pageData) {
+      return;
     }
-    this.pk=pageData.getPk();
-    const binaryEntity = this.imageData?this.imageData.binaryEntity:null;
+    this.pk = pageData.getPk();
+    const binaryEntity = this.imageData
+      ? this.imageData.binaryEntity
+      : null;
     //console.log(binaryEntity)
-    if(binaryEntity){
-        const data = {
-          name: "page_"+this.listing,
-          ab: binaryEntity._ab,
-          type: binaryEntity.type
-        }
-        this.thumbnail = await this.ip.createImageNodeByData(data).catch((e) => {
-          console.log(e);
-          throw e
-        });
-        this.dragElm = this.thumbnail;
+    if (binaryEntity) {
+      const data = {
+        name: "page_" + this.listing,
+        ab: binaryEntity._ab,
+        type: binaryEntity.type
+      }
+      this.thumbnail = await this.ip.createImageNodeByData(data).catch((e) => {
+        console.log(e);
+        throw e
+      });
+      this.draggableArea.nowSelectedElm = this.thumbnail;
     }
   }
   render(store, actionData) {
     return div('', "");
   }
   remove(pk) {
-    return (event) => {
+    return(event) => {
       if (window.confirm("delete ok?")) {
-        const action = PageActionCreator.creatRemoveAction(this, {
-          imagePKforDelete: pk
-        });
+        const action = PageActionCreator.creatRemoveAction(this, {imagePKforDelete: pk});
         this.dispatch(action);
       }
     }
   }
   handleDragStart(dragImageSrc) {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      this.parent.dropElm = null;
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.style.opacity = '0.4'; // this / event.target is the source nodevent.
-      this.dragElm = elm;
+      this.draggableArea.nowSelectedElm = elm;
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/html', elm.innerHTML);
       let dragIcon = document.createElement('img');
@@ -67,9 +78,9 @@ export class PageImage  extends BaseView {
     }
   }
   handleDragOver() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       event.preventDefault(); // Necessary. Allows us to drop.
@@ -78,99 +89,98 @@ export class PageImage  extends BaseView {
     }
   }
   handleDragEnter() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.classList.add('over');
     }
   }
   handleDragLeave() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.classList.remove('over'); // this / event.target is previous target element.
     }
   }
   handleDrop(event) {
-    return (event) => {
+    return(event) => {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
-      if (this.dragElm !== elm) {
+      this.parent.dropElm = elm;
+      const nowSelectedElm = this.draggableArea.nowSelectedElm;
+      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm !== elm) {
+        const selectedPk = nowSelectedElm.dataset.pk;
         const targetPk = elm.dataset.pk;
-        console.log('sort handleDrop imagePKmove:'+this.dragElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
-        const action = PageActionCreator.creatSortImagesAction(this, {
-          imagePKmove: this.dragElm.dataset.pk,
-          imagePKdrop: targetPk
-        });
-        this.dispatch(action);
+        if(nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_image){
+          //console.log('sort handleDrop imagePKmove:' + nowSelectedElm+ "/elm.dataset.pk:" + elm.dataset.pk+"/targetPk:"+targetPk)
+          const action = PageActionCreator.creatAddPageAction(this, {
+            imagePk: selectedPk,
+            pagePk: targetPk
+          });
+          this.dispatch(action);
+        }else if(nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_page){
+          //console.log('sort handleDrop imagePKmove:' + nowSelectedElm + "/elm.dataset.pk:" + elm.dataset.pk+"/targetPk:"+targetPk)
+          const action = PageActionCreator.creatSortPagesAction(this, {
+            imagePKmove: selectedPk,
+            imagePKdrop: targetPk
+          });
+          //alert("creatSortPagesAction :"+nowSelectedElm.dataset.is_image+"/pk:"+nowSelectedElm.dataset.pk+"/"+elm.dataset.pk+"/"+elm.dataset.is_page);
+          this.dispatch(action);
+        }
       }
       return false;
     }
   }
-  createDropAction(targetPk){
-    const pageNum = this.parent.pageNum;
-    for(let index =0 ;index < pageNum;index++){
-      const page=this.parent.pages[index];
-      if(page.pk === targetPk){
-        const action = PageActionCreator.creatSortImagesAction(this, {
-          fromPk: this.dragElm.dataset.pk,
-          toPk: targetPk
-        });
-        return acion;
-      }else {
-        const action = PageActionCreator.creatSortImagesAction(this, {
-          fromPk: this.dragElm.dataset.pk
-        });
-        return acion;
-
-      }
-    }
-  }
   handleDragEnd(event) {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      const targetPk = elm.dataset.pk;
+      console.log('sort handleDrop imagePKmove:' + this.draggableArea.nowSelectedElm + "/elm.dataset.pk:" + elm.dataset.pk+"/targetPk:"+targetPk)
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
+      this.parent.draggableArea.nowSelectedElm = null;
       elm.style.opacity = '1';
       const childNodes = elm.parentNode.childNodes;
-      for(let i = 0; i< childNodes.length ; i++) {
+      for (let i = 0; i < childNodes.length; i++) {
         const col = childNodes[i];
         col.classList.remove('over');
       }
     }
   }
   selectImage(event) {
-    return (event) => {
+    return(event) => {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-        console.log('sort selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
-        const action = PageActionCreator.creatDetailAction(this, {
-          imagePK: elm.dataset.pk
-        });
+      console.log('sort selecImage imagePKmove:/elm.dataset.pk:' + elm.dataset.pk+"/"+this.pageData)
+      if (this.pageData && this.pageData.baseImage) {
+        const action = ImageActionCreator.creatDetailAction(this, {imagePK: this.pageData.baseImage});
         this.dispatch(action);
+      }
       return false;
     }
   }
   renderVnode(parent) {
     const pageEntity = this.pageData;
-    if(!pageEntity){
-        return div(this.id,["aaaaaaa"+this.listing],"null"+this.listing);
+    if (!pageEntity) {
+      return div(this.id, ["aaaaaaa" + this.listing], "null" + this.listing);
     }
     console.log("A binaryEntity 01")
-    const src = this.thumbnail? this.thumbnail.src :null;
-    console.log("A binaryEntity 02")
+    const src = this.thumbnail
+      ? this.thumbnail.src
+      : null;
+    //console.log("A binaryEntity 02")
     const imgVnode = img(this.pk + "_page", "", "", src, {});
-    console.log("A binaryEntity 03")
+    //console.log("A binaryEntity 03")
     const rowVnode = div(this.id, ["thumbnail_block"], {
       on: {
         dragstart: this.handleDragStart(src),
@@ -178,18 +188,20 @@ export class PageImage  extends BaseView {
         dragenter: this.handleDragEnter(),
         dragleave: this.handleDragLeave(),
         drop: this.handleDrop(),
-        dragend:this.handleDragEnd(),
-        click:this.selectImage()
+        dragend: this.handleDragEnd(),
+        click: this.selectImage()
       },
-      dataset:{pk:this.pk},
-      props:{ "draggable":"true",'data-pk':pk}
-    }, [div("", ["page_block"],[imgVnode])]);
-    console.log("A binaryEntity 04")
-
+      dataset: {
+        pk: this.pk,
+        is_page:true
+      },
+      props: {
+        "draggable": "true"
+      }
+    }, [div("", ["page_block"], [imgVnode])]);
+    //console.log("A binaryEntity 04")
     parent.prePatch("#" + this.id, rowVnode);
     return rowVnode;
   }
-  createVnode(){
-
-  }
+  createVnode() {}
 }

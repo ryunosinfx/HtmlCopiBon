@@ -53,7 +53,7 @@ export class ImageViewReducer extends BaseReducer {
       store[this.storePagesKey] = await this.loadPages();
     } else if (this.imagesChangeTitleAction.type === action.type) {
       store[this.storePagesKey] = await this.loadPages();
-    } else if (this.imagesDetailAction.type === action.type) {loadImages
+    } else if (this.imagesDetailAction.type === action.type) {
       store["imagesDetailData"] = await this.loadAImage(action.data.imagePK);
     }
     return store;

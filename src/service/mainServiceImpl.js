@@ -38,6 +38,7 @@ export class MainServiceImpl {
     this.sm = new SettingsManager(this.em,this.opm );
     this.tm = new TitleManager(this.em);
     this.im.setTitleManager(this.tm);
+    this.pm.setTitleManager(this.tm);
     await this.tm.load();
   }
 
