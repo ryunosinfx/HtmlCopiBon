@@ -133,7 +133,7 @@ export class Thumbnail extends BaseView {
   async crateDataLine(imageData) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
-    console.log(binaryEntity)
+    //console.log(binaryEntity)
     const data = {
       name: imageEntity.name,
       ab: binaryEntity._ab,

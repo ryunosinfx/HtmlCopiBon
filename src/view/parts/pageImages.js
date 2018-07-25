@@ -27,7 +27,7 @@ export class PageImages extends BaseView {
     this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
     this.storePagesKey = PageActionCreator.getStorePagesKey();
     for(let index = 0; index < 32; index++){
-      this.pages.push(new PageImage(index))
+      this.pages.push(new PageImage(this.index))
     }
   }
   render() {
@@ -35,14 +35,13 @@ export class PageImages extends BaseView {
     return div(this.id, "PageImages", [this.setting]);
   }
   async onViewShow(store, actionData) {
-
     let pageFrames = [];
     const pagesData = store[this.storePagesKey];
     const imagesData = store[this.storeImagesKey]
     if(imagesData && pagesData){
       //alert("onViewShow"+imagesData.length+"/"+pagesData.length+"/");
       await this.showPages(pagesData,imagesData);
-      console.log("Pages onViewShow");
+      //console.log("Pages onViewShow");
     }else if (store[this.storeKey]) {
       pageFrames = this.buildPageFrames(store[this.storeKey]);
       this.prePatch("#" + this.childId, div(this.childId, pageFrames));
@@ -102,6 +101,7 @@ export class PageImages extends BaseView {
     frames.push(this.buildPreviewButtons());
     const startPage = setting.startPage;
     const pageNum = setting.pageNum*1;//SettingData.pageNums[setting.pageNum-1]*1;
+    this.pageNum = pageNum;
     const pageDirection = setting.pageDirection;
     const isPageDirectionR2L = pageDirection === "r2l";
     const isPageStartR = startPage === "r";

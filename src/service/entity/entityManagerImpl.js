@@ -30,7 +30,7 @@ export class EntityManagerImpl {
     return await this.saveExecute(data,true);
   }
   async saveExecute(data,isWithBinary) {
-    console.log("EntityManagerImpl save!!A!! data:" + data+"/isWithBinary:"+isWithBinary);
+    //console.log("EntityManagerImpl save!!A!! data:" + data+"/isWithBinary:"+isWithBinary);
     if (!data || !data.getEntityName || !data.getPk || data.getEntityName() !== this.entityName) {
       console.log("EntityManagerImpl save!!Z!! data:" + data.getEntityName() + "/this.entityName:" + this.entityName + "/data.getPk:" + data.getPk);
       return;

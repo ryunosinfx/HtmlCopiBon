@@ -3,8 +3,9 @@ import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
 import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
 export class PageImage  extends BaseView {
-  constructor(listing) {
+  constructor(parent,listing) {
     super("PageImage"+listing, "PageImage");
+    this.parent=parent;ss
     this.listing = listing;
     this.thumbnail = null;
     this.dragElm = null;
@@ -20,8 +21,9 @@ export class PageImage  extends BaseView {
     if(!pageData){
       return ;
     }
+    this.pk=pageData.getPk();
     const binaryEntity = this.imageData?this.imageData.binaryEntity:null;
-    console.log(binaryEntity)
+    //console.log(binaryEntity)
     if(binaryEntity){
         const data = {
           name: "page_"+this.listing,
@@ -32,6 +34,7 @@ export class PageImage  extends BaseView {
           console.log(e);
           throw e
         });
+        this.dragElm = this.thumbnail;
     }
   }
   render(store, actionData) {
@@ -101,14 +104,34 @@ export class PageImage  extends BaseView {
         return
       }
       if (this.dragElm !== elm) {
+        const targetPk = elm.dataset.pk;
         console.log('sort handleDrop imagePKmove:'+this.dragElm.dataset.pk+"/elm.dataset.pk:"+elm.dataset.pk)
         const action = PageActionCreator.creatSortImagesAction(this, {
           imagePKmove: this.dragElm.dataset.pk,
-          imagePKdrop:elm.dataset.pk
+          imagePKdrop: targetPk
         });
         this.dispatch(action);
       }
       return false;
+    }
+  }
+  createDropAction(targetPk){
+    const pageNum = this.parent.pageNum;
+    for(let index =0 ;index < pageNum;index++){
+      const page=this.parent.pages[index];
+      if(page.pk === targetPk){
+        const action = PageActionCreator.creatSortImagesAction(this, {
+          fromPk: this.dragElm.dataset.pk,
+          toPk: targetPk
+        });
+        return acion;
+      }else {
+        const action = PageActionCreator.creatSortImagesAction(this, {
+          fromPk: this.dragElm.dataset.pk
+        });
+        return acion;
+
+      }
     }
   }
   handleDragEnd(event) {
@@ -144,10 +167,9 @@ export class PageImage  extends BaseView {
         return div(this.id,["aaaaaaa"+this.listing],"null"+this.listing);
     }
     console.log("A binaryEntity 01")
-    const pk = pageEntity.getPk();
-    console.log("A binaryEntity 02")
     const src = this.thumbnail? this.thumbnail.src :null;
-    const imgVnode = img(pk + "_page", "", "", src, {});
+    console.log("A binaryEntity 02")
+    const imgVnode = img(this.pk + "_page", "", "", src, {});
     console.log("A binaryEntity 03")
     const rowVnode = div(this.id, ["thumbnail_block"], {
       on: {
@@ -159,7 +181,7 @@ export class PageImage  extends BaseView {
         dragend:this.handleDragEnd(),
         click:this.selectImage()
       },
-      dataset:{pk:pk},
+      dataset:{pk:this.pk},
       props:{ "draggable":"true",'data-pk':pk}
     }, [div("", ["page_block"],[imgVnode])]);
     console.log("A binaryEntity 04")
