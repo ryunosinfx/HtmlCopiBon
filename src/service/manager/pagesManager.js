@@ -30,6 +30,21 @@ export class PagesManager {
       await this.em.Pages.delete(pk);
     }
   }
+  async removeImage(pk) {
+    const target = await this.em.Pages.get(pk);
+    if (target) {
+      if (target.previewThumbnail) {
+        await this.em.Binary.delete(target.previewThumbnail);
+      }
+      if (target.outputImage) {
+        await this.em.Binary.delete(target.outputImage);
+      }
+      target.baseImage = null;
+      target.thumbnail = null;
+      await this.em.Pages.save(target);
+    }
+  }
+
   async addPage(imagePk,pagePk) {
     const title = await this.tm.load();
     const pages = title.pages;

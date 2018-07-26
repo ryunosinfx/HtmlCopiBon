@@ -18,17 +18,21 @@ export class PageProcessor {
     const pages = title.pages;
     const pageEntitis = [];
     const delPages = [];
-    let pageCount = 0;
+    const addPageAsNew = {};
     if (pages.length > pageNum) {
       for (let index in pages) {
         const pk = pages[index];
-        if (!pk) {
+        if (!pk || typeof pk !== "string") {
+          addPageAsNew[index] = true;
           continue;
         }
         const pageEntity = await this.em.get(pk);
+        if (!pageEntity) {
+          addPageAsNew[index] = true;
+          continue;
+        }
         pageEntitis.push(pageEntity);
-        pageCount++;
-        if (pageCount > pageNum) {
+        if (index >= pageNum) {
           delPages.push(pk);
         }
       }
@@ -41,6 +45,13 @@ export class PageProcessor {
             this.pm.remove(delTarget);
             break;
           }
+        }
+      }
+      for(let keyIndex in addPageAsNew){
+        const index = keyIndex*1;
+        if (index < pageNum) {
+          const addOne = await this.pm.save(null, null, null,null,null, index);
+          pages[index] = addOne.getPk();
         }
       }
     } else {
@@ -73,6 +84,6 @@ export class PageProcessor {
     await this.pm.addPage(imagePk,pagePk);
   }
   async remove(pagePk) {
-    await this.pm.remove(pagePk);
+    await this.pm.removeImage(pagePk);
   }
 }

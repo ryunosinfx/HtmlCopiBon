@@ -185,6 +185,9 @@ canvas.hidden {
   border: 1px solid #fdd;
   width: 150px;
   cursor: pointer;
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
 }
 
 .thumbnail_block.over {
@@ -337,7 +340,7 @@ canvas.hidden {
   width: 110px;
   border: 2px solid rgb(126, 100, 113);
   background-color: rgb(172, 148, 185);
-  height: 130px;
+  height: 140px;
   margin: 0.0em auto;
 }
 
@@ -346,12 +349,21 @@ canvas.hidden {
 }
 
 .PageFrame .Page .thumbnail_block {
-  height: 100px;
+  height: 104px;
   width: 106px;
   margin: 0.0em auto;
   background-color: rgb(227, 209, 238);
 }
-
+.thumbnail_block .image_block{
+  height: 104px;
+  width: 106px;
+  margin: 0.0em auto;
+  background-color: rgb(227, 209, 238);
+  cursor: pointer;
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
+}
 .MenuFrame {
   display: flex;
 }
@@ -367,4 +379,7 @@ canvas.hidden {
   border-top-right-radius: 10px;
   background-color: rgb(170, 185, 210);
   color: rgb(222, 240, 222)
+}
+.display_none{
+  display:none;
 }

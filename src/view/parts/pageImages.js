@@ -83,7 +83,8 @@ export class PageImages extends BaseView {
     }
     const sideClass="pageFrameHeader"+(isRight?"Right":"Left");
     frameParts.push(div("",["pageFrameHeader",sideClass],pageNo+""))
-    const page = this.pages[pageNo].renderVnode(this);
+    const pageIndex = pageNo-1;
+    const page = this.pages[pageIndex].renderVnode(this);
     frameParts.push(page)
     return frameParts;
   }

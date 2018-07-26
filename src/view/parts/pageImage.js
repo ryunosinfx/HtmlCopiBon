@@ -38,9 +38,6 @@ export class PageImage extends BaseView {
       ? this.imageData.binaryEntity
       : null;
     if (binaryEntity) {
-  console.log('setPageData=======================')
-  console.log(binaryEntity)
-  console.log(binaryEntity._ab)
       const data = {
         name: "page_" + this.listing,
         ab: binaryEntity._ab,
@@ -50,8 +47,9 @@ export class PageImage extends BaseView {
         console.log(e);
         throw e
       });
-      console.log(this.thumbnail)
-      //this.draggableArea.nowSelectedElm = this.thumbnail;
+      // console.log(this.thumbnail)
+    }else{
+      this.thumbnail = null;
     }
   }
   render(store, actionData) {
@@ -124,22 +122,27 @@ export class PageImage extends BaseView {
       if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm !== elm) {
         const selectedPk = nowSelectedElm.dataset.pk;
         const targetPk = elm.dataset.pk;
-        if(nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_image){
+        if(selectedPk && nowSelectedElm.dataset.is_image){
           //console.log('sort handleDrop imagePKmove:' + nowSelectedElm+ "/elm.dataset.pk:" + elm.dataset.pk+"/targetPk:"+targetPk)
           const action = PageActionCreator.creatAddPageAction(this, {
             imagePk: selectedPk,
             pagePk: targetPk
           });
           this.dispatch(action);
-        }else if(nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_page){
+        }else if(selectedPk && nowSelectedElm.dataset.is_page){
           //console.log('sort handleDrop imagePKmove:' + nowSelectedElm + "/elm.dataset.pk:" + elm.dataset.pk+"/targetPk:"+targetPk)
           const action = PageActionCreator.creatSortPagesAction(this, {
-            imagePKmove: selectedPk,
-            imagePKdrop: targetPk
+            formPk: selectedPk,
+            toPk: targetPk
           });
           //alert("creatSortPagesAction :"+nowSelectedElm.dataset.is_image+"/pk:"+nowSelectedElm.dataset.pk+"/"+elm.dataset.pk+"/"+elm.dataset.is_page);
           this.dispatch(action);
         }
+      }
+      const childNodes = elm.parentNode.childNodes;
+      for (let i = 0; i < childNodes.length; i++) {
+        const col = childNodes[i];
+        col.classList.remove('over');
       }
       return false;
     }
@@ -152,7 +155,7 @@ export class PageImage extends BaseView {
       if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
-      this.parent.draggableArea.nowSelectedElm = null;
+      this.draggableArea.nowSelectedElm = null;
       elm.style.opacity = '1';
       const childNodes = elm.parentNode.childNodes;
       for (let i = 0; i < childNodes.length; i++) {
@@ -179,16 +182,14 @@ export class PageImage extends BaseView {
     if (!pageEntity) {
       return div(this.id, ["aaaaaaa" + this.listing], "null" + this.listing);
     }
-    console.log("A binaryEntity 01")
     const src = this.thumbnail
       ? this.thumbnail.src
-      : null;
-      console.log(!!src)
-      console.log(src)
-      //alert("A binaryEntity 01")
-    //console.log("A binaryEntity 02")
-    const imgVnode = img(this.pk + "_page", [""], "", src, {});
-    //console.log("A binaryEntity 03")
+      : "aaaaaaaaaaaaaaaaaaa";
+    const imageBg = !src?{}:{
+      "background-image":"url("+src+")"
+    };
+    //console.log("★A binaryEntity 01"+this.id+"/src:"+src)
+    //const imgVnode = img(this.pk + "_page", [""], "", src, {});
     const rowVnode = div(this.id, ["thumbnail_block"], {
       on: {
         dragstart: this.handleDragStart(src),
@@ -203,11 +204,11 @@ export class PageImage extends BaseView {
         pk: this.pk,
         is_page:true
       },
+      style:imageBg,
       props: {
         "draggable": "true"
       }
-    }, [div("", ["page_block"], [imgVnode])]);
-    //console.log("A binaryEntity 04")
+    }, [div("", ["page_block"], [])]);
     parent.prePatch("#" + this.id, rowVnode);
     return rowVnode;
   }

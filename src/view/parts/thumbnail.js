@@ -96,15 +96,28 @@ export class Thumbnail extends BaseView {
         return
       }
       const nowSelectedElm = this.draggableArea.nowSelectedElm;
-      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm.dataset.is_image && nowSelectedElm !== elm) {
+      if(nowSelectedElm && nowSelectedElm.dataset.pk  && nowSelectedElm !== elm){
         const selectedPk = nowSelectedElm.dataset.pk;
-        console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
-        const action = ImageActionCreator.creatSortImagesAction(this, {
-          imagePKmove: selectedPk,
-          imagePKdrop:elm.dataset.pk
-        });
+        if (nowSelectedElm.dataset.is_image) {
+          //console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
+          const action = ImageActionCreator.creatSortImagesAction(this, {
+            imagePKmove: selectedPk,
+            imagePKdrop:elm.dataset.pk
+          });
+          this.dispatch(action);
+        }else if (nowSelectedElm.dataset.is_page) {
+          //console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
+          const action = PageActionCreator.creatRemovePageAction(this, {
+            pagePk: selectedPk
+          });
+          this.dispatch(action);
+        }
         this.draggableArea.nowSelectedElm = null;
-        this.dispatch(action);
+      }
+      const childNodes = elm.parentNode.childNodes;
+      for (let i = 0; i < childNodes.length; i++) {
+        const col = childNodes[i];
+        col.classList.remove('over');
       }
       return false;
     }
@@ -138,7 +151,7 @@ export class Thumbnail extends BaseView {
       return false;
     }
   }
-  async crateDataLine(imageData,isOnPage=false) {
+  async crateDataLine(imageData,pagesMap ={}) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
     //console.log(binaryEntity)
@@ -152,15 +165,14 @@ export class Thumbnail extends BaseView {
       throw e
     });
     const pk = imageEntity.getPk();
-    const imgVnode = img(pk + "_image", imageEntity.name, imageEntity.name, imgElm.src, {});
+    // const imgVnode = img(pk + "_image", imageEntity.name, imageEntity.name, imgElm.src, {});
     const textVnode = span(pk + "_text", ["thumbnail_text"], imageData.imageText);
     const delButton = span(pk + "_delButton", ["delButton"], {
       on: {
         "click": this.remove(pk)
       }
     }, "x");
-    const addClass= isOnPage?this.displayNone:'';
-    const rowVnode = div("", [this.thumbnail_block,addClass], {
+    const imageVnode = div("", ["image_block"], {
       on: {
         dragstart: this.handleDragStart(imgElm.src),
         dragover: this.handleDragOver(),
@@ -170,9 +182,28 @@ export class Thumbnail extends BaseView {
         dragend:this.handleDragEnd(),
         click:this.selectImage()
       },
+      style:{
+        "background-image":"url("+imgElm.src+")"
+      },
       dataset:{pk:pk,is_image:true},
       props:{ "draggable":"true"}
-    }, [delButton, div("", ["image_block"],[imgVnode]), textVnode]);
+    });
+    const classObj = {};
+    classObj[this.displayNone] = pagesMap[pk];
+    const rowVnode = div("", [this.thumbnail_block],{
+      on: {
+        dragstart: this.handleDragStart(imgElm.src),
+        dragover: this.handleDragOver(),
+        dragenter: this.handleDragEnter(),
+        dragleave: this.handleDragLeave(),
+        drop: this.handleDrop(),
+        dragend:this.handleDragEnd(),
+        click:this.selectImage()
+      },
+      class:classObj,
+      dataset:{pk:pk,is_image:true},
+      props:{ "draggable":"true"}
+    }, [delButton,imageVnode , textVnode]);
     return rowVnode;
   }
 }

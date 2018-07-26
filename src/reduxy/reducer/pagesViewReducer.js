@@ -42,13 +42,14 @@ export class PagesViewReducer extends BaseReducer {
       store[this.storeKey] = await this.add(action.data.imagePk,action.data.pagePk);
       store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pageRemoveAction.type === action.type) {
-      store[this.storeKey] = this.remove(action.data.pagePk);
+      store[this.storeKey] = await this.remove(action.data.pagePk);
       store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pagesResetAction.type === action.type) {
-      store[this.storeKey] = this.reset();
+      store[this.storeKey] = await this.reset();
       store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pagesSortAction.type === action.type) {
-      store[this.storeKey] = this.move(action.data.formPk,action.data.toPk);
+      store[this.storeKey] = await this.move(action.data.formPk,action.data.toPk);
+      store[this.storeImagesKey] = await this.loadImages();
     }
     return store;
   }
