@@ -1,6 +1,6 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
-const imgRe = /^image\/.+/;
+const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
   constructor() {
     this.canvas = vu.createCanvas(null, "hidden");
@@ -50,6 +50,9 @@ export class ImageProcessor {
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 
+      if(!type){
+        type="application/octet-stream";
+      }
       if (type && type.match(imgRe)) {
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
         imgElm.onload = () => {

@@ -24,6 +24,7 @@ export class Thumbnail extends BaseView {
     this.ip = this.ms.ip;
     this.draggableArea.nowSelectedElm = null;
     this.thumbnail_block = "thumbnail_block";
+    this.displayNone = "display_none";
   }
   setImageData(imageData) {
     this.imageData = imageData;
@@ -137,7 +138,7 @@ export class Thumbnail extends BaseView {
       return false;
     }
   }
-  async crateDataLine(imageData) {
+  async crateDataLine(imageData,isOnPage=false) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
     //console.log(binaryEntity)
@@ -158,7 +159,8 @@ export class Thumbnail extends BaseView {
         "click": this.remove(pk)
       }
     }, "x");
-    const rowVnode = div("", [this.thumbnail_block], {
+    const addClass= isOnPage?this.displayNone:'';
+    const rowVnode = div("", [this.thumbnail_block,addClass], {
       on: {
         dragstart: this.handleDragStart(imgElm.src),
         dragover: this.handleDragOver(),

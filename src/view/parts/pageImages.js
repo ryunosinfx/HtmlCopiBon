@@ -59,7 +59,7 @@ export class PageImages extends BaseView {
     for(let imageData of imagesData){
       const imageEntity = imageData.imageEntity;
       const imagePk = imageEntity.getPk();
-      imageMap[imageMap] = imageData;
+      imageMap[imagePk] = imageData;
     }
     let index =0;
     for (let pageEntity of pagesData) {
@@ -71,6 +71,7 @@ export class PageImages extends BaseView {
       const pk = pageEntity.getPk();
       const imagePk = pageEntity.baseImage;
       const imageData = imageMap[imagePk];
+      //alert("id:"+imageData+"/imagePk:"+imagePk)
       await page.setPageData(pageEntity,imageData);
       page.renderVnode(this);
     }

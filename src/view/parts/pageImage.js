@@ -1,4 +1,5 @@
 import vu from "../../util/viewUtil";
+import bc from "../../util/binaryConverter";
 import {BaseView} from "../../util/reactive/baseView";
 import {
   a,
@@ -15,6 +16,7 @@ import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
 export class PageImage extends BaseView {
   constructor(parent, listing,draggableArea) {
     super("PageImage" + listing, "PageImage");
+    this.ip = this.ms.ip;
     this.parent = parent;
     this.draggableArea = draggableArea;
     this.listing = listing;
@@ -35,8 +37,10 @@ export class PageImage extends BaseView {
     const binaryEntity = this.imageData
       ? this.imageData.binaryEntity
       : null;
-    //console.log(binaryEntity)
     if (binaryEntity) {
+  console.log('setPageData=======================')
+  console.log(binaryEntity)
+  console.log(binaryEntity._ab)
       const data = {
         name: "page_" + this.listing,
         ab: binaryEntity._ab,
@@ -46,7 +50,8 @@ export class PageImage extends BaseView {
         console.log(e);
         throw e
       });
-      this.draggableArea.nowSelectedElm = this.thumbnail;
+      console.log(this.thumbnail)
+      //this.draggableArea.nowSelectedElm = this.thumbnail;
     }
   }
   render(store, actionData) {
@@ -178,8 +183,11 @@ export class PageImage extends BaseView {
     const src = this.thumbnail
       ? this.thumbnail.src
       : null;
+      console.log(!!src)
+      console.log(src)
+      //alert("A binaryEntity 01")
     //console.log("A binaryEntity 02")
-    const imgVnode = img(this.pk + "_page", "", "", src, {});
+    const imgVnode = img(this.pk + "_page", [""], "", src, {});
     //console.log("A binaryEntity 03")
     const rowVnode = div(this.id, ["thumbnail_block"], {
       on: {
