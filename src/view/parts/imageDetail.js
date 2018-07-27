@@ -30,6 +30,7 @@ export class ImageDetail extends BaseView {
       this.startY = 0;
       this.offsetX = 0;
       this.offsetY = 0;
+      this.isOnScroll = false;
     }
   }
 
@@ -47,7 +48,8 @@ export class ImageDetail extends BaseView {
       on: {
         mousedown: this.onMouseOn(),
         mousemove: this.onMouseMove()
-      }
+      },
+      style:{top:0,left:0}
     }, image));
   }
   click() {

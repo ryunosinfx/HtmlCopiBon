@@ -33,6 +33,8 @@ export class Thumbnails extends BaseView {
     this.storePagesKey = PageActionCreator.getStorePagesKey();
     this.pageMap = {}
     this.thumbnails_block = 'thumbnails_block';
+    this.draggableArea = draggableArea;
+    this.draggableArea.cancelPageArea = null;
   }
   onAfterAttach(store, data) {
     const action = ImageActionCreator.creatLoadImagesAction(this, {});
@@ -63,21 +65,23 @@ export class Thumbnails extends BaseView {
   handleDragEnter() {
     return (event) => {
       const elm = event.target;
-      alert("handleDragEnter!")
       if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
         return
       }
       elm.classList.add('over');
+      this.draggableArea.cancelPageArea = elm;
     }
   }
   handleDragLeave() {
     return (event) => {
       const elm = event.target;
-      alert("handleDragLeave!")
       if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
         return
       }
       elm.classList.remove('over'); // this / event.target is previous target element.
+      setTimeout(()=>{
+        this.draggableArea.cancelPageArea = null;
+      },100)
     }
   }
   handleDrop(event) {
@@ -85,28 +89,6 @@ export class Thumbnails extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-      if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
-        return
-      }
-      alert("handleDrop!")
-      const nowSelectedElm = this.draggableArea.nowSelectedElm;
-      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm !== elm) {
-        const selectedPk = nowSelectedElm.dataset.pk;
-        if (nowSelectedElm.dataset.is_page) {
-          console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
-          const action = PageActionCreator.creatRemovePageAction(this, {
-            pagePk: selectedPk
-          });
-          this.dispatch(action);
-        }
-        this.parent.nowSelectedElm = null;
-      }
-      elm.classList.remove('over');
-      const childNodes = elm.childNodes;
-      for (let i = 0; i < childNodes.length; i++) {
-        const col = childNodes[i];
-        col.classList.remove('over');
-      }
       return false;
     }
   }
@@ -114,7 +96,7 @@ export class Thumbnails extends BaseView {
   reset() {
     return (event) => {
       const elm = event.target;
-      alert("reset!")
+      //alert("reset!")
       }
   }
   async showImages(imageDatas) {
@@ -132,9 +114,12 @@ export class Thumbnails extends BaseView {
     }
     const newVnode = div(this.imageAreaID,[this.thumbnails_block], {
         on: {
+          dragover: this.handleDragEnter(),
+          dragstart: this.handleDragEnter(),
           dragenter: this.handleDragEnter(),
           dragleave: this.handleDragLeave(),
           drop: this.handleDrop(),
+          dragend:this.handleDrop(),
           click:this.reset()
         },
         props:{ "draggable":"true"}

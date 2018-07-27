@@ -162,6 +162,12 @@ export class PageImage extends BaseView {
         const col = childNodes[i];
         col.classList.remove('over');
       }
+      if (this.draggableArea.cancelPageArea!==null) {
+        const action = PageActionCreator.creatRemovePageAction(this, {
+          pagePk: targetPk
+        });
+        this.dispatch(action);
+      }
     }
   }
   selectImage(event) {
