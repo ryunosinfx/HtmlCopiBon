@@ -176,6 +176,16 @@ canvas.hidden {
 
 .Thumnails {
   flex-direction: column;
+  background-color: rgba(200, 200, 200, 1);
+}
+.Thumnails .thumbnails_block {
+  background-color: rgba(220, 220, 220, 1);
+  border: 0px dotted #dfd;
+  height:100%;
+}
+.Thumnails .thumbnails_block.over {
+  background-color: rgba(190, 190, 190, 0.8);
+  border: 2px dotted #dfd;
 }
 
 .thumbnail_block {

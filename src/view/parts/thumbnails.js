@@ -1,6 +1,10 @@
 import vu from "../../util/viewUtil";
-import {BaseView} from "../../util/reactive/baseView";
-import {Sorter} from "../../util/sorter";
+import {
+  BaseView
+} from "../../util/reactive/baseView";
+import {
+  Sorter
+} from "../../util/sorter";
 import {
   a,
   div,
@@ -11,9 +15,15 @@ import {
   input,
   label
 } from "../../util/reactive/base/vtags";
-import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
-import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
-import {Thumbnail} from './thumbnail'
+import {
+  ImageActionCreator
+} from '../../reduxy/action/imageActionCreator'
+import {
+  PageActionCreator
+} from '../../reduxy/action/pageActionCreator'
+import {
+  Thumbnail
+} from './thumbnail'
 export class Thumbnails extends BaseView {
   constructor(draggableArea) {
     super("Thumnails", "Thumnails");
@@ -21,7 +31,8 @@ export class Thumbnails extends BaseView {
     this.thumbnail = new Thumbnail(this, draggableArea);
     this.ip = this.ms.ip;
     this.storePagesKey = PageActionCreator.getStorePagesKey();
-    this.pageMap= {}
+    this.pageMap = {}
+    this.thumbnails_block = 'thumbnails_block';
   }
   onAfterAttach(store, data) {
     const action = ImageActionCreator.creatLoadImagesAction(this, {});
@@ -39,15 +50,72 @@ export class Thumbnails extends BaseView {
     return div(this.imageAreaID, "Thumnails");
   }
   updatePageMap(pagesData) {
-    for(let key in this.pageMap){
+    for (let key in this.pageMap) {
       delete this.pageMap[key];
     }
-    for(let pageEntity of pagesData){
+    for (let pageEntity of pagesData) {
       const imagePk = pageEntity.baseImage;
-      if(imagePk){
+      if (imagePk) {
         this.pageMap[imagePk] = true;
       }
     }
+  }
+  handleDragEnter() {
+    return (event) => {
+      const elm = event.target;
+      alert("handleDragEnter!")
+      if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
+        return
+      }
+      elm.classList.add('over');
+    }
+  }
+  handleDragLeave() {
+    return (event) => {
+      const elm = event.target;
+      alert("handleDragLeave!")
+      if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
+        return
+      }
+      elm.classList.remove('over'); // this / event.target is previous target element.
+    }
+  }
+  handleDrop(event) {
+    return (event) => {
+      event.stopPropagation(); // Stops some browsers from redirecting.
+      event.preventDefault();
+      const elm = event.target;
+      if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
+        return
+      }
+      alert("handleDrop!")
+      const nowSelectedElm = this.draggableArea.nowSelectedElm;
+      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm !== elm) {
+        const selectedPk = nowSelectedElm.dataset.pk;
+        if (nowSelectedElm.dataset.is_page) {
+          console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
+          const action = PageActionCreator.creatRemovePageAction(this, {
+            pagePk: selectedPk
+          });
+          this.dispatch(action);
+        }
+        this.parent.nowSelectedElm = null;
+      }
+      elm.classList.remove('over');
+      const childNodes = elm.childNodes;
+      for (let i = 0; i < childNodes.length; i++) {
+        const col = childNodes[i];
+        col.classList.remove('over');
+      }
+      return false;
+    }
+  }
+
+  reset() {
+    return (event) => {
+      const elm = event.target;
+      alert("reset!")
+      }
   }
   async showImages(imageDatas) {
     const images = [];
@@ -57,11 +125,21 @@ export class Thumbnails extends BaseView {
       }
       const imageEntity = imageData.imageEntity;
       const pk = imageEntity.getPk();
-      const vnode = await this.thumbnail.crateDataLine(imageData,this.pageMap).catch((e) => {
-          console.log(e)
-        });
+      const vnode = await this.thumbnail.crateDataLine(imageData, this.pageMap).catch((e) => {
+        console.log(e)
+      });
       images.push(vnode);
     }
-    this.prePatch("#" + this.imageAreaID, div(this.imageAreaID, images));
+    const newVnode = div(this.imageAreaID,[this.thumbnails_block], {
+        on: {
+          dragenter: this.handleDragEnter(),
+          dragleave: this.handleDragLeave(),
+          drop: this.handleDrop(),
+          click:this.reset()
+        },
+        props:{ "draggable":"true"}
+      },
+      images)
+    this.prePatch("#" + this.imageAreaID, newVnode);
   }
 }
