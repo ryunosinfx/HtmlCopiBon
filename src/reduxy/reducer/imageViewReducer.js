@@ -9,10 +9,7 @@ export class ImageViewReducer extends BaseReducer {
   constructor() {
     super();
     this.ms = MainService.getInstance();
-    this.vpl = this.ms.getViewPartsLoader();
-    this.ip = this.ms.ip;
     this.em = this.ms.em;
-    this.pm = this.ms.pm;
     this.im = this.ms.im;
     this.tm = this.ms.tm;
     this.imagAddAction = ImageActionCreator.creatAddAction();

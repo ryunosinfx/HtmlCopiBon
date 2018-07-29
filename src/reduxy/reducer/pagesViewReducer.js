@@ -14,10 +14,7 @@ export class PagesViewReducer extends BaseReducer {
   constructor() {
     super();
     this.ms = MainService.getInstance();
-    this.vpl = this.ms.getViewPartsLoader();
-    this.em = this.ms.em;
     this.im = this.ms.im;
-    this.tm = this.ms.tm;
     this.pageAddAction = PageActionCreator.creatAddPageAction();
     this.pageRemoveAction = PageActionCreator.creatRemovePageAction();
     this.pagesResetAction = PageActionCreator.creatResetPagesAction();

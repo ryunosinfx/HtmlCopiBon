@@ -11,10 +11,6 @@ let progressViewReducer = null;
 export class ProgressViewReducer extends BaseReducer {
   constructor() {
     super();
-    this.ms = MainService.getInstance();
-    this.vpl = this.ms.getViewPartsLoader();
-    this.em = this.ms.em;
-    this.tm = this.ms.tm;
     this.progressBarAddAction = ProgressActionCreator.creatAddAction();
     this.progressBarRemoveAction = ProgressActionCreator.creatRemoveAction();
     this.progressBarUpdateAction = ProgressActionCreator.creatUpdateAction();

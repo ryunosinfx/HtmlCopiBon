@@ -16,8 +16,6 @@ export class SettingViewReducer extends BaseReducer {
   constructor() {
     super();
     this.ms = MainService.getInstance();
-    this.vpl = this.ms.getViewPartsLoader();
-    this.em = this.ms.em;
     this.tm = this.ms.tm;
     this.sm = this.ms.sm;
     this.opm = this.ms.opm;
