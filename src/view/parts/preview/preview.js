@@ -21,7 +21,6 @@ export class Preview extends BaseView {
     this.currentSetNum = 0;
     this.closeActionType ="closePreview";
   }
-
   onAfterAttach(store, data) {
     PreviewReducer.register();
   }
@@ -47,12 +46,28 @@ export class Preview extends BaseView {
         this.list = list;
       }else if(type === this.closeActionType){
         this.list = null;
+
+        return;
       }
 
       //console.log("Preview onViewShow");
     }
   }
-
+  beClose(){
+    return (event)=>{
+      const action = PreviewActionCreator.creatCloseAction();
+      this.despatch()
+    }
+  }
+  goNext(){
+    return (event)=>{
+      const action = PreviewActionCreator.creatCloseAction();
+      this.despatch()
+    }
+  }
+  closePreview(){
+    this.currentVnode.elm.style.display = 'none';
+  }
   showPreview(list,isSingle) {
       this.currentVnode.elm.style.display = 'block';
       this.prePatch(".preview", div("", ["preview"], {
@@ -63,7 +78,6 @@ export class Preview extends BaseView {
       this.prePatch(".previewPoints", div("", ["previewPoints"], {}, progress + "%"));
       if (isComple) {
         setTimeout(() => {
-          this.currentVnode.elm.style.display = 'none';
         }, 1000)
       }
     } else {
@@ -76,6 +90,7 @@ export class Preview extends BaseView {
       this.prePatch(".previewPoints", div("", ["previewPoints"], {}, this.initPoint));
     }
   }
+
   buildPreview(){
       this.currentVnode.elm.style.display = 'block';
   }
