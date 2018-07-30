@@ -31,22 +31,31 @@ export class PreviewProcessor {
     }
     return retPreviews;
   }
-  shapeListBySets(previews,isSingle,settings){
-    const retSetLis = [];
-    for(){
-
+  shapeListBySets(previews, isSingle, settings) {
+    if (isSingle) {
+      const retSetLis = [];
+      let pageNo = 1;
+      for (const binary of previews) {
+        retSetLis.push(this.cratePageData(pageNo, false, false, binary));
+        pageNo++;
+      }
+      return retSetLis;
+    } else {
+      return buildPageFrames(setting, previews);
     }
-
   }
-  cratePageData(pageNo,className,isRight,binaries){
+  cratePageData(pageNo, className, isRight, binaries) {
     return {
-      
+      pageNo: pageNo,
+      isDummy: className === this.dummyClass,
+      isRight: isRight,
+      binary: binaries[pageNo - 1]
     }
   }
-  buildPageFrames(setting,binaries) {
+  buildPageFrames(setting, binaries) {
     const retFrames = [];
     const startPage = setting.startPage;
-    const pageNum = setting.pageNum*1;//SettingData.pageNums[setting.pageNum-1]*1;
+    const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
     this.pageNum = pageNum;
     const pageDirection = setting.pageDirection;
     const isPageDirectionR2L = pageDirection === "r2l";
@@ -59,7 +68,7 @@ export class PreviewProcessor {
       : isMatchPageStartSide
         ? 0
         : 1;
-    const totalPageFrame = frameNum*1 + addPageNum*1;
+    const totalPageFrame = frameNum * 1 + addPageNum * 1;
     const dummyClass = this.dummyClass;
     const pageClass = "Page";
     const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR)
@@ -69,12 +78,10 @@ export class PreviewProcessor {
     const rightStartDummyClass = isPageStartR || isStartFull
       ? ""
       : dummyClass;
-    const leftEndDummyClass = (isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L)))
-    || (!isOdd && (!isPageDirectionR2L||isStartFull))
+    const leftEndDummyClass = (isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L))) || (!isOdd && (!isPageDirectionR2L || isStartFull))
       ? ""
       : dummyClass;
-    const rightEndDummyClass = (isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L)))
-    || (!isOdd && (isPageDirectionR2L||isStartFull))
+    const rightEndDummyClass = (isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L))) || (!isOdd && (isPageDirectionR2L || isStartFull))
       ? ""
       : dummyClass;
     const lastIndex = totalPageFrame - 1;
@@ -108,18 +115,18 @@ export class PreviewProcessor {
             : isStartFull
               ? 2
               : 1
-        pagePair.push(this.cratePageData(leftPageNoFirst,leftStartDummyClass,false,binaries));
-        pagePair.push(this.cratePageData(rightPageNoFirst,rightStartDummyClass,true,binaries));
+        pagePair.push(this.cratePageData(leftPageNoFirst, leftStartDummyClass, false, binaries));
+        pagePair.push(this.cratePageData(rightPageNoFirst, rightStartDummyClass, true, binaries));
         pageOffset = 1;
         pagNo += isStartFull
           ? 2
           : 1;
       } else if (index === lastIndex) {
-        pagePair.push(this.creatPageFrame(leftPageNo,leftEndDummyClass,false,binaries));
-        pagePair.push(this.creatPageFrame(rightPageNo,rightEndDummyClass,true,binaries)));
+        pagePair.push(this.creatPageFrame(leftPageNo, leftEndDummyClass, false, binaries));
+        pagePair.push(this.creatPageFrame(rightPageNo, rightEndDummyClass, true, binaries)));
       } else {
-        pagePair.push(this.creatPageFrame(leftPageNo,"",false,binaries));
-        pagePair.push(this.creatPageFrame(rightPageNo,"",true,binaries));
+        pagePair.push(this.creatPageFrame(leftPageNo, "", false, binaries));
+        pagePair.push(this.creatPageFrame(rightPageNo, "", true, binaries));
         pagNo += 2;
       }
     }

@@ -1,15 +1,7 @@
-import {
-  PreviewActionCreator
-} from '../action/previewActionCreator'
-import {
-  SettingActionCreator
-} from '../action/settingActionCreator'
-import {
-  MainService
-} from "../../service/mainService"
-import {
-  BaseReducer
-} from '../../util/reactive/baseReducer'
+import {PreviewActionCreator} from '../action/previewActionCreator'
+import {SettingActionCreator} from '../action/settingActionCreator'
+import {MainService} from "../../service/mainService"
+import {BaseReducer} from '../../util/reactive/baseReducer'
 import {PreviewProcessor} from '../processor/previewProcessor'
 let previewReducer = null;
 export class PreviewReducer extends BaseReducer {
@@ -32,23 +24,43 @@ export class PreviewReducer extends BaseReducer {
       previewReducer = new PreviewReducer();
     }
   }
-  async reduce(store, action) {
+  this.previewOpenAction.data.isSingle async reduce(store, action) {
     if (this.previewOpenAction.type === action.type) {
-      store[this.storeKey] = {isSingle:this.previewOpenAction.data.isSingle,list:await this.loadPreviews()};
-      store[this.storeSettingKey] = await this.load().catch((e)=>{console.log(e)}) ;
+      const isSingle = this.previewOpenAction.data.isSingle;
+      const setting = await this.load().catch((e) => {
+        console.log(e)
+      });
+      const list = await this.loadPreviews(setting, isSingle);
+      store[this.storeKey] = {
+        isSingle: isSingle,
+        list: list,
+        setting: setting
+      };
     } else if (this.previewCloseAction.type === action.type) {
-      store[this.storeKey] = {type:this.previewOpenAction.type};
+      store[this.storeKey] = {
+        type: this.previewOpenAction.type
+      };
     } else if (this.previewNextAction.type === action.type) {
-      store[this.storeKey] = {isSingle:this.previewOpenAction.data.isSingle,nowSetNum:this.previewOpenAction.data.isSingle,type:this.previewOpenAction.type};
+      store[this.storeKey] = {
+        isSingle: this.previewOpenAction.data.isSingle,
+        nowSetNum: this.previewOpenAction.data.isSingle,
+        type: this.previewOpenAction.type
+      };
     } else if (this.previewBackAction.type === action.type) {
-      store[this.storeKey] = {isSingle:this.previewOpenAction.data.isSingle,nowSetNum:this.previewOpenAction.data.isSingle,type:this.previewOpenAction.type};
+      store[this.storeKey] = {
+        isSingle: this.previewOpenAction.data.isSingle,
+        nowSetNum: this.previewOpenAction.data.isSingle,
+        type: this.previewOpenAction.type
+      };
     }
     return store;
   }
   async loadPreviews() {
     return await this.pvp.loadPreviews();
   }
-  async load() {
-    return this.tm.loadSettings();
+  async load(setting, isSingle) {
+    const binaries = await this.tm.loadSettings();
+    const list = this.pvp.shapeListBySets(binaries, isSingle, setting);
+    return list;
   }
 }
