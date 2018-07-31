@@ -1,8 +1,18 @@
-import {PreviewActionCreator} from '../action/previewActionCreator'
-import {SettingActionCreator} from '../action/settingActionCreator'
-import {MainService} from "../../service/mainService"
-import {BaseReducer} from '../../util/reactive/baseReducer'
-import {PreviewProcessor} from '../processor/previewProcessor'
+import {
+  PreviewActionCreator
+} from '../action/previewActionCreator'
+import {
+  SettingActionCreator
+} from '../action/settingActionCreator'
+import {
+  MainService
+} from "../../service/mainService"
+import {
+  BaseReducer
+} from '../../util/reactive/baseReducer'
+import {
+  PreviewProcessor
+} from '../processor/previewProcessor'
 let previewReducer = null;
 export class PreviewReducer extends BaseReducer {
   constructor() {
@@ -24,7 +34,7 @@ export class PreviewReducer extends BaseReducer {
       previewReducer = new PreviewReducer();
     }
   }
-  this.previewOpenAction.data.isSingle async reduce(store, action) {
+  async reduce(store, action) {
     if (this.previewOpenAction.type === action.type) {
       const isSingle = this.previewOpenAction.data.isSingle;
       const setting = await this.load().catch((e) => {

@@ -1,5 +1,7 @@
 import vu from "../../../util/viewUtil";
-import {BaseView} from "../../../util/reactive/baseView";
+import {
+  BaseView
+} from "../../../util/reactive/baseView";
 import {
   a,
   div,
@@ -10,11 +12,16 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-import {PreviewReducer} from '../../../reduxy/reducerpPreviewReducer'
+import {
+  PreviewReducer
+} from '../../../reduxy/reducer/previewReducer'
+import {
+  PreviewActionCreator
+} from '../../../reduxy/action/previewActionCreator'
 export class Preview extends BaseView {
   constructor() {
     super("Preview", "Preview");
-    this.storeKey = PreviewReducer.getStorePreviewKey();
+    this.storeKey = PreviewActionCreator.getStorePreviewKey();
     this.previewOpenAction = PreviewActionCreator.creatOpenAction();
     this.previewCloseAction = PreviewActionCreator.creatCloseAction();
     this.previewNextAction = PreviewActionCreator.creatNextAction();
@@ -29,12 +36,12 @@ export class Preview extends BaseView {
   }
   render() {
     const viewFrame = div('', ['previewFrame'], [
-      div('', ['previewLeft'], "<")div('', ['preview'], {
+      div('', ['previewLeft'], "<"),
+      div('', ['preview'], {
         style: {
           width: "100%"
         }
       }),
-
       div('', ['previewRight'], ">")
     ])
     return div("" ["PreviewView"], {
@@ -42,14 +49,20 @@ export class Preview extends BaseView {
         display: "none"
       },
       on: {
-        click: this.beClose();
+        click: this.beClose()
       }
     }, [viewFrame]);
   }
   async onViewShow(store, actionData) {
     const data = store[this.storeKey];
     if (data) {
-      const {isSingle, nowSetNum, list, type, setting} = data;
+      const {
+        isSingle,
+        nowSetNum,
+        list,
+        type,
+        setting
+      } = data;
       if (setting) {
         this.setting = setting;
       }
@@ -86,21 +99,27 @@ export class Preview extends BaseView {
     }
   }
   beClose() {
-    return(event) => {
-      const action = PreviewActionCreator.creatCloseAction(this, {isSingle: this.isSingle});
-      this.despatch()
+    return (event) => {
+      const action = PreviewActionCreator.creatCloseAction(this, {
+        isSingle: this.isSingle
+      });
+      this.dispatch()
     }
   }
   goNext() {
-    return(event) => {
-      const action = PreviewActionCreator.creatNextAction(this, {isSingle: this.isSingle});
-      this.despatch(action);
+    return (event) => {
+      const action = PreviewActionCreator.creatNextAction(this, {
+        isSingle: this.isSingle
+      });
+      this.dispatch(action);
     }
   }
   goBack() {
-    return(event) => {
-      const action = PreviewActionCreator.creatBackAction(this, {isSingle: this.isSingle});
-      this.despatch(action);
+    return (event) => {
+      const action = PreviewActionCreator.creatBackAction(this, {
+        isSingle: this.isSingle
+      });
+      this.dispatch(action);
     }
   }
   closePreview() {
@@ -111,31 +130,35 @@ export class Preview extends BaseView {
     let mainView = null;
     const left = div('', ['previewLeft'], {
       on: {
-        click: (isR2L?  this.goNext() : this.goBack())
+        click: (isR2L ? this.goNext() : this.goBack())
       }
     }, "<");
     const right = div('', ['previewRight'], {
       on: {
-        click: (isR2L? this.goBack() : this.goNext())
+        click: (isR2L ? this.goBack() : this.goNext())
       }
     }, ">");
     if (isSingle) {
       const dataUri = bc.arrayBuffer2DataURI(pageSet._ab);
-      const imgVnode = img(pk + "_preview", "preview_"+pageNo, "", dataUri, {});
-
-      mainView = div('', ['preview'], {
+      const imgVnode = img(pk + "_preview", "preview_" + pageNo, "", dataUri, {});
+      mainView = div('', ['preview_single'], {
         style: {
           width: "100%"
         }
-      },[imgVnode]);
+      }, [imgVnode]);
     } else {
       //
-      const lNo = pageNo*2+(isR2L?1:0);
-      const rNo = pageNo*2+(isR2L?0:1);
+      const lNo = pageNo * 2 + (isR2L ? 1 : 0);
+      const rNo = pageNo * 2 + (isR2L ? 0 : 1);
       const dataUriL = bc.arrayBuffer2DataURI(pageSet[0]._ab);
-      const imgVnodeL = img(pk + "_preview", "preview_"+pageNo ,"", dataUriL, {});
+      const imgVnodeL = img(pk + "_preview", "preview_" + lNo, "", dataUriL, {});
       const dataUriR = bc.arrayBuffer2DataURI(pageSet[1]._ab);
-      const imgVnodeR = img(pk + "_preview", "preview_"+pageNo, "", dataUriR, {});
+      const imgVnodeR = img(pk + "_preview", "preview_" + rNo, "", dataUriR, {});
+      mainView = div('', ['preview_dual'], {
+        style: {
+          width: "50%"
+        }
+      }, [imgVnodeL, imgVnodeR]);
     }
     this.prePatch(".preview", div("", ["preview"], {
       style: {

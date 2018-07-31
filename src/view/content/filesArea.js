@@ -12,6 +12,7 @@ import {
 } from "../../util/reactive/base/vtags";
 import {ImageDetail} from "../parts/imageDetail";
 import {PageImages} from "../parts/pageImages";
+import {Preview} from '../parts/preview/preview'
 import {Thumbnails} from "../parts/thumbnails";
 import {ImageViewReducer} from '../../reduxy/reducer/imageViewReducer'
 import {PagesViewReducer} from '../../reduxy/reducer/pagesViewReducer'
@@ -22,6 +23,7 @@ export class FilesArea extends BaseView {
     this.imageDetail = new ImageDetail();
     this.pageImages = new PageImages(this);
     this.thumbnails = new Thumbnails(this);
+    this.preview = new Preview();
     ImageViewReducer.register();
     PagesViewReducer.register();
   }
@@ -30,6 +32,7 @@ export class FilesArea extends BaseView {
     this.imageDetail.attach(this);
     this.pageImages.attach(this);
     this.thumbnails.attach(this);
+    this.preview.attach(this);
   }
   render() {
     return div("", [

@@ -123,13 +123,13 @@ export class PreviewProcessor {
           : 1;
       } else if (index === lastIndex) {
         pagePair.push(this.creatPageFrame(leftPageNo, leftEndDummyClass, false, binaries));
-        pagePair.push(this.creatPageFrame(rightPageNo, rightEndDummyClass, true, binaries)));
+        pagePair.push(this.creatPageFrame(rightPageNo, rightEndDummyClass, true, binaries));
       } else {
         pagePair.push(this.creatPageFrame(leftPageNo, "", false, binaries));
         pagePair.push(this.creatPageFrame(rightPageNo, "", true, binaries));
         pagNo += 2;
       }
     }
+    return retFrames;
   }
-  return retFrames;
 }
