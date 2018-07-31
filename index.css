@@ -225,7 +225,7 @@ canvas.hidden {
   left: -30px;
 }
 
-.ProgressBar {
+.ProgressBar,.Preview {
   top: 0;
   left: 0;
   position: fixed;
@@ -236,7 +236,7 @@ canvas.hidden {
   display: none;
 }
 
-.ProgressBar>div {
+.ProgressBar>div{
   position: fixed;
   top: 50%;
   left: 5%;
@@ -264,7 +264,42 @@ canvas.hidden {
   height: 3em;
   background-color: rgb(120, 231, 194);
 }
+.Preview>div {
+  position: fixed;
+  top: 2%;
+  left: 2%;
+  margin: 0 auto;
+  width: 96%;
+  height: 96%;
+  background-color: rgb(197, 206, 213);
+  z-index: 1000;
+  padding: 0px
+}
+.Preview>div img{
+  max-width: 100%;
+  max-height: 100%;
+}
+.Preview>div .previewLeft,.Preview>div .previewRight{
+  cursor: pointer;
+  padding: 10px;
+  background-color: rgba(95, 161, 212, 0.58);
 
+}
+.Preview>div .previewInfo{
+  font-size: 60%;
+  padding: 10px;
+  color: rgb(43, 176, 218)
+}
+
+.Preview>div .preview_dual {
+  display: flex;
+}
+.Preview>div .preview_dual .previewImageFrame{
+  width:50%;
+}
+.Preview>div .preview_dual .previewImageFrame.dummy{
+  background-color: rgb(174, 181, 184);
+}
 .TitleSettings {
   background-color: rgb(159, 117, 242);
   padding: 0.1em;

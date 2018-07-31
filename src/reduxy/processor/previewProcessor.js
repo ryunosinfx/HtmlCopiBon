@@ -12,16 +12,16 @@ export class PreviewProcessor {
     const pages = title.pages;
     const retPreviews = [];
     for (let pagePk of pages) {
-      const pageEnitity = this.em.get(pagePk);
+      const pageEnitity = await this.em.get(pagePk);
       const previewThumbnail = pageEnitity.previewThumbnail;
       const baseImage = pageEnitity.baseImage;
       if (baseImage) {
-        if (outputImage) {
-          const binaryEntity = this.em.get(outputImage);
+        if (previewThumbnail) {
+          const binaryEntity = await this.em.get(previewThumbnail);
           retPreviews.push(binaryEntity);
         } else {
-          const imageEntity = this.em.get(baseImage);
-          const binaryEntity = this.em.get(imageEntity.binary);
+          const imageEntity = await this.em.get(baseImage);
+          const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
           retPreviews.push(binaryEntity);
         }
@@ -31,20 +31,19 @@ export class PreviewProcessor {
     }
     return retPreviews;
   }
-  shapeListBySets(previews, isSingle, settings) {
+  shapeListBySets(previews, isSingle, setting) {
     if (isSingle) {
       const retSetLis = [];
-      let pageNo = 1;
-      for (const binary of previews) {
-        retSetLis.push(this.cratePageData(pageNo, false, false, binary));
-        pageNo++;
+      for (let index in previews) {
+        retSetLis.push(this.cratePageData(index*1+1, false, false, previews));
       }
       return retSetLis;
     } else {
-      return buildPageFrames(setting, previews);
+      return this.buildPageFrames(setting, previews);
     }
   }
   cratePageData(pageNo, className, isRight, binaries) {
+
     return {
       pageNo: pageNo,
       isDummy: className === this.dummyClass,
@@ -122,11 +121,11 @@ export class PreviewProcessor {
           ? 2
           : 1;
       } else if (index === lastIndex) {
-        pagePair.push(this.creatPageFrame(leftPageNo, leftEndDummyClass, false, binaries));
-        pagePair.push(this.creatPageFrame(rightPageNo, rightEndDummyClass, true, binaries));
+        pagePair.push(this.cratePageData(leftPageNo, leftEndDummyClass, false, binaries));
+        pagePair.push(this.cratePageData(rightPageNo, rightEndDummyClass, true, binaries));
       } else {
-        pagePair.push(this.creatPageFrame(leftPageNo, "", false, binaries));
-        pagePair.push(this.creatPageFrame(rightPageNo, "", true, binaries));
+        pagePair.push(this.cratePageData(leftPageNo, "", false, binaries));
+        pagePair.push(this.cratePageData(rightPageNo, "", true, binaries));
         pagNo += 2;
       }
     }

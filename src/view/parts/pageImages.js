@@ -12,7 +12,7 @@ import {
 } from "../../util/reactive/base/vtags";
 import {SettingData} from '../../settings/exportSettings'
 import {SettingActionCreator} from '../../reduxy/action/settingActionCreator'
-import {PageImage} from './pageImage'    
+import {PageImage} from './pageImage'
 import {PageProcessor} from '../../reduxy/processor/pageProcessor'
 import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
 import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
@@ -91,14 +91,14 @@ export class PageImages extends BaseView {
   }
   showPreviewSingle(){
     return (event)=>{
-      alert("showPreviewSingle");
+      //alert("showPreviewSingle");
       const action = PreviewActionCreator.creatOpenAction(this, {isSingle: true});
       this.dispatch(action);
     }
   }
   showPreviewDual(){
     return (event)=>{
-      alert("showPreviewDual");
+      //alert("showPreviewDual");
       const action = PreviewActionCreator.creatOpenAction(this, {isSingle: false});
       this.dispatch(action);
     }

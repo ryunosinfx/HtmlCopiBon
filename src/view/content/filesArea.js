@@ -38,7 +38,8 @@ export class FilesArea extends BaseView {
     return div("", [
       div(this.pageImages.id),
       div(this.thumbnails.id),
-      div(this.imageDetail.id)
+      div(this.imageDetail.id),
+      div(this.preview.id)
     ])
 
   }
