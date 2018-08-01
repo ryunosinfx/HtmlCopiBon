@@ -1,10 +1,15 @@
 import {Sorter} from "../../util/sorter";
+import {ImageResizer} from "../../util/image/imageResizer";
 import {MainService} from "../../service/mainService"
 export class PreviewProcessor {
   constructor() {
     this.ms = MainService.getInstance();
     this.em = this.ms.em;
     this.tm = this.ms.tm;
+    this.ip = this.ms.ip;
+    this.imageResizer = new ImageResizer();
+    this.previewMaxWidth = 100;
+    this.previewMaxHeight = 100;
   }
 
   async loadPreviews() {
@@ -23,6 +28,9 @@ export class PreviewProcessor {
           const imageEntity = await this.em.get(baseImage);
           const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
+          const data = await this.ip.getImageDataFromArrayBuffer(binaryEntity._ab);
+          binaryEntity._ab = this.imageResizer.resizeInMaxSize(data,this.previewMaxWidth,this.previewMaxHeight);
+
           retPreviews.push(binaryEntity);
         }
       } else {
@@ -43,7 +51,6 @@ export class PreviewProcessor {
     }
   }
   cratePageData(pageNo, className, isRight, binaries) {
-
     return {
       pageNo: pageNo,
       isDummy: className === this.dummyClass,

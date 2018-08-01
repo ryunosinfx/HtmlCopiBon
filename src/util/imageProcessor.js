@@ -13,6 +13,37 @@ export class ImageProcessor {
   setDataURI(dataURI) {
     this.dataURI = dataURI;
   }
+  getImageDataFromArrayBuffer(ab) {
+    return new Promise((resolve, reject) => {
+      const dataUri = bc.arrayBuffer2DataURI(ab);
+      const img = new Image();
+      img.src = dataUri;
+      img.onload = () => {
+        const width = img.width;
+        const height = img.height;
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.ctx.drawImage(img, 0, 0);
+        const imageData = this.ctx.getImageData(0, 0, width, height);
+        resolve(imageData);
+      }
+      img.onerror = (e) => {
+        reject(e);
+      }
+    });
+  }
+  getArrayBufferFromPixcelData(imageData) {
+    return new Promise((resolve, reject) => {
+      const width = imageData.width;
+      const height = imageData.height;
+      this.canvas.width = width;
+      this.canvas.height = height;
+      const newImageData = this.ctx.createImageData(width, height);
+      newImageData.data = imageData.data;
+      this.ctx.putImageData(newImageData, 0, 0);
+      
+    });
+  }
   create(arrayBuffer, width, height, type) {
     return new Promise((resolve, reject) => {
       const imgElm = new Image();
@@ -50,8 +81,8 @@ export class ImageProcessor {
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 
-      if(!type){
-        type="application/octet-stream";
+      if (!type) {
+        type = "application/octet-stream";
       }
       if (type && type.match(imgRe)) {
         imgElm.src = bc.arrayBuffer2DataURI(ab, type);
