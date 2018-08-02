@@ -29,8 +29,11 @@ export class PreviewProcessor {
           const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
           const data = await this.ip.getImageDataFromArrayBuffer(binaryEntity._ab);
-          binaryEntity._ab = this.imageResizer.resizeInMaxSize(data,this.previewMaxWidth,this.previewMaxHeight);
-
+          const newData = this.imageResizer.resizeInMaxSize(data,this.previewMaxWidth,this.previewMaxHeight);
+           binaryEntity._ab =this.ip.getArrayBufferFromPixcelData(newData);
+           // console.log(newData.data);
+           // console.log(binaryEntity._ab);
+           // alert(newData.data);
           retPreviews.push(binaryEntity);
         }
       } else {

@@ -1,15 +1,15 @@
 export class ImageResizer {
   trimByte(byteX) {
     const x = Math.ceil(byteX);
-    const maxByte = x > 255
-      ? 255
-      : x;
-    const minByte = maxByte < 0
-      ? 0
-      : maxByte;
+    const maxByte = x > 255 ?
+      255 :
+      x;
+    const minByte = maxByte < 0 ?
+      0 :
+      maxByte;
     return maxByte;
   }
-  culcWeightByCubic(){
+  culcWeightByCubic() {
     return (x, alpha) => {
       let result = 0;
       if (x <= 1.0) {
@@ -25,32 +25,40 @@ export class ImageResizer {
   }
 
   lanczosWeight() {
-    return (d,n = 3) =>{
-      return d === 0
-        ? 1
-        : (
-          Math.abs(d) < n
-          ? this.sincLanczos(d) * this.sincLanczos(d / n)
-          : 0);
+    return (d, n = 3) => {
+      return d === 0 ?
+        1 :
+        (
+          Math.abs(d) < n ?
+          this.sincLanczos(d) * this.sincLanczos(d / n) :
+          0);
     }
   }
   resizeInMaxSize(iamegData, maxWidth, maxHeight) {
-    const {data,width,height} = iamegData;
-    const isWidthGreater = (width>= height);
-    const retio = isWidthGreater? maxWidth / width :maxHeight/height;
-    const newWidth = isWidthGreater? maxWidth: width*retio;
-    const newHeight = isWidthGreater? height*retio :maxHeight ;
-    const data = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight));
-    return {data:data,width:newWidth,height:newHeight};
+    const {
+      data,
+      width,
+      height
+    } = iamegData;
+    const isWidthGreater = (width >= height);
+    const retio = isWidthGreater ? maxWidth / width : maxHeight / height;
+    const newWidth = isWidthGreater ? maxWidth : width * retio;
+    const newHeight = isWidthGreater ? height * retio : maxHeight;
+    const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight));
+    return {
+      data: newData,
+      width: newWidth,
+      height: newHeight
+    };
   }
   resizeLanczos(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight) {
-    return this.resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(), 6,3);
+    return this.resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(), 6, 3);
   }
   resizeByCubic(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight) {
-    return this.resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(), 4,-1.0);
+    return this.resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(), 4, -1.0);
   }
   // TODO run with maltiThead
-  resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, weightFunc, size,alpha) {
+  resize(bitmapUint8Array, sourceWidth, sourceHeight, newWidth, newHeight, weightFunc, size, alpha) {
     const sw = sourceWidth;
     const sw4 = sw * 4;
     const swLimit = sw - 1;
@@ -79,18 +87,18 @@ export class ImageResizer {
         const endX = x + sizeHalf;
         for (let jy = startY; jy <= endY; jy++) {
           const weightY = weightFunc(Math.abs(wfy - jy), alpha);
-          const sy = (jy < 0 || jy > shLimit)
-            ? y
-            : jy;
+          const sy = (jy < 0 || jy > shLimit) ?
+            y :
+            jy;
           const y32bitOffset = sw4 * sy;
           for (let jx = startX; jx <= endX; jx++) {
             const w = weightFunc(Math.abs(wfx - jx), alpha) * weightY;
             if (w === 0) {
               continue;
             }
-            const sx = (jx < 0 || jx > swLimit)
-              ? x
-              : jx;
+            const sx = (jx < 0 || jx > swLimit) ?
+              x :
+              jx;
             const offset32bit = y32bitOffset + sx * 4;
             r += src[offset32bit] * w;
             g += src[offset32bit + 1] * w;

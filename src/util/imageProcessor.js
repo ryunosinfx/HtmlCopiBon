@@ -33,16 +33,17 @@ export class ImageProcessor {
     });
   }
   getArrayBufferFromPixcelData(imageData) {
-    return new Promise((resolve, reject) => {
-      const width = imageData.width;
-      const height = imageData.height;
-      this.canvas.width = width;
-      this.canvas.height = height;
-      const newImageData = this.ctx.createImageData(width, height);
-      newImageData.data = imageData.data;
-      this.ctx.putImageData(newImageData, 0, 0);
-      
-    });
+    const width = imageData.width;
+    const height = imageData.height;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    const newImageData = this.ctx.createImageData(width, height);
+    newImageData.data = imageData.data;
+    this.ctx.putImageData(newImageData, 0, 0);
+    const dataUri = this.canvas.toDataURL();
+    console.log(dataUri)
+    alert(dataUri)
+    return bc.dataURI2ArrayBuffer(dataUri);
   }
   create(arrayBuffer, width, height, type) {
     return new Promise((resolve, reject) => {
@@ -51,9 +52,9 @@ export class ImageProcessor {
       imgElm.onload = () => {
         const widthScale = width / imgElm.width;
         const heightScale = height / imgElm.height;
-        const scale = widthScale <= heightScale
-          ? widthScale
-          : heightScale;
+        const scale = widthScale <= heightScale ?
+          widthScale :
+          heightScale;
         this.canvas.height = imgElm.height * scale;
         this.canvas.width = imgElm.width * scale;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -77,7 +78,11 @@ export class ImageProcessor {
 
   createImageNodeByData(data) {
     return new Promise((resolve, reject) => {
-      let {name, ab, type} = data;
+      let {
+        name,
+        ab,
+        type
+      } = data;
       let imgElm = vu.createImage();
       imgElm.alt = escape(name);
 

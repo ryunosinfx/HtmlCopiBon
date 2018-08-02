@@ -51,7 +51,7 @@ export class Sorter {
         }
         let a = objA[colName];
         let b = objB[colName];
-        console.log("a:"+a+"/b:"+b);
+        //console.log("a:"+a+"/b:"+b);
         if (a < b) {
           return isDESC
             ? 1

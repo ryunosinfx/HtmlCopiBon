@@ -12,4 +12,12 @@ export class ImageProcessService {
   async createImageNodeByData(data) {
     return await this.ip.createImageNodeByData(data);
   }
+
+  async getImageDataFromArrayBuffer(data) {
+    return await this.ip.getImageDataFromArrayBuffer(data);
+  }
+
+  getArrayBufferFromPixcelData(data) {
+    return this.ip.getArrayBufferFromPixcelData(data);
+  }
 }
