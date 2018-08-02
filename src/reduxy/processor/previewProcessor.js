@@ -8,8 +8,8 @@ export class PreviewProcessor {
     this.tm = this.ms.tm;
     this.ip = this.ms.ip;
     this.imageResizer = new ImageResizer();
-    this.previewMaxWidth = 100;
-    this.previewMaxHeight = 100;
+    this.previewMaxWidth = 1000;
+    this.previewMaxHeight = 1000;
   }
 
   async loadPreviews() {
@@ -28,12 +28,10 @@ export class PreviewProcessor {
           const imageEntity = await this.em.get(baseImage);
           const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
-          const data = await this.ip.getImageDataFromArrayBuffer(binaryEntity._ab);
-          const newData = this.imageResizer.resizeInMaxSize(data,this.previewMaxWidth,this.previewMaxHeight);
-           binaryEntity._ab =this.ip.getArrayBufferFromPixcelData(newData);
+          binaryEntity.dataUri = await this.ip.resize(binaryEntity._ab,this.previewMaxWidth,this.previewMaxHeight);
            // console.log(newData.data);
            // console.log(binaryEntity._ab);
-           // alert(newData.data);
+           // alert(binaryEntity._ab);
           retPreviews.push(binaryEntity);
         }
       } else {

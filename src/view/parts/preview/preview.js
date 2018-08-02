@@ -166,7 +166,7 @@ export class Preview extends BaseView {
         ? this.classNameRight
         : this.classNameLeft);
     if(binalyEnitiy){
-      const dataUri = bc.arrayBuffer2DataURI(binalyEnitiy._ab);
+      const dataUri = binalyEnitiy.dataUri;//bc.arrayBuffer2DataURI(binalyEnitiy._ab);
       console.log(dataUri);
       const imgVnode = img(binalyEnitiy.pk + "_preview", "preview_" + pageNo, "", dataUri, {});
       const info = div('', ['previewInfo'], {}, "pageNo:" + pageNo);

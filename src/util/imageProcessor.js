@@ -1,17 +1,45 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
+import {ImageResizer} from "./image/imageResizer";
 const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
   constructor() {
     this.canvas = vu.createCanvas(null, "hidden");
+
     this.ctx = this.canvas.getContext('2d');
-    const self = this;
+    this.imageResizer = new ImageResizer();
     window.onload = () => {
       document.body.appendChild(this.canvas);
     };
   }
   setDataURI(dataURI) {
     this.dataURI = dataURI;
+  }
+  async resize(ab,maxWidth,maxHeight){
+    console.time('resize');
+    const origin = await this.getImageDataFromArrayBuffer(ab);
+    const newImageData = this.resizeInMaxSize(origin,maxWidth,maxHeight);
+    this.canvas.width = newImageData.width;
+    this.canvas.height = newImageData.height;
+    this.ctx.putImageData(newImageData, 0, 0);
+    const dataUri = this.canvas.toDataURL();
+    console.timeEnd('resize');
+    return dataUri;//bc.dataURI2ArrayBuffer(dataUri);
+  }
+
+  resizeInMaxSize(iamegData, maxWidth, maxHeight) {
+    const {
+      data,
+      width,
+      height
+    } = iamegData;
+    const isWidthGreater = (width >= height);
+    const retio = isWidthGreater ? maxWidth / width : maxHeight / height;
+    const newWidth = isWidthGreater ? maxWidth : width * retio;
+    const newHeight = isWidthGreater ? height * retio : maxHeight;
+    const newImageData = this.ctx.createImageData(newWidth, newHeight);
+    const newData = new Uint8ClampedArray(this.imageResizer.resize(iamegData, newWidth, newHeight,newImageData));
+    return newImageData;
   }
   getImageDataFromArrayBuffer(ab) {
     return new Promise((resolve, reject) => {
@@ -32,19 +60,6 @@ export class ImageProcessor {
       }
     });
   }
-  getArrayBufferFromPixcelData(imageData) {
-    const width = imageData.width;
-    const height = imageData.height;
-    this.canvas.width = width;
-    this.canvas.height = height;
-    const newImageData = this.ctx.createImageData(width, height);
-    newImageData.data = imageData.data;
-    this.ctx.putImageData(newImageData, 0, 0);
-    const dataUri = this.canvas.toDataURL();
-    console.log(dataUri)
-    alert(dataUri)
-    return bc.dataURI2ArrayBuffer(dataUri);
-  }
   create(arrayBuffer, width, height, type) {
     return new Promise((resolve, reject) => {
       const imgElm = new Image();
@@ -55,8 +70,8 @@ export class ImageProcessor {
         const scale = widthScale <= heightScale ?
           widthScale :
           heightScale;
-        this.canvas.height = imgElm.height * scale;
-        this.canvas.width = imgElm.width * scale;
+        this.canvas.height = Math.floor(imgElm.height * scale);
+        this.canvas.width = Math.floor(imgElm.width * scale);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.scale(scale, scale);
         this.ctx.drawImage(imgElm, 0, 0);

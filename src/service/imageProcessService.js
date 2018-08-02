@@ -13,11 +13,7 @@ export class ImageProcessService {
     return await this.ip.createImageNodeByData(data);
   }
 
-  async getImageDataFromArrayBuffer(data) {
-    return await this.ip.getImageDataFromArrayBuffer(data);
-  }
-
-  getArrayBufferFromPixcelData(data) {
-    return this.ip.getArrayBufferFromPixcelData(data);
+  async resize(ab, newWidth, newHeight) {
+    return await this.ip.resize(ab, newWidth, newHeight);
   }
 }
