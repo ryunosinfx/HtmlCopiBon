@@ -1,12 +1,12 @@
 export class ImageResizer {
   trimByte(byteX) {
     const x = Math.floor(byteX);
-    const maxByte = x > 255
-      ? 255
-      : x;
-    const minByte = maxByte < 0
-      ? 0
-      : maxByte;
+    const maxByte = x > 255 ?
+      255 :
+      x;
+    const minByte = maxByte < 0 ?
+      0 :
+      maxByte;
     return minByte;
   }
   culcWeightByCubic(alpha) {
@@ -25,26 +25,30 @@ export class ImageResizer {
   }
 
   lanczosWeight(n = 3) {
-    return(d) => {
-      return d === 0
-        ? 1
-        : (
-          Math.abs(d) < n
-          ? this.sincLanczos(d) * this.sincLanczos(d / n)
-          : 0);
+    return (d) => {
+      return d === 0 ?
+        1 :
+        (
+          Math.abs(d) < n ?
+          this.sincLanczos(d) * this.sincLanczos(d / n) :
+          0);
     }
   }
   resize(iamegData, newWidth, newHeight, distImage) {
-    const {data, width, height} = iamegData;
+    const {
+      data,
+      width,
+      height
+    } = iamegData;
     const distBitmap = distImage.data;
     const newData = new Uint8ClampedArray(this.resizeLanczos(data, width, height, newWidth, newHeight, distBitmap));
     return distImage
   }
   resizeLanczos(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap) {
-    return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(3), 6,distBitmap);
+    return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(3), 6, distBitmap);
   }
   resizeByCubic(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap) {
-    return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(-1.0), 4 ,distBitmap);
+    return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(-1.0), 4, distBitmap);
   }
   // TODO run with maltiThead
   resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidthF, newHeightF, weightFunc, size, distBitmap) {
@@ -59,11 +63,11 @@ export class ImageResizer {
     const wf = sw / newWidth;
     const hf = sh / newHeight;
     const src = originBitmap;
-    const dist = distBitmap
-      ? distBitmap
-      : new Uint8Array(newWidth * newHeight * 4);
+    const dist = distBitmap ?
+      distBitmap :
+      new Uint8Array(newWidth * newHeight * 4);
     const sizeHalf = size / 2;
-    const sizeHalfm1 = sizeHalf-1;
+    const sizeHalfm1 = sizeHalf - 1;
     const xMap = {};
     for (let iy = 0; iy < newHeight; iy++) {
       const wfy = hf * iy;
@@ -81,18 +85,18 @@ export class ImageResizer {
         const endX = x + sizeHalf;
         for (let jy = startY; jy <= endY; jy++) {
           const weightY = weightFunc(Math.abs(wfy - jy));
-          const sy = (jy < 0 || jy > shLimit)
-            ? y
-            : jy;
+          const sy = (jy < 0 || jy > shLimit) ?
+            y :
+            jy;
           const y32bitOffset = sw4 * sy;
           for (let jx = startX; jx <= endX; jx++) {
             const w = weightFunc(Math.abs(wfx - jx)) * weightY;
             if (w === 0) {
               continue;
             }
-            const sx = (jx < 0 || jx > swLimit)
-              ? x
-              : jx;
+            const sx = (jx < 0 || jx > swLimit) ?
+              x :
+              jx;
             const offset32bit = y32bitOffset + sx * 4;
             r += src[offset32bit] * w;
             g += src[offset32bit + 1] * w;
@@ -107,7 +111,7 @@ export class ImageResizer {
         dist[offset32bitDist + 3] = 255;
       }
     }
-    console.log("newHeight:"+dist.buffer);
+    console.log("newHeight:" + dist.buffer);
     console.log(dist.buffer);
     return dist.buffer;
   }
