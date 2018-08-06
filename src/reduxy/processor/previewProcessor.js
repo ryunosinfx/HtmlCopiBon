@@ -28,7 +28,7 @@ export class PreviewProcessor {
           const imageEntity = await this.em.get(baseImage);
           const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
-          binaryEntity.dataUri = await this.ip.resize(binaryEntity._ab,this.previewMaxWidth,this.previewMaxHeight);
+          binaryEntity._ab = await this.ip.resize(binaryEntity._ab,this.previewMaxWidth,this.previewMaxHeight);
            // console.log(newData.data);
            // console.log(binaryEntity._ab);
            // alert(binaryEntity._ab);

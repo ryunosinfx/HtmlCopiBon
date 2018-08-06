@@ -70,5 +70,5 @@ export const paperSizeSet = {
   A3: {
     x: 297,
     y: 420
-  },
+  }
 }
