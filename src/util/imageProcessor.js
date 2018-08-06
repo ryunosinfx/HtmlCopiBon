@@ -1,5 +1,6 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
+import {Paper} from "./image/paper";
 import {ImageResizer} from "./image/imageResizer";
 const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
@@ -7,6 +8,7 @@ export class ImageProcessor {
     this.canvas = vu.createCanvas(null, "hidden");
 
     this.ctx = this.canvas.getContext('2d');
+    this.paper = new Paper();
     this.imageResizer = new ImageResizer();
     window.onload = () => {
       document.body.appendChild(this.canvas);

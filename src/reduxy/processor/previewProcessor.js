@@ -1,5 +1,4 @@
 import {Sorter} from "../../util/sorter";
-import {ImageResizer} from "../../util/image/imageResizer";
 import {MainService} from "../../service/mainService"
 export class PreviewProcessor {
   constructor() {
@@ -7,7 +6,6 @@ export class PreviewProcessor {
     this.em = this.ms.em;
     this.tm = this.ms.tm;
     this.ip = this.ms.ip;
-    this.imageResizer = new ImageResizer();
     this.previewMaxWidth = 1000;
     this.previewMaxHeight = 1000;
   }
