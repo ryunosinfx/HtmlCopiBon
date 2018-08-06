@@ -1,12 +1,32 @@
+import {dpis, printMargin, paperSizeSet} from "../../settings/exportSettings";
 export class Paper {
   constructor() {
     //
-    paparSize = {
-
-    }
+    this.paparSize = {}
+  }
+  getPaperSizeMm(paperSize) {
+    return paperSizeSet[paperSize];
+  }
+  getPrintMargin(marginSetting) {
+    return printMargin[marginSetting];
+  }
+  getDpi(dpiName) {
+    return dpis[dpiName];
+  }
+  getOffset(dpiName,marginSetting){
+    const margin = this.getPrintMargin(marginSetting);
+    const dpi = this.getDpi(dpiName);
+    const mpi = dpi / 25.4;
+    return Math.floor(mpi * margin);
+  }
+  getPixcelSizeBySelected(paperSize, dpiName, marginSetting = "none") {
+    const size = this.getPaperSizeMm(paperSize);
+    const margin = this.getPrintMargin(marginSetting);
+    const dpi = this.getDpi(dpiName);
+    return this.getPixcelSizeWithMargin(dpi, size.x, size.y, margin);
   }
   getPixcelSize(dpi, mmWidth, mmHeight) {
-    const mpi = dpi / 2.54;
+    const mpi = dpi / 25.4;
     return {
       width: Math.floor(mpi * mmWidth),
       height: Math.floor(mpi * mmHeight)

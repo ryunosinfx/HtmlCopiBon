@@ -9,14 +9,25 @@ export class ImageMerger {
       : maxByte;
     return minByte;
   }
-  maegeReplace(imageDataBase, images){
-    mergeImages(imageDataBase, images, this.replace());
+  maegeReplace(imageDataBase, images, isBaseWhite) {
+    this.beWhiteImage(imageDataBase,isBaseWhite);
+    this.mergeImages(imageDataBase, images, this.replace());
   }
-  maegeLinninr(imageDataBase, images){
-    mergeImages(imageDataBase, images, this.linier());
+  maegeLinninr(imageDataBase, images, isBaseWhite) {
+    this.beWhiteImage(imageDataBase,isBaseWhite);
+    this.mergeImages(imageDataBase, images, this.linier());
   }
-  maegeMultiplication(imageDataBase, images){
-    mergeImages(imageDataBase, images, this.multiplication());
+  maegeMultiplication(imageDataBase, images, isBaseWhite) {
+    this.beWhiteImage(imageDataBase,isBaseWhite);
+    this.mergeImages(imageDataBase, images, this.multiplication());
+  }
+  beWhiteImage(imageDataBase,isBaseWhite){
+    if(isBaseWhite){
+      const length = imageDataBase.data.length;
+      for(let i= 0;i< length;i++){
+        imageDataBase.data[i]=255;
+      }
+    }
   }
   mergeImages(imageDataBase, images, func) {
     const {data, width, height} = imageDataBase;
@@ -24,6 +35,7 @@ export class ImageMerger {
       const addData = imageData.data;
       const addWidth = imageData.width;
       const addHeight = imageData.height;
+      //console.log(width+"*"+height+"*4="+data.length+"/"+width+"*"+height+"*4="+data.length)
       const offsetY = imageData.offsetY
         ? imageData.offsetY
         : 0;
@@ -34,40 +46,55 @@ export class ImageMerger {
       const endY = addOffsetY > height
         ? height
         : addOffsetY;
-      const addOffsetX = offsetX + addHeight;
+      const addOffsetX = offsetX + addWidth;
       const endX = addOffsetX > width
         ? width
         : addOffsetX;
+      let maxY = 0;
+      let maxX = 0;
+      let count =0;
       for (let iy = offsetY; iy < endY; iy++) {
-        const addPixcelIndexY = iy-offsetY;
-        for (let ix = offsetX; ix < endX; ix++) {{
-          const addPixcelIndexX = ix-offsetX;
-          const basePixcelIndex = iy*width+ix;
-          const addPixcelIndex = addPixcelIndexY* addWidth+addPixcelIndexX;
-          func(data,basePixcelIndex,addData,addPixcelIndex);
+        const addPixcelIndexY = iy - offsetY;
+        maxY= addPixcelIndexY;
+        for (let ix = offsetX; ix < endX; ix++) {
+          const addPixcelIndexX = ix - offsetX;
+          const basePixcelIndex = iy * width + ix;
+          const addPixcelIndex = addPixcelIndexY * addWidth + addPixcelIndexX;
+          count++;
+          func(data, basePixcelIndex, addData, addPixcelIndex);
+          maxX= addPixcelIndexX;
         }
       }
+      //console.log("count:"+count+"/maxX:"+maxX+"/maxY:"+maxY+"/w:"+addWidth+"/h:"+addHeight+"/offsetX:"+offsetX+"/offsetY:"+offsetY+"/endX:"+endX+"/endY:"+endY+"/width:"+width+"/height:"+height)
     }
   }
-  replace(){
+
+  replace() {
     return(base, basePixcelIndex, addOne, addPixcelIndex) => {
-      base[basePixcelIndex] = base[basePixcelIndex] + addOne[addPixcelIndex]
-      base[basePixcelIndex + 1] = addOne[addPixcelIndex + 1]
-      base[basePixcelIndex + 2] = addOne[addPixcelIndex + 2]
+      const index = basePixcelIndex*4;
+      const indexAdd = addPixcelIndex*4;
+      base[index] =addOne[indexAdd]
+      base[index + 1] = addOne[indexAdd + 1]
+      base[index + 2] = addOne[indexAdd + 2]
+      base[index +3] = 255//addOne[addPixcelIndex + 2]
     }
   }
   linier() {
     return(base, basePixcelIndex, addOne, addPixcelIndex) => {
-      base[basePixcelIndex] = base[basePixcelIndex] + addOne[addPixcelIndex]
-      base[basePixcelIndex + 1] = base[basePixcelIndex + 1] + addOne[addPixcelIndex + 1]
-      base[basePixcelIndex + 2] = base[basePixcelIndex + 2] + addOne[addPixcelIndex + 2]
+      const index = basePixcelIndex*4;
+      const indexAdd = addPixcelIndex*4;
+      base[index] = base[index] + addOaddOffsetXne[indexAdd]
+      base[index + 1] = base[index + 1] + addOne[indexAdd + 1]
+      base[index + 2] = base[index + 2] + addOne[indexAdd + 2]
     }
   }
   multiplication() {
     return(base, basePixcelIndex, addOne, addPixcelIndex) => {
-      base[basePixcelIndex] = this.trimByte(base[basePixcelIndex] * addOne[addPixcelIndex] / 255);
-      base[basePixcelIndex + 1] = this.trimByte(base[basePixcelIndex + 1] * addOne[addPixcelIndex + 1] / 255);
-      base[basePixcelIndex + 2] = this.trimByte(base[basePixcelIndex + 2] * addOne[addPixcelIndex + 2] / 255);
+      const index = basePixcelIndex*4;
+      const indexAdd = addPixcelIndex*4;
+      base[index] = this.trimByte(base[index] * addOne[indexAdd] / 255);
+      base[index + 1] = this.trimByte(base[index + 1] * addOne[indexAdd + 1] / 255);
+      base[index + 2] = this.trimByte(base[index + 2] * addOne[indexAdd + 2] / 255);
     }
   }
 }

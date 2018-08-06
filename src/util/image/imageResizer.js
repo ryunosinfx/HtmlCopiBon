@@ -41,7 +41,7 @@ export class ImageResizer {
       height
     } = iamegData;
     const distBitmap = distImage.data;
-    const newData = new Uint8ClampedArray(this.resizeLanczos(data, width, height, newWidth, newHeight, distBitmap));
+    const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap));
     return distImage
   }
   resizeLanczos(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap) {

@@ -16,4 +16,7 @@ export class ImageProcessService {
   async resize(ab, newWidth, newHeight) {
     return await this.ip.resize(ab, newWidth, newHeight);
   }
+  async resizeAsPaperB5_72(ab) {
+    return await this.ip.resizeAsPaper(ab,"B5", "dpi72", "conbini");
+  }
 }

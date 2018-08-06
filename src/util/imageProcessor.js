@@ -1,6 +1,7 @@
 import vu from "./viewUtil";
 import bc from "./binaryConverter";
 import {Paper} from "./image/paper";
+import {ImageMerger} from "./image/imageMerger";
 import {ImageResizer} from "./image/imageResizer";
 const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
@@ -9,6 +10,7 @@ export class ImageProcessor {
 
     this.ctx = this.canvas.getContext('2d');
     this.paper = new Paper();
+    this.imageMerger = new ImageMerger();
     this.imageResizer = new ImageResizer();
     window.onload = () => {
       document.body.appendChild(this.canvas);
@@ -22,10 +24,46 @@ export class ImageProcessor {
     const origin = await this.getImageDataFromArrayBuffer(ab);
     return this.resizeInMaxSize(origin, maxWidth, maxHeight);
   }
+  async resizeAsPaper(ab, paperSize, dpiName, marginSetting) {
+    const origin = await this.getImageDataFromArrayBuffer(ab);
+    const sizeOfPaper = this.paper.getPixcelSizeBySelected(paperSize, dpiName);
+    let newPaperData = this.ctx.createImageData(sizeOfPaper.width, sizeOfPaper.height);
+    const sizeOfImage = this.paper.getPixcelSizeBySelected(paperSize, dpiName, marginSetting);
+    const newData = this.resizeInMaxSize(origin, sizeOfImage.width, sizeOfImage.height);
+    const marginMM = this.paper.getOffset(dpiName, marginSetting);
+    const data = {
+      offsetY: marginMM,
+      offsetX: marginMM,
+      data: newData.data,
+      width: newData.width,
+      height: newData.height
+    }
+    const len = newData.data.length
+    for(let i =0;i<len;i++){
+      newPaperData.data[i] = newData.data[i];
+    }
+    this.canvas.width = newPaperData.width;
+    this.canvas.height = newPaperData.height;
+    this.imageMerger.maegeReplace(newPaperData, [data],true);
+    // console.log("newData---------------------------------------------------width:" + sizeOfImage.width + "/height:" + sizeOfImage.height)
+    // console.log(newData)
+    // console.log(data)
+    // console.log(newPaperData.data)
+    this.ctx.putImageData(newPaperData, 0, 0);
+    newPaperData = undefined;
+    let dataUri = this.canvas.toDataURL();
+    console.time('resize copy');
+    const abResized = bc.dataURI2ArrayBuffer(dataUri);
+    dataUri = undefined;
+    console.timeEnd('resize copy');
+    return abResized;
+  }
 
   resizeInMaxSize(iamegData, maxWidth, maxHeight) {
     const {data, width, height} = iamegData;
-    const isWidthGreater = (width >= height);
+    const retioOuter = maxWidth / maxHeight;
+    const retioInner = width / height;
+    const isWidthGreater = retioInner >= retioOuter;
     const retio = isWidthGreater
       ? maxWidth / width
       : maxHeight / height;
@@ -35,23 +73,15 @@ export class ImageProcessor {
     const newHeight = isWidthGreater
       ? height * retio
       : maxHeight;
+    // console.log("resizeInMaxSize---------------------------------------------------newWidth:" + newWidth + "/newHeight:" + newHeight)
     return this.resizeExecute(iamegData, newWidth, newHeight);
   }
   resizeExecute(iamegData, newWidth, newHeight) {
     console.time('resize');
-    let newImageData = this.ctx.createImageData(newWidth, newHeight);
-    const newData = new Uint8ClampedArray(this.imageResizer.resize(iamegData, newWidth, newHeight, newImageData));
-    this.canvas.width = newImageData.width;
-    this.canvas.height = newImageData.height;
-    this.ctx.putImageData(newImageData, 0, 0);
-    newImageData = undefined;
-    let dataUri = this.canvas.toDataURL();
+    const newImageData = this.ctx.createImageData(newWidth, newHeight);
+    this.imageResizer.resize(iamegData, newWidth, newHeight, newImageData);
     console.timeEnd('resize');
-      console.time('resize copy');
-    const abResized = bc.dataURI2ArrayBuffer(dataUri);
-    dataUri = undefined;
-    console.timeEnd('resize copy');
-    return abResized;
+    return newImageData;
   }
   getImageDataFromArrayBuffer(ab) {
     console.time('resize getImageDataFromArrayBuffer');
