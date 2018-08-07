@@ -4,8 +4,8 @@ export class ImageOutputs extends BaseEntity {
     super("ImageOutputs");
     this.name = null;
     this.binary = null;
-    this.type = null;
-    this.thumbnail = null;
+    this.type = null;// zip or pdf
+    this.thumbnail = null;// thumnails of firstPage
     this.modifyDate=null;
     this.width = null;
     this.height = null;

@@ -1,8 +1,18 @@
-import {dpis, printMargin, paperSizeSet} from "../../settings/exportSettings";
+import {dpis, printMargin, paperSizeSet, basePaper} from "../../settings/exportSettings";
 export class Paper {
   constructor() {
     //
     this.paparSize = {}
+  }
+
+  calcClopOffset(basePaperSet){
+    const targetPaper = basePaper[basePaperSet];
+
+    const offset = {x:0,y:0};
+    if(!targetPaper){
+      return offset;
+    }
+    return offset;
   }
   getPaperSizeMm(paperSize) {
     return paperSizeSet[paperSize];

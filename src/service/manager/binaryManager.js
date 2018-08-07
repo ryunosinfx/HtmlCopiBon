@@ -19,9 +19,9 @@ export class BinaryManager {
     return await this.em.Binary.delete(binaryPk);
   }
   async save(pk, name, binary) {
-    console.log("BinaryManager save!!A!! pk:" + pk);
-    console.log(binary);
-    console.log("BinaryManager save!!B!! name:" + name);
+    // console.log("BinaryManager save!!A!! pk:" + pk);
+    // console.log(binary);
+    // console.log("BinaryManager save!!B!! name:" + name);
     let binEntity = null;
     if (pk) {
       binEntity = await this.em.Binary.get(pk);

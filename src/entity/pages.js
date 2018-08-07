@@ -4,6 +4,8 @@ export class Pages extends BaseEntity{
     super("Pages");
     this.previewThumbnail = null;
     this.outputImage = null;
+    this.outputExpandImage = null;
+    this.outputDualImage = null;
     this.thumbnail = null;
     this.baseImage = null;
     this.createDate = Date.now();

@@ -1,5 +1,5 @@
 import {ActionCreator} from '../../util/reactive/actionCreator'
-export class TitleActionCreator {
+export class ExportActionCreator {
   constructor() {}
   static createExecuteAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("executeExport", targetView, data, storeKey);
@@ -10,11 +10,14 @@ export class TitleActionCreator {
   static creatLoadAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("loadExported", targetView, data, storeKey);
   }
+  static createDownloadAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("downloadExport", targetView, data, storeKey);
+  }
   static createExecutePdfAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("executePdfExport", targetView, data, storeKey);
   }
-  static createExecutePdfAction(targetView, data, storeKey = null) {
-    return ActionCreator.createBaseAction("executeImgZipExport", targetView, data, storeKey);
+  static createDownloadPdfAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("edownloadPdfExport", targetView, data, storeKey);
   }
   static getStoreKey(){
     return "exports";

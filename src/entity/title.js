@@ -16,6 +16,7 @@ export class Title extends BaseEntity {
     this.images = [];
     this.pages = [];
     this.outputsPars = [];
+    this.exports = [];
     this.direction = "r2l";
     this.createDate = Date.now();
     this.updateDate = Date.now();

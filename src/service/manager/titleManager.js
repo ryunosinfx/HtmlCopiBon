@@ -85,7 +85,7 @@ export class TitleManager {
       images.push(imagePk);
       iamageEntitis.push(imageEntity);
     }
-    console.log(images);
+    //console.log(images);
     await this.saveTitle(title);
     return iamageEntitis;
   }
@@ -100,7 +100,7 @@ export class TitleManager {
         delete images[index];
       };
     }
-    console.log(images);
+    // console.log(images);
     await this.saveTitle(title);
   }
 
