@@ -9,10 +9,37 @@ export class Paper {
     const targetPaper = basePaper[basePaperSet];
 
     const offset = {x:0,y:0};
-    if(!targetPaper){
+    if(!targetPaper || targetPaper.target ==="same"){
+      //
       return offset;
     }
+    const targetSize = this.getPaperSizeMm(targetPaper.target);
+    const frameSize = this.getPaperSizeMm(targetPaper.frame);
+    const targetX = targetSize.x*targetPaper.multiple;
+    const targetY = targetSize.y*targetPaper.multiple;
+    offset.x = (frameSize-x - targetX)/2;
+    offset.y = (frameSize-y - targetY)/2;
     return offset;
+  }
+  getTargetPaperSize(basePaperSet,dpiName){
+    const targetPaper = basePaper[basePaperSet];
+    const size = {x:0,y:0};
+    if(!targetPaper || targetPaper.target ==="same"){
+      //
+      return size;
+    }
+    const targetSize = this.getPaperSizeMm(targetPaper.target);
+    const dpi = this.getDpi(dpiName);
+    size.x = this.calcPixcel(targetSize.x,dpi);
+    size.y = this.calcPixcel(targetSize.y,dpi);
+    return size;
+  }
+  calcPixcel(dpi,mm){
+    return Math.floor(mm*dpi/25.4);
+  }
+
+  calcDpi(pixcel,mm){
+    return pixcel/mm*25.4;
   }
   getPaperSizeMm(paperSize) {
     return paperSizeSet[paperSize];
