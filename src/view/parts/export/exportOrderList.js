@@ -12,7 +12,7 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-export class ExportOrdrList extends BaseView {
+export class ExportOrderList extends BaseView {
   constructor() {
     super("ExportOrdrList", "ExportOrdrList");
   }

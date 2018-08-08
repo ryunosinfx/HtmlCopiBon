@@ -8,20 +8,24 @@ export class ExportImageProcesser {
       this.sm = this.ms.sm;
       this.tm = this.ms.tm;
     }
-    load(){
+    load(eportSetting){
+      alert('ExportImageProcesser load');
       this.eportSetting= eportSetting;
     }
     remove(exportPk=-1){
+      alert('ExportImageProcesser remove');
 
     }
     loadZip(exportPk){
+      alert('ExportImageProcesser loadZip');
 
     }
     loadPdf(exportPk){
+      alert('ExportImageProcesser loadPdf');
 
     }
     exportExecute(exportOrders=[]){
-
+      alert('ExportImageProcesser exportExecute');
       // 0 load Title & pages ExecutePerPage
       const pages =this.pp.loadPages();
       const order = {
@@ -44,6 +48,7 @@ export class ExportImageProcesser {
 
     }
     exportPdfExecute(exportOrders){
+      alert('ExportImageProcesser exportPdfExecute');
 
     }
 }

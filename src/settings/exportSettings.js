@@ -45,7 +45,7 @@ export const printMargin = {
 export const basePaper={
   mangaPaperA4:{
     target:"B5",
-    multiple:１
+    multiple:1
   },
   mangaPaperA4ExpandTatikiri:{
     target:"B5",
@@ -53,15 +53,15 @@ export const basePaper={
   },
   mangaPaperB4:{
     target:"A4",
-    multiple:１
+    multiple:1
   },
   mangaPaperA3:{
     target:"B4",
-    multiple:１
+    multiple:1
   },
   pure_fit:{
     target:"same",
-    multiple:１
+    multiple:1
   }
 }
 export const paperSizeSet = {

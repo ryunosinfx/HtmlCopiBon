@@ -12,7 +12,7 @@ import {
 } from "../util/reactive/base/vtags";
 import {FileUploadArea} from "./content/fileUploadArea";
 import {TitleSettings} from "./content/titleSettings";
-import {ExportButton} from "./content/exportButton";
+import {ExportArea} from "./content/exportArea";
 import {FilesArea} from "./content/filesArea";
 import {ProgressBar} from "./parts/progressBar";
 export class Container extends BaseView {
@@ -21,7 +21,7 @@ export class Container extends BaseView {
     this.fileUploadArea = new FileUploadArea();
     this.titleSettings = new TitleSettings();
     this.filesArea = new FilesArea();
-    this.exportButton = new ExportButton();
+    this.exportArea = new ExportArea();
     this.progressBar = new ProgressBar();
   }
 
@@ -29,7 +29,7 @@ export class Container extends BaseView {
     this.fileUploadArea.attach(this);
     this.titleSettings.attach(this);
     this.filesArea.attach(this);
-    this.exportButton.attach(this);
+    this.exportArea.attach(this);
     this.progressBar.attach(this);
   }
   render() {
@@ -42,7 +42,7 @@ export class Container extends BaseView {
       div(this.progressBar.id),
       div(this.titleSettings.id),
       div(this.filesArea.id),
-      div(this.exportButton.id)
+      div(this.exportArea.id)
     ], "container");
     // console.log('container!render!!!!!!!!!!!')s
     return newVnode;
