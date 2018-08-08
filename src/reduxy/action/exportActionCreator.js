@@ -4,6 +4,9 @@ export class ExportActionCreator {
   static createExecuteAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("executeExport", targetView, data, storeKey);
   }
+  static creatExecuteAllAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("executeExportAll", targetView, data, storeKey);
+  }
   static creatRemoveAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("removeExported", targetView, data, storeKey);
   }

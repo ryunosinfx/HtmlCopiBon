@@ -15,9 +15,9 @@ import {
 import {
   ExportActionCreator
 } from '../../../reduxy/action/exportActionCreator'
-export class DownloadLastExportOneButton extends BaseView {
+export class DeleteExportOneButton extends BaseView {
   constructor() {
-    super("DownloadLastExportOneButton", "DownloadLastExportOneButton",true);
+    super("DeleteExportOneButton", "DeleteExportOneButton",true);
     this.storeKey = ExportActionCreator.getStoreKey();
   }
 
@@ -26,7 +26,7 @@ export class DownloadLastExportOneButton extends BaseView {
       on:{
         click:this.click()
       }
-    }, [ div("", ["button"], "download!")]);
+    }, [ div("", ["button"], "delete Exports!")]);
   }
   onAfterAttach(store, data) {}
 
@@ -37,7 +37,7 @@ export class DownloadLastExportOneButton extends BaseView {
   }
     click(){
       return (event)=>{
-        const action= ExportActionCreator.createDownloadAction();//createDownloadPdfAction
+        const action= ExportActionCreator.creatRemoveAction();
         this.dispatch(action);
         event.stopPropagation();
         return false;

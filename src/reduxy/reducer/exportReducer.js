@@ -17,12 +17,14 @@ export class ExportReducer extends BaseReducer {
     this.ms = MainService.getInstance();
     this.im = this.ms.im;
     this.exportExecuteAction = ExportActionCreator.createExecuteAction();
+    this.exportExecuteAllAction = ExportActionCreator.creatExecuteAllAction();
     this.exportRemoveAction = ExportActionCreator.creatRemoveAction();
     this.exportsLoadAction = ExportActionCreator.creatLoadAction();
     this.exportDownloadAction = ExportActionCreator.createDownloadAction();
     this.exportExecutePdfAction = ExportActionCreator.createExecutePdfAction();
     this.exportDownloadPdfAction = ExportActionCreator.createDownloadPdfAction();
     this.atatch(this.exportExecuteAction);
+    this.atatch(this.exportExecuteAllAction);
     this.atatch(this.exportRemoveAction);
     this.atatch(this.exportsLoadAction);
     this.atatch(this.exportDownloadAction);
@@ -41,6 +43,9 @@ export class ExportReducer extends BaseReducer {
   async reduce(store, action) {
     if (this.exportExecuteAction.type === action.type) {
       store[this.storeKey] = await this.exportExecute(action.data.exportOrders);
+    } else if (this.exportExecuteAllAction.type === action.type) {
+      store[this.storeKey] = await this.exportExecute(action.data.exportOrders);
+      store[this.storeKey] = await this.exportPdfExecute(action.data.exportOrders);
     } else if (this.exportRemoveAction.type === action.type) {
       store[this.storeKey] = await this.remove(action.data.exportPk);
     } else if (this.exportsLoadAction.type === action.type) {

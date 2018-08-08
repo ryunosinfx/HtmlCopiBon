@@ -425,6 +425,36 @@ canvas.hidden {
   background-color: rgb(170, 185, 210);
   color: rgb(222, 240, 222)
 }
+.ExportArea .ExportArea{
+  background-color: rgb(195, 240, 204);
+  border:1px solid rgb(87, 158, 17);
+  padding: 10px;
+}
+.ExportOrdrList .ExportOrdersListTitle{
+    background-color: rgb(162, 233, 176);
+    padding:10px;
+    margin-bottom: 0.3em;
+}
+.ExportOrdrList .ExportOrdrs{
+    background-color: rgb(222, 232, 219);
+    padding:15px;
+    border:1px solid rgb(87, 158, 17);
+    margin-bottom: 0.5em;
+}
+.ExportButtons{
+  display: flex;
+  flex-direction: row;
+}
+.ExportButtons>div{
+  display: flex;
+  width:200px;
+  padding:15px;
+  margin:2px;
+  border:1px solid rgb(87, 158, 17);
+  cursor: pointer;
+  border-radius: 3px;
+      background-color: rgb(141, 233, 159);
+}
 .display_none{
   display:none;
 }

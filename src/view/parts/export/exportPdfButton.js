@@ -12,20 +12,36 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
+import {
+  ExportActionCreator
+} from '../../../reduxy/action/exportActionCreator'
 export class ExportPdfButton extends BaseView {
   constructor() {
-    super("ExportPdfButton", "ExportPdfButton");
+    super("ExportPdfButton", "ExportPdfButton",true);
+    this.storeKey = ExportActionCreator.getStoreKey();
   }
 
   render(store, actionData) {
-    const name = div("", ["TitleName"], "TitleName");
-    return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
+    return div(this.id, [this.id + "Frame"],{
+      on:{
+        click:this.click()
+      }
+    }, [ div("", ["button"], "make pdf!")]);
   }
   onAfterAttach(store, data) {}
 
-  async onViewShow(store, actionData) {}
+  async onViewShow(store, actionData) {
+    if(store[this.storeKey]){
+      alert("OK");
+    }
+  }
 
-  buildRows(){
-
+  click(){
+    return (event)=>{
+      const action= ExportActionCreator.createExecutePdfAction();
+      this.dispatch(action);
+      event.stopPropagation();
+      return false;
+    }
   }
 }
