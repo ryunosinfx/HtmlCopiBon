@@ -4,8 +4,12 @@ export class Paper {
     //
     this.paparSize = {}
   }
-
-  calcClopOffset(basePaperSet){
+  calcClopOffsetPixcel(basePaperSet,dpi){
+    const cropSizeMm = this.calcClopOffsetMm(basePaperSet);
+    //const size = this.getTargetPaperSizeMm(basePaperSet);
+    return {x:this.calcPixcel(dpi,cropSizeMm.x),y:this.calcPixcel(dpi,cropSizeMm.y)};
+  }
+  calcClopOffsetMm(basePaperSet){
     const targetPaper = basePaper[basePaperSet];
 
     const offset = {x:0,y:0};
@@ -21,6 +25,15 @@ export class Paper {
     offset.y = (frameSize-y - targetY)/2;
     return offset;
   }
+  getTargetPaperSizeMm(basePaperSet){
+    const size = {x:0,y:0};
+    if(!basePaperSet){
+      //
+      return size;
+    }
+    const targetSize = this.getPaperSizeMm(basePaperSet);
+    return targetSize;
+  }
   getTargetPaperSize(basePaperSet,dpiName){
     const targetPaper = basePaper[basePaperSet];
     const size = {x:0,y:0};
@@ -28,7 +41,7 @@ export class Paper {
       //
       return size;
     }
-    const targetSize = this.getPaperSizeMm(targetPaper.target);
+    const targetSize = this.getTargetPaperSizeMm(targetPaper.target);
     const dpi = this.getDpi(dpiName);
     size.x = this.calcPixcel(targetSize.x,dpi);
     size.y = this.calcPixcel(targetSize.y,dpi);
@@ -40,6 +53,9 @@ export class Paper {
 
   calcDpi(pixcel,mm){
     return pixcel/mm*25.4;
+  }
+  getPaperFrameSizeMm(basePaperSet) {
+    return paperSizeSet[basePaperSet.frame];
   }
   getPaperSizeMm(paperSize) {
     return paperSizeSet[paperSize];
