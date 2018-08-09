@@ -18,7 +18,8 @@
   "author": "ryunosinfx",
   "license": "MIT",
   "dependencies": {
-    "snabbdom": "^0.7.1"
+    "snabbdom": "^0.7.1",
+    "zlibjs": "^0.3.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",

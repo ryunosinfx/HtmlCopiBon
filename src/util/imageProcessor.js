@@ -19,7 +19,6 @@ export class ImageProcessor {
   setDataURI(dataURI) {
     this.dataURI = dataURI;
   }
-
   async resize(ab, maxWidth, maxHeight) {
     const origin = await this.getImageDataFromArrayBuffer(ab);
     return this.resizeInMaxSize(origin, maxWidth, maxHeight);
@@ -39,12 +38,12 @@ export class ImageProcessor {
       height: newData.height
     }
     const len = newData.data.length
-    for(let i =0;i<len;i++){
+    for (let i = 0; i < len; i++) {
       newPaperData.data[i] = newData.data[i];
     }
     this.canvas.width = newPaperData.width;
     this.canvas.height = newPaperData.height;
-    this.imageMerger.maegeReplace(newPaperData, [data],true);
+    this.imageMerger.maegeReplace(newPaperData, [data], true);
     // console.log("newData---------------------------------------------------width:" + sizeOfImage.width + "/height:" + sizeOfImage.height)
     // console.log(newData)
     // console.log(data)

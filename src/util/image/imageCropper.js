@@ -13,7 +13,12 @@ export class ImageCropper {
     };
     imageData.offsetX = offsetX;
     imageData.offsetY = offsetY;
-    this.imageMerger.maegeReplace(imageDataBase, [imageData], false)
+    this.imageMerger.maegeReplace(imagaDataBase, [imageData], false)
     return imagaDataBase;
+  }
+  corpImageToData(imageData,distData,offset){
+    imageData.offsetX = offset.x;
+    imageData.offsetY = offset.y;
+    this.imageMerger.maegeReplace(distData, [imageData], false);
   }
 }
