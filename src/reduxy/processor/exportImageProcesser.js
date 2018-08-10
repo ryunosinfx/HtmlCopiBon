@@ -44,9 +44,14 @@ export class ExportImageProcesser {
       dpiName: "dpi600"
     };
     //-1 order consts calc
+    const targetDpi = this.paper.getDpi(order.dpiName);
     const targetSize = this.paper.getTargetPaperSize(order.basePaper);
-    const clopOffset = this.paper.calcClopOffset(order.basePaper);
-    const frameSize = this.paper.getPaperFrameSizeMm(order.basePaper);
+    const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper,targetDpi);
+    const frameSizeMm = this.paper.getPaperFrameSizeMm(order.basePaper);
+    const frameSize = {
+      x:this.paper.calcPixcel(targetDpi,frameSizeMm.x),
+      y:this.paper.calcPixcel(targetDpi,frameSizeMm.y)
+    };
 
     const expandedPaper = {
       data:new Uint8ClampedArray(frameSize.x*frameSize.y*4),
@@ -81,8 +86,8 @@ export class ExportImageProcesser {
           ? width
           : height;
         const longMm = isWider
-          ? frameSize.x
-          : frameSize.y;
+          ? frameSizeMm.x
+          : frameSizeMm.y;
         const dpi = this.paper.calcDpi(longPixcel, longMm);
         //paper size nomalize
         const sizeWhitePaperWidth = isWider
@@ -108,13 +113,14 @@ export class ExportImageProcesser {
         const deflate = new Zlib.RawDeflate(plain);
 const compressed = deflate.compress();
 cropedPaperForSave.data =compressed;
+
         //expand
         //2 Save to page
 
         //3 CropPage
         //4 saveImage
         //5 Save to page
-
+break;
       }
     }
 

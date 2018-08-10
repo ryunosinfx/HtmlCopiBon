@@ -21,8 +21,8 @@ export class Paper {
     const frameSize = this.getPaperSizeMm(targetPaper.frame);
     const targetX = targetSize.x*targetPaper.multiple;
     const targetY = targetSize.y*targetPaper.multiple;
-    offset.x = (frameSize-x - targetX)/2;
-    offset.y = (frameSize-y - targetY)/2;
+    offset.x = (frameSize.x - targetX)/2;
+    offset.y = (frameSize.y - targetY)/2;
     return offset;
   }
   getTargetPaperSizeMm(basePaperSet){
