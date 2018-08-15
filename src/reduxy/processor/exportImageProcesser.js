@@ -12,6 +12,7 @@ export class ExportImageProcesser {
     this.em = this.ms.em;
     this.sm = this.ms.sm;
     this.bm = this.ms.bm;
+    this.im = this.ms.im;
     this.ip = this.ms.ip;
     this.tm = this.ms.tm;
     this.paper = new Paper();
@@ -38,48 +39,58 @@ export class ExportImageProcesser {
   async exportExecute(exportOrders = []) {
     alert('ExportImageProcesser exportExecute');
     // 0 load Title & pages ExecutePerPage
-    const pages = this.pp.loadPages();
+    const pages = await this.pp.loadPages();
     const order = {
       basePaper: "mangaPaperA4ExpandTatikiri",
       dpiName: "dpi600"
     };
     //-1 order consts calc
     const targetDpi = this.paper.getDpi(order.dpiName);
-    const targetSize = this.paper.getTargetPaperSize(order.basePaper);
-    const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper,targetDpi);
+    const targetSize = this.paper.getTargetPaperSize(order.basePaper,order.dpiName);
+    const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper, targetDpi);
     const frameSizeMm = this.paper.getPaperFrameSizeMm(order.basePaper);
     const frameSize = {
-      x:this.paper.calcPixcel(targetDpi,frameSizeMm.x),
-      y:this.paper.calcPixcel(targetDpi,frameSizeMm.y)
+      x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
+      y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
-
+    console.log("--targetSize--")
+    console.log(targetSize)
     const expandedPaper = {
-      data:new Uint8ClampedArray(frameSize.x*frameSize.y*4),
-      width:frameSize.x,
-      height:frameSize.y
+      data: new Uint8ClampedArray(frameSize.x * frameSize.y * 4),
+      width: frameSize.x,
+      height: frameSize.y
     };
     const cropedPaper = {
-      data:new Uint8ClampedArray(targetSize.x*targetSize.y*4),
-      width:targetSize.x,
-      height:targetSize.y
+      data: new Uint8ClampedArray(targetSize.x * targetSize.y * 4),
+      width: targetSize.x,
+      height: targetSize.y
     };
     const cropedPaperForSave = {
-      data:new Uint8ClampedArray(targetSize.x*targetSize.y*4),
-      width:targetSize.x,
-      height:targetSize.y
+      data: new Uint8ClampedArray(targetSize.x * targetSize.y * 4),
+      width: targetSize.x,
+      height: targetSize.y
     };
     const targetRetio = targetSize.x / targetSize.y;
-
-    for (let page of pages) {
-      const pageEntity = this.em.get(page);
-      if (page && pageEntity && pageEntity.baseImage) {
+    const isBaseWhite = true;
+    for (let pageEntity of pages) {
+      if (pageEntity && pageEntity.baseImage) {
+        console.log(pageEntity)
         //1 Expand
-        const baseImageEntity = this.em.get(page.baseImage);
+        const baseImageEntity = await this.em.get(pageEntity.baseImage);
         const width = baseImageEntity.width;
         const height = baseImageEntity.height;
+        const baseBinaryEntity = await this.em.get(baseImageEntity.binary);
+        console.log(baseImageEntity)
+        console.log(baseBinaryEntity)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
         // TODO convert flate bitmap data
-        const origin = await this.ip.getImageDataFromArrayBuffer(baseImageEntity._ab);
-        const originData = {data:"",width:width,height:height};
+        const origin = await this.ip.getImageDataFromArrayBuffer(baseBinaryEntity._ab);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
+        const originData = {
+          data: "",
+          width: width,
+          height: height
+        };
         const retio = width / height;
         const isWider = retio > targetRetio;
         const longPixcel = isWider
@@ -103,24 +114,35 @@ export class ExportImageProcesser {
           ? (sizeWhitePaperHeight - height) / 2
           : 0;
         const whitePaper = {
-          data:new Uint8ClampedArray(sizeWhitePaperWidth*sizeWhitePaperHeight*4),
-          width:sizeWhitePaperWidth,
-          height:sizeWhitePaperHeight
+          data: new Uint8ClampedArray(sizeWhitePaperWidth * sizeWhitePaperHeight * 4),
+          width: sizeWhitePaperWidth,
+          height: sizeWhitePaperHeight
         };
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a"+whitePaper.data.length)
         this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a"+expandedPaper.data.length)
         this.imageResizer.resizeByCubic(whitePaper, expandedPaper);
-        this.imageCropper.corpImageToData(expandedPaper,cropedPaper,clopOffset);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a"+cropedPaper.data.length)
+        this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+        const plain = cropedPaper.data;
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a")
+          console.time('RawDeflate');
         const deflate = new Zlib.RawDeflate(plain);
-const compressed = deflate.compress();
-cropedPaperForSave.data =compressed;
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
+        const compressed = deflate.compress();
+          console.timeEnd('RawDeflate');
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a")
+        cropedPaperForSave.data = compressed;
 
+        console.log(compressed)
+        alert(frameSizeMm);
         //expand
         //2 Save to page
 
         //3 CropPage
         //4 saveImage
         //5 Save to page
-break;
+        break;
       }
     }
 

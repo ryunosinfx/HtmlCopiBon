@@ -18,7 +18,7 @@ export class ImageManager {
   }
   async load(pk) {
     let binaryPk = pk;
-    if (!pk) {
+    if (typeof pk!=="string") {
       binaryPk = PrimaryKey.getPrimaryKey(pk);
     }
     return await this.em.Images.get(binaryPk);

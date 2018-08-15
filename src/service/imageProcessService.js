@@ -19,4 +19,7 @@ export class ImageProcessService {
   async resizeAsPaperB5_72(ab) {
     return await this.ip.resizeAsPaper(ab,"B5", "dpi72", "conbini");
   }
+  async getImageDataFromArrayBuffer(ab){
+    return await this.ip.getImageDataFromArrayBuffer(ab);
+  }
 }

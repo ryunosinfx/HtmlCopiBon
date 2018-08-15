@@ -55,7 +55,8 @@ export class Paper {
     return pixcel/mm*25.4;
   }
   getPaperFrameSizeMm(basePaperSet) {
-    return paperSizeSet[basePaperSet.frame];
+    const targetPaper = basePaper[basePaperSet];
+    return paperSizeSet[targetPaper.frame];
   }
   getPaperSizeMm(paperSize) {
     return paperSizeSet[paperSize];
