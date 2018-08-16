@@ -46,7 +46,7 @@ export class ExportImageProcesser {
     };
     //-1 order consts calc
     const targetDpi = this.paper.getDpi(order.dpiName);
-    const targetSize = this.paper.getTargetPaperSize(order.basePaper,order.dpiName);
+    const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
     const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper, targetDpi);
     const frameSizeMm = this.paper.getPaperFrameSizeMm(order.basePaper);
     const frameSize = {
@@ -118,19 +118,19 @@ export class ExportImageProcesser {
           width: sizeWhitePaperWidth,
           height: sizeWhitePaperHeight
         };
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a"+whitePaper.data.length)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a" + whitePaper.data.length)
         this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a"+expandedPaper.data.length)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a" + expandedPaper.data.length)
         this.imageResizer.resizeByCubic(whitePaper, expandedPaper);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a"+cropedPaper.data.length)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a" + cropedPaper.data.length)
         this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
         const plain = cropedPaper.data;
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a")
-          console.time('RawDeflate');
+        console.time('RawDeflate');
         const deflate = new Zlib.RawDeflate(plain);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
         const compressed = deflate.compress();
-          console.timeEnd('RawDeflate');
+        console.timeEnd('RawDeflate');
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a")
         cropedPaperForSave.data = compressed;
 
@@ -152,6 +152,8 @@ export class ExportImageProcesser {
     //9 save
 
     //10 load images and add tozip
+    const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+    
     //11 save zip
 
   }

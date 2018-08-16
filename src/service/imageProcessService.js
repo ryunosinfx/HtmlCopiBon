@@ -22,4 +22,7 @@ export class ImageProcessService {
   async getImageDataFromArrayBuffer(ab){
     return await this.ip.getImageDataFromArrayBuffer(ab);
   }
+  getArrayBufferFromImageBitmapData(imageBitmapData){
+    return this.ip.getArrayBufferFromImageBitmapData(imageBitmapData);
+  }
 }

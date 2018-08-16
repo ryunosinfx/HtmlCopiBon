@@ -105,6 +105,20 @@ export class ImageProcessor {
       }
     });
   }
+  getArrayBufferFromImageBitmapData(iamgeBitmapData) {
+    console.time('resize getArrayBufferFromImageBitmapData');
+    let newPaperData = this.ctx.createImageData(iamgeBitmapData.width, iamgeBitmapData.height);
+    const len = iamgeBitmapData.data.length
+    for (let i = 0; i < len; i++) {
+      newPaperData.data[i] = iamgeBitmapData.data[i];
+    }
+    this.ctx.putImageData(newPaperData, 0, 0);
+    newPaperData = undefined;
+    let dataUri = this.canvas.toDataURL();
+    const abResized = bc.dataURI2ArrayBuffer(dataUri);
+    console.timeEnd('resize getArrayBufferFromImageBitmapData');
+    return abResized;
+  }
   create(arrayBuffer, width, height, type) {
     return new Promise((resolve, reject) => {
       const imgElm = new Image();
