@@ -14,6 +14,7 @@ export class UnicodeEncoder {
         codePoints.push(charCode);
       }
     }
+    console.log(codePoints)
     return codePoints;
   }
 
@@ -35,5 +36,14 @@ export class UnicodeEncoder {
       stringParts += (String.fromCharCode.apply(String, codePointCharCodes));
     }
     return stringParts;
+  }
+  static stringToByteArray(str) {
+    const len = str.length;
+    const array = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      array[i] = str.charCodeAt(i) & 0xff;
+    }
+    return array;
   }
 }

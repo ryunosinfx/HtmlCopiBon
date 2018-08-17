@@ -1,10 +1,24 @@
-import {Sorter} from "../../util/sorter";
-import {Paper} from "../../util/image/paper";
-import {ImageMerger} from "../../util/image/imageMerger";
-import {ImageResizer} from "../../util/image/imageResizer";
-import {ImageCropper} from "../../util/image/imageCropper";
-import {MainService} from "../../service/mainService"
-import {Zlib} from "zlibjs/bin/rawdeflate.min"
+import {
+  Sorter
+} from "../../util/sorter";
+import {
+  Paper
+} from "../../util/image/paper";
+import {
+  ImageMerger
+} from "../../util/image/imageMerger";
+import {
+  ImageResizer
+} from "../../util/image/imageResizer";
+import {
+  ImageCropper
+} from "../../util/image/imageCropper";
+import {
+  MainService
+} from "../../service/mainService"
+import {
+  Zlib,Zip,Raw,PKZIP
+} from "zlibjs/bin/zlib_and_gzip.min"
 export class ExportImageProcesser {
   constructor(pp) {
     this.pp = pp;
@@ -93,26 +107,26 @@ export class ExportImageProcesser {
         };
         const retio = width / height;
         const isWider = retio > targetRetio;
-        const longPixcel = isWider
-          ? width
-          : height;
-        const longMm = isWider
-          ? frameSizeMm.x
-          : frameSizeMm.y;
+        const longPixcel = isWider ?
+          width :
+          height;
+        const longMm = isWider ?
+          frameSizeMm.x :
+          frameSizeMm.y;
         const dpi = this.paper.calcDpi(longPixcel, longMm);
         //paper size nomalize
-        const sizeWhitePaperWidth = isWider
-          ? width
-          : height * targetRetio;
-        const sizeWhitePaperHeight = isWider
-          ? width / targetRetio
-          : height;
-        const offsetX = isWider
-          ? 0
-          : (sizeWhitePaperWidth - width) / 2;
-        const offsetY = isWider
-          ? (sizeWhitePaperHeight - height) / 2
-          : 0;
+        const sizeWhitePaperWidth = isWider ?
+          width :
+          height * targetRetio;
+        const sizeWhitePaperHeight = isWider ?
+          width / targetRetio :
+          height;
+        const offsetX = isWider ?
+          0 :
+          (sizeWhitePaperWidth - width) / 2;
+        const offsetY = isWider ?
+          (sizeWhitePaperHeight - height) / 2 :
+          0;
         const whitePaper = {
           data: new Uint8ClampedArray(sizeWhitePaperWidth * sizeWhitePaperHeight * 4),
           width: sizeWhitePaperWidth,
@@ -125,9 +139,13 @@ export class ExportImageProcesser {
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a" + cropedPaper.data.length)
         this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
         const plain = cropedPaper.data;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a")
+        console.log(Zlib);
+        console.log(Zip);
+        console.log(Raw);
+        console.log(PKZIP);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a-")
         console.time('RawDeflate');
-        const deflate = new Zlib.RawDeflate(plain);
+        const deflate = new Raw.RawDeflate(plain);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
         const compressed = deflate.compress();
         console.timeEnd('RawDeflate');
@@ -153,7 +171,12 @@ export class ExportImageProcesser {
 
     //10 load images and add tozip
     const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
-    
+    const zip = new Zlib.Zip();
+    // plainData1
+    zip.addFile(ab, {
+      filename: stringToByteArray('foo.png')
+    });
+    const compressed = zip.compress();
     //11 save zip
 
   }
