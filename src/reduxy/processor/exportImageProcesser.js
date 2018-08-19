@@ -1,24 +1,13 @@
-import {
-  Sorter
-} from "../../util/sorter";
-import {
-  Paper
-} from "../../util/image/paper";
-import {
-  ImageMerger
-} from "../../util/image/imageMerger";
-import {
-  ImageResizer
-} from "../../util/image/imageResizer";
-import {
-  ImageCropper
-} from "../../util/image/imageCropper";
-import {
-  MainService
-} from "../../service/mainService"
-import {
-  Zlib,Zip,Raw,PKZIP
-} from "zlibjs/bin/zlib_and_gzip.min"
+import {Sorter} from "../../util/sorter";
+import {Paper} from "../../util/image/paper";
+import {ImageMerger} from "../../util/image/imageMerger";
+import {ImageResizer} from "../../util/image/imageResizer";
+import {ImageCropper} from "../../util/image/imageCropper";
+import {UnicodeEncoder} from "../../util/unicodeEncoder";
+import {MainService} from "../../service/mainService"
+// import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
+import {Zlib} from "zlibjs/bin/zip.min"
+
 export class ExportImageProcesser {
   constructor(pp) {
     this.pp = pp;
@@ -107,26 +96,26 @@ export class ExportImageProcesser {
         };
         const retio = width / height;
         const isWider = retio > targetRetio;
-        const longPixcel = isWider ?
-          width :
-          height;
-        const longMm = isWider ?
-          frameSizeMm.x :
-          frameSizeMm.y;
+        const longPixcel = isWider
+          ? width
+          : height;
+        const longMm = isWider
+          ? frameSizeMm.x
+          : frameSizeMm.y;
         const dpi = this.paper.calcDpi(longPixcel, longMm);
         //paper size nomalize
-        const sizeWhitePaperWidth = isWider ?
-          width :
-          height * targetRetio;
-        const sizeWhitePaperHeight = isWider ?
-          width / targetRetio :
-          height;
-        const offsetX = isWider ?
-          0 :
-          (sizeWhitePaperWidth - width) / 2;
-        const offsetY = isWider ?
-          (sizeWhitePaperHeight - height) / 2 :
-          0;
+        const sizeWhitePaperWidth = isWider
+          ? width
+          : height * targetRetio;
+        const sizeWhitePaperHeight = isWider
+          ? width / targetRetio
+          : height;
+        const offsetX = isWider
+          ? 0
+          : (sizeWhitePaperWidth - width) / 2;
+        const offsetY = isWider
+          ? (sizeWhitePaperHeight - height) / 2
+          : 0;
         const whitePaper = {
           data: new Uint8ClampedArray(sizeWhitePaperWidth * sizeWhitePaperHeight * 4),
           width: sizeWhitePaperWidth,
@@ -140,20 +129,17 @@ export class ExportImageProcesser {
         this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
         const plain = cropedPaper.data;
         console.log(Zlib);
-        console.log(Zip);
-        console.log(Raw);
-        console.log(PKZIP);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a-")
         console.time('RawDeflate');
-        const deflate = new Raw.RawDeflate(plain);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
-        const compressed = deflate.compress();
-        console.timeEnd('RawDeflate');
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a")
-        cropedPaperForSave.data = compressed;
+        // const deflate = new Raw.RawDeflate(plain);
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
+        // const compressed = deflate.compress();
+        // console.timeEnd('RawDeflate');
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a")
+        // cropedPaperForSave.data = compressed;
 
-        console.log(compressed)
-        alert(frameSizeMm);
+        // console.log(compressed)
+        // alert(frameSizeMm);
         //expand
         //2 Save to page
 
@@ -171,14 +157,15 @@ export class ExportImageProcesser {
 
     //10 load images and add tozip
     const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+    console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
+    console.log(ab);
     const zip = new Zlib.Zip();
     // plainData1
-    zip.addFile(ab, {
-      filename: stringToByteArray('foo.png')
-    });
+    zip.addFile(new Uint8Array(ab), {filename: UnicodeEncoder.stringToByteArray('foo.png')});
     const compressed = zip.compress();
     //11 save zip
-
+    console.log(compressed);
+    return compressed;
   }
   exportPdfExecute(exportOrders) {
     alert('ExportImageProcesser exportPdfExecute');

@@ -116,6 +116,8 @@ export class ImageProcessor {
     newPaperData = undefined;
     let dataUri = this.canvas.toDataURL();
     const abResized = bc.dataURI2ArrayBuffer(dataUri);
+    console.log('dataUri:'+dataUri);
+    console.log(abResized);
     console.timeEnd('resize getArrayBufferFromImageBitmapData');
     return abResized;
   }
