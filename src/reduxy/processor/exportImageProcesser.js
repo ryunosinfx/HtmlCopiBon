@@ -120,16 +120,16 @@ export class ExportImageProcesser {
         };
         origin.offsetX=offsetX;
         origin.offsetY=offsetY;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a" + whitePaper.data.length+'/w:'+sizeWhitePaperWidth+'/h:'+sizeWhitePaperHeight)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length+'/w:'+sizeWhitePaperWidth+'/h:'+sizeWhitePaperHeight)
         this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
-        currentDataAb = this.ip.getArrayBufferFromImageBitmapData(whitePaper);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a" + expandedPaper.data.length)
-        this.imageResizer.resizeByCubic(whitePaper, expandedPaper);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a" + cropedPaper.data.length)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
+        this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
         this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+        currentDataAb = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
         const plain = cropedPaper.data;
-        console.log(Zlib);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a-")
+        //console.log(Zlib);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a-/")
         console.time('RawDeflate');
         // const deflate = new Raw.RawDeflate(plain);
         // console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a")
@@ -142,13 +142,30 @@ export class ExportImageProcesser {
         // alert(frameSizeMm);
         //expand
         //2 Save to page
-
+        const outputOld = pageEntity.outputExpandImage;
+        const outputNew = await this.bm.save(outputOld,"expandPage",currentDataAb);
+        pageEntity.outputExpandImage = outputNew;
+        await this.em.Pages.save(pageEntity);
         //3 CropPage
         //4 saveImage
         //5 Save to page
         break;
       }
     }
+    const zip = new Zlib.Zip();
+    let pageNum = 0;
+    for (let pageEntity of pages) {
+      pageNum++;
+      if (pageEntity && pageEntity.outputExpandImage) {
+        const outputBinaryEntity = await this.em.get(pageEntity.outputExpandImage);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:"+pageNum+"/outputBinaryEntity:"+outputBinaryEntity);
+        if(outputBinaryEntity){
+          zip.addFile(new Uint8Array(outputBinaryEntity._ab), {filename: UnicodeEncoder.stringToByteArray('foo'+pageNum+'.png')});
+        }
+      }
+    }
+    const compressed = zip.compress();
+
 
     //6 new WhiteImageCreate
     //7 load2PageImage
@@ -156,15 +173,12 @@ export class ExportImageProcesser {
     //9 save
 
     //10 load images and add tozip
-    const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
-    console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
-    console.log(ab);
-    const zip = new Zlib.Zip();
+    // const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+    // console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
+    // console.log(ab);
     // plainData1
-    zip.addFile(new Uint8Array(currentDataAb), {filename: UnicodeEncoder.stringToByteArray('foo.png')});
-    const compressed = zip.compress();
     //11 save zip
-    console.log(compressed);
+    // console.log(compressed);
     return compressed;
   }
   exportPdfExecute(exportOrders) {

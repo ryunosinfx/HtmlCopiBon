@@ -7,7 +7,7 @@ export class Paper {
   calcClopOffsetPixcel(basePaperSet,dpi){
     const cropSizeMm = this.calcClopOffsetMm(basePaperSet);
     //const size = this.getTargetPaperSizeMm(basePaperSet);
-    return {x:this.calcPixcel(dpi,cropSizeMm.x),y:this.calcPixcel(dpi,cropSizeMm.y)};
+    return {x:this.calcPixcel(dpi,cropSizeMm.x)*-1,y:this.calcPixcel(dpi,cropSizeMm.y)*-1};
   }
   calcClopOffsetMm(basePaperSet){
     const targetPaper = basePaper[basePaperSet];

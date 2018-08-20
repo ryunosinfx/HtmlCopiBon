@@ -18,7 +18,7 @@ export class BinaryManager {
     }
     return await this.em.Binary.delete(binaryPk);
   }
-  async save(pk, name, binary) {
+  async save(pk, name, ab) {
     // console.log("BinaryManager save!!A!! pk:" + pk);
     // console.log(binary);
     // console.log("BinaryManager save!!B!! name:" + name);
@@ -28,15 +28,13 @@ export class BinaryManager {
     }
     // console.log(binary);
     //alert(binary);
-    let binaryPk = PrimaryKey.getPrimaryKey(binary);
+    // let binaryPk = PrimaryKey.getPrimaryKey(binary);
     if (!binEntity) {
-      binEntity = new Binary();
+      binEntity = new Binary(ab);
     } else {
       binEntity.updateDate = Date.now();
+      binEntity._ab = ab;
     }
-    binEntity.binary = binaryPk
-      ? binaryPk
-      : binary;
     return await this.em.Binary.save(binEntity);
   }
 }

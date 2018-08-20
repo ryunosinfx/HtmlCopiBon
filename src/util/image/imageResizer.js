@@ -34,7 +34,7 @@ export class ImageResizer {
           0);
     }
   }
-  resizeByCubic(iamegData, distImage) {
+  resizeAsByCubic(iamegData, distImage) {
     const {
       data,
       width,
