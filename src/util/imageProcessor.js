@@ -107,17 +107,20 @@ export class ImageProcessor {
   }
   getArrayBufferFromImageBitmapData(iamgeBitmapData) {
     console.time('resize getArrayBufferFromImageBitmapData');
+    this.canvas.width = Math.floor(iamgeBitmapData.width);
+    this.canvas.height = Math.floor(iamgeBitmapData.height);
     let newPaperData = this.ctx.createImageData(iamgeBitmapData.width, iamgeBitmapData.height);
     const len = iamgeBitmapData.data.length
     for (let i = 0; i < len; i++) {
       newPaperData.data[i] = iamgeBitmapData.data[i];
     }
     this.ctx.putImageData(newPaperData, 0, 0);
-    newPaperData = undefined;
     let dataUri = this.canvas.toDataURL();
     const abResized = bc.dataURI2ArrayBuffer(dataUri);
+    console.log('iamgeBitmapData.data.length:'+iamgeBitmapData.data.length+'/w:'+iamgeBitmapData.width+'/h:'+iamgeBitmapData.height);
     console.log('dataUri:'+dataUri);
     console.log(abResized);
+    newPaperData = undefined;
     console.timeEnd('resize getArrayBufferFromImageBitmapData');
     return abResized;
   }

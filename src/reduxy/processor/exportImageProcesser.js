@@ -75,6 +75,7 @@ export class ExportImageProcesser {
     };
     const targetRetio = targetSize.x / targetSize.y;
     const isBaseWhite = true;
+    let currentDataAb = null
     for (let pageEntity of pages) {
       if (pageEntity && pageEntity.baseImage) {
         console.log(pageEntity)
@@ -87,13 +88,9 @@ export class ExportImageProcesser {
         console.log(baseBinaryEntity)
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
         // TODO convert flate bitmap data
+        currentDataAb = baseBinaryEntity._ab;
         const origin = await this.ip.getImageDataFromArrayBuffer(baseBinaryEntity._ab);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
-        const originData = {
-          data: "",
-          width: width,
-          height: height
-        };
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a w:"+origin.width+'/h:'+origin.height)
         const retio = width / height;
         const isWider = retio > targetRetio;
         const longPixcel = isWider
@@ -106,23 +103,26 @@ export class ExportImageProcesser {
         //paper size nomalize
         const sizeWhitePaperWidth = isWider
           ? width
-          : height * targetRetio;
+          : Math.floor(height * targetRetio);
         const sizeWhitePaperHeight = isWider
-          ? width / targetRetio
+          ? Math.floor(width / targetRetio)
           : height;
         const offsetX = isWider
           ? 0
-          : (sizeWhitePaperWidth - width) / 2;
+          : Math.floor((sizeWhitePaperWidth - width) / 2);
         const offsetY = isWider
-          ? (sizeWhitePaperHeight - height) / 2
+          ? Math.floor((sizeWhitePaperHeight - height) / 2)
           : 0;
         const whitePaper = {
           data: new Uint8ClampedArray(sizeWhitePaperWidth * sizeWhitePaperHeight * 4),
           width: sizeWhitePaperWidth,
           height: sizeWhitePaperHeight
         };
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a" + whitePaper.data.length)
+        origin.offsetX=offsetX;
+        origin.offsetY=offsetY;
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a" + whitePaper.data.length+'/w:'+sizeWhitePaperWidth+'/h:'+sizeWhitePaperHeight)
         this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+        currentDataAb = this.ip.getArrayBufferFromImageBitmapData(whitePaper);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a" + expandedPaper.data.length)
         this.imageResizer.resizeByCubic(whitePaper, expandedPaper);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a" + cropedPaper.data.length)
@@ -161,7 +161,7 @@ export class ExportImageProcesser {
     console.log(ab);
     const zip = new Zlib.Zip();
     // plainData1
-    zip.addFile(new Uint8Array(ab), {filename: UnicodeEncoder.stringToByteArray('foo.png')});
+    zip.addFile(new Uint8Array(currentDataAb), {filename: UnicodeEncoder.stringToByteArray('foo.png')});
     const compressed = zip.compress();
     //11 save zip
     console.log(compressed);
