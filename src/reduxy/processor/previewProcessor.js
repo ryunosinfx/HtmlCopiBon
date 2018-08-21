@@ -40,29 +40,33 @@ export class PreviewProcessor {
     return retPreviews;
   }
   shapeListBySets(previews, isSingle, setting) {
+    const cratePageData = this.getCratePageDataFunc();
     if (isSingle) {
       const retSetLis = [];
       for (let index in previews) {
-        retSetLis.push(this.cratePageData(index*1+1, false, false, previews));
+        retSetLis.push(cratePageData(index*1+1, false, false, previews, this.dummyClass));
       }
       return retSetLis;
     } else {
-      return this.buildPageFrames(setting, previews);
+      const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
+      this.pageNum = pageNum;
+      return this.buildPageFrames(setting, previews, cratePageData, this.dummyClass);
     }
   }
-  cratePageData(pageNo, className, isRight, binaries) {
-    return {
-      pageNo: pageNo,
-      isDummy: className === this.dummyClass,
-      isRight: isRight,
-      binary: binaries[pageNo - 1]
+  getCratePageDataFunc(){
+    return (pageNo, className, isRight, binaries, dummyClass)->{
+      return {
+        pageNo: pageNo,
+        isDummy: className === dummyClass,
+        isRight: isRight,
+        binary: binaries[pageNo - 1]
+      }
     }
   }
-  buildPageFrames(setting, binaries) {
+  buildPageFrames(setting, binaries, cratePageData, dummyClass) {
     const retFrames = [];
     const startPage = setting.startPage;
     const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
-    this.pageNum = pageNum;
     const pageDirection = setting.pageDirection;
     const isPageDirectionR2L = pageDirection === "r2l";
     const isPageStartR = startPage === "r";
@@ -121,18 +125,18 @@ export class PreviewProcessor {
             : isStartFull
               ? 2
               : 1
-        pagePair.push(this.cratePageData(leftPageNoFirst, leftStartDummyClass, false, binaries));
-        pagePair.push(this.cratePageData(rightPageNoFirst, rightStartDummyClass, true, binaries));
+        pagePair.push(cratePageData(leftPageNoFirst, leftStartDummyClass, false, binaries, dummyClass));
+        pagePair.push(cratePageData(rightPageNoFirst, rightStartDummyClass, true, binaries, dummyClass));
         pageOffset = 1;
         pagNo += isStartFull
           ? 2
           : 1;
       } else if (index === lastIndex) {
-        pagePair.push(this.cratePageData(leftPageNo, leftEndDummyClass, false, binaries));
-        pagePair.push(this.cratePageData(rightPageNo, rightEndDummyClass, true, binaries));
+        pagePair.push(cratePageData(leftPageNo, leftEndDummyClass, false, binaries, dummyClass));
+        pagePair.push(cratePageData(rightPageNo, rightEndDummyClass, true, binaries, dummyClass));
       } else {
-        pagePair.push(this.cratePageData(leftPageNo, "", false, binaries));
-        pagePair.push(this.cratePageData(rightPageNo, "", true, binaries));
+        pagePair.push(cratePageData(leftPageNo, "", false, binaries, dummyClass));
+        pagePair.push(cratePageData(rightPageNo, "", true, binaries, dummyClass));
         pagNo += 2;
       }
     }

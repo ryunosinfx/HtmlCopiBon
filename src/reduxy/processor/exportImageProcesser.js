@@ -73,6 +73,11 @@ export class ExportImageProcesser {
       width: targetSize.x,
       height: targetSize.y
     };
+    const cropedPaperDual = {
+      data: new Uint8ClampedArray(targetSize.x * targetSize.y * 8),
+      width: targetSize.x*2,
+      height: targetSize.y
+    };
     const targetRetio = targetSize.x / targetSize.y;
     const isBaseWhite = true;
     let currentDataAb = null
@@ -149,16 +154,37 @@ export class ExportImageProcesser {
         //3 CropPage
         //4 saveImage
         //5 Save to page
-        break;
+        //break;
       }
     }
+
+    //6 new WhiteImageCreate
+    //7 load2PageImage
+    //8 merge
+    //9 save
+    let cupleNum = 0;
+    let leftPage = null;
+    let rightPage = null;
+
+    for (let pageEntity of pages) {
+      cupleNum++;
+      if (pageEntity && pageEntity.outputExpandImage) {
+        const outputBinaryEntity = await this.em.get(pageEntity.outputExpandImage);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:"+cupleNum+"/outputBinaryEntity:"+outputBinaryEntity);
+        if(outputBinaryEntity){
+
+        }
+      }
+    }
+
+
     const zip = new Zlib.Zip();
     let pageNum = 0;
     for (let pageEntity of pages) {
       pageNum++;
       if (pageEntity && pageEntity.outputExpandImage) {
         const outputBinaryEntity = await this.em.get(pageEntity.outputExpandImage);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:"+pageNum+"/outputBinaryEntity:"+outputBinaryEntity);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a pageNum:"+pageNum+"/outputBinaryEntity:"+outputBinaryEntity);
         if(outputBinaryEntity){
           zip.addFile(new Uint8Array(outputBinaryEntity._ab), {filename: UnicodeEncoder.stringToByteArray('foo'+pageNum+'.png')});
         }
@@ -167,10 +193,6 @@ export class ExportImageProcesser {
     const compressed = zip.compress();
 
 
-    //6 new WhiteImageCreate
-    //7 load2PageImage
-    //8 merge
-    //9 save
 
     //10 load images and add tozip
     // const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);

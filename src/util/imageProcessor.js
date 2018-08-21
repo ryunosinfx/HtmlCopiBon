@@ -117,9 +117,9 @@ export class ImageProcessor {
     this.ctx.putImageData(newPaperData, 0, 0);
     let dataUri = this.canvas.toDataURL();
     const abResized = bc.dataURI2ArrayBuffer(dataUri);
-    console.log('iamgeBitmapData.data.length:'+iamgeBitmapData.data.length+'/w:'+iamgeBitmapData.width+'/h:'+iamgeBitmapData.height);
-    console.log('dataUri:'+dataUri);
-    console.log(abResized);
+    // console.log('iamgeBitmapData.data.length:'+iamgeBitmapData.data.length+'/w:'+iamgeBitmapData.width+'/h:'+iamgeBitmapData.height);
+    // console.log('dataUri:'+dataUri);
+    // console.log(abResized);
     newPaperData = undefined;
     console.timeEnd('resize getArrayBufferFromImageBitmapData');
     return abResized;
