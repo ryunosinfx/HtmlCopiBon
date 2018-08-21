@@ -42,10 +42,10 @@ export class ImageMerger {
       //console.log(width+"*"+height+"*4="+data.length+"/"+width+"*"+height+"*4="+data.length)
       const offsetY = imageData.offsetY && imageData.offsetY > 0 && imageData.offsetY < height ?
         imageData.offsetY :
-        imageData.offsetY < height ? 0 : height;
+        !imageData.offsetY || imageData.offsetY < height ? 0 : height;
       const offsetX = imageData.offsetX && imageData.offsetX > 0 && imageData.offsetX < width ?
         imageData.offsetX :
-        imageData.offsetX < width ? 0 : width;
+        !imageData.offsetX || imageData.offsetX < width ? 0 : width;
       const addOffsetY = offsetY + addHeight;
       const endY = addOffsetY > height ?
         height :

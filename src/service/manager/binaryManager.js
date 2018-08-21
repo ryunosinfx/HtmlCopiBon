@@ -35,6 +35,7 @@ export class BinaryManager {
       binEntity.updateDate = Date.now();
       binEntity._ab = ab;
     }
-    return await this.em.Binary.save(binEntity);
+    const binaryEntitySaved = await this.em.Binary.save(binEntity)
+    return PrimaryKey.getPrimaryKey(binaryEntitySaved);
   }
 }

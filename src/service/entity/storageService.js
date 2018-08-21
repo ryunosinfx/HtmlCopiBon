@@ -38,7 +38,7 @@ export class StorageService {
     if (data.toObj) {
       saveData = data.toObj();
     }
-    console.log(saveData);
+    // console.log(saveData);
     await this.idbAccessor.saveDataDefault(pk, saveData);
     return data; //
   }

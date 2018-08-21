@@ -11,6 +11,7 @@ export default class IndexeddbHelper {
 
   getOpenDB(newVersion) {
     return new Promise((resolve, reject) => {
+      // TODO instance
       let request = this.indexedDB.open(this.dbName, newVersion);
       request.onsuccess = (event) => {
         resolve(event.target.result);

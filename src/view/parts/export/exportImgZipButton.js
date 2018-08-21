@@ -29,7 +29,7 @@ export class ExportImgZipButton extends BaseView {
   async onViewShow(store, actionData) {
     if (store[this.storeKey]) {
       const data = store[this.storeKey];
-      console.log(data);
+      // console.log(data);
       alert("OK download zip file!");
       FileDownloader.download("test.zip",data,"application/zip");
     }

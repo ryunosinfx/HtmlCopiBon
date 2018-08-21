@@ -105,7 +105,17 @@ export class ImageProcessor {
       }
     });
   }
-  getArrayBufferFromImageBitmapData(iamgeBitmapData) {
+  getArrayBufferFromImageBitmapDataAsJpg(iamgeBitmapData,quority) {
+    const option ={
+      type:'image/jpeg',
+      quority:quority
+    };
+    return this.getArrayBufferFromImageBitmapData(iamgeBitmapData,option);
+  }
+  getArrayBufferFromImageBitmapDataAsPng(iamgeBitmapData) {
+    return this.getArrayBufferFromImageBitmapData(iamgeBitmapData);
+  }
+  getArrayBufferFromImageBitmapData(iamgeBitmapData,option) {
     console.time('resize getArrayBufferFromImageBitmapData');
     this.canvas.width = Math.floor(iamgeBitmapData.width);
     this.canvas.height = Math.floor(iamgeBitmapData.height);
@@ -115,7 +125,7 @@ export class ImageProcessor {
       newPaperData.data[i] = iamgeBitmapData.data[i];
     }
     this.ctx.putImageData(newPaperData, 0, 0);
-    let dataUri = this.canvas.toDataURL();
+    let dataUri = option? this.canvas.toDataURL(option.type,option.quority):this.canvas.toDataURL();
     const abResized = bc.dataURI2ArrayBuffer(dataUri);
     // console.log('iamgeBitmapData.data.length:'+iamgeBitmapData.data.length+'/w:'+iamgeBitmapData.width+'/h:'+iamgeBitmapData.height);
     // console.log('dataUri:'+dataUri);

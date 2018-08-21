@@ -22,7 +22,13 @@ export class ImageProcessService {
   async getImageDataFromArrayBuffer(ab){
     return await this.ip.getImageDataFromArrayBuffer(ab);
   }
-  getArrayBufferFromImageBitmapData(imageBitmapData){
-    return this.ip.getArrayBufferFromImageBitmapData(imageBitmapData);
+  getArrayBufferFromImageBitmapData(imageBitmapData,option){
+    return this.ip.getArrayBufferFromImageBitmapData(imageBitmapData,option);
+  }
+  getArrayBufferFromImageBitmapDataAsJpg(iamgeBitmapData,quority) {
+    return this.ip.getArrayBufferFromImageBitmapDataAsJpg(imageBitmapData,quority);
+  }
+  getArrayBufferFromImageBitmapDataAsPng(iamgeBitmapData) {
+    return this.ip.getArrayBufferFromImageBitmapDataAsPng(imageBitmapData);
   }
 }

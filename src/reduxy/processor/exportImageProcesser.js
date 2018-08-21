@@ -5,6 +5,7 @@ import {ImageResizer} from "../../util/image/imageResizer";
 import {ImageCropper} from "../../util/image/imageCropper";
 import {UnicodeEncoder} from "../../util/unicodeEncoder";
 import {MainService} from "../../service/mainService"
+import {PreviewProcessor} from "./previewProcessor"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
 import {Zlib} from "zlibjs/bin/zip.min"
 
@@ -40,9 +41,13 @@ export class ExportImageProcesser {
 
   }
   async exportExecute(exportOrders = []) {
-    alert('ExportImageProcesser exportExecute');
     // 0 load Title & pages ExecutePerPage
-    const pages = await this.pp.loadPages();
+    const setting = await this.tm.loadSettings().catch((e) => {
+      console.log(e)
+    });
+    const pages = await this.pp.loadPages().catch((e) => {
+      console.log(e)
+    });
     const order = {
       basePaper: "mangaPaperA4ExpandTatikiri",
       dpiName: "dpi600"
@@ -73,29 +78,24 @@ export class ExportImageProcesser {
       width: targetSize.x,
       height: targetSize.y
     };
-    const cropedPaperDual = {
-      data: new Uint8ClampedArray(targetSize.x * targetSize.y * 8),
-      width: targetSize.x*2,
-      height: targetSize.y
-    };
     const targetRetio = targetSize.x / targetSize.y;
     const isBaseWhite = true;
     let currentDataAb = null
     for (let pageEntity of pages) {
       if (pageEntity && pageEntity.baseImage) {
-        console.log(pageEntity)
+        // console.log(pageEntity)
         //1 Expand
         const baseImageEntity = await this.em.get(pageEntity.baseImage);
         const width = baseImageEntity.width;
         const height = baseImageEntity.height;
         const baseBinaryEntity = await this.em.get(baseImageEntity.binary);
-        console.log(baseImageEntity)
-        console.log(baseBinaryEntity)
+        // console.log(baseImageEntity)
+        // console.log(baseBinaryEntity)
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
         // TODO convert flate bitmap data
         currentDataAb = baseBinaryEntity._ab;
         const origin = await this.ip.getImageDataFromArrayBuffer(baseBinaryEntity._ab);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a w:"+origin.width+'/h:'+origin.height)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a w:" + origin.width + '/h:' + origin.height)
         const retio = width / height;
         const isWider = retio > targetRetio;
         const longPixcel = isWider
@@ -123,9 +123,9 @@ export class ExportImageProcesser {
           width: sizeWhitePaperWidth,
           height: sizeWhitePaperHeight
         };
-        origin.offsetX=offsetX;
-        origin.offsetY=offsetY;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length+'/w:'+sizeWhitePaperWidth+'/h:'+sizeWhitePaperHeight)
+        origin.offsetX = offsetX;
+        origin.offsetY = offsetY;
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight)
         this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
         this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
@@ -148,7 +148,7 @@ export class ExportImageProcesser {
         //expand
         //2 Save to page
         const outputOld = pageEntity.outputExpandImage;
-        const outputNew = await this.bm.save(outputOld,"expandPage",currentDataAb);
+        const outputNew = await this.bm.save(outputOld, "expandPage", currentDataAb);
         pageEntity.outputExpandImage = outputNew;
         await this.em.Pages.save(pageEntity);
         //3 CropPage
@@ -157,54 +157,127 @@ export class ExportImageProcesser {
         //break;
       }
     }
+    console.log(pages)
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
+    await this.exportDualImage4Print(targetSize,setting,pages);
 
-    //6 new WhiteImageCreate
-    //7 load2PageImage
-    //8 merge
-    //9 save
-    let cupleNum = 0;
-    let leftPage = null;
-    let rightPage = null;
-
-    for (let pageEntity of pages) {
-      cupleNum++;
-      if (pageEntity && pageEntity.outputExpandImage) {
-        const outputBinaryEntity = await this.em.get(pageEntity.outputExpandImage);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:"+cupleNum+"/outputBinaryEntity:"+outputBinaryEntity);
-        if(outputBinaryEntity){
-
-        }
-      }
-    }
-
-
-    const zip = new Zlib.Zip();
-    let pageNum = 0;
-    for (let pageEntity of pages) {
-      pageNum++;
-      if (pageEntity && pageEntity.outputExpandImage) {
-        const outputBinaryEntity = await this.em.get(pageEntity.outputExpandImage);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a pageNum:"+pageNum+"/outputBinaryEntity:"+outputBinaryEntity);
-        if(outputBinaryEntity){
-          zip.addFile(new Uint8Array(outputBinaryEntity._ab), {filename: UnicodeEncoder.stringToByteArray('foo'+pageNum+'.png')});
-        }
-      }
-    }
-    const compressed = zip.compress();
-
-
-
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
     //10 load images and add tozip
     // const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
     // console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
     // console.log(ab);
     // plainData1
     //11 save zip
+    const compressed = await this.exoprtAsZip(pages);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/")
     // console.log(compressed);
     return compressed;
   }
+  async exoprtAsZip(pages){
+    const zip = new Zlib.Zip();
+    let pageNum = 0;
+    let lastOne = null;
+    for (let pageEntity of pages) {
+      pageNum++;
+      if (pageEntity && pageEntity.outputDualImage) {
+        if(pageEntity.outputDualImage === lastOne){
+          continue;
+        }
+        lastOne = pageEntity.outputDualImage;
+        const outputBinaryEntity = await this.em.get(lastOne);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a pageNum:" + pageNum + "/outputBinaryEntity:" + outputBinaryEntity);
+        if (outputBinaryEntity) {
+          zip.addFile(new Uint8Array(outputBinaryEntity._ab), {
+            filename: UnicodeEncoder.stringToByteArray('page' + pageNum+"-" + pageNum+ '.jpg')
+          });
+        }
+      }
+    }
+    return zip.compress();
+  }
+  async exportDualImage4Print(targetSize,setting,pages){
+    //6 new WhiteImageCreate
+    //7 load2PageImage
+    //8 merge
+    //9 save
+    const cropedPaperDual = {
+      data: new Uint8ClampedArray(targetSize.x * targetSize.y * 8),
+      width: targetSize.x * 2,
+      height: targetSize.y
+    };
+    console.log(setting);
+    let cupleNum = 0;
+    const isPageDirectionR2L = setting.pageDirection === "r2l";
+    const cratePageData = PreviewProcessor.getCratePageDataFunc();
+    const dummyClass = "dummy";
+    const shapedList = PreviewProcessor.buildPageFrames(setting, pages, cratePageData, dummyClass);
+    const pairPages = {
+      right: null,
+      left: null,
+        rightBin: null,
+        leftBin: null
+    };
+    for (let shapedPage of shapedList) {
+    console.log(shapedPage);
+      cupleNum++;
+      let isPaired = false;
+      pairPages.rightBin = null;
+      pairPages.leftBin = null;
+      if (shapedPage.isRight) {
+        pairPages.right = shapedPage.isDummy
+          ? null
+          : shapedPage.binary;
+        isPaired = isPageDirectionR2L !== true;
+      } else {
+        pairPages.left = shapedPage.isDummy
+          ? null
+          : shapedPage.binary;
+        isPaired = isPageDirectionR2L === true;
+      }
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a isPaired:" + isPaired + "/left:" + pairPages.left+ "/right:" + pairPages.right+"/shapedPage.isRight:"+shapedPage.isRight);
+      if(isPaired){
+        let pageEntity = null;
+        if (pairPages.right && pairPages.right.outputExpandImage) {
+          pairPages.rightBin = await this.em.get(pairPages.right.outputExpandImage);
+          pageEntity = pairPages.right;
+        }
+        if (pairPages.left && pairPages.left.outputExpandImage) {
+          pairPages.leftBin = await this.em.get(pairPages.left.outputExpandImage);
+          pageEntity = pairPages.left;
+        }
+        if(!pageEntity){
+          continue;
+        }
+        this.imageMerger.beWhiteImage(cropedPaperDual,true);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:" + cupleNum + "/left:" + pairPages.left+ "/right:" + pairPages.right);
+        if (pairPages.leftBin) {
+          const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
+          origin.offsetX = 0;
+          origin.offsetY = 0;
+          this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+        }
+        if (pairPages.rightBin) {
+          const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
+          origin.offsetX = targetSize.x;
+          origin.offsetY = 0;
+          this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+        }
+        //ping?
+        const cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual,1.0);
+        const outputOld = pageEntity.outputDualImage;
+        const outputNew = await this.bm.save(outputOld, "expandPage", cropedPaperDualAb);
+        if (pairPages.right && pairPages.right.outputExpandImage) {
+          pairPages.right.outputDualImage = outputNew;
+          await this.em.Pages.save(pairPages.right);
+        }
+        if (pairPages.left && pairPages.left.outputExpandImage) {
+          pairPages.left.outputDualImage = outputNew;
+          await this.em.Pages.save(pairPages.left);
+        }
+      }
+    }
+  }
   exportPdfExecute(exportOrders) {
     alert('ExportImageProcesser exportPdfExecute');
-
   }
 }

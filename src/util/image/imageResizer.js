@@ -123,8 +123,8 @@ export class ImageResizer {
         dist[offset32bitDist + 3] = 255;
       }
     }
-    console.log("newHeight:" + dist.buffer);
-    console.log(dist.buffer);
+    // console.log("newHeight:" + dist.buffer);
+    // console.log(dist.buffer);
     return dist.buffer;
   }
 }

@@ -40,7 +40,7 @@ export class PreviewProcessor {
     return retPreviews;
   }
   shapeListBySets(previews, isSingle, setting) {
-    const cratePageData = this.getCratePageDataFunc();
+    const cratePageData = PreviewProcessor.getCratePageDataFunc();
     if (isSingle) {
       const retSetLis = [];
       for (let index in previews) {
@@ -50,11 +50,12 @@ export class PreviewProcessor {
     } else {
       const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
       this.pageNum = pageNum;
-      return this.buildPageFrames(setting, previews, cratePageData, this.dummyClass);
+      return PreviewProcessor.buildPageFrames(setting, previews, cratePageData, this.dummyClass);
     }
   }
-  getCratePageDataFunc(){
-    return (pageNo, className, isRight, binaries, dummyClass)->{
+  // 
+  static getCratePageDataFunc(){
+    return (pageNo, className, isRight, binaries, dummyClass)=>{
       return {
         pageNo: pageNo,
         isDummy: className === dummyClass,
@@ -63,7 +64,7 @@ export class PreviewProcessor {
       }
     }
   }
-  buildPageFrames(setting, binaries, cratePageData, dummyClass) {
+  static buildPageFrames(setting, binaries, cratePageData, dummyClass) {
     const retFrames = [];
     const startPage = setting.startPage;
     const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
@@ -79,7 +80,6 @@ export class PreviewProcessor {
         ? 0
         : 1;
     const totalPageFrame = frameNum * 1 + addPageNum * 1;
-    const dummyClass = this.dummyClass;
     const pageClass = "Page";
     const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR)
     const leftStartDummyClass = !isPageStartR || isStartFull

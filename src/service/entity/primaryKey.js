@@ -22,6 +22,8 @@ export class PrimaryKey {
         return value;
       }else if(value.getEntityName && value.getPk){
         return value.getPk();
+      }else if(value.oid){
+        return value.oid;
       }else if(value.pk){
         return value.pk;
       }
