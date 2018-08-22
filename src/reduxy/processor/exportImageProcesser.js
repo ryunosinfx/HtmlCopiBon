@@ -159,7 +159,12 @@ export class ExportImageProcesser {
     }
     console.log(pages)
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
-    await this.exportDualImage4Print(targetSize,setting,pages);
+    const isPageDirectionR2L = setting.pageDirection === "r2l";
+    const isRightStart = setting.startPage === "r";
+    const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
+    const isOdd = pages.length % 2 > 0;
+    const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
+    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd);
 
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
     //10 load images and add tozip
@@ -173,29 +178,29 @@ export class ExportImageProcesser {
     // console.log(compressed);
     return compressed;
   }
-  async exoprtAsZip(pages){
+  async exoprtAsZip(pages) {
     const zip = new Zlib.Zip();
     let pageNum = 0;
     let lastOne = null;
     for (let pageEntity of pages) {
       pageNum++;
       if (pageEntity && pageEntity.outputDualImage) {
-        if(pageEntity.outputDualImage === lastOne){
+        if (pageEntity.outputDualImage === lastOne) {
           continue;
         }
         lastOne = pageEntity.outputDualImage;
         const outputBinaryEntity = await this.em.get(lastOne);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a pageNum:" + pageNum + "/outputBinaryEntity:" + outputBinaryEntity);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a pageNum:" + pageNum + "/outputBinaryEntity:" + outputBinaryEntity + "/lastOne:" + lastOne);
         if (outputBinaryEntity) {
           zip.addFile(new Uint8Array(outputBinaryEntity._ab), {
-            filename: UnicodeEncoder.stringToByteArray('page' + pageNum+"-" + pageNum+ '.jpg')
+            filename: UnicodeEncoder.stringToByteArray('page' + pageNum + "-" + pageNum + '.jpg')
           });
         }
       }
     }
     return zip.compress();
   }
-  async exportDualImage4Print(targetSize,setting,pages){
+  async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd) {
     //6 new WhiteImageCreate
     //7 load2PageImage
     //8 merge
@@ -206,8 +211,6 @@ export class ExportImageProcesser {
       height: targetSize.y
     };
     console.log(setting);
-    let cupleNum = 0;
-    const isPageDirectionR2L = setting.pageDirection === "r2l";
     const cratePageData = PreviewProcessor.getCratePageDataFunc();
     const dummyClass = "dummy";
     const shapedList = PreviewProcessor.buildPageFrames(setting, pages, cratePageData, dummyClass);
@@ -217,58 +220,102 @@ export class ExportImageProcesser {
       rightBin: null,
       leftBin: null
     };
-    const lastPagesPair = [null,null];
+    const lastPagesPair = [null, null];
+    const latestPagesPair = [null, null];
+    let isSkeped = isSideSynced !== true;
+    const printPages = [];
+    const printPairs = [];
     for (let shapedPagePair of shapedList) {
-      console.log(shapedPagePair);
-      cupleNum++;
-      const right=isPageDirectionR2L === true?lastPagesPair[1]:shapedPagePair[0];
-      const left=isPageDirectionR2L === true?shapedPagePair[0]:lastPagesPair[1];
-      pairPages.right = right===null||right.isDummy ? null:right.binary;
-      pairPages.left = left===null||left.isDummy ? null:left.binary;
-      pairPages.rightBin = null;
-      pairPages.leftBin = null;
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a shapedPagePair:" + shapedPagePair + "/left:" + pairPages.left+ "/right:" + pairPages.right);
+      const one = shapedPagePair[0];
+      const two = shapedPagePair[1];
+      if (one && !one.isDummy) {
+        printPages.push(one);
+      }
+      if (two && !two.isDummy) {
+        printPages.push(two);
+      }
+    }
 
-      let pageEntity = null;
-      if (pairPages.right && pairPages.right.outputExpandImage) {
-        pairPages.rightBin = await this.em.get(pairPages.right.outputExpandImage);
-        pageEntity = pairPages.right;
+    for (let index = 0; index < printPages.length; index++) {
+      const newPair = [null, null];
+      if (index <= 0) {
+        if (!isSideSynced) {
+          newPair[1] = printPages[index];
+        } else {
+          newPair[0] = printPages[index];
+          index++;
+          newPair[1] = printPages[index];
+        }
+      } else {
+        newPair[0] = printPages[index];
+        index++;
+        if (index < printPages.length) {
+          newPair[1] = printPages[index];
+        }
       }
-      if (pairPages.left && pairPages.left.outputExpandImage) {
-        pairPages.leftBin = await this.em.get(pairPages.left.outputExpandImage);
-        pageEntity = pairPages.left;
-      }
-      if(!pageEntity){
-        continue;
-      }
-      this.imageMerger.beWhiteImage(cropedPaperDual,true);
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a pageNum:" + cupleNum + "/left:" + pairPages.left+ "/right:" + pairPages.right);
-      if (pairPages.leftBin) {
-        const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
-        origin.offsetX = 0;
-        origin.offsetY = 0;
-        this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
-      }
-      if (pairPages.rightBin) {
-        const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
-        origin.offsetX = targetSize.x;
-        origin.offsetY = 0;
-        this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
-      }
-      //ping?
-      const cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual,1.0);
-      const outputOld = pageEntity.outputDualImage;
-      const outputNew = await this.bm.save(outputOld, "expandPage", cropedPaperDualAb);
-      if (pairPages.right && pairPages.right.outputExpandImage) {
-        pairPages.right.outputDualImage = outputNew;
-        await this.em.Pages.save(pairPages.right);
-      }
-      if (pairPages.left && pairPages.left.outputExpandImage) {
-        pairPages.left.outputDualImage = outputNew;
-        await this.em.Pages.save(pairPages.left);
-      }
-      lastPagesPair[0] = shapedPagePair[0];
-      lastPagesPair[1] = shapedPagePair[1];
+      printPairs.push(newPair);
+    }
+    for (let printPagePair of printPairs) {
+      await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair);
+    }
+  }
+  async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair) {
+    console.log(shapedPagePair);
+    const one = shapedPagePair[0];
+    const two = shapedPagePair[1];
+    const right = one && one.isRight
+      ? two
+      : one;
+    const left = one && one.isRight
+      ? one
+      : two;
+    pairPages.right = right === null || right.isDummy
+      ? null
+      : right.binary;
+    pairPages.left = left === null || left.isDummy
+      ? null
+      : left.binary;
+    pairPages.rightBin = null;
+    pairPages.leftBin = null;
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a shapedPagePair:" + shapedPagePair + "/left:" + pairPages.left + "/right:" + pairPages.right);
+
+    let pageEntity = null;
+    if (pairPages.right && pairPages.right.outputExpandImage) {
+      pairPages.rightBin = await this.em.get(pairPages.right.outputExpandImage);
+      pageEntity = pairPages.right;
+    }
+    if (pairPages.left && pairPages.left.outputExpandImage) {
+      pairPages.leftBin = await this.em.get(pairPages.left.outputExpandImage);
+      pageEntity = pairPages.left;
+    }
+    if (!pageEntity) {
+      return;
+    }
+    this.imageMerger.beWhiteImage(cropedPaperDual, true);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a left:" + pairPages.left + "/right:" + pairPages.right);
+    if (pairPages.leftBin) {
+      const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
+      origin.offsetX = 0;
+      origin.offsetY = 0;
+      this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+    }
+    if (pairPages.rightBin) {
+      const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
+      origin.offsetX = targetSize.x;
+      origin.offsetY = 0;
+      this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+    }
+    //ping?
+    const cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual, 1.0);
+    const outputOld = pageEntity.outputDualImage;
+    const outputNew = await this.bm.save(outputOld, "expandPage", cropedPaperDualAb);
+    if (pairPages.right && pairPages.right.outputExpandImage) {
+      pairPages.right.outputDualImage = outputNew;
+      await this.em.Pages.save(pairPages.right);
+    }
+    if (pairPages.left && pairPages.left.outputExpandImage) {
+      pairPages.left.outputDualImage = outputNew;
+      await this.em.Pages.save(pairPages.left);
     }
   }
   exportPdfExecute(exportOrders) {

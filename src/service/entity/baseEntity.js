@@ -21,11 +21,11 @@ export class BaseEntity {
   }
   include(obj) {
     console.log("!=======BaseEntity.include====================!!");
-    console.log(obj);
+    // console.log(obj);
   }
   exclude(obj) {
     console.log("!=======BaseEntity.exclude====================!!");
-    console.log(obj);
+    // console.log(obj);
   }
   async deepClone() {
     return await ObjectUtil.deepClone(this);
