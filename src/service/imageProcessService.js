@@ -25,10 +25,10 @@ export class ImageProcessService {
   getArrayBufferFromImageBitmapData(imageBitmapData,option){
     return this.ip.getArrayBufferFromImageBitmapData(imageBitmapData,option);
   }
-  getArrayBufferFromImageBitmapDataAsJpg(iamgeBitmapData,quority) {
+  getArrayBufferFromImageBitmapDataAsJpg(imageBitmapData,quority) {
     return this.ip.getArrayBufferFromImageBitmapDataAsJpg(imageBitmapData,quority);
   }
-  getArrayBufferFromImageBitmapDataAsPng(iamgeBitmapData) {
+  getArrayBufferFromImageBitmapDataAsPng(imageBitmapData) {
     return this.ip.getArrayBufferFromImageBitmapDataAsPng(imageBitmapData);
   }
 }
