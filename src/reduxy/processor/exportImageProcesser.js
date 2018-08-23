@@ -61,6 +61,29 @@ export class ExportImageProcesser {
       x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
       y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
+    await this.expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages);
+    console.log(pages)
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
+    const isPageDirectionR2L = setting.pageDirection === "r2l";
+    const isRightStart = setting.startPage === "r";
+    const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
+    const isOdd = pages.length % 2 > 0;
+    const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
+    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd);
+
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
+    //10 load images and add tozip
+    // const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+    // console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
+    // console.log(ab);
+    // plainData1
+    //11 save zip
+    const compressed = await this.exoprtAsZip(pages);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/")
+    // console.log(compressed);
+    return compressed;
+  }
+  async expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages){
     console.log("--targetSize--")
     console.log(targetSize)
     const expandedPaper = {
@@ -157,26 +180,6 @@ export class ExportImageProcesser {
         //break;
       }
     }
-    console.log(pages)
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
-    const isPageDirectionR2L = setting.pageDirection === "r2l";
-    const isRightStart = setting.startPage === "r";
-    const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
-    const isOdd = pages.length % 2 > 0;
-    const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
-    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd);
-
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
-    //10 load images and add tozip
-    // const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
-    // console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
-    // console.log(ab);
-    // plainData1
-    //11 save zip
-    const compressed = await this.exoprtAsZip(pages);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/")
-    // console.log(compressed);
-    return compressed;
   }
   async exoprtAsZip(pages) {
     const zip = new Zlib.Zip();
@@ -263,12 +266,13 @@ export class ExportImageProcesser {
     console.log(shapedPagePair);
     const one = shapedPagePair[0];
     const two = shapedPagePair[1];
+    // reverse side!
     const right = one && one.isRight
-      ? two
+      ? (two && !two.isRight?two:null)
       : one;
     const left = one && one.isRight
       ? one
-      : two;
+      : (two && two.isRight?two:null);
     pairPages.right = right === null || right.isDummy
       ? null
       : right.binary;
@@ -308,14 +312,16 @@ export class ExportImageProcesser {
     //ping?
     const cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual, 1.0);
     const outputOld = pageEntity.outputDualImage;
-    const outputNew = await this.bm.save(outputOld, "expandPage", cropedPaperDualAb);
+    const outputNew = await this.bm.save(outputOld, "expandDualPage", cropedPaperDualAb);
     if (pairPages.right && pairPages.right.outputExpandImage) {
       pairPages.right.outputDualImage = outputNew;
       await this.em.Pages.save(pairPages.right);
+      await this.em.delete(pairPages.rightBin);
     }
     if (pairPages.left && pairPages.left.outputExpandImage) {
       pairPages.left.outputDualImage = outputNew;
       await this.em.Pages.save(pairPages.left);
+      await this.em.delete(pairPages.leftBin);
     }
   }
   exportPdfExecute(exportOrders) {
