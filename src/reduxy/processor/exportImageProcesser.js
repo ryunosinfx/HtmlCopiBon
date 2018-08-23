@@ -194,6 +194,7 @@ export class ExportImageProcesser {
       pageNum++;
       if (pageEntity && pageEntity.outputDualImage) {
         if (pageEntity.outputDualImage === lastOne) {
+          pageEntity.outputDualImage = null;
           continue;
         }
         lastOne = pageEntity.outputDualImage;
@@ -203,7 +204,9 @@ export class ExportImageProcesser {
           zip.addFile(new Uint8Array(outputBinaryEntity._ab), {
             filename: UnicodeEncoder.stringToByteArray('page' + pageNum + "-" + pageNum + '.jpg')
           });
+          await this.bm.remove(lastOne);
         }
+
       }
     }
     return zip.compress();
