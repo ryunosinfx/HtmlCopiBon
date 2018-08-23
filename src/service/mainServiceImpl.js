@@ -5,6 +5,7 @@ import {BinaryManager} from "./manager/binaryManager";
 import {PagesManager} from "./manager/pagesManager";
 import {SettingsManager} from "./manager/settingsManager";
 import {OutputProfilesManager} from "./manager/outputProfilesManager";
+import {ImageOutputsManager} from "./manager/imageOutputsManager";
 import {ImageManager} from "./manager/imageManager";
 import {ThumbnaleManager} from "./manager/thumbnailManager";
 import {Images} from "../entity/images";
@@ -35,6 +36,7 @@ export class MainServiceImpl {
     this.im = new ImageManager(this.em);
     this.pm = new PagesManager(this.em);
     this.opm = new OutputProfilesManager(this.em);
+    this.iom = new ImageOutputsManager(this.em);
     this.sm = new SettingsManager(this.em,this.opm );
     this.tm = new TitleManager(this.em);
     this.im.setTitleManager(this.tm);

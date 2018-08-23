@@ -1,4 +1,5 @@
 import {Sorter} from "../../util/sorter";
+import {getNowUnixtime} from "../../util/timeUtil";
 import {Paper} from "../../util/image/paper";
 import {ImageMerger} from "../../util/image/imageMerger";
 import {ImageResizer} from "../../util/image/imageResizer";
@@ -9,6 +10,11 @@ import {PreviewProcessor} from "./previewProcessor"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
 import {Zlib} from "zlibjs/bin/zip.min"
 
+const order = {
+  orderName:"MangaPaperA4ExpandTatikiri",
+  basePaper: "mangaPaperA4ExpandTatikiri",
+  dpiName: "dpi600"
+};
 export class ExportImageProcesser {
   constructor(pp) {
     this.pp = pp;
@@ -17,6 +23,7 @@ export class ExportImageProcesser {
     this.sm = this.ms.sm;
     this.bm = this.ms.bm;
     this.im = this.ms.im;
+    this.iom = this.ms.iom;
     this.ip = this.ms.ip;
     this.tm = this.ms.tm;
     this.paper = new Paper();
@@ -24,23 +31,7 @@ export class ExportImageProcesser {
     this.imageResizer = new ImageResizer();
     this.imageCropper = new ImageCropper();
   }
-  load(eportSetting) {
-    alert('ExportImageProcesser load');
-    this.eportSetting = eportSetting;
-  }
-  remove(exportPk = -1) {
-    alert('ExportImageProcesser remove');
-
-  }
-  loadZip(exportPk) {
-    alert('ExportImageProcesser loadZip');
-
-  }
-  loadPdf(exportPk) {
-    alert('ExportImageProcesser loadPdf');
-
-  }
-  async exportExecute(exportOrders = []) {
+  async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
     const setting = await this.tm.loadSettings().catch((e) => {
       console.log(e)
@@ -48,10 +39,8 @@ export class ExportImageProcesser {
     const pages = await this.pp.loadPages().catch((e) => {
       console.log(e)
     });
-    const order = {
-      basePaper: "mangaPaperA4ExpandTatikiri",
-      dpiName: "dpi600"
-    };
+  }
+  async executeParOrder(setting,pages,order){
     //-1 order consts calc
     const targetDpi = this.paper.getDpi(order.dpiName);
     const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
@@ -79,9 +68,25 @@ export class ExportImageProcesser {
     // plainData1
     //11 save zip
     const compressed = await this.exoprtAsZip(pages);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/")
+    const exports = this.tm.getExports();
+    let exportImagePk = null;
+    for(let exportPk of exports){
+      const imageOutput = await this.iom.load(exportPk);
+      if(imageOutput.type==="zip"){
+        exportImagePk = exportPk;
+        break;
+      }
+    }
+    const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/");
+    const exportImageNewPk = await this.iom.save(exportImagePk, this.tm.getCurrentTitleName()+getNowUnixtime()+".zip", outputNew, "zip", order.orderName);
     // console.log(compressed);
-    return compressed;
+    if(exportImageNewPk){
+      exports.push(exportImageNewPk);
+      await this.tm.saveCurrent();
+    }
+    // return pk list
+    return exports;
   }
   async expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages){
     console.log("--targetSize--")
@@ -102,7 +107,7 @@ export class ExportImageProcesser {
       height: targetSize.y
     };
     const targetRetio = targetSize.x / targetSize.y;
-    const isBaseWhite = true;
+    const isBaseWhite = true;binaryEntitySaved
     let currentDataAb = null
     for (let pageEntity of pages) {
       if (pageEntity && pageEntity.baseImage) {

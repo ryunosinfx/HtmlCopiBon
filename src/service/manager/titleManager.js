@@ -103,6 +103,24 @@ export class TitleManager {
     // console.log(images);
     await this.saveTitle(title);
   }
+  async getExports() {
+    const title = await this.loadCurrent();
+    if(title && title.exports){
+      return title.exports;
+    }else{
+      title.exports = [];
+      await this.saveTitle(title);
+      return title.exports;
+    }
+  }
+  async getCurrentTitleName() {
+    const title = await this.loadCurrent();
+    return title.name;
+  }
+  async saveCurrent() {
+    const title = await this.loadCurrent();
+    await this.saveTitle(title);
+  }
 
   async loadSettings() {
     const title = await this.loadCurrent();

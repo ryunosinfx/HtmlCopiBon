@@ -25,4 +25,16 @@ export class ExportActionCreator {
   static getStoreKey(){
     return "exports";
   }
+  static getStorePdfDLKey(){
+    return "exportPdfDL";
+  }
+  static getStoreZipDLKey(){
+    return "exportZipDL";
+  }
+  static getStoreRemoveResultKey(){
+    return "exportRemoveResult";
+  }
+  static getStoreExportResultKey(){
+    return "exportExportResult";
+  }
 }
