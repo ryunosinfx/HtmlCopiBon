@@ -13,7 +13,6 @@ export class ExportUtilProcesser {
   constructor() {
     this.ms = MainService.getInstance();
     this.em = this.ms.em;
-    this.sm = this.ms.sm;
     this.bm = this.ms.bm;
     this.im = this.ms.im;
     this.iom = this.ms.iom;
@@ -21,7 +20,7 @@ export class ExportUtilProcesser {
   }
   async load() {
     const exportPks = this.tm.getExports();
-    return this.getZipPdfPair(exportPks);
+    return await this.getZipPdfPair(exportPks);
   }
   async remove(exportPk = -1) {
     const exportPks = this.tm.getExports();
@@ -62,7 +61,7 @@ export class ExportUtilProcesser {
     return null;
   }
 
-  getZipPdfPair(exportPks){
+  async getZipPdfPair(exportPks){
     const imageOutpus = {pdf:null,zip:null};
     for(let exportPk of exportPks){
       const imageOutput = await this.iom.load(exportPk);

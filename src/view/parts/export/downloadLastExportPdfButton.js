@@ -15,9 +15,10 @@ import {
 import {
   ExportActionCreator
 } from '../../../reduxy/action/exportActionCreator'
-export class ExportPdfButton extends BaseView {
+import {FileDownloader} from "../../../util/fileDownloader";
+export class DownloadLastExportPdfButton extends BaseView {
   constructor() {
-    super("ExportPdfButton", "ExportPdfButton",true);
+    super("DownloadLastExportOneButton", "DownloadLastExportOneButton",true);
     this.storeKey = ExportActionCreator.getStoreKey();
     this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
@@ -30,22 +31,26 @@ export class ExportPdfButton extends BaseView {
       on:{
         click:this.click()
       }
-    }, [ div("", ["button"], "make pdf!")]);
+    }, [ div("", ["button"], "download PDF!")]);
   }
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
-    if(store[this.storeKey]){
-      alert("OK");
-    }
+      if (store[this.storePdfDLKey]) {
+        const output = store[this.storePdfDLKey];
+        if(output.ab){
+          FileDownloader.download(output.name,output.ab,"application/pdf");
+        }else{
+          alert("not exported!");
+        }
+      }
   }
-
-  click(){
-    return (event)=>{
-      const action= ExportActionCreator.createExecutePdfAction();
-      this.dispatch(action);
-      event.stopPropagation();
-      return false;
+    click(){
+      return (event)=>{
+        const action= ExportActionCreator.createDownloadPdfAction();//createDownloadPdfAction
+        this.dispatch(action);
+        event.stopPropagation();
+        return false;
+      }
     }
-  }
 }

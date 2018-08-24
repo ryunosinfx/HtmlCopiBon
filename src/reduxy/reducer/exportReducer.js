@@ -64,7 +64,7 @@ export class ExportReducer extends BaseReducer {
   }
   async exportExecute(exportOrders) {
     const exportPks = await this.eip.exportExecute(exportOrders);
-    return this.eup.getZipPdfPair(exportPks);
+    return await this.eup.getZipPdfPair(exportPks);
   }
   async exportPdfExecute(exportOrders) {
     return await this.eip.exportPdfExecute(exportOrders);

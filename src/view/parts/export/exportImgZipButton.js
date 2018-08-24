@@ -15,9 +15,14 @@ export class ExportImgZipButton extends BaseView {
   constructor() {
     super("ExportImgZipButton", "ExportImgZipButton", true);
     this.storeKey = ExportActionCreator.getStoreKey();
+    this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
+    this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
+    this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
+    this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
   }
 
   render(store, actionData) {
+    const butonName;
     return div(this.id, [this.id + "Frame"], {
       on: {
         click: this.click()
@@ -31,7 +36,6 @@ export class ExportImgZipButton extends BaseView {
       const data = store[this.storeKey];
       // console.log(data);
       alert("OK download zip file!");
-      FileDownloader.download("test.zip",data,"application/zip");
     }
   }
 

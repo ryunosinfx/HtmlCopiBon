@@ -19,6 +19,10 @@ export class ExportAllButton extends BaseView {
   constructor() {
     super("ExportAllButton", "ExportAllButton",true);
     this.storeKey = ExportActionCreator.getStoreKey();
+    this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
+    this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
+    this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
+    this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
   }
 
   render(store, actionData) {

@@ -9,13 +9,13 @@ import {ImageOutputsManager} from "./manager/imageOutputsManager";
 import {ImageManager} from "./manager/imageManager";
 import {ThumbnaleManager} from "./manager/thumbnailManager";
 import {Images} from "../entity/images";
-import {Pdfs} from "../entity/pdfs";
 import {Series} from "../entity/series";
 import {Thumbnales} from "../entity/thumbnales";
 import {Title} from "../entity/title";
 import {Pages} from "../entity/pages";
 import {Settings} from "../entity/settings";
 import {OutputProfiles} from "../entity/outputProfiles";
+import {ImageOutputs} from "../entity/imageOutputs";
 import {ImageProcessService} from "./imageProcessService"
 
 const title = "CopiBon";
@@ -27,7 +27,7 @@ export class MainServiceImpl {
     this.ip = new ImageProcessService();
   }
   async init() {
-    await this.em.initAsNewUser([Images, Pdfs, Series, Thumbnales, Title, Pages, Settings, OutputProfiles]);
+    await this.em.initAsNewUser([Images, Series, Thumbnales, Title, Pages, Settings, OutputProfiles,ImageOutputs]);
     this.ip = new ImageProcessService();
     this.bm = new BinaryManager(this.em);
     this.tbm = new ThumbnaleManager(this.em);

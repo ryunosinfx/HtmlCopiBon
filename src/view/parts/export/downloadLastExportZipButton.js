@@ -15,10 +15,15 @@ import {
 import {
   ExportActionCreator
 } from '../../../reduxy/action/exportActionCreator'
-export class DownloadLastExportOneButton extends BaseView {
+import {FileDownloader} from "../../../util/fileDownloader";
+export class DownloadLastExportZipButton extends BaseView {
   constructor() {
     super("DownloadLastExportOneButton", "DownloadLastExportOneButton",true);
     this.storeKey = ExportActionCreator.getStoreKey();
+    this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
+    this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
+    this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
+    this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
   }
 
   render(store, actionData) {
@@ -26,13 +31,18 @@ export class DownloadLastExportOneButton extends BaseView {
       on:{
         click:this.click()
       }
-    }, [ div("", ["button"], "download!")]);
+    }, [ div("", ["button"], "download PDF!")]);
   }
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
-      if (store[this.storeKey]) {
-        alert("OK");
+      if (store[this.storeZipDLKey]) {
+        const output = store[this.storeZipDLKey];
+        if(output.ab){
+          FileDownloader.download(output.name,output.ab,"application/zip");
+        }else{
+          alert("not exported!");
+        }
       }
   }
     click(){
