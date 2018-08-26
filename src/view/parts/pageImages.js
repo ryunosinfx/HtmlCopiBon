@@ -27,92 +27,123 @@ export class PageImages extends BaseView {
     this.pages = [];
     this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
     this.storePagesKey = PageActionCreator.getStorePagesKey();
-    for(let index = 0; index < 32; index++){
-      this.pages.push(new PageImage(this,index,draggableArea))
+    for (let index = 0; index < 32; index++) {
+      this.pages.push(new PageImage(this, index, draggableArea))
     }
     this.dropElm = null;
+    this.lastSettingOne = null;
+    this.lastPagesData = null;
+    this.lastImagesData = null;
   }
   render() {
     this.setting = div(this.id + "child", ["PageImagesA"], this.id);
     return div(this.id, "PageImages", [this.setting]);
   }
   async onViewShow(store, actionData) {
-    let pageFrames = [];
     const pagesData = store[this.storePagesKey];
     const imagesData = store[this.storeImagesKey];
-    if(imagesData && pagesData){
+    const pagesDataJson = JSON.stringify(pagesData);
+    const imagesDataJson = JSON.stringify(imagesData);
+    if (imagesData && pagesData && (this.lastPagesData !== pagesDataJson || this.lastImagesData !== imagesDataJson)) {
       //alert("onViewShow"+imagesData.length+"/"+pagesData.length+"/");
-      await this.showPages(pagesData,imagesData);
+      await this.showPages(pagesData, imagesData);
+      this.lastPagesData = pagesDataJson;
+      this.lastImagesData = imagesDataJson;
       //console.log("Pages onViewShow");
-    }else if (store[this.storeKey]) {
-      pageFrames = this.buildPageFrames(store[this.storeKey]);
+      // alert("imagesData:"+imagesData);
+    }
+    if (store[this.storeKey]) {
+      const settings = store[this.storeKey];
+      const settingsJson = JSON.stringify(settings);
+      if (settingsJson === this.lastSettingOne) {
+        return;
+      }
+      // alert("store[this.storeKey]:"+store[this.storeKey]+"/"+(JSON.stringify(settings)===this.lastSettingOne));
+      const pageFrames = this.buildPageFrames(settings);
       this.prePatch("#" + this.childId, div(this.childId, pageFrames));
+      this.lastSettingOne = settingsJson;
     } else {
       return;
     }
   }
-  addPage(imagesPk,pagePk){
-      const action = PageActionCreator.creatAddPageAction(this, {imagePk: imagesPk,pagePk:pagePk});
-      this.dispatch(action);
+  addPage(imagesPk, pagePk) {
+    const action = PageActionCreator.creatAddPageAction(this, {
+      imagePk: imagesPk,
+      pagePk: pagePk
+    });
+    this.dispatch(action);
   }
-  async showPages(pagesData,imagesData) {
+  async showPages(pagesData, imagesData) {
     const imageMap = {};
-    for(let imageData of imagesData){
+    for (let imageData of imagesData) {
       const imageEntity = imageData.imageEntity;
       const imagePk = imageEntity.getPk();
       imageMap[imagePk] = imageData;
     }
-    let index =0;
+    let index = 0;
     for (let pageEntity of pagesData) {
       const page = this.pages[index];
       index++;
-      if(!pageEntity){
+      if (!pageEntity) {
         continue;
       }
       const pk = pageEntity.getPk();
       const imagePk = pageEntity.baseImage;
       const imageData = imageMap[imagePk];
       //alert("id:"+imageData+"/imagePk:"+imagePk)
-      await page.setPageData(pageEntity,imageData);
+      await page.setPageData(pageEntity, imageData);
       page.renderVnode(this);
     }
   }
-  creatPageFrame(pageNo,dummyClass,isRight){
+  creatPageFrame(pageNo, dummyClass, isRight) {
     const frameParts = [];
-    if(dummyClass === this.dummyClass){
+    if (dummyClass === this.dummyClass) {
       return frameParts;
     }
-    const sideClass="pageFrameHeader"+(isRight?"Right":"Left");
-    frameParts.push(div("",["pageFrameHeader",sideClass],pageNo+""))
-    const pageIndex = pageNo-1;
+    const sideClass = "pageFrameHeader" + (
+      isRight
+      ? "Right"
+      : "Left");
+    frameParts.push(div("", [
+      "pageFrameHeader", sideClass
+    ], pageNo + ""))
+    const pageIndex = pageNo - 1;
     const page = this.pages[pageIndex].renderVnode(this);
     frameParts.push(page)
     return frameParts;
   }
-  showPreviewSingle(){
-    return (event)=>{
+  showPreviewSingle() {
+    return(event) => {
       //alert("showPreviewSingle");
       const action = PreviewActionCreator.creatOpenAction(this, {isSingle: true});
       this.dispatch(action);
     }
   }
-  showPreviewDual(){
-    return (event)=>{
+  showPreviewDual() {
+    return(event) => {
       //alert("showPreviewDual");
       const action = PreviewActionCreator.creatOpenAction(this, {isSingle: false});
       this.dispatch(action);
     }
   }
-  buildPreviewButtons(){
-    const previewSingle = div("",["previewCallButton"],{on:{click:this.showPreviewSingle()}},"Preview Single");
-    const previewDouble = div("",["previewCallButton"],{on:{click:this.showPreviewDual()}},"Preview Dual");
-    return div("",["previewFrame"],[previewSingle,previewDouble]);
+  buildPreviewButtons() {
+    const previewSingle = div("", ["previewCallButton"], {
+      on: {
+        click: this.showPreviewSingle()
+      }
+    }, "Preview Single");
+    const previewDouble = div("", ["previewCallButton"], {
+      on: {
+        click: this.showPreviewDual()
+      }
+    }, "Preview Dual");
+    return div("", ["previewFrame"], [previewSingle, previewDouble]);
   }
   buildPageFrames(setting) {
     const frames = [];
     frames.push(this.buildPreviewButtons());
     const startPage = setting.startPage;
-    const pageNum = setting.pageNum*1;//SettingData.pageNums[setting.pageNum-1]*1;
+    const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
     this.pageNum = pageNum;
     const pageDirection = setting.pageDirection;
     const isPageDirectionR2L = pageDirection === "r2l";
@@ -125,7 +156,7 @@ export class PageImages extends BaseView {
       : isMatchPageStartSide
         ? 0
         : 1;
-    const totalPageFrame = frameNum*1 + addPageNum*1;
+    const totalPageFrame = frameNum * 1 + addPageNum * 1;
     const dummyClass = this.dummyClass;
     const pageClass = "Page";
     const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR)
@@ -135,12 +166,10 @@ export class PageImages extends BaseView {
     const rightStartDummyClass = isPageStartR || isStartFull
       ? ""
       : dummyClass;
-    const leftEndDummyClass = (isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L)))
-    || (!isOdd && (!isPageDirectionR2L||isStartFull))
+    const leftEndDummyClass = (isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L))) || (!isOdd && (!isPageDirectionR2L || isStartFull))
       ? ""
       : dummyClass;
-    const rightEndDummyClass = (isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L)))
-    || (!isOdd && (isPageDirectionR2L||isStartFull))
+    const rightEndDummyClass = (isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L))) || (!isOdd && (isPageDirectionR2L || isStartFull))
       ? ""
       : dummyClass;
     const lastIndex = totalPageFrame - 1;
@@ -175,10 +204,10 @@ export class PageImages extends BaseView {
               : 1
         pagePair.push(div("", [
           pageClass, leftStartDummyClass
-        ], this.creatPageFrame(leftPageNoFirst,leftStartDummyClass,false),totalPageFrame+"L" + leftPageNoFirst+" "+isMatchPageStartSide));
+        ], this.creatPageFrame(leftPageNoFirst, leftStartDummyClass, false), totalPageFrame + "L" + leftPageNoFirst + " " + isMatchPageStartSide));
         pagePair.push(div("", [
           pageClass, rightStartDummyClass
-        ], this.creatPageFrame(rightPageNoFirst,rightStartDummyClass,true),frameNum+"R" + rightPageNoFirst+" "+isOdd));
+        ], this.creatPageFrame(rightPageNoFirst, rightStartDummyClass, true), frameNum + "R" + rightPageNoFirst + " " + isOdd));
         pageOffset = 1;
         pagNo += isStartFull
           ? 2
@@ -186,13 +215,13 @@ export class PageImages extends BaseView {
       } else if (index === lastIndex) {
         pagePair.push(div("", [
           pageClass, leftEndDummyClass
-        ], this.creatPageFrame(leftPageNo,leftEndDummyClass,false),"L" + leftPageNo));
+        ], this.creatPageFrame(leftPageNo, leftEndDummyClass, false), "L" + leftPageNo));
         pagePair.push(div("", [
           pageClass, rightEndDummyClass
-        ], this.creatPageFrame(rightPageNo,rightEndDummyClass,true),"R" + rightPageNo));
+        ], this.creatPageFrame(rightPageNo, rightEndDummyClass, true), "R" + rightPageNo));
       } else {
-        pagePair.push(div("", [pageClass], this.creatPageFrame(leftPageNo,"",false),"L" + leftPageNo));
-        pagePair.push(div("", [pageClass], this.creatPageFrame(rightPageNo,"",true),"R" + rightPageNo));
+        pagePair.push(div("", [pageClass], this.creatPageFrame(leftPageNo, "", false), "L" + leftPageNo));
+        pagePair.push(div("", [pageClass], this.creatPageFrame(rightPageNo, "", true), "R" + rightPageNo));
         pagNo += 2;
       }
       frames.push(div("", ["PageFrame"], pagePair, "pageFrame index:" + index))
