@@ -9,6 +9,7 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
+import {unixTimeToDateFormat} from "../../../util/timeUtil";
 import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
 import {FileDownloader} from "../../../util/fileDownloader";
 export class DownloadLastExportZipButton extends BaseView {
@@ -19,12 +20,12 @@ export class DownloadLastExportZipButton extends BaseView {
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
     this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
-    this.stateId = this.id+"Button";
+    this.stateId = this.id + "Button";
     this.isExported = false;
   }
 
   render(store, actionData) {
-    const text = div(this.stateId , ["button"], "download Zip!");
+    const text = div(this.stateId, ["button"], "-no export Zip-");
     return div(this.id, [this.id + "Frame"], {
       on: {
         click: this.click()
@@ -48,12 +49,12 @@ export class DownloadLastExportZipButton extends BaseView {
         const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
         this.prePatch("#" + this.stateId, div(this.stateId, [
           "button", "enable"
-        ], "download PDF!"));
+        ], "download Zip!"));
         this.isExported = true;
       } else {
         this.prePatch("#" + this.stateId, div(this.stateId, [
           "button", "disable"
-        ], "no export"));
+        ], "no export Zip"));
         this.isExported = false;
       }
     }
@@ -61,8 +62,8 @@ export class DownloadLastExportZipButton extends BaseView {
   click() {
     return(event) => {
       if (this.isExported) {
-const action = ExportActionCreator.createDownloadAction(); //createDownloadPdfAction
-this.dispatch(action);
+        const action = ExportActionCreator.createDownloadAction(); //createDownloadPdfAction
+        this.dispatch(action);
       }
       event.stopPropagation();
       return false;

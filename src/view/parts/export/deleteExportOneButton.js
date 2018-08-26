@@ -32,6 +32,7 @@ export class DeleteExportOneButton extends BaseView {
   async onViewShow(store, actionData) {
     if (store[this.storeRemoveResultKey]) {
       alert("delete exports!");
+      store[this.storeRemoveResultKey] = null;
     }
   }
   click() {

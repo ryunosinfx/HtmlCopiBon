@@ -26,13 +26,11 @@ export class ExportUtilProcesser {
     const exportPks = await this.tm.getExports();
     if(exportPks){
       for(let exportｓIndex in exportPks){
-        if(exportPks[exportｓIndex] === exportPk){
-          delete exportPks[exportｓIndex];
-          await this.iom.save(exportPk);
-          await this.tm.saveCurrent();
-          break;
-        }
+        const current = exportPks[exportｓIndex];
+        delete exportPks[exportｓIndex];
+        await this.iom.remove(current);
       }
+      await this.tm.saveCurrent();
     }
     alert('ExportImageProcesser remove');
   }
@@ -43,7 +41,10 @@ export class ExportUtilProcesser {
       const imageOutpus = await this.load();
       const zip = imageOutpus.zip;
       if(zip && zip.binary){
-        zip.ab = await this.bm.load(zip.binary);
+        alert(zip.binary);
+        const binaryEntity = await this.bm.load(zip.binary);
+        zip.ab = binaryEntity._ab;
+        console.error(zip.ab)
       }
       return zip;
     }
@@ -56,7 +57,8 @@ export class ExportUtilProcesser {
       const imageOutpus = await this.load();
       const pdf = imageOutpus.pdf;
       if(pdf && pdf.binary){
-        pdf.ab = await this.bm.load(pdf.binary);
+        const binaryEntity = await this.bm.load(pdf.binary);
+        pdf.ab = binaryEntity._ab;
       }
       return pdf;
     }

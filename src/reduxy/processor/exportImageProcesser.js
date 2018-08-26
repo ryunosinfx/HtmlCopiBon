@@ -1,5 +1,5 @@
 import {Sorter} from "../../util/sorter";
-import {getNowUnixtime} from "../../util/timeUtil";
+import {getNowUnixtime,unixTimeToDateFormat} from "../../util/timeUtil";
 import {Paper} from "../../util/image/paper";
 import {ImageMerger} from "../../util/image/imageMerger";
 import {ImageResizer} from "../../util/image/imageResizer";
@@ -40,7 +40,7 @@ export class ExportImageProcesser {
     const pages = await this.pp.loadPages().catch((e) => {
       console.log(e)
     });
-    return await executeParOrder(setting,pages,exportOrders);
+    return await this.executeParOrder(setting,pages,exportOrders[0]);
   }
   async executeParOrder(setting,pages,order){
     //-1 order consts calc
@@ -70,18 +70,22 @@ export class ExportImageProcesser {
     // plainData1
     //11 save zip
     const compressed = await this.exoprtAsZip(pages);
-    const exports = this.tm.getExports();
+    const exports = await this.tm.getExports();
     let exportImagePk = null;
+    let outputOld = null;
     for(let exportPk of exports){
       const imageOutput = await this.iom.load(exportPk);
       if(imageOutput.type==="zip"){
         exportImagePk = exportPk;
+        outputOld = imageOutput.binary;
         break;
       }
     }
     const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/");
-    const exportImageNewPk = await this.iom.save(exportImagePk, this.tm.getCurrentTitleName()+getNowUnixtime()+".zip", outputNew, "zip", order.orderName);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/"+outputNew+"/"+outputOld);
+    const now = (new Date().getTime());
+    const yyyyMMddThhmmss= unixTimeToDateFormat(now,"yyyyMMddThhmmss");
+    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName())+yyyyMMddThhmmss+".zip", outputNew, "zip", order.orderName);
     // console.log(compressed);
     if(exportImageNewPk){
       exports.push(exportImageNewPk);
@@ -109,7 +113,7 @@ export class ExportImageProcesser {
       height: targetSize.y
     };
     const targetRetio = targetSize.x / targetSize.y;
-    const isBaseWhite = true;binaryEntitySaved
+    const isBaseWhite = true;
     let currentDataAb = null
     for (let pageEntity of pages) {
       if (pageEntity && pageEntity.baseImage) {

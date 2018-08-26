@@ -37,10 +37,15 @@ export class ExportImgZipButton extends BaseView {
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
-    if (store[this.storeKey]) {
+    if (store[this.storeExportResultKey]) {
+      const isSuccess = this.buildButton(store[this.storeExportResultKey]);
+      if (isSuccess) {
+        alert("OK download zip file!:" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
+      }
+      store[this.storeExportResultKey] = null;
+    } else if (store[this.storeKey]) {
+      //alert(JSON.stringify(store[this.storeKey]));
       this.buildButton(store[this.storeKey]);
-    } else if (store[this.storeExportResultKey]) {
-      this.buildButton(store[this.storeExportResultKey]);
     }
   }
   buildButton(exports) {
@@ -48,15 +53,17 @@ export class ExportImgZipButton extends BaseView {
       const zip = exports.zip
       const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
       this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));
-
+      this.isExported = true;
+      return true;
       // console.log(data);
-      alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
+      //alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
 
     } else {
       this.isExported = false;
       this.prePatch("#" + this.stateId, div(this.stateId, ["exportedStateNone"], "no export"));
+      return false;
       // console.log(data);
-      alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
+      //alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
     }
   }
 

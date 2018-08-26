@@ -45,18 +45,24 @@ export class ExportReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.exportExecuteAction.type === action.type) {
-      store[this.storeExportResultKey] = await this.exportExecute(action.data.exportOrders);
+      const loadPks = await this.exportExecute(action.data.exportOrders);
+      store[this.storeKey] = loadPks;
+      store[this.storeExportResultKey] =loadPks;
     } else if (this.exportExecuteAllAction.type === action.type) {
       store[this.storeExportResultKey] = await this.exportExecute(action.data.exportOrders);
       store[this.storeExportResultKey] = await this.exportPdfExecute(action.data.exportOrders);
     } else if (this.exportRemoveAction.type === action.type) {
-      store[this.storeRemoveResultKey] = await this.remove(action.data.exportPk);
+      const loadPks = await this.remove(action.data.exportPk);
+      store[this.storeRemoveResultKey] = loadPks;
+      store[this.storeKey] = loadPks;
     } else if (this.exportsLoadAction.type === action.type) {
       store[this.storeKey] = await this.load();
     } else if (this.exportDownloadAction.type === action.type) {
       store[this.storeZipDLKey] = await this.loadZip(action.data.exportPk);
     } else if (this.exportExecutePdfAction.type === action.type) {
-      store[this.storeExportResultKey] = await this.exportPdfExecute(action.data.exportOrders);
+      const loadPks = await this.exportPdfExecute(action.data.exportOrders);
+      store[this.storeKey] = loadPks;
+      store[this.storeExportResultKey] =loadPks;
     } else if (this.exportDownloadPdfAction.type === action.type) {
       store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
     }

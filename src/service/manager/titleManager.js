@@ -105,7 +105,7 @@ export class TitleManager {
   }
   async getExports() {
     const title = await this.loadCurrent();
-    if(title && title.exports){
+    if(title && title.exports && Array.isArray(title.exports)){
       return title.exports;
     }else{
       title.exports = [];

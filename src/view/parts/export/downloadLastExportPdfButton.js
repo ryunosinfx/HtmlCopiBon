@@ -9,6 +9,7 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
+import {unixTimeToDateFormat} from "../../../util/timeUtil";
 import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
 import {FileDownloader} from "../../../util/fileDownloader";
 export class DownloadLastExportPdfButton extends BaseView {
@@ -24,7 +25,7 @@ export class DownloadLastExportPdfButton extends BaseView {
   }
 
   render(store, actionData) {
-    const text = div(this.stateId , ["button"], "download PDF!");
+    const text = div(this.stateId , ["button"], "-no export PDF-");
     const result = div(this.id, [this.id + "Frame"], {
       on: {
         click: this.click()
@@ -44,13 +45,13 @@ export class DownloadLastExportPdfButton extends BaseView {
       }
     } else if (store[this.storeKey]) {
       const data = store[this.storeKey];
-      const zip = data.zip;
-      if (zip) {
-        const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+      const pdf = data.pdf;
+      if (pdf) {
+        const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
         this.prePatch("#" + this.stateId, div(this.stateId, ["button","enable"], "download PDF!"));
         this.isExported = true;
       } else {
-        this.prePatch("#" + this.stateId, div(this.stateId, ["button","disable"], "no export"));
+        this.prePatch("#" + this.stateId, div(this.stateId, ["button","disable"], "no export PDF"));
         this.isExported = false;
       }
     }
