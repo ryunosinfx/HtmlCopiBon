@@ -38,17 +38,25 @@ export class ExportImgZipButton extends BaseView {
 
   async onViewShow(store, actionData) {
     if (store[this.storeKey]) {
-      const data = store[this.storeKey];
-      const zip = data.zip;
-      if (zip) {
-        const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
-        this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));
-      } else {
-        this.prePatch("#" + this.stateId, div(this.stateId, ["exportedStateNone"], "no export"));
-      }
+      this.buildButton(store[this.storeKey]);
     } else if (store[this.storeExportResultKey]) {
+      this.buildButton(store[this.storeExportResultKey]);
+    }
+  }
+  buildButton(exports) {
+    if (exports.zip) {
+      const zip = exports.zip
+      const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+      this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));
+
       // console.log(data);
-      alert("OK download zip file!");
+      alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
+
+    } else {
+      this.isExported = false;
+      this.prePatch("#" + this.stateId, div(this.stateId, ["exportedStateNone"], "no export"));
+      // console.log(data);
+      alert("OK download zip file!:" + JSON.stringify(exports) + "/this.isExported:" + this.isExported);
     }
   }
 

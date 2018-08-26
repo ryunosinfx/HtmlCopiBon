@@ -33,12 +33,14 @@ export class ExportImageProcesser {
   }
   async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
+      alert("exportExecute exportOrders:"+exportOrders);
     const setting = await this.tm.loadSettings().catch((e) => {
       console.log(e)
     });
     const pages = await this.pp.loadPages().catch((e) => {
       console.log(e)
     });
+    return await executeParOrder(setting,pages,exportOrders);
   }
   async executeParOrder(setting,pages,order){
     //-1 order consts calc
@@ -85,7 +87,7 @@ export class ExportImageProcesser {
       exports.push(exportImageNewPk);
       await this.tm.saveCurrent();
     }
-    // return pk list
+    // return pk list PK!PK!
     return exports;
   }
   async expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages){
