@@ -7,17 +7,17 @@ export class ViewBaseReducer extends BaseReducer {
     this.atatch(ViewBaseActions.getGotoAnotherViewAction());
     this.atatch(ViewBaseActions.getShowViewAction());
   }
-  async reduce(store,action) {
+  async reduce(store, action) {
     //console.log('reduce! action:'+action);
     //console.log('reduce! oldVnode:'+action.data.oldVnode);
-    if(ActionCreator.isEquals(ViewBaseActions.getGotoAnotherViewAction(),action)){
+    if (ActionCreator.isEquals(ViewBaseActions.getGotoAnotherViewAction(), action)) {
       // todo update menue
       //console.log('getGotoAnotherViewAction!');
-    }else if(ActionCreator.isEquals(ViewBaseActions.getShowViewAction(),action)){
-      store.isOrverride=true;
+    } else if (ActionCreator.isEquals(ViewBaseActions.getShowViewAction(), action)) {
+      store.isOrverride = true;
 
-      store.oldVnode=action.data.oldVnode;
-      store.selector="#"+action.data.selector;
+      store.oldVnode = action.data.oldVnode;
+      store.selector = "#" + action.data.selector;
     }
     //console.log('reduced...');
     return store;

@@ -1,7 +1,4 @@
-
-import {
-  BaseView
-} from "../../../util/reactive/baseView";
+import {BaseView} from "../../../util/reactive/baseView";
 import {
   a,
   div,
@@ -12,12 +9,10 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-import {
-  ExportActionCreator
-} from '../../../reduxy/action/exportActionCreator'
+import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
 export class DeleteExportOneButton extends BaseView {
   constructor() {
-    super("DeleteExportOneButton", "DeleteExportOneButton",true);
+    super("DeleteExportOneButton", "DeleteExportOneButton", true);
     this.storeKey = ExportActionCreator.getStoreKey();
     this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
@@ -26,25 +21,25 @@ export class DeleteExportOneButton extends BaseView {
   }
 
   render(store, actionData) {
-    return div(this.id, [this.id + "Frame"],{
-      on:{
-        click:this.click()
+    return div(this.id, [this.id + "Frame"], {
+      on: {
+        click: this.click()
       }
-    }, [ div("", ["button"], "delete Exports!")]);
+    }, [div("", ["button"], "delete Exports!")]);
   }
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
-      if (store[this.storeRemoveResultKey]) {
-        alert("delete exports!");
-      }
-  }
-    click(){
-      return (event)=>{
-        const action= ExportActionCreator.creatRemoveAction();
-        this.dispatch(action);
-        event.stopPropagation();
-        return false;
-      }
+    if (store[this.storeRemoveResultKey]) {
+      alert("delete exports!");
     }
+  }
+  click() {
+    return(event) => {
+      const action = ExportActionCreator.creatRemoveAction();
+      this.dispatch(action);
+      event.stopPropagation();
+      return false;
+    }
+  }
 }

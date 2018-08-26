@@ -19,17 +19,19 @@ export class ExportUtilProcesser {
     this.tm = this.ms.tm;
   }
   async load() {
-    const exportPks = this.tm.getExports();
+    const exportPks = await this.tm.getExports();
     return await this.getZipPdfPair(exportPks);
   }
   async remove(exportPk = -1) {
-    const exportPks = this.tm.getExports();
-    for(let exportｓIndex in exportPks){
-      if(exportPks[exportｓIndex] === exportPk){
-        delete exportPks[exportｓIndex];
-        await this.iom.save(exportPk);
-        await this.tm.saveCurrent();
-        break;
+    const exportPks = await this.tm.getExports();
+    if(exportPks){
+      for(let exportｓIndex in exportPks){
+        if(exportPks[exportｓIndex] === exportPk){
+          delete exportPks[exportｓIndex];
+          await this.iom.save(exportPk);
+          await this.tm.saveCurrent();
+          break;
+        }
       }
     }
     alert('ExportImageProcesser remove');
@@ -63,6 +65,9 @@ export class ExportUtilProcesser {
 
   async getZipPdfPair(exportPks){
     const imageOutpus = {pdf:null,zip:null};
+    if(!!exportPks===false){
+      return imageOutpus;
+    }
     for(let exportPk of exportPks){
       const imageOutput = await this.iom.load(exportPk);
       if(imageOutput && imageOutput.type==="zip"){

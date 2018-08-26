@@ -1,6 +1,4 @@
-import {
-  BaseView
-} from "../../../util/reactive/baseView";
+import {BaseView} from "../../../util/reactive/baseView";
 import {
   a,
   div,
@@ -11,30 +9,14 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags"; //
-import {
-  ExportActionCreator
-} from '../../../reduxy/action/exportActionCreator'
-import {
-  ExportReducer
-} from '../../../reduxy/reducer/exportReducer'
-import {
-  ExportAllButton
-} from './exportAllButton'
-import {
-  ExportImgZipButton
-} from "./exportImgZipButton";
-import {
-  ExportPdfButton
-} from './exportPdfButton'
-import {
-  DownloadLastExportZipButton
-} from './downloadLastExportZipButton'
-import {
-  DownloadLastExportPdfButton
-} from './downloadLastExportPdfButton'
-import {
-  DeleteExportOneButton
-} from './deleteExportOneButton'
+import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
+import {ExportReducer} from '../../../reduxy/reducer/exportReducer'
+import {ExportAllButton} from './exportAllButton'
+import {ExportImgZipButton} from "./exportImgZipButton";
+import {ExportPdfButton} from './exportPdfButton'
+import {DownloadLastExportZipButton} from './downloadLastExportZipButton'
+import {DownloadLastExportPdfButton} from './downloadLastExportPdfButton'
+import {DeleteExportOneButton} from './deleteExportOneButton'
 export class ExportButton extends BaseView {
   constructor() {
     super("ExportButton", "ExportButtonFrame");
