@@ -42,31 +42,51 @@ export const printMargin = {
   none: 0,
   conbini: 5
 }
-export const basePaper={
-  mangaPaperA4:{
-    target:"B5",
-    frame:"A4",
-    multiple:1
+export const basePaper = {
+  A5: {
+    target: "A5",
+    frame: "A5",
+    multiple: 1
   },
-  mangaPaperA4ExpandTatikiri:{
-    target:"B5",
-    frame:"A4",
-    multiple:(274/257)
+  B5: {
+    target: "B5",
+    frame: "B5",
+    multiple: 1
   },
-  mangaPaperB4:{
-    target:"A4",
-    frame:"B4",
-    multiple:1
+  A4: {
+    target: "A4",
+    frame: "A4",
+    multiple: 1
   },
-  mangaPaperA3:{
-    target:"B4",
-    frame:"A3",
-    multiple:1
+  mangaPaperB5: {
+    target: "A5",
+    frame: "B5",
+    multiple: 1
   },
-  pure_fit:{
-    target:"same",
-    frame:"same",
-    multiple:1
+  mangaPaperA4: {
+    target: "B5",
+    frame: "A4",
+    multiple: 1
+  },
+  mangaPaperA4ExpandTatikiri: {
+    target: "B5",
+    frame: "A4",
+    multiple: (274 / 257)
+  },
+  mangaPaperB4: {
+    target: "A4",
+    frame: "B4",
+    multiple: 1
+  },
+  mangaPaperA3: {
+    target: "B4",
+    frame: "A3",
+    multiple: 1
+  },
+  pure_fit: {
+    target: "same",
+    frame: "same",
+    multiple: 1
   }
 }
 export const paperSizeSet = {
@@ -99,3 +119,46 @@ export const paperSizeSet = {
     y: 420
   }
 }
+
+export const ExportOrders = [ //
+  {
+    orderName: "B5Expand600",
+    basePaper: "B5",
+    dpiName: "dpi600"
+  },
+  {
+    orderName: "B5Expand350",
+    basePaper: "B5",
+    dpiName: "dpi350"
+  },
+  {
+    orderName: "B5Expand300",
+    basePaper: "B5",
+    dpiName: "dpi300"
+  },
+  {
+    orderName: "B5ExpandTatikiri72",
+    basePaper: "B5",
+    dpiName: "dpi72"
+  },
+  {
+    orderName: "MangaPaperA4ExpandTatikiri600",
+    basePaper: "mangaPaperA4ExpandTatikiri",
+    dpiName: "dpi600"
+  },
+  {
+    orderName: "MangaPaperA4ExpandTatikiri350",
+    basePaper: "mangaPaperA4ExpandTatikiri",
+    dpiName: "dpi350"
+  },
+  {
+    orderName: "MangaPaperA4ExpandTatikiri300",
+    basePaper: "mangaPaperA4ExpandTatikiri",
+    dpiName: "dpi300"
+  },
+  {
+    orderName: "MangaPaperA4ExpandTatikiri72",
+    basePaper: "mangaPaperA4ExpandTatikiri",
+    dpiName: "dpi72"
+  }
+];

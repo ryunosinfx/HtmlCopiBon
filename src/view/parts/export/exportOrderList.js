@@ -23,6 +23,7 @@ export class ExportOrderList extends BaseView {
 
   render(store, actionData) {
     const name = div("", ["ExportOrdersListTitle"], "Export Orders List");
+    const list = this.buildRows()
     return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ExportOrdrs"], this.id + "aaaaa")]);
   }
   onAfterAttach(store, data) {}
@@ -30,6 +31,6 @@ export class ExportOrderList extends BaseView {
   async onViewShow(store, actionData) {}
 
   buildRows(){
-
+    return this.exportOrderRow.buildRows()
   }
 }

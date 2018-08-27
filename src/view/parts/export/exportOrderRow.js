@@ -12,9 +12,12 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
+import {dpis, ExportOrders} from "../../../settings/exportSettings";
 export class ExportOrderRow extends BaseView {
   constructor() {
     super("ExportOrderRow", "ExportOrderRow");
+    this.selectOrder = null;
+    this.ordersMap = {};
   }
 
   render(store, actionData) {
@@ -26,6 +29,13 @@ export class ExportOrderRow extends BaseView {
   async onViewShow(store, actionData) {}
 
   buildRows(){
+    const retList = [];
+    const ordersList = ExportOrders;
+    for(let order of ordersList){
+      const name=order.name;
+      this.ordersMap[name]= order;
+      div("")
+    }
 
   }
 }
