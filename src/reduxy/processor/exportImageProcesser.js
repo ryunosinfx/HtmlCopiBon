@@ -1,5 +1,5 @@
 import {Sorter} from "../../util/sorter";
-import {getNowUnixtime,unixTimeToDateFormat} from "../../util/timeUtil";
+import {getNowUnixtime, unixTimeToDateFormat} from "../../util/timeUtil";
 import {Paper} from "../../util/image/paper";
 import {ImageMerger} from "../../util/image/imageMerger";
 import {ImageResizer} from "../../util/image/imageResizer";
@@ -11,7 +11,7 @@ import {PreviewProcessor} from "./previewProcessor"
 import {Zlib} from "zlibjs/bin/zip.min"
 
 const order = {
-  orderName:"MangaPaperA4ExpandTatikiri",
+  orderName: "MangaPaperA4ExpandTatikiri",
   basePaper: "mangaPaperA4ExpandTatikiri",
   dpiName: "dpi600"
 };
@@ -33,16 +33,16 @@ export class ExportImageProcesser {
   }
   async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
-      alert("exportExecute exportOrders:"+exportOrders);
+    alert("exportExecute exportOrders:" + exportOrders);
     const setting = await this.tm.loadSettings().catch((e) => {
       console.log(e)
     });
     const pages = await this.pp.loadPages().catch((e) => {
       console.log(e)
     });
-    return await this.executeParOrder(setting,pages,exportOrders[0]);
+    return await this.executeParOrder(setting, pages, exportOrders[0]);
   }
-  async executeParOrder(setting,pages,order){
+  async executeParOrder(setting, pages, order) {
     //-1 order consts calc
     const targetDpi = this.paper.getDpi(order.dpiName);
     const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
@@ -52,7 +52,7 @@ export class ExportImageProcesser {
       x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
       y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
-    await this.expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages);
+    await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages);
     console.log(pages)
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
     const isPageDirectionR2L = setting.pageDirection === "r2l";
@@ -60,7 +60,7 @@ export class ExportImageProcesser {
     const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
     const isOdd = pages.length % 2 > 0;
     const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
-    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd);
+    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd, isPageDirectionR2L);
 
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
     //10 load images and add tozip
@@ -73,28 +73,28 @@ export class ExportImageProcesser {
     const exports = await this.tm.getExports();
     let exportImagePk = null;
     let outputOld = null;
-    for(let exportPk of exports){
+    for (let exportPk of exports) {
       const imageOutput = await this.iom.load(exportPk);
-      if(imageOutput.type==="zip"){
+      if (imageOutput.type === "zip") {
         exportImagePk = exportPk;
         outputOld = imageOutput.binary;
         break;
       }
     }
     const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/"+outputNew+"/"+outputOld);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld);
     const now = (new Date().getTime());
-    const yyyyMMddThhmmss= unixTimeToDateFormat(now,"yyyyMMddThhmmss");
-    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName())+yyyyMMddThhmmss+".zip", outputNew, "zip", order.orderName);
+    const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
+    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName);
     // console.log(compressed);
-    if(exportImageNewPk){
+    if (exportImageNewPk) {
       exports.push(exportImageNewPk);
       await this.tm.saveCurrent();
     }
     // return pk list PK!PK!
     return exports;
   }
-  async expandAndCropSize(targetSize,frameSizeMm,frameSize,clopOffset,pages){
+  async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages) {
     console.log("--targetSize--")
     console.log(targetSize)
     const expandedPaper = {
@@ -217,7 +217,7 @@ export class ExportImageProcesser {
     }
     return zip.compress();
   }
-  async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd) {
+  async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L) {
     //6 new WhiteImageCreate
     //7 load2PageImage
     //8 merge
@@ -230,63 +230,52 @@ export class ExportImageProcesser {
     console.log(setting);
     const cratePageData = PreviewProcessor.getCratePageDataFunc();
     const dummyClass = "dummy";
-    const shapedList = PreviewProcessor.buildPageFrames(setting, pages, cratePageData, dummyClass);
+    // const shapedList = PreviewProcessor.buildPageFrames(setting, pages, cratePageData, dummyClass);
     const pairPages = {
       right: null,
       left: null,
       rightBin: null,
       leftBin: null
     };
-    const lastPagesPair = [null, null];
-    const latestPagesPair = [null, null];
     let isSkeped = isSideSynced !== true;
     const printPages = [];
     const printPairs = [];
-    for (let shapedPagePair of shapedList) {
-      const one = shapedPagePair[0];
-      const two = shapedPagePair[1];
-      if (one && !one.isDummy) {
-        printPages.push(one);
+    let indexA = 0;
+    for (let page of pages) {
+      indexA++;
+      const data = {
+        pageNo: indexA,
+        isDummy: false,
+        isRight: indexA % 2 > 0 && isSideSynced,
+        binary: page
       }
-      if (two && !two.isDummy) {
-        printPages.push(two);
-      }
+      printPages.push(data);
     }
 
     for (let index = 0; index < printPages.length; index++) {
       const newPair = [null, null];
-      if (index <= 0) {
-        if (!isSideSynced) {
-          newPair[1] = printPages[index];
-        } else {
-          newPair[0] = printPages[index];
-          index++;
-          newPair[1] = printPages[index];
-        }
-      } else {
-        newPair[0] = printPages[index];
-        index++;
-        if (index < printPages.length) {
-          newPair[1] = printPages[index];
-        }
+      newPair[0] = printPages[index];
+      index++;
+      if (index < printPages.length) {
+        newPair[1] = printPages[index];
       }
       printPairs.push(newPair);
     }
     for (let printPagePair of printPairs) {
-      await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair);
+      await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair, isPageDirectionR2L);
     }
   }
-  async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair) {
+  async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair, isPageDirectionR2L) {
     console.log(shapedPagePair);
     const one = shapedPagePair[0];
     const two = shapedPagePair[1];
     // reverse side!
-    const right = one && one.isRight
-      ? (two && !two.isRight?two:null)
+    const right = isPageDirectionR2L
+      ? two
       : one;
-    const left = one && one.isRight
+    const left = isPageDirectionR2L
       ? one
-      : (two && two.isRight?two:null);
+      : two;
     pairPages.right = right === null || right.isDummy
       ? null
       : right.binary;

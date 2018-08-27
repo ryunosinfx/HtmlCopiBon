@@ -42,14 +42,13 @@ export class ExportImgZipButton extends BaseView {
       if (isSuccess) {
         alert("OK download zip file!:" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
       }
-      store[this.storeExportResultKey] = null;
     } else if (store[this.storeKey]) {
       //alert(JSON.stringify(store[this.storeKey]));
       this.buildButton(store[this.storeKey]);
     }
   }
   buildButton(exports) {
-    if (exports.zip) {
+    if (exports && exports.zip) {
       const zip = exports.zip
       const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
       this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));

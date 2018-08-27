@@ -57,14 +57,17 @@ export class ExportReducer extends BaseReducer {
       store[this.storeKey] = loadPks;
     } else if (this.exportsLoadAction.type === action.type) {
       store[this.storeKey] = await this.load();
+      store[this.storeExportResultKey] =null;
     } else if (this.exportDownloadAction.type === action.type) {
       store[this.storeZipDLKey] = await this.loadZip(action.data.exportPk);
+      store[this.storeExportResultKey] =null;
     } else if (this.exportExecutePdfAction.type === action.type) {
       const loadPks = await this.exportPdfExecute(action.data.exportOrders);
       store[this.storeKey] = loadPks;
       store[this.storeExportResultKey] =loadPks;
     } else if (this.exportDownloadPdfAction.type === action.type) {
       store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
+      store[this.storeExportResultKey] =null;
     }
     return store;
   }
