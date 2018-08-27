@@ -20,7 +20,10 @@ export class ExportActionCreator {
     return ActionCreator.createBaseAction("executePdfExport", targetView, data, storeKey);
   }
   static createDownloadPdfAction(targetView, data, storeKey = null) {
-    return ActionCreator.createBaseAction("edownloadPdfExport", targetView, data, storeKey);
+    return ActionCreator.createBaseAction("downloadPdfExport", targetView, data, storeKey);
+  }
+  static createSelectOrderAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("selectOrderExport", targetView, data, storeKey);
   }
   static getStoreKey(){
     return "exports";
@@ -36,5 +39,8 @@ export class ExportActionCreator {
   }
   static getStoreExportResultKey(){
     return "exportExportResult";
+  }
+  static getStoreSelectedOrderKey(){
+    return "exportSelectedOrder";
   }
 }

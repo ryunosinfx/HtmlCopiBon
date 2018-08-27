@@ -21,6 +21,7 @@ export class ExportReducer extends BaseReducer {
     this.exportDownloadAction = ExportActionCreator.createDownloadAction();
     this.exportExecutePdfAction = ExportActionCreator.createExecutePdfAction();
     this.exportDownloadPdfAction = ExportActionCreator.createDownloadPdfAction();
+    this.selectOrderAction = createSelectOrderAction.createDownloadPdfAction();
     this.atatch(this.exportExecuteAction);
     this.atatch(this.exportExecuteAllAction);
     this.atatch(this.exportRemoveAction);
@@ -28,6 +29,7 @@ export class ExportReducer extends BaseReducer {
     this.atatch(this.exportDownloadAction);
     this.atatch(this.exportExecutePdfAction);
     this.atatch(this.exportDownloadPdfAction);
+    this.atatch(this.selectOrderAction);
 
     this.pp = new PageProcessor();
     this.eip = new ExportImageProcesser(this.pp);
@@ -37,6 +39,7 @@ export class ExportReducer extends BaseReducer {
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
     this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
+    this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
   }
   static register() {
     if (!exportReducer) {
@@ -48,9 +51,11 @@ export class ExportReducer extends BaseReducer {
       const loadPks = await this.exportExecute(action.data.exportOrders);
       store[this.storeKey] = loadPks;
       store[this.storeExportResultKey] =loadPks;
+      store[this.storeRemoveResultKey] =null;
     } else if (this.exportExecuteAllAction.type === action.type) {
       store[this.storeExportResultKey] = await this.exportExecute(action.data.exportOrders);
       store[this.storeExportResultKey] = await this.exportPdfExecute(action.data.exportOrders);
+      store[this.storeRemoveResultKey] =null;
     } else if (this.exportRemoveAction.type === action.type) {
       const loadPks = await this.remove(action.data.exportPk);
       store[this.storeRemoveResultKey] = loadPks;
@@ -65,9 +70,12 @@ export class ExportReducer extends BaseReducer {
       const loadPks = await this.exportPdfExecute(action.data.exportOrders);
       store[this.storeKey] = loadPks;
       store[this.storeExportResultKey] =loadPks;
+      store[this.storeRemoveResultKey] =null;
     } else if (this.exportDownloadPdfAction.type === action.type) {
       store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
       store[this.storeExportResultKey] =null;
+    } else if (this.selectOrderAction.type === action.type) {
+      store[this.storeSelectedOrderKey] = await this.loadPdf(action.data.exportPk);
     }
     return store;
   }

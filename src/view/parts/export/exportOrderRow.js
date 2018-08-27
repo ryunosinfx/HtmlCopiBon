@@ -27,15 +27,28 @@ export class ExportOrderRow extends BaseView {
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
+  getCurrentSelected(){
+    return this.ordersMap[this.selectOrder];
+  }
+  selectOrder(name){
+    return (event)=>{
+      this.selectOrder = name;
+
+    }
+  }
 
   buildRows(){
     const retList = [];
     const ordersList = ExportOrders;
     for(let order of ordersList){
-      const name=order.name;
+      const name=order.orderName;
       this.ordersMap[name]= order;
-      div("")
+      const id = "ExportOrderRow-"+name;
+      const row = div(id,[name],{
+        on:{click:this.selectOrder(name)}
+      },span("",[],[name]));
+      retList.push(row);
     }
-
+    return retList;
   }
 }
