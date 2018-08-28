@@ -13,9 +13,11 @@ import {
   label
 } from "../../../util/reactive/base/vtags";
 import {dpis, ExportOrders} from "../../../settings/exportSettings";
+import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
 export class ExportOrderRow extends BaseView {
-  constructor() {
+  constructor(parent) {
     super("ExportOrderRow", "ExportOrderRow");
+    this.parent = parent;
     this.selectOrder = null;
     this.ordersMap = {};
   }
@@ -30,10 +32,15 @@ export class ExportOrderRow extends BaseView {
   getCurrentSelected(){
     return this.ordersMap[this.selectOrder];
   }
-  selectOrder(name){
+  getSelectOrder(name){
     return (event)=>{
       this.selectOrder = name;
-
+      const action = ExportActionCreator.createSelectOrderAction(this.parent,{
+        selectOrder:this.selectOrder
+      });
+      this.dispatch(action);
+      event.stopPropagation();
+      return false;
     }
   }
 
@@ -45,7 +52,7 @@ export class ExportOrderRow extends BaseView {
       this.ordersMap[name]= order;
       const id = "ExportOrderRow-"+name;
       const row = div(id,[name],{
-        on:{click:this.selectOrder(name)}
+        on:{click:this.getSelectOrder(name)}
       },span("",[],[name]));
       retList.push(row);
     }

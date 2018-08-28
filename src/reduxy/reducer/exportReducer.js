@@ -21,7 +21,7 @@ export class ExportReducer extends BaseReducer {
     this.exportDownloadAction = ExportActionCreator.createDownloadAction();
     this.exportExecutePdfAction = ExportActionCreator.createExecutePdfAction();
     this.exportDownloadPdfAction = ExportActionCreator.createDownloadPdfAction();
-    this.selectOrderAction = createSelectOrderAction.createDownloadPdfAction();
+    this.selectOrderAction = ExportActionCreator.createSelectOrderAction();
     this.atatch(this.exportExecuteAction);
     this.atatch(this.exportExecuteAllAction);
     this.atatch(this.exportRemoveAction);
