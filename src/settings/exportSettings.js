@@ -122,43 +122,18 @@ export const paperSizeSet = {
 
 export const ExportOrders = [ //
   {
-    orderName: "B5Expand600",
+    orderName: "A5",
+    basePaper: "A5",
+    dpiName: "dpi600"
+  },
+  {
+    orderName: "B5ExpandTatikiri",
     basePaper: "B5",
     dpiName: "dpi600"
   },
   {
-    orderName: "B5Expand350",
-    basePaper: "B5",
-    dpiName: "dpi350"
-  },
-  {
-    orderName: "B5Expand300",
-    basePaper: "B5",
-    dpiName: "dpi300"
-  },
-  {
-    orderName: "B5ExpandTatikiri72",
-    basePaper: "B5",
-    dpiName: "dpi72"
-  },
-  {
-    orderName: "MangaPaperA4ExpandTatikiri600",
+    orderName: "MangaPaperA4ExpandTatikiri",
     basePaper: "mangaPaperA4ExpandTatikiri",
     dpiName: "dpi600"
-  },
-  {
-    orderName: "MangaPaperA4ExpandTatikiri350",
-    basePaper: "mangaPaperA4ExpandTatikiri",
-    dpiName: "dpi350"
-  },
-  {
-    orderName: "MangaPaperA4ExpandTatikiri300",
-    basePaper: "mangaPaperA4ExpandTatikiri",
-    dpiName: "dpi300"
-  },
-  {
-    orderName: "MangaPaperA4ExpandTatikiri72",
-    basePaper: "mangaPaperA4ExpandTatikiri",
-    dpiName: "dpi72"
   }
 ];

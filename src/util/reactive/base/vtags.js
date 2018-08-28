@@ -106,6 +106,12 @@ export const input = (id, classNames, data, type, text) => {
     value: text
   }), null, text);
 }
+export const checkbox = (id, classNames, data, text) => {
+  return vtags("input", id, classNames, setProps(data, {
+    type: "checkbox",
+    value: text
+  }), null, text);
+}
 export const label = (id, classNames, data, children, text) => {
   return vtags("label", id, classNames, data, children, text);
 }

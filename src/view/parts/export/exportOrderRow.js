@@ -20,6 +20,7 @@ export class ExportOrderRow extends BaseView {
     this.parent = parent;
     this.selectOrder = null;
     this.ordersMap = {};
+    this.orderOptions={isGrascale:false,dpiName:"dpi72",isMaxSize10M:false}
   }
 
   render(store, actionData) {
@@ -50,10 +51,11 @@ export class ExportOrderRow extends BaseView {
     for(let order of ordersList){
       const name=order.orderName;
       this.ordersMap[name]= order;
+      const label = span("",[name+"Text"],[name]);
       const id = "ExportOrderRow-"+name;
       const row = div(id,[name],{
         on:{click:this.getSelectOrder(name)}
-      },span("",[],[name]));
+      },[label]);
       retList.push(row);
     }
     return retList;
