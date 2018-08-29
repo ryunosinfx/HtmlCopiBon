@@ -26,12 +26,18 @@ export class ObjectUtil {
   static simpleDeepCloneSerialized(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
-  static simpleDeepClone(obj, newObj) {
+  static simpleDeepClone(obj, newObj, count = 0) {
+    const newCount = count+1;
     const output = newObj
       ? newObj
       : Array.isArray(obj)
         ? []
         : {};
+    if(newCount>10){
+      console.log(obj);
+      console.log(newCount);
+      return output;
+    }
     for (let key in obj) {
       const value = obj[key];
       if (value && typeof value === "object" && !value.byteLength) {
@@ -42,7 +48,7 @@ export class ObjectUtil {
             break;
           }
         }
-        output[key] = ObjectUtil.simpleDeepClone(value, baseType);
+        output[key] = ObjectUtil.simpleDeepClone(value, baseType,newCount);
       } else {
         try {
           output[key] = value;

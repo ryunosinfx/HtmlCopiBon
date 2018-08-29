@@ -16,6 +16,7 @@ import {FileDownloader} from "../../../util/fileDownloader";
 export class ExportImgZipButton extends BaseView {
   constructor() {
     super("ExportImgZipButton", "ExportImgZipButton", true);
+    this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
     this.storeKey = ExportActionCreator.getStoreKey();
     this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
@@ -48,14 +49,23 @@ export class ExportImgZipButton extends BaseView {
       this.buildButton(store[this.storeKey]);
     }
 
-        if (store[this.storeSelectedOrderKey]) {
-          this.exportOrderData = store[this.storeSelectedOrderKey];
-        }
+    if (store[this.storeSelectedOrderKey]) {
+      const orderData = store[this.storeSelectedOrderKey];
+      const selectOptions = orderData.selectOptions;
+      const selectOrder = orderData.selectOrder;
+      this.exportOrderData ={
+        basePaper:selectOrder.basePaper,
+        orderName:selectOrder.orderName,
+        dpiName:selectOptions.dpiName,
+        isGrascale:selectOptions.isGrascale,
+        isMaxSize10M:selectOptions.isMaxSize10M
+      }
+    }
   }
   buildButton(exports) {
     if (exports && exports.zip) {
       const zip = exports.zip
-      const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+      const exportString = "*Last Exported One* " +zip.name + " / " + zip.orderName + " /size: "+ zip.size+"byte / " + unixTimeToDateFormat(zip.updateDate);
       this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));
       this.isExported = true;
       return true;
@@ -73,8 +83,12 @@ export class ExportImgZipButton extends BaseView {
 
   click() {
     return(event) => {
+      if(!this.exportOrderData){
+        alert("Export Order is not Selected!");
+        return
+      }
       if (!this.isExported || this.isExported && window.confirm("is export orverride ok?")) {
-        const action = ExportActionCreator.createExecuteAction(this,this.exportOrderData);
+        const action = ExportActionCreator.createExecuteAction(this, {exportOrders:[this.exportOrderData]});
         this.dispatch(action);
       }
       event.stopPropagation();

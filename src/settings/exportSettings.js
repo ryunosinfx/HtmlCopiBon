@@ -122,18 +122,19 @@ export const paperSizeSet = {
 
 export const ExportOrders = [ //
   {
-    orderName: "A5",
-    basePaper: "A5",
-    dpiName: "dpi600"
+    orderName: "A5 none croping",
+    basePaper: "A5"
   },
   {
-    orderName: "B5ExpandTatikiri",
-    basePaper: "B5",
-    dpiName: "dpi600"
+    orderName: "B5 none croping",
+    basePaper: "B5"
   },
   {
-    orderName: "MangaPaperA4ExpandTatikiri",
-    basePaper: "mangaPaperA4ExpandTatikiri",
-    dpiName: "dpi600"
+    orderName: "mangaPaperB5Tatikiri",
+    basePaper: "mangaPaperB5"
+  },
+  {
+    orderName: "MangaPaperA4ExpandTatikiriSpecial",
+    basePaper: "mangaPaperA4ExpandTatikiri"
   }
 ];

@@ -48,6 +48,8 @@ export class ExportReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.exportExecuteAction.type === action.type) {
+      console.log(action.data.exportOrders);
+      alert(action.data.exportOrders);
       const loadPks = await this.exportExecute(action.data.exportOrders);
       store[this.storeKey] = loadPks;
       store[this.storeExportResultKey] =loadPks;
@@ -75,7 +77,13 @@ export class ExportReducer extends BaseReducer {
       store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
       store[this.storeExportResultKey] =null;
     } else if (this.selectOrderAction.type === action.type) {
-      store[this.storeSelectedOrderKey] = await this.loadPdf(action.data);
+      if(action.data.selectOrder && action.data.selectOptions ){
+        const newData ={
+          selectOptions:action.data.selectOptions,
+          selectOrder:action.data.selectOrder
+        };
+        store[this.storeSelectedOrderKey] = newData;
+      }
     }
     return store;
   }

@@ -445,6 +445,11 @@ canvas.hidden {
   display: flex;
   flex-direction: row;
 }
+div.button>div.exportedState{
+  background-color:rgb(148, 222, 164);
+  padding: 0.2em;
+  font-size:60%;
+}
 .ExportButtons>div{
   display: flex;
   width:200px;
@@ -471,17 +476,22 @@ canvas.hidden {
   border: 1px solid #999;
   background-color: rgb(237, 247, 234);
 }
+.ExportArea .ExportOrdrs>div.active{
+  font-weight: bold;
+  color:rgb(223, 238, 218);
+  background-color: rgb(70, 187, 35);
+}
 .ExportArea .ExportOrdrs>label{
   display: inline-block;
   line-height: 2em;
   margin:0.1em;
-  padding: 0.4em 2em;
+  padding: 0.4em 0.6em;
   border: 0px solid #aaa;
   cursor: pointer;
   background-color: rgb(232, 242, 229);
 }
 .ExportArea .ExportOrdrs>label:active{
-  background-color: rgb(242, 252, 239);
+  background-color: rgb(174, 223, 160);
 }
 .ExportArea .ExportOrdrs>label:hover{
   background-color: rgb(237, 247, 234);

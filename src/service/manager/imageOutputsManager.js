@@ -20,7 +20,7 @@ export class ImageOutputsManager {
       await this.em.ImageOutputs.delete(pk);
     }
   }
-  async save(pk, name, binary, type, orderName, listing = 0) {
+  async save(pk, name, binary, type, orderName,size, listing = 0) {
     let imageOutputs = null;
     if (pk) {
       imageOutputs = await this.em.ImageOutputs.get(pk);
@@ -43,6 +43,9 @@ export class ImageOutputsManager {
     imageOutputs.orderName = orderName || orderName === null
       ? orderName
       : imageOutputs.orderName;
+    imageOutputs.size = size || size === null
+      ? size
+      : imageOutputs.size;
     imageOutputs.listing = listing || listing === null
       ? listing
       : imageOutputs.listing;

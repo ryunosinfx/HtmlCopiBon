@@ -4,6 +4,7 @@ import {Paper} from "../../util/image/paper";
 import {ImageMerger} from "../../util/image/imageMerger";
 import {ImageResizer} from "../../util/image/imageResizer";
 import {ImageCropper} from "../../util/image/imageCropper";
+import {ImageFilter} from "../../util/image/imageFilter";
 import {UnicodeEncoder} from "../../util/unicodeEncoder";
 import {MainService} from "../../service/mainService"
 import {PreviewProcessor} from "./previewProcessor"
@@ -30,6 +31,7 @@ export class ExportImageProcesser {
     this.imageMerger = new ImageMerger();
     this.imageResizer = new ImageResizer();
     this.imageCropper = new ImageCropper();
+    this.imageFilter = new ImageFilter();
   }
   async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
@@ -48,11 +50,13 @@ export class ExportImageProcesser {
     const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
     const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper, targetDpi);
     const frameSizeMm = this.paper.getPaperFrameSizeMm(order.basePaper);
+    const isGrascale = order.isGrascale;
+    const isMaxSize10M = order.isMaxSize10M;
     const frameSize = {
       x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
       y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
-    await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages);
+    await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale);
     console.log(pages)
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
     const isPageDirectionR2L = setting.pageDirection === "r2l";
@@ -60,7 +64,7 @@ export class ExportImageProcesser {
     const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
     const isOdd = pages.length % 2 > 0;
     const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
-    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd, isPageDirectionR2L);
+    await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M);
 
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
     //10 load images and add tozip
@@ -82,10 +86,11 @@ export class ExportImageProcesser {
       }
     }
     const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld);
+    const size = compressed.byteLength;
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld+"/size:"+size);
     const now = (new Date().getTime());
     const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
-    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName);
+    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName,size);
     // console.log(compressed);
     if (exportImageNewPk) {
       exports.push(exportImageNewPk);
@@ -94,8 +99,8 @@ export class ExportImageProcesser {
     // return pk list PK!PK!
     return exports;
   }
-  async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages) {
-    console.log("--targetSize--")
+  async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale) {
+    console.log("--targetSize--isGrascale:" + isGrascale)
     console.log(targetSize)
     const expandedPaper = {
       data: new Uint8ClampedArray(frameSize.x * frameSize.y * 4),
@@ -159,8 +164,12 @@ export class ExportImageProcesser {
         };
         origin.offsetX = offsetX;
         origin.offsetY = offsetY;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight)
-        this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight+"/isGrascale:"+isGrascale)
+        if (isGrascale) {
+          this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
+        }else{
+          this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+        }
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
         this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
@@ -217,7 +226,7 @@ export class ExportImageProcesser {
     }
     return zip.compress();
   }
-  async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L) {
+  async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M) {
     //6 new WhiteImageCreate
     //7 load2PageImage
     //8 merge
@@ -262,10 +271,10 @@ export class ExportImageProcesser {
       printPairs.push(newPair);
     }
     for (let printPagePair of printPairs) {
-      await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair, isPageDirectionR2L);
+      await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair, isPageDirectionR2L, isMaxSize10M);
     }
   }
-  async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair, isPageDirectionR2L) {
+  async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair, isPageDirectionR2L, isMaxSize10M) {
     console.log(shapedPagePair);
     const one = shapedPagePair[0];
     const two = shapedPagePair[1];
@@ -313,7 +322,13 @@ export class ExportImageProcesser {
       this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
     }
     //ping?
-    const cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual, 1.0);
+    let cropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual, 1.0);
+    const size10MB = 10 * 1000 * 1000;
+    const length = cropedPaperDualAb.byteLength;
+    if (isMaxSize10M && size10MB < length) {
+      const retio = size10MB / length;
+      ropedPaperDualAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(cropedPaperDual, retio);
+    }
     const outputOld = pageEntity.outputDualImage;
     const outputNew = await this.bm.save(outputOld, "expandDualPage", cropedPaperDualAb);
     if (pairPages.right && pairPages.right.outputExpandImage) {

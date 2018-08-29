@@ -1,14 +1,5 @@
+import {ByteUtil} from "./byteUtil";
 export class ImageResizer {
-  trimByte(byteX) {
-    const x = Math.floor(byteX);
-    const maxByte = x > 255 ?
-      255 :
-      x;
-    const minByte = maxByte < 0 ?
-      0 :
-      maxByte;
-    return minByte;
-  }
   culcWeightByCubic(alpha) {
     return (x) => {
       let result = 0;
@@ -117,9 +108,9 @@ export class ImageResizer {
         }
         // console.log("newHeight y32bitOffsetDist:"+y32bitOffsetDist);
         const offset32bitDist = y32bitOffsetDist + ix * 4;
-        dist[offset32bitDist] = this.trimByte(r);
-        dist[offset32bitDist + 1] = this.trimByte(g);
-        dist[offset32bitDist + 2] = this.trimByte(b);
+        dist[offset32bitDist] = ByteUtil.trimByte(r);
+        dist[offset32bitDist + 1] = ByteUtil.trimByte(g);
+        dist[offset32bitDist + 2] = ByteUtil.trimByte(b);
         dist[offset32bitDist + 3] = 255;
       }
     }

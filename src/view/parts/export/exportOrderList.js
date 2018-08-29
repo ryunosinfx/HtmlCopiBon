@@ -17,7 +17,8 @@ export class ExportOrderList extends BaseView {
     super("ExportOrdrList", "ExportOrdrList");
     this.exportOrderRow = new ExportOrderRow(this);
     this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
-    this.listId = this.id + "ListFrame";
+    this.listFrameId = this.id + "ListFrame";
+    this.listId = this.id + "List";
     this.checkboxIsGrascale = "checkboxIsGrascaleAt" + this.Id;
     this.selectBoxDpiName = "selectBoxDpiNameAt" + this.Id;
     this.checkboxIsMaxSize10M = "checkboxIsMaxSize10MAt" + this.Id;
@@ -38,24 +39,20 @@ export class ExportOrderList extends BaseView {
     console.error(dpiList)
 
     const selectBoxDpiName = label("",[inputClass],[" ",createSelectVnode(this.selectBoxDpiName, [], "", dpis, dpiList[firstKey]),"dpi"]);
-    const checkboxIsMaxSize10M =  label("",[inputClass],[checkbox(this.checkboxIsMaxSize10M, [""], ""),"isMaxSize10?"]);
+    const checkboxIsMaxSize10M =  label("",[inputClass],[checkbox(this.checkboxIsMaxSize10M, [""], ""),"isMaxSize10MB/Paper?"]);
     const exportOptions = div("", [inputFrameClass], ["Options:",selectBoxDpiName, checkboxIsGrascale, checkboxIsMaxSize10M]);
     ////
-    const list = div(this.imageAreaID, [inputFrameClass], this.buildRows());
+    const list = div(this.listFrameId, [inputFrameClass], this.buildRows());
     return div(this.listId, [this.id + "Frame"], [name, list, exportOptions]);
   }
   onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeSelectedOrderKey]) {
+      const inputFrameClass = "ExportOrdrs";
       const selectOrderData = store[this.storeSelectedOrderKey];
-      const name = div("", ["ExportOrdersListTitle"], "Export Orders List");
-      const list = this.buildRows(selectOrderData);
-      const listVnode = div(this.listId, [this.id + "Frame"], [
-        name,
-        div(this.imageAreaID, ["ExportOrdrs"], list)
-      ]);
-      this.prePatch("#" + this.listId, listVnode);
+      const list = div(this.listFrameId, [inputFrameClass], this.buildRows(selectOrderData));
+      this.prePatch("#" + this.listFrameId, list);
     }
   }
   getCurrentOptions() {

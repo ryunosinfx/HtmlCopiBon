@@ -17,6 +17,7 @@ import {
 export class ExportPdfButton extends BaseView {
   constructor() {
     super("ExportPdfButton", "ExportPdfButton", true);
+    this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
     this.storeKey = ExportActionCreator.getStoreKey();
     this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
@@ -56,14 +57,23 @@ export class ExportPdfButton extends BaseView {
     }
 
     if (store[this.storeSelectedOrderKey]) {
-      this.exportOrderData = store[this.storeSelectedOrderKey];
+      const orderData = store[this.storeSelectedOrderKey];
+      const selectOptions = orderData.selectOptions;
+      const selectOrder = orderData.selectOrder;
+      this.exportOrderData ={
+        basePaper:selectOrder.basePaper,
+        orderName:selectOrder.orderName,
+        dpiName:selectOptions.dpiName,
+        isGrascale:selectOptions.isGrascale,
+        isMaxSize10M:selectOptions.isMaxSize10M
+      }
     }
   }
 
   click() {
     return (event) => {
       if (!this.isExported || this.isExported && window.confirm("is export orverride ok?")) {
-        const action = ExportActionCreator.createExecutePdfAction(this,this.exportOrderData);
+        const action = ExportActionCreator.createExecutePdfAction(this, {exportOrders:[this.exportOrderData]});
         this.dispatch(action);
       }
       event.stopPropagation();

@@ -36,7 +36,7 @@ export class ExportUtilProcesser {
   }
   async loadZip(exportPk) {
     if(exportPk){
-      alert('ExportImageProcesser loadZip');
+      alert('ExportImageProcesser loadZip is NULL!');
     }else{
       const imageOutpus = await this.load();
       const zip = imageOutpus.zip;
@@ -52,7 +52,7 @@ export class ExportUtilProcesser {
   }
   async loadPdf(exportPk) {
     if(exportPk){
-      alert('ExportImageProcesser loadPdf');
+      alert('ExportImageProcesser loadPdf exportPk is NULL!');
     }else{
       const imageOutpus = await this.load();
       const pdf = imageOutpus.pdf;

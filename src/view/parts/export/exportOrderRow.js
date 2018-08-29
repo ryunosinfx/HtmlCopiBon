@@ -21,6 +21,7 @@ export class ExportOrderRow extends BaseView {
     this.selectOrder = null;
     this.ordersMap = {};
     this.orderOptions={isGrascale:false,dpiName:"dpi72",isMaxSize10M:false}
+    this.activeClassName = "active";
   }
 
   render(store, actionData) {
@@ -46,15 +47,17 @@ export class ExportOrderRow extends BaseView {
     }
   }
 
-  buildRows(){
+  buildRows(exportOrderData){
     const retList = [];
     const ordersList = ExportOrders;
+    const selectOrder = exportOrderData && exportOrderData.selectOrder? exportOrderData.selectOrder:null;
     for(let order of ordersList){
       const name=order.orderName;
+      const activeClass = selectOrder && selectOrder.orderName && order.orderName===selectOrder.orderName? this.activeClassName:"";
       this.ordersMap[name]= order;
       const label = span("",[name+"Text"],[name]);
       const id = "ExportOrderRow-"+name;
-      const row = div(id,[name],{
+      const row = div(id,[name,activeClass],{
         on:{click:this.getSelectOrder(name)}
       },[label]);
       retList.push(row);
