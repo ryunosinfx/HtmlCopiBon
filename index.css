@@ -455,6 +455,37 @@ canvas.hidden {
   border-radius: 3px;
       background-color: rgb(141, 233, 159);
 }
+.ExportArea .ExportOrdrs>div{
+  margin:0.1em;
+  padding: 0.4em;
+  padding-left: 2em;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  background-color: rgb(232, 242, 229);
+}
+.ExportArea .ExportOrdrs>div:active{
+  border: 1px solid #666;
+  background-color: rgb(242, 252, 239);
+}
+.ExportArea .ExportOrdrs>div:hover{
+  border: 1px solid #999;
+  background-color: rgb(237, 247, 234);
+}
+.ExportArea .ExportOrdrs>label{
+  display: inline-block;
+  line-height: 2em;
+  margin:0.1em;
+  padding: 0.4em 2em;
+  border: 0px solid #aaa;
+  cursor: pointer;
+  background-color: rgb(232, 242, 229);
+}
+.ExportArea .ExportOrdrs>label:active{
+  background-color: rgb(242, 252, 239);
+}
+.ExportArea .ExportOrdrs>label:hover{
+  background-color: rgb(237, 247, 234);
+}
 .display_none{
   display:none;
 }

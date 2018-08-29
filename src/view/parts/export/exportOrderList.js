@@ -48,9 +48,9 @@ export class ExportOrderList extends BaseView {
 
   async onViewShow(store, actionData) {
     if (store[this.storeSelectedOrderKey]) {
-      const selectOrder = store[this.storeSelectedOrderKey];
+      const selectOrderData = store[this.storeSelectedOrderKey];
       const name = div("", ["ExportOrdersListTitle"], "Export Orders List");
-      const list = this.buildRows(selectOrder);
+      const list = this.buildRows(selectOrderData);
       const listVnode = div(this.listId, [this.id + "Frame"], [
         name,
         div(this.imageAreaID, ["ExportOrdrs"], list)
@@ -68,7 +68,7 @@ export class ExportOrderList extends BaseView {
 
   }
 
-  buildRows(selectOrder = null) {
-    return this.exportOrderRow.buildRows(selectOrder)
+  buildRows(selectOrderData = null) {
+    return this.exportOrderRow.buildRows(selectOrderData)
   }
 }

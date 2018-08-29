@@ -23,6 +23,7 @@ export class ExportImgZipButton extends BaseView {
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
     this.stateId = "exportedStateZip";
     this.isExported = false;
+    this.exportOrderData = null;
   }
 
   render(store, actionData) {
@@ -46,6 +47,10 @@ export class ExportImgZipButton extends BaseView {
       //alert(JSON.stringify(store[this.storeKey]));
       this.buildButton(store[this.storeKey]);
     }
+
+        if (store[this.storeSelectedOrderKey]) {
+          this.exportOrderData = store[this.storeSelectedOrderKey];
+        }
   }
   buildButton(exports) {
     if (exports && exports.zip) {
@@ -69,7 +74,7 @@ export class ExportImgZipButton extends BaseView {
   click() {
     return(event) => {
       if (!this.isExported || this.isExported && window.confirm("is export orverride ok?")) {
-        const action = ExportActionCreator.createExecuteAction();
+        const action = ExportActionCreator.createExecuteAction(this,this.exportOrderData);
         this.dispatch(action);
       }
       event.stopPropagation();

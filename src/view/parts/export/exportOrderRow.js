@@ -37,7 +37,8 @@ export class ExportOrderRow extends BaseView {
     return (event)=>{
       this.selectOrder = name;
       const action = ExportActionCreator.createSelectOrderAction(this.parent,{
-        selectOrder:this.selectOrder
+        selectOrder:this.ordersMap[this.selectOrder],
+        selectOptions:this.parent.getCurrentOptions()
       });
       this.dispatch(action);
       event.stopPropagation();

@@ -75,7 +75,7 @@ export class ExportReducer extends BaseReducer {
       store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
       store[this.storeExportResultKey] =null;
     } else if (this.selectOrderAction.type === action.type) {
-      store[this.storeSelectedOrderKey] = await this.loadPdf(action.data.exportPk);
+      store[this.storeSelectedOrderKey] = await this.loadPdf(action.data);
     }
     return store;
   }

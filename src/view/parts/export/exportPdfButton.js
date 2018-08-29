@@ -1,4 +1,6 @@
-import {BaseView} from "../../../util/reactive/baseView";
+import {
+  BaseView
+} from "../../../util/reactive/baseView";
 import {
   a,
   div,
@@ -9,7 +11,9 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-import {ExportActionCreator} from '../../../reduxy/action/exportActionCreator'
+import {
+  ExportActionCreator
+} from '../../../reduxy/action/exportActionCreator'
 export class ExportPdfButton extends BaseView {
   constructor() {
     super("ExportPdfButton", "ExportPdfButton", true);
@@ -20,6 +24,7 @@ export class ExportPdfButton extends BaseView {
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
     this.stateId = "exportedStatePdf";
     this.isExported = false;
+    this.exportOrderData = null;
   }
 
   render(store, actionData) {
@@ -49,12 +54,16 @@ export class ExportPdfButton extends BaseView {
       // console.log(data);
       alert("OK download zip file!");
     }
+
+    if (store[this.storeSelectedOrderKey]) {
+      this.exportOrderData = store[this.storeSelectedOrderKey];
+    }
   }
 
   click() {
-    return(event) => {
+    return (event) => {
       if (!this.isExported || this.isExported && window.confirm("is export orverride ok?")) {
-        const action = ExportActionCreator.createExecutePdfAction();
+        const action = ExportActionCreator.createExecutePdfAction(this,this.exportOrderData);
         this.dispatch(action);
       }
       event.stopPropagation();
