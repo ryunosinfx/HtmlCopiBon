@@ -29,7 +29,9 @@ export class ExportOrderList extends BaseView {
     const name = div("", [inputFrameClass], "Export Orders List");
     ////
     const inputClass = "ExportOrdersOptions";
-    const checkboxIsGrascale = label("",[inputClass],[checkbox(this.checkboxIsGrascale, [""],"" ),"isGrascale?"]);
+    const checkboxIsGrascale = label("",[inputClass],[checkbox(this.checkboxIsGrascale, [""],{
+      on:{change:this.exportOrderRow.getSelectOrder()}
+    },"" ),"isGrascale?"]);
     const dpiList = {};
     let firstKey = "";
     for (let dpiName in dpis) {
@@ -38,8 +40,12 @@ export class ExportOrderList extends BaseView {
     }
     console.error(dpiList)
 
-    const selectBoxDpiName = label("",[inputClass],[" ",createSelectVnode(this.selectBoxDpiName, [], "", dpis, dpiList[firstKey]),"dpi"]);
-    const checkboxIsMaxSize10M =  label("",[inputClass],[checkbox(this.checkboxIsMaxSize10M, [""], ""),"isMaxSize10MB/Paper?"]);
+    const selectBoxDpiName = label("",[inputClass],[" ",createSelectVnode(this.selectBoxDpiName, [], "", dpis, dpiList[firstKey],{
+      change:this.exportOrderRow.getSelectOrder()
+    }),"dpi"]);
+    const checkboxIsMaxSize10M =  label("",[inputClass],[checkbox(this.checkboxIsMaxSize10M, [""],{
+      on:{change:this.exportOrderRow.getSelectOrder()}
+    }, ""),"isMaxSize10MB/Paper?"]);
     const exportOptions = div("", [inputFrameClass], ["Options:",selectBoxDpiName, checkboxIsGrascale, checkboxIsMaxSize10M]);
     ////
     const list = div(this.listFrameId, [inputFrameClass], this.buildRows());

@@ -1,15 +1,41 @@
-import {Sorter} from "../../util/sorter";
-import {getNowUnixtime, unixTimeToDateFormat} from "../../util/timeUtil";
-import {Paper} from "../../util/image/paper";
-import {ImageMerger} from "../../util/image/imageMerger";
-import {ImageResizer} from "../../util/image/imageResizer";
-import {ImageCropper} from "../../util/image/imageCropper";
-import {ImageFilter} from "../../util/image/imageFilter";
-import {UnicodeEncoder} from "../../util/unicodeEncoder";
-import {MainService} from "../../service/mainService"
-import {PreviewProcessor} from "./previewProcessor"
+import {
+  Sorter
+} from "../../util/sorter";
+import {
+  getNowUnixtime,
+  unixTimeToDateFormat
+} from "../../util/timeUtil";
+import {
+  Paper
+} from "../../util/image/paper";
+import {
+  ImageMerger
+} from "../../util/image/imageMerger";
+import {
+  ImageResizer
+} from "../../util/image/imageResizer";
+import {
+  ImageCropper
+} from "../../util/image/imageCropper";
+import {
+  ImageFilter
+} from "../../util/image/imageFilter";
+import {
+  UnicodeEncoder
+} from "../../util/unicodeEncoder";
+import {
+  MainService
+} from "../../service/mainService"
+import {
+  PreviewProcessor
+} from "./previewProcessor"
+import {
+  ProgressBarProcesser
+} from "./progressBarProcesser"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
-import {Zlib} from "zlibjs/bin/zip.min"
+import {
+  Zlib
+} from "zlibjs/bin/zip.min"
 
 const order = {
   orderName: "MangaPaperA4ExpandTatikiri",
@@ -32,16 +58,25 @@ export class ExportImageProcesser {
     this.imageResizer = new ImageResizer();
     this.imageCropper = new ImageCropper();
     this.imageFilter = new ImageFilter();
+    this.pbp = new ProgressBarProcesser();
+    this.progress = 0;
   }
   async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
     alert("exportExecute exportOrders:" + exportOrders);
+    this.pbp.start('Start page!');
+    this.progress = 0;
+    this.pbp.update(his.progress, 'loading Settings');
     const setting = await this.tm.loadSettings().catch((e) => {
       console.log(e)
     });
+    this.progress = 1;
+    this.pbp.update(his.progress, 'loading pages');
     const pages = await this.pp.loadPages().catch((e) => {
       console.log(e)
     });
+    this.progress = 2;
+    this.pbp.update(his.progress, 'start executess');
     return await this.executeParOrder(setting, pages, exportOrders[0]);
   }
   async executeParOrder(setting, pages, order) {
@@ -56,6 +91,8 @@ export class ExportImageProcesser {
       x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
       y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
+    this.progress = 3;
+    this.pbp.update(his.progress, 'expandAndCropSize');
     await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale);
     console.log(pages)
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
@@ -64,6 +101,9 @@ export class ExportImageProcesser {
     const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
     const isOdd = pages.length % 2 > 0;
     const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
+
+    this.progress = 60;
+    this.pbp.update(his.progress, 'start exportDualImage4Print');
     await this.exportDualImage4Print(targetSize, setting, pages, hasAddSet, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M);
 
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
@@ -73,6 +113,8 @@ export class ExportImageProcesser {
     // console.log(ab);
     // plainData1
     //11 save zip
+    this.progress = 80;
+    this.pbp.update(his.progress, 'start exoprtAsZip');
     const compressed = await this.exoprtAsZip(pages);
     const exports = await this.tm.getExports();
     let exportImagePk = null;
@@ -87,16 +129,19 @@ export class ExportImageProcesser {
     }
     const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
     const size = compressed.byteLength;
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld+"/size:"+size);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld + "/size:" + size);
     const now = (new Date().getTime());
     const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
-    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName,size);
+    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName, size);
     // console.log(compressed);
     if (exportImageNewPk) {
       exports.push(exportImageNewPk);
       await this.tm.saveCurrent();
     }
     // return pk list PK!PK!
+
+    this.progress = 100;
+    this.pbp.comple(his.progress, 'start executess');
     return exports;
   }
   async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale) {
@@ -120,11 +165,18 @@ export class ExportImageProcesser {
     const targetRetio = targetSize.x / targetSize.y;
     const isBaseWhite = true;
     let currentDataAb = null
+    this.progress = 5;
+    this.pbp.update(his.progress, 'start pages');
+    //50
+    const progressUnit = 50 / (6 * pages.length)
+
     for (let pageEntity of pages) {
       if (pageEntity && pageEntity.baseImage) {
         // console.log(pageEntity)
         //1 Expand
         const baseImageEntity = await this.em.get(pageEntity.baseImage);
+        this.progress = 5;
+        this.pbp.update(his.progress, 'load baseImageEntity');
         const width = baseImageEntity.width;
         const height = baseImageEntity.height;
         const baseBinaryEntity = await this.em.get(baseImageEntity.binary);
@@ -137,26 +189,26 @@ export class ExportImageProcesser {
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a w:" + origin.width + '/h:' + origin.height)
         const retio = width / height;
         const isWider = retio > targetRetio;
-        const longPixcel = isWider
-          ? width
-          : height;
-        const longMm = isWider
-          ? frameSizeMm.x
-          : frameSizeMm.y;
+        const longPixcel = isWider ?
+          width :
+          height;
+        const longMm = isWider ?
+          frameSizeMm.x :
+          frameSizeMm.y;
         const dpi = this.paper.calcDpi(longPixcel, longMm);
         //paper size nomalize
-        const sizeWhitePaperWidth = isWider
-          ? width
-          : Math.floor(height * targetRetio);
-        const sizeWhitePaperHeight = isWider
-          ? Math.floor(width / targetRetio)
-          : height;
-        const offsetX = isWider
-          ? 0
-          : Math.floor((sizeWhitePaperWidth - width) / 2);
-        const offsetY = isWider
-          ? Math.floor((sizeWhitePaperHeight - height) / 2)
-          : 0;
+        const sizeWhitePaperWidth = isWider ?
+          width :
+          Math.floor(height * targetRetio);
+        const sizeWhitePaperHeight = isWider ?
+          Math.floor(width / targetRetio) :
+          height;
+        const offsetX = isWider ?
+          0 :
+          Math.floor((sizeWhitePaperWidth - width) / 2);
+        const offsetY = isWider ?
+          Math.floor((sizeWhitePaperHeight - height) / 2) :
+          0;
         const whitePaper = {
           data: new Uint8ClampedArray(sizeWhitePaperWidth * sizeWhitePaperHeight * 4),
           width: sizeWhitePaperWidth,
@@ -164,10 +216,10 @@ export class ExportImageProcesser {
         };
         origin.offsetX = offsetX;
         origin.offsetY = offsetY;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight+"/isGrascale:"+isGrascale)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight + "/isGrascale:" + isGrascale)
         if (isGrascale) {
           this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
-        }else{
+        } else {
           this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
         }
         console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
@@ -279,18 +331,18 @@ export class ExportImageProcesser {
     const one = shapedPagePair[0];
     const two = shapedPagePair[1];
     // reverse side!
-    const right = isPageDirectionR2L
-      ? two
-      : one;
-    const left = isPageDirectionR2L
-      ? one
-      : two;
-    pairPages.right = right === null || right.isDummy
-      ? null
-      : right.binary;
-    pairPages.left = left === null || left.isDummy
-      ? null
-      : left.binary;
+    const right = isPageDirectionR2L ?
+      two :
+      one;
+    const left = isPageDirectionR2L ?
+      one :
+      two;
+    pairPages.right = right === null || right.isDummy ?
+      null :
+      right.binary;
+    pairPages.left = left === null || left.isDummy ?
+      null :
+      left.binary;
     pairPages.rightBin = null;
     pairPages.leftBin = null;
     console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a shapedPagePair:" + shapedPagePair + "/left:" + pairPages.left + "/right:" + pairPages.right);
