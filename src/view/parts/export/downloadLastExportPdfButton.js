@@ -20,13 +20,17 @@ export class DownloadLastExportPdfButton extends BaseView {
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
     this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
-    this.stateId = this.id+"Button";
+    this.stateId = this.id + "Button";
     this.isExported = false;
   }
 
   render(store, actionData) {
-    const text = div(this.stateId , ["button"], "-no export PDF-");
-    const result = div(this.id, [this.id + "Frame"], {
+    const text = div(this.stateId, [
+      "button", "disable"
+    ], "-no export PDF-");
+    const result = div(this.id, [
+      this.id + "Frame"
+    ], {
       on: {
         click: this.click()
       }
@@ -48,10 +52,30 @@ export class DownloadLastExportPdfButton extends BaseView {
       const pdf = data.pdf;
       if (pdf) {
         const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
-        this.prePatch("#" + this.stateId, div(this.stateId, ["button","enable"], "download PDF!"));
+        const text = div(this.stateId, [
+          "button", "enable"
+        ], "download PDF!");
+        this.prePatch("#" + this.id, div(this.id, [
+          this.id + "Frame",
+          "enable"
+        ], {
+          on: {
+            click: this.click()
+          }
+        }, [text]));
         this.isExported = true;
       } else {
-        this.prePatch("#" + this.stateId, div(this.stateId, ["button","disable"], "no export PDF"));
+        const text = div(this.stateId, [
+          "button", "disable"
+        ], "no export PDF");
+        this.prePatch("#" + this.id, div(this.id, [
+          this.id + "Frame",
+          "disable"
+        ], {
+          on: {
+            click: this.click()
+          }
+        }, [text]));
         this.isExported = false;
       }
     }

@@ -7,7 +7,8 @@ export class ProgressBarProcesser {
   update(percentProgress,msg) {
     if (percentProgress < 100) {
       //this.progress.progress(percentLoaded);
-      this.actionDispatcher.dispatch(ProgressActionCreator.creatUpdateAction(null,{progress:percentProgress,msg:msg}));
+      const percent = Math.floor(percentProgress*10)/10;
+      this.actionDispatcher.dispatch(ProgressActionCreator.creatUpdateAction(null,{progress:percent,msg:msg}));
     }
   }
   comple(msg) {

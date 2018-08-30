@@ -25,11 +25,10 @@ export class DownloadLastExportZipButton extends BaseView {
   }
 
   render(store, actionData) {
-    const text = div(this.stateId, ["button"], "-no export Zip-");
+    const text = div(this.stateId, [
+      "button", "disable"
+    ], "-no export Zip-");
     return div(this.id, [this.id + "Frame"], {
-      on: {
-        click: this.click()
-      }
     }, [text]);
   }
   onAfterAttach(store, data) {}
@@ -44,17 +43,23 @@ export class DownloadLastExportZipButton extends BaseView {
       }
     } else if (store[this.storeKey]) {
       const data = store[this.storeKey];
-      const zip = data.zip;
+      const zip = data.zip;;
       if (zip) {
         const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
-        this.prePatch("#" + this.stateId, div(this.stateId, [
+        const text = div(this.stateId, [
           "button", "enable"
-        ], "download Zip!"));
+        ],{
+          on: {
+            click: this.click()
+          }
+        }, "download Zip!");
+        this.prePatch("#" + this.stateId, text);
         this.isExported = true;
       } else {
-        this.prePatch("#" + this.stateId, div(this.stateId, [
+        const text = div(this.stateId, [
           "button", "disable"
-        ], "no export Zip"));
+        ], "no export Zip");
+        this.prePatch("#" + this.stateId, text);
         this.isExported = false;
       }
     }

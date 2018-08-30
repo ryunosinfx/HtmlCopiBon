@@ -32,16 +32,17 @@ export class ProgressViewReducer extends BaseReducer {
     } else if (this.progressBarRemoveAction.type === action.type) {
       store[this.storeKey] = this.createProgress(false, 0, false);
     } else if (this.progressBarUpdateAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, action.data.progress, false);
+      store[this.storeKey] = this.createProgress(true, action.data.progress, false,action.data.msg);
     } else if (this.progressBarCompleatSortAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 100, true);
+      store[this.storeKey] = this.createProgress(true, 100, true, action.data.msg);
     }
     return store;
   }
-  createProgress(isVisible, progress, isComple) {
+  createProgress(isVisible, progress, isComple, msg) {
     return {
       isVisible: isVisible,
       progress: progress,
+      msg: msg,
       isComple: isComple
     }
   }

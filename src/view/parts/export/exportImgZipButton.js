@@ -42,7 +42,8 @@ export class ExportImgZipButton extends BaseView {
     if (store[this.storeExportResultKey]) {
       const isSuccess = this.buildButton(store[this.storeExportResultKey]);
       if (isSuccess) {
-        alert("OK download zip file!:" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
+        setTimeout(()=>{alert("OK download zip file!")},1000)
+        //":" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
       }
     } else if (store[this.storeKey]) {
       //alert(JSON.stringify(store[this.storeKey]));

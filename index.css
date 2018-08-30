@@ -256,6 +256,13 @@ canvas.hidden {
   z-index: 1000;
   padding: 0px
 }
+.ProgressBar>div .progeressInfo>div{
+  width:70%;
+  float: left;
+}
+.ProgressBar>div .progeressInfo>div.progeressPoints{
+  width:5em;
+}
 
 .progeress {
   position: relative;
@@ -435,11 +442,14 @@ canvas.hidden {
     padding:10px;
     margin-bottom: 0.3em;
 }
-.ExportOrdrList .ExportOrdrs{
+.ExportOrdrList .ExportOrdrListFrame{
     background-color: rgb(222, 232, 219);
     padding:15px;
     border:1px solid rgb(87, 158, 17);
     margin-bottom: 0.5em;
+}
+.ExportOrdrList .ExportOrdrs{
+  margin-bottom: 0.5em;
 }
 .ExportButtons{
   display: flex;
@@ -459,6 +469,17 @@ div.button>div.exportedState{
   cursor: pointer;
   border-radius: 3px;
       background-color: rgb(141, 233, 159);
+}
+div.DownloadLastExportZipButtonFrame,div.DownloadLastExportPdfButtonFrame{
+  padding: 0em;
+}
+div.button.disable,div.button.enable{
+  background-color:rgb(104, 131, 116);
+  padding:10px;
+  margin: 0em;
+}
+div.button.enable{
+  background-color:rgb(148, 219, 86);
 }
 .ExportArea .ExportOrdrs>div{
   margin:0.1em;

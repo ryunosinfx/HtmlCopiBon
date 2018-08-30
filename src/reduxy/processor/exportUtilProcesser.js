@@ -41,7 +41,7 @@ export class ExportUtilProcesser {
       const imageOutpus = await this.load();
       const zip = imageOutpus.zip;
       if(zip && zip.binary){
-        alert(zip.binary);
+        //alert(zip.binary);
         const binaryEntity = await this.bm.load(zip.binary);
         zip.ab = binaryEntity._ab;
         console.error(zip.ab)

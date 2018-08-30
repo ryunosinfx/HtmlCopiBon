@@ -10,9 +10,7 @@ import {
   input,
   label
 } from "../../util/reactive/base/vtags";
-import {
-  ProgressViewReducer
-} from '../../reduxy/reducer/progressViewReducer'
+import {ProgressViewReducer} from '../../reduxy/reducer/progressViewReducer'
 export class ProgressBar extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
@@ -34,7 +32,10 @@ export class ProgressBar extends BaseView {
             width: this.initPoint
           }
         })]),
-      div('', ['progeressPoints'], this.initPoint)
+      div('', ['progeressInfo'], [
+        div('', ['progeressPoints'], this.initPoint),
+        div('', ['progeressMessage'], "")
+      ])
     ]);
   }
   async onViewShow(store, actionData) {
@@ -44,7 +45,7 @@ export class ProgressBar extends BaseView {
     }
   }
   showProgress(data) {
-    const {isVisible, progress, isComple} = data;
+    const {isVisible, progress, isComple, msg} = data;
     if (isVisible) {
       this.currentVnode.elm.style.display = 'block';
       this.prePatch(".progeress", div("", ["progeress"], {
@@ -53,6 +54,7 @@ export class ProgressBar extends BaseView {
         }
       },));
       this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, progress + "%"));
+      this.prePatch(".progeressMessage", div("", ["progeressMessage"], {}, msg ));
       if (isComple) {
         setTimeout(() => {
           this.currentVnode.elm.style.display = 'none';
