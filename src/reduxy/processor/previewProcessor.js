@@ -1,5 +1,6 @@
 import {Sorter} from "../../util/sorter";
 import {MainService} from "../../service/mainService"
+import {ProgressBarProcesser} from "./progressBarProcesser"
 export class PreviewProcessor {
   constructor() {
     this.ms = MainService.getInstance();
@@ -8,35 +9,60 @@ export class PreviewProcessor {
     this.ip = this.ms.ip;
     this.previewMaxWidth = 1000;
     this.previewMaxHeight = 1000;
+    this.pbp = new ProgressBarProcesser();
+    this.progress = 0;
   }
 
   async loadPreviews() {
+    this.pbp.open('Start page!');
+    this.progress = 0;
+    this.pbp.update(this.progress, 'loading Settings');
     const title = await this.tm.load();
     const pages = title.pages;
     const retPreviews = [];
+    const pegaNum = pages.length;
+    const stepNum = 4
+    const progressUnit = 100 / (stepNum * pegaNum)
+    let pageCount = 0;
     for (let pagePk of pages) {
+      pageCount++;
+      const pageStep = "[" + pageCount + "/" + pegaNum + "]";
+      this.progress += progressUnit;
+      this.pbp.update(this.progress, 'load pageEnitity' + pageStep);
       const pageEnitity = await this.em.get(pagePk);
       const previewThumbnail = pageEnitity.previewThumbnail;
       const baseImage = pageEnitity.baseImage;
       if (baseImage) {
         if (previewThumbnail) {
+          this.progress += progressUnit * 3;
+          this.pbp.update(this.progress, 'load binaryEntity' + pageStep);
           const binaryEntity = await this.em.get(previewThumbnail);
           retPreviews.push(binaryEntity);
         } else {
+          this.progress += progressUnit;
+          this.pbp.update(this.progress, 'load imageEntity' + pageStep);
           const imageEntity = await this.em.get(baseImage);
+          this.progress += progressUnit;
+          this.pbp.update(this.progress, 'load binaryEntity' + pageStep);
           const binaryEntity = await this.em.get(imageEntity.binary);
           //TODO mk previews
           //binaryEntity._ab = await this.ip.resize(binaryEntity._ab,this.previewMaxWidth,this.previewMaxHeight);
+          this.progress += progressUnit;
+          this.pbp.update(this.progress, 'resize As Paper B5_72dpi' + pageStep);
           binaryEntity._ab = await this.ip.resizeAsPaperB5_72(binaryEntity._ab);
-           // console.log(newData.data);
-           // console.log(binaryEntity._ab);
-           // alert(binaryEntity._ab);
+          // console.log(newData.data);
+          // console.log(binaryEntity._ab);
+          // alert(binaryEntity._ab);
           retPreviews.push(binaryEntity);
         }
       } else {
         retPreviews.push(null);
       }
     }
+
+    this.progress = 100;
+    this.pbp.update(this.progress, 'end all!');
+    this.pbp.comple(this.progress);
     return retPreviews;
   }
   shapeListBySets(previews, isSingle, setting) {
@@ -44,7 +70,7 @@ export class PreviewProcessor {
     if (isSingle) {
       const retSetLis = [];
       for (let index in previews) {
-        retSetLis.push(cratePageData(index*1+1, false, false, previews, this.dummyClass));
+        retSetLis.push(cratePageData(index * 1 + 1, false, false, previews, this.dummyClass));
       }
       return retSetLis;
     } else {
@@ -53,9 +79,9 @@ export class PreviewProcessor {
       return PreviewProcessor.buildPageFrames(setting, previews, cratePageData, this.dummyClass);
     }
   }
-  // 
-  static getCratePageDataFunc(){
-    return (pageNo, className, isRight, binaries, dummyClass)=>{
+  //
+  static getCratePageDataFunc() {
+    return(pageNo, className, isRight, binaries, dummyClass) => {
       return {
         pageNo: pageNo,
         isDummy: className === dummyClass,

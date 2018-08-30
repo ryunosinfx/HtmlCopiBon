@@ -351,6 +351,20 @@ canvas.hidden {
 .previewFrame {
   display: flex;
 }
+.previewFrame>div.button{
+  width:2em;
+}
+.previewFrame>div.button span.button{
+  display:block;
+  width:20px;
+  text-align: center;
+}
+.previewFrame>div.button span.button.symbol{
+  font-size: 150%;
+}
+.previewFrame>div.button span.button.text{
+  font-size: 50%;
+}
 
 .previewCallButton {
   width: 150px;

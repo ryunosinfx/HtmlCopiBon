@@ -39,8 +39,8 @@ export class ProgressBar extends BaseView {
     ]);
   }
   async onViewShow(store, actionData) {
-    if (store.progress) {
-      await this.showProgress(store.progress);
+    if (store[this.storeKey]) {
+      await this.showProgress(store[this.storeKey]);
       //console.log("ProgressBar onViewShow");
     }
   }
@@ -61,6 +61,7 @@ export class ProgressBar extends BaseView {
         }, 1000)
       }
     } else {
+      alert(this.currentVnode.elm);
       this.currentVnode.elm.style.display = 'none';
       this.prePatch(".progeress", div("", ["progeress"], {
         style: {

@@ -102,22 +102,28 @@ export class Preview extends BaseView {
   showPreview(list, isSingle, pageNo, isR2L) {
     const pageSet = list[pageNo - 1];
     let mainView = null;
-    const left = div('', ['previewLeft'], {
+    const leftText = isR2L
+    ? "Next"
+    : "Back";
+    const rightText = isR2L
+    ? "Back"
+    : "Next";
+    const left = div('', ['previewLeft',"button"], {
       on: {
         click: (
           isR2L
           ? this.goNext()
           : this.goBack())
       }
-    }, "<");
-    const right = div('', ['previewRight'], {
+    }, [span('',[leftText,"button","symbol"],"<"),span('',[leftText,"button","text"],leftText)]);
+    const right = div('', ['previewRight',"button"], {
       on: {
         click: (
           isR2L
           ? this.goBack()
           : this.goNext())
       }
-    }, ">");
+    }, [span('',[rightText,"button","symbol"],">"),span('',[rightText,"button","text"],rightText)]);
     if (isSingle) {
       // console.log(pageSet)
       // alert(pageSet+"/pageNo:"+pageNo);
