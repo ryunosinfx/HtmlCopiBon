@@ -15,6 +15,7 @@ import {TitleSettings} from "./content/titleSettings";
 import {ExportArea} from "./content/exportArea";
 import {FilesArea} from "./content/filesArea";
 import {ProgressBar} from "./parts/progressBar";
+import {TitleMng} from "./content/titleMng";
 export class Container extends BaseView {
   constructor() {
     super("container", "container");
@@ -23,6 +24,7 @@ export class Container extends BaseView {
     this.filesArea = new FilesArea();
     this.exportArea = new ExportArea();
     this.progressBar = new ProgressBar();
+    this.titleMng = new TitleMng();
   }
 
   onAfterAttach(store, data) {
@@ -31,6 +33,7 @@ export class Container extends BaseView {
     this.filesArea.attach(this);
     this.exportArea.attach(this);
     this.progressBar.attach(this);
+    this.titleMng.attach(this);
   }
   render() {
     const newVnode = div({
@@ -42,7 +45,8 @@ export class Container extends BaseView {
       div(this.progressBar.id),
       div(this.titleSettings.id),
       div(this.filesArea.id),
-      div(this.exportArea.id)
+      div(this.exportArea.id),
+      div(this.titleMng.id)
     ], "container");
     // console.log('container!render!!!!!!!!!!!')s
     return newVnode;

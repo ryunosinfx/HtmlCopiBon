@@ -531,6 +531,11 @@ div.button.enable{
 .ExportArea .ExportOrdrs>label:hover{
   background-color: rgb(237, 247, 234);
 }
+.TitleMng{
+  padding:10px;
+    background-color: rgb(237, 247, 234);
+
+}
 .display_none{
   display:none;
 }

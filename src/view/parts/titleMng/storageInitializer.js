@@ -11,14 +11,14 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-export class TitleNewone extends BaseView {
+export class StorageInitializer extends BaseView {
   constructor() {
-    super("TitleNewone", "TitleNewone");
+    super("StorageInitializer", "StorageInitializer");
   }
 
   render(store, actionData) {
-    const name = div("", ["TitleNewone"], "TitleNewone");
-    return div("", [this.id + "Frame"], [name, div(this.TitleNewoneId, ["TitleNewone"], this.id + "aaaaa")]);
+    const name = div("", ["StorageInitializer"], "StorageInitializer");
+    return div("", [this.id + "Frame"], [name, div(this.StorageInitializerId, ["StorageInitializerA"], this.id + "aaaaa")]);
   }
   onAfterAttach(store, data) {}
 

@@ -41,6 +41,5 @@ export class FilesArea extends BaseView {
       div(this.imageDetail.id),
       div(this.preview.id)
     ])
-
   }
 }
