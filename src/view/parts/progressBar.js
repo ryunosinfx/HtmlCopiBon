@@ -16,6 +16,7 @@ export class ProgressBar extends BaseView {
     super("ProgressBar", "ProgressBar");
     this.storeKey = "progress";
     this.initPoint = '0%';
+    this.title = "ProgressBar";
   }
 
   onAfterAttach(store, data) {
@@ -27,6 +28,7 @@ export class ProgressBar extends BaseView {
         display: "none"
       }
     }, [
+      div('', ['progeressTitle'], ""),
       div('', ['progeressFrame'], [div('', ['progeress'], {
           style: {
             width: this.initPoint
@@ -39,13 +41,26 @@ export class ProgressBar extends BaseView {
     ]);
   }
   async onViewShow(store, actionData) {
+  console.log(store)
     if (store[this.storeKey]) {
+      //alert("onViewShow");
       await this.showProgress(store[this.storeKey]);
+      console.error(store[this.storeKey]);
       //console.log("ProgressBar onViewShow");
+      if (store[this.storeKey].isComple) {
+        alert(isComple);
+      }
     }
   }
-  showProgress(data) {
-    const {isVisible, progress, isComple, msg} = data;
+  async showProgress(data) {
+    const {isVisible, progress, isComple, msg, title} = data;
+    if (title) {
+      this.title = title;
+    }
+    console.log(title+"/"+isComple)
+    if (isComple) {
+      alert(isComple);
+    }
     if (isVisible) {
       this.currentVnode.elm.style.display = 'block';
       this.prePatch(".progeress", div("", ["progeress"], {
@@ -53,12 +68,12 @@ export class ProgressBar extends BaseView {
           width: progress + "%"
         }
       },));
+      this.prePatch(".progeressTitle", div("", ["progeressTitle"], {}, this.title));
       this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, progress + "%"));
-      this.prePatch(".progeressMessage", div("", ["progeressMessage"], {}, msg ));
+      this.prePatch(".progeressMessage", div("", ["progeressMessage"], {}, msg));
       if (isComple) {
-        setTimeout(() => {
-          this.currentVnode.elm.style.display = 'none';
-        }, 1000)
+        alert(isComple);
+        this.currentVnode.elm.style.display = 'none';
       }
     } else {
       alert(this.currentVnode.elm);

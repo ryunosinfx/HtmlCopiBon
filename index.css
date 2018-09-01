@@ -242,12 +242,15 @@ canvas.hidden {
   left: 5%;
   margin: 0 auto;
   width: 90%;
-  height: 5em;
+  height: 7em;
   background-color: rgba(238, 118, 238, 1);
   z-index: 1000;
   padding: 10px
 }
 
+.ProgressBar>div .progeressTitle {
+  padding-bottom: 5px;
+}
 .ProgressBar>div .progeressFrame {
   margin: 0 auto;
   width: 95%;
@@ -255,6 +258,9 @@ canvas.hidden {
   background-color: rgb(193, 165, 200);
   z-index: 1000;
   padding: 0px
+}
+.ProgressBar>div .progeressInfo{
+  padding-top: 5px;
 }
 .ProgressBar>div .progeressInfo>div{
   width:70%;

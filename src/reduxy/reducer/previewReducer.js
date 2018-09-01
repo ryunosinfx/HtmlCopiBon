@@ -20,6 +20,8 @@ export class PreviewReducer extends BaseReducer {
     this.atatch(this.previewBackAction);
     this.storeKey = PreviewActionCreator.getStorePreviewKey();
     this.storeSettingKey = SettingActionCreator.getStoreKey();
+    this.addInitializeKey(this.storeKey);
+    this.addInitializeKey(this.storeSettingKey);
   }
   static register() {
     if (!previewReducer) {
@@ -59,7 +61,7 @@ export class PreviewReducer extends BaseReducer {
   }
   async loadPreviews(setting, isSingle) {
     const binaries = await this.pvp.loadPreviews();
-    const list = this.pvp.shapeListBySets(binaries, isSingle, setting);
+    const list = await this.pvp.shapeListBySets(binaries, isSingle, setting);
     return list;
   }
 }

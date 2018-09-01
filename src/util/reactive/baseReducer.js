@@ -1,5 +1,6 @@
 import {ActionCreator} from './actionCreator'
 import {ActionDispatcherImple} from './actionDispatcherImple'
+const initializeStoreKeys=[];
 export class BaseReducer {
   constructor(isBaseUse) {
     this.isBaseUse = isBaseUse;
@@ -11,6 +12,16 @@ export class BaseReducer {
         this.atatch({type: type});
       }
     }
+  }
+  addInitializeKey(targetKey){
+    initializeStoreKeys.push(targetKey);
+  }
+  getInitializeKeys(){
+    const retList = [];
+    for(let value of initializeStoreKeys){
+      retList.push(value);
+    }
+    return retList
   }
   atatch(action) {
     // console.log('A0 BaseReducer atatch action:' + action);

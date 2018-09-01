@@ -36,6 +36,7 @@ export class BaseView {
     this.onViewLoaded(store)
     this.updateReactiveCallCount = 0;
     this.updateReactiveCallTimer = null;
+    this.updateReactivePromise = new Map();
     this.updateCount = 0;
   }
   static setRootVnode(rootVnode) {
@@ -94,7 +95,7 @@ export class BaseView {
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
-    console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode + "/" + typeof this.currentVnode);
+    // console.log('A00 update --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/this.currentVnode:' + this.currentVnode + "/" + typeof this.currentVnode);
     if (isOrverride) {
       // console.warn("isOrverride:"+isOrverride+"/this.currentVnode:"+this.currentVnode+"/selector:"+selector);
       this.onPreViewBuild(oldVnode, store);
@@ -138,6 +139,7 @@ export class BaseView {
   async updateReactive(store, actionData) {
     // this.updateReactiveCallCount++;
     if (this.updateReactiveCallTimer) {
+      this.updateReactivePromise.get(this.updateReactiveCallTimer);
       clearTimeout(this.updateReactiveCallTimer);
     }
     this.updateReactiveCallTimer = setTimeout(async () => {
@@ -147,7 +149,7 @@ export class BaseView {
       this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
       // console.log(nodeFrame.rootVnode);
       // console.error(this.currentVnode);
-      console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
+      // console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
       await this.onViewShow(store, actionData).catch((e) => {
         console.log(e)
       });
@@ -179,7 +181,7 @@ export class BaseView {
     const store = Store.getStore();
     this.onPreViewBuild(store)
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
-    console.log('A08---attach ==selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
+    // console.log('A08---attach ==selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
     this.dispatch(action);
   }
@@ -224,28 +226,28 @@ export class BaseView {
   }
   // Event listener
   onViewLoad(store, actionData) {
-    console.log('m001 baseView.onViewLoad name:' + name + '/actionData:' + actionData+"/this.id:"+ this.id);
+    // console.log('m001 baseView.onViewLoad name:' + name + '/actionData:' + actionData+"/this.id:"+ this.id);
   }
   onViewLoaded(store, actionData) {
-    console.log('m002 baseView.onViewLoaded name:' + name + '/actionData:' + actionData+"/this.id:"+ this.id);
+    // console.log('m002 baseView.onViewLoaded name:' + name + '/actionData:' + actionData+"/this.id:"+ this.id);
   }
   onPreViewBuild(store, actionData) {
-    console.log('m003a baseView.onPreViewBuild store:' + store + '/actionData:' + actionData+"/this.id:"+ this.id);
+    // console.log('m003a baseView.onPreViewBuild store:' + store + '/actionData:' + actionData+"/this.id:"+ this.id);
   }
   async onViewShow(store, actionData) {
-    console.log('m003-- baseView.onViewShow newNode:' + '/store:' + store+"/this.id:"+ this.id);
+    // console.log('m003-- baseView.onViewShow newNode:' + '/store:' + store+"/this.id:"+ this.id);
   }
   async onViewShown(store, actionData) {
-    console.log('m004-- baseView.onViewShown newNode:' + '/store:' + store+"/this.id:"+ this.id);
+    // console.log('m004-- baseView.onViewShown newNode:' + '/store:' + store+"/this.id:"+ this.id);
     //console.log(JSON.stringify(this.currentVnode));
   }
   async onViewHide(nextView, store, actionData) {
-    console.log('m005 baseView.onViewHide nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
+    // console.log('m005 baseView.onViewHide nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
     //console.log(JSON.stringify(this.currentVnode));
     return true;
   }
   async onViewHidden(nextView, store, actionData) {
-    console.log('m006 baseView.onViewHidden nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
+    // console.log('m006 baseView.onViewHidden nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
   }
   render() {
     const elm = vu.create("BaseView", "BaseView");

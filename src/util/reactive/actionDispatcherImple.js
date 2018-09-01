@@ -54,10 +54,18 @@ export class ActionDispatcherImple {
     }
     const data = action.data;
     const storeKey = action.storeKey;
-    let store = Store.getStore(storeKey);
+    const actionClass = action.constructor;
+    let store = Store.getStore(storeKey,actionClass);
     let targetView = this.view;
     if (actionMap.has(type)) {
       const reducers = actionMap.get(type);
+      for (let reducer of reducers) {
+        const initializeStoreKeys = reducer.getInitializeKeys();
+        for(let initializeStoreKey of initializeStoreKeys){
+          store[initializeStoreKey] = null;
+        }
+        break;
+      }
       for (let reducer of reducers) {
         //console.log("A01 dispatch type:"+type+"/reducer.reduce:"+reducer.reduce)
         await reducer.preReduce(store, action).catch((e)=>{console.log(e)});
@@ -66,56 +74,72 @@ export class ActionDispatcherImple {
       }
       //console.log("A01 dispatch type:"+type+"/"+reducers[0])
       //console.log(reducers[0])
-      Store.setStore(store);
     }
-
-    let storeB = Store.getStore(storeKey);
+    const storeAsClones= Store.cloneStore(store,actionClass);
+    // let storeB = Store.getStore(storeKey,actionClass);
     //console.log("A01 dispatch ")
     //console.log(storeB)
     // console.log('dispatch02');
+    let result = null;
     if (store.isOrverride && action.data.view) {
       targetView = action.data.views;
       if (this.view.onViewHide(targetView, data) === false) {
         return;
       }
-      this.callUpdate(targetView, data, storeKey);
-      this.view.onViewHidden(targetView, data);
+      result = await this.callUpdate(targetView, data, storeKey,actionClass).catch((e)=>{console.error(e)});
+      await this.view.onViewHidden(targetView, data);
     } else {
-      this.callUpdate(targetView, data, storeKey);
+      result = await this.callUpdate(targetView, data, storeKey,actionClass).catch((e)=>{console.error(e)});
     }
     //store = Store.getStore(storeKey);
+    Store.setStore(storeAsClones,storeKey,actionClass);
+    console.error(storeAsClones);
+    console.error(result);
     return true;
   }
-  callUpdate(targetView, actionData, storeKey) {
-    const activViews = viewAttachQueue.getActiveViewList();
-    for (let activeView of activViews) {
-      const store = Store.getStore(storeKey);
-      if (targetView === activeView) {
-        //console.log('A0 callUpdate update id:' + activeView.id);
-        const promise = targetView.updateReactiveTheTargetView(store, actionData);
-        if(promise){
-          if(!promise.then){
-            alert("your view has override method name 'updateReactiveTheTargetView'! activeView.id):"+activeView.id);
-            return ;
+  callUpdate(targetView, actionData, storeKey,actionClass) {
+    return new Promise(
+      (resolve,reject)=>{
+        const promises = [];
+        const activViews = viewAttachQueue.getActiveViewList();
+        for (let activeView of activViews) {
+          const store = Store.getTemp(storeKey,actionClass);
+          if (targetView === activeView) {
+            //console.log('A0 callUpdate update id:' + activeView.id);
+            const promise = targetView.updateReactiveTheTargetView(store, actionData);
+            if(promise){
+              if(!promise.then){
+                alert("your view has override method name 'updateReactiveTheTargetView'! activeView.id):"+activeView.id);
+                reject(promise);
+                return ;
+              }
+              promises.push(promise.then(()=>{},(e)=>{console.error(e)}));
+            }else{
+              console.log(activeView);
+            }
+          } else {
+             //console.log('A0 callUpdate updateReactive id:' + activeView.id);
+            const promise = activeView.updateReactive(store, actionData);
+            if(promise){
+              if(!promise.then){
+                alert("your view has override method name 'updateReactive'! activeView.id):"+activeView.id);
+                reject(promise);
+                return ;
+              }
+              promises.push(promise.then(()=>{},(e)=>{console.error(e)}));
+            }else{
+              //console.log(activeView);
+            }
           }
-          promise.then(()=>{},(e)=>{console.log(e)});
-        }else{
-          console.log(activeView);
         }
-      } else {
-         //console.log('A0 callUpdate updateReactive id:' + activeView.id);
-        const promise = activeView.updateReactive(store, actionData);
-        if(promise){
-          if(!promise.then){
-            alert("your view has override method name 'updateReactive'! activeView.id):"+activeView.id);
-            return ;
-          }
-          promise.then(()=>{},(e)=>{console.log(e)});
+        if(promises.length>0){
+          Promise.all(promises).then(resolve,reject);
         }else{
-          //console.log(activeView);
+          resolve(targetView);
         }
       }
-    }
+    )
+
     // console.log('callUpdate END----------------');
   }
 }

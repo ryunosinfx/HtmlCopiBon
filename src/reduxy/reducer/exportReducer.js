@@ -40,6 +40,12 @@ export class ExportReducer extends BaseReducer {
     this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
     this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
     this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
+    this.addInitializeKey(this.storeKey);
+    this.addInitializeKey(this.storePdfDLKey);
+    this.addInitializeKey(this.storeZipDLKey);
+    this.addInitializeKey(this.storeRemoveResultKey);
+    this.addInitializeKey(this.storeExportResultKey);
+    this.addInitializeKey(this.storeSelectedOrderKey);
   }
   static register() {
     if (!exportReducer) {
@@ -47,12 +53,6 @@ export class ExportReducer extends BaseReducer {
     }
   }
   async reduce(store, action) {
-    delete store[this.storePdfDLKey];
-    delete store[this.storeRemoveResultKey];
-    delete store[this.storeExportResultKey];
-    delete store[this.storeKey];
-    delete store[this.storeZipDLKey];
-    delete store[this.storeSelectedOrderKey];
     if (this.exportExecuteAction.type === action.type) {
       const loadPks = await this.exportExecute(action.data.exportOrders);
       store[this.storeKey] = loadPks;

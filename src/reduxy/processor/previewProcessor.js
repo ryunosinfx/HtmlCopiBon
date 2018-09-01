@@ -61,21 +61,24 @@ export class PreviewProcessor {
     }
 
     this.progress = 100;
-    this.pbp.update(this.progress, 'end all!');
-    this.pbp.comple(this.progress);
+    await this.pbp.update(this.progress, 'end all!');
     return retPreviews;
   }
-  shapeListBySets(previews, isSingle, setting) {
+  async shapeListBySets(previews, isSingle, setting) {
     const cratePageData = PreviewProcessor.getCratePageDataFunc();
     if (isSingle) {
       const retSetLis = [];
       for (let index in previews) {
         retSetLis.push(cratePageData(index * 1 + 1, false, false, previews, this.dummyClass));
       }
+      await this.pbp.comple(this.progress);
+      alert("a");
       return retSetLis;
     } else {
       const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
       this.pageNum = pageNum;
+      await this.pbp.comple(this.progress);
+      alert("a");
       return PreviewProcessor.buildPageFrames(setting, previews, cratePageData, this.dummyClass);
     }
   }

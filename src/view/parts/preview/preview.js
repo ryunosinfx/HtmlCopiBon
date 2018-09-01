@@ -80,6 +80,7 @@ export class Preview extends BaseView {
         this.pageNo = pageNo;
         this.showPreview(this.list, isSingle, this.pageNo, isR2L);
       } else if (this.previewNextAction.type === type) {
+        console.log(type);
         if (pageSetCount > nowSetNum) {
           const pageNo = nowSetNum * 1 + 1;
           this.pageNo = pageNo;
@@ -88,6 +89,7 @@ export class Preview extends BaseView {
           return;
         }
       } else if (this.previewBackAction.type === type) {
+        console.log(type);
         if (nowSetNum > 1) {
           const pageNo = nowSetNum * 1 - 1;
           this.pageNo = pageNo;
