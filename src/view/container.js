@@ -41,9 +41,9 @@ export class Container extends BaseView {
         color: '#000'
       }
     }, [
-      div(this.fileUploadArea.id),
       div(this.progressBar.id),
       div(this.titleSettings.id),
+      div(this.fileUploadArea.id),
       div(this.filesArea.id),
       div(this.exportArea.id),
       div(this.titleMng.id)
