@@ -93,8 +93,8 @@ export class ActionDispatcherImple {
     }
     //store = Store.getStore(storeKey);
     Store.setStore(storeAsClones,storeKey,actionClass);
-    console.error(storeAsClones);
-    console.error(result);
+    // console.error(storeAsClones);
+    // console.error(result);
     return true;
   }
   callUpdate(targetView, actionData, storeKey,actionClass) {

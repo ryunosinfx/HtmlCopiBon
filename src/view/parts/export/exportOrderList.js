@@ -38,7 +38,6 @@ export class ExportOrderList extends BaseView {
       firstKey = dpis[dpiName];
       break;
     }
-    console.error(dpiList)
 
     const selectBoxDpiName = label("",[inputClass],[" ",createSelectVnode(this.selectBoxDpiName, [], "", dpis, dpiList[firstKey],{
       change:this.exportOrderRow.getSelectOrder()

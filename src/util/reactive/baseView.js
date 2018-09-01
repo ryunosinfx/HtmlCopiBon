@@ -83,7 +83,7 @@ export class BaseView {
       this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
     }
     if (!this.currentVnode) {
-      console.log('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
+      console.error('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
     }
     //console.log('!!A!!prePatch ' +  JSON.stringify(this.currentVnode) + '/this.id:' + this.id+"/selector:"+selector+"/"+this.es.getElements(this.currentVnode , selector)[0]);
     this.currentVnode.data['name'] = this.name + Date.now();
@@ -133,36 +133,48 @@ export class BaseView {
       },2000);
     }
     await this.onViewShown(store, actionData).catch((e) => {
-      console.log(e)
+      console.error(e)
     });
   }
-  async updateReactive(store, actionData) {
-    // this.updateReactiveCallCount++;
-    if (this.updateReactiveCallTimer) {
-      this.updateReactivePromise.get(this.updateReactiveCallTimer);
-      clearTimeout(this.updateReactiveCallTimer);
-    }
-    this.updateReactiveCallTimer = setTimeout(async () => {
-      const oldVnode = store.oldVnode;
-      const selector = store.selector;
-      const isOrverride = store.isOrverride;
-      this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
-      // console.log(nodeFrame.rootVnode);
-      // console.error(this.currentVnode);
-      // console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
-      await this.onViewShow(store, actionData).catch((e) => {
-        console.log(e)
-      });
-      // console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-      this.patch("#" + this.id, this.currentVnode);
-      // console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-      //this.onAfterAttach(store);
-      // console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-      await this.onViewShown(store, actionData).catch((e) => {
-        console.log(e)
-      });
-      // console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-    });
+  updateReactive(store, actionData) {
+    return new Promise(
+      (resolve,reject)=>{
+        // this.updateReactiveCallCount++;
+        if (this.updateReactiveCallTimer) {
+          const clearTimer = this.updateReactiveCallTimer;
+          const pre =this.updateReactivePromise.get(clearTimer);
+          clearTimeout(this.updateReactiveCallTimer);
+          pre.resolve();
+          setTimeout(()=>{this.updateReactivePromise.delete(clearTimer)})
+        }
+        this.updateReactiveCallTimer = setTimeout(() => {
+          const oldVnode = store.oldVnode;
+          const selector = store.selector;
+          const isOrverride = store.isOrverride;
+          this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
+          // console.log(nodeFrame.rootVnode);
+          // console.error(this.currentVnode);
+          // console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
+          const promiseOnViewShow = this.onViewShow(store, actionData);
+          // console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+          promiseOnViewShow.then(
+            ()=>{
+              this.patch("#" + this.id, this.currentVnode);
+              // console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+              //this.onAfterAttach(store);
+              // console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+              const promiseOnViewShown = this.onViewShown(store, actionData);
+              promiseOnViewShown.then(
+                ()=>{resolve()},
+                (e)=>{console.error(e);reject(e)}
+              );
+            },(e)=>{console.error(e);reject(e)}
+          );
+          // console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+        });
+        this.updateReactivePromise.set(this.updateReactiveCallTimer,{resolve,reject})
+      }
+    )
   }
   init() {}
   // attache to

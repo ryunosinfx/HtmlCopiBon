@@ -41,25 +41,16 @@ export class ProgressBar extends BaseView {
     ]);
   }
   async onViewShow(store, actionData) {
-  console.log(store)
     if (store[this.storeKey]) {
       //alert("onViewShow");
-      await this.showProgress(store[this.storeKey]);
-      console.error(store[this.storeKey]);
+      this.showProgress(store[this.storeKey]);
       //console.log("ProgressBar onViewShow");
-      if (store[this.storeKey].isComple) {
-        alert(isComple);
-      }
     }
   }
-  async showProgress(data) {
+  showProgress(data) {
     const {isVisible, progress, isComple, msg, title} = data;
     if (title) {
       this.title = title;
-    }
-    console.log(title+"/"+isComple)
-    if (isComple) {
-      alert(isComple);
     }
     if (isVisible) {
       this.currentVnode.elm.style.display = 'block';
@@ -72,11 +63,9 @@ export class ProgressBar extends BaseView {
       this.prePatch(".progeressPoints", div("", ["progeressPoints"], {}, progress + "%"));
       this.prePatch(".progeressMessage", div("", ["progeressMessage"], {}, msg));
       if (isComple) {
-        alert(isComple);
         this.currentVnode.elm.style.display = 'none';
       }
     } else {
-      alert(this.currentVnode.elm);
       this.currentVnode.elm.style.display = 'none';
       this.prePatch(".progeress", div("", ["progeress"], {
         style: {
