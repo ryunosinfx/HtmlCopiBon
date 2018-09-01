@@ -38,7 +38,7 @@ export class ExportArea extends BaseView {
   }
   render() {
     return div(this.id, ["ExportArea"], [
-      div('', [''], this.text),
+      div('', ['ExportAreaTitle'], this.text),
       div(this.exportOrderList.id),
       div(this.exportButton.id)
     ]);

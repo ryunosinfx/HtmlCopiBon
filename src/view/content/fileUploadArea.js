@@ -11,7 +11,7 @@ import {
   file
 } from "../../util/reactive/base/vtags";
 import {FileUploader} from "../../eventHandler/fileUploader";
-const text = "ここにファイルをアップロードしてください。";
+const text = "Drop image file";
 export class FileUploadArea extends BaseView {
   constructor() {
     super("fuaPArent", "FileUploadArea",true);

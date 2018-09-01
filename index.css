@@ -15,7 +15,6 @@ div.frame {
   margin-left: auto;
   margin-right: auto;
   margin: 0;
-  border: solid 1px blue;
 }
 
 div.footer {
@@ -34,15 +33,22 @@ div.copyright {
 div.header {
   min-height: 100%;
   width: 100%;
-  border: solid 1px green;
-  padding: 0.2em;
+  border: solid 1px rgb(101, 64, 88);
 }
 
 div.title {
   font-size: 2em;
   font-weight: bold;
-  background-color: #c23cc1;
+  background-color: rgb(255, 226, 251);
   padding: 0.5em;
+  color:rgb(155, 215, 223);
+}
+div.title:after {
+  font-size: 0.5em;
+  padding: 0.5em;
+  font-weight:normal;
+  content:":The Images Converter For Book Made By Copy Machine!";
+  color:rgb(119, 52, 112);
 }
 
 div.FileUploadArea input {
@@ -52,13 +58,24 @@ div.FileUploadArea input {
 
 div.FileUploadArea {
   display: block;
-  min-height: 100%;
+  min-height: 10em;
+  height: 20em;
   width: 100%;
   border: dotted 1px black;
   background-color: #a8bae0;
-  padding-top: 5em;
-  padding-bottom: 5em;
+  padding: 0.1em;
+}
+div.FileUploadArea >  div.FileUploadAreaA {
+  display: block;
+  min-height: 9.8em;;
+  height: 9.8em;
+  width: 100%;
+  border: dotted 3px rgb(100, 94, 153);
+  background-color: #a8bae0;
+  padding-top: 4em;
+  padding-bottom: 4em;
   text-align: center;
+  color: rgb(100, 94, 153);
   font-size: 2em;
 }
 
@@ -74,8 +91,8 @@ div.FilesArea {
   width: 100%;
   border: dotted 1px black;
   background-color: rgb(124, 110, 241);
-  padding-top: 1em;
-  padding-bottom: 1em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
   text-align: center;
   font-size: 2em;
 }
@@ -145,7 +162,7 @@ canvas.hidden {
   width: 100%;
   min-width: 630px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex-direction: row;
 }
 
@@ -156,13 +173,13 @@ canvas.hidden {
 }
 
 .FilesArea>div>div.PageImages {
-  min-width: 320px;
+  min-width: 310px;
+  width: 310px;
   max-width: 50%;
 }
 
 .FilesArea>div>div.ImageDetail {
   min-width: 160px;
-  max-width: 25%;
 }
 
 .ImageDetail .ImageDetailTitle {
@@ -176,9 +193,11 @@ canvas.hidden {
 
 .Thumnails {
   flex-direction: column;
-  background-color: rgba(200, 200, 200, 1);
+  padding-right:0.2em;
+  background-color: rgba(200, 200, 200, 0);
 }
 .Thumnails .thumbnails_block {
+  padding:1px;
   background-color: rgba(220, 220, 220, 1);
   border: 0px dotted #dfd;
   height:100%;
@@ -315,7 +334,7 @@ canvas.hidden {
 }
 .TitleSettings {
   background-color: rgb(159, 117, 242);
-  padding: 0.1em;
+  padding: 0.5em;
   margin: 0.1em 0;
 }
 
@@ -455,7 +474,8 @@ canvas.hidden {
 .ExportArea .ExportArea{
   background-color: rgb(195, 240, 204);
   border:1px solid rgb(87, 158, 17);
-  padding: 10px;
+  padding: 1em;
+  margin-bottom: 0.2em;
 }
 .ExportOrdrList .ExportOrdersListTitle{
     background-color: rgb(162, 233, 176);
@@ -495,11 +515,19 @@ div.DownloadLastExportZipButtonFrame,div.DownloadLastExportPdfButtonFrame{
 }
 div.button.disable,div.button.enable{
   background-color:rgb(104, 131, 116);
-  padding:10px;
+  padding:1em;
   margin: 0em;
+  width:100%;
 }
 div.button.enable{
   background-color:rgb(148, 219, 86);
+}
+.ExportArea .ExportAreaTitle{
+  margin-bottom:0.2em;
+  text-align: center;
+  padding: 0.3em;
+  font-weight: bold;
+  background-color: rgb(151, 238, 143);
 }
 .ExportArea .ExportOrdrs>div{
   margin:0.1em;
