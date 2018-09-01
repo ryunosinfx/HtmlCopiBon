@@ -14,7 +14,7 @@ export class PreviewProcessor {
   }
 
   async loadPreviews() {
-    this.pbp.open('Start page!');
+    await this.pbp.open('Create Previews');
     this.progress = 0;
     this.pbp.update(this.progress, 'loading Settings');
     const title = await this.tm.load();

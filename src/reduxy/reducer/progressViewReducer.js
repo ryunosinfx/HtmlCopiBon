@@ -33,7 +33,7 @@ export class ProgressViewReducer extends BaseReducer {
     }
     return store;
   }
-  createProgress(isVisible, progress, isComple, msg,title) {
-    return {isVisible: isVisible, progress: progress, msg: msg, isComple: isComple,title:title}
+  createProgress(isVisible, progress, isComple, msg, title) {
+    return {isVisible: isVisible, progress: progress, msg: msg, isComple: isComple, title: title}
   }
 }

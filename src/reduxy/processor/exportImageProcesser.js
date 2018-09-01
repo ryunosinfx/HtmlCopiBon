@@ -63,7 +63,7 @@ export class ExportImageProcesser {
   }
   async exportExecute(exportOrders = [order]) {
     // 0 load Title & pages ExecutePerPage
-    this.pbp.open('Start page!');
+    await this.pbp.open('Export and save files for print as zip');
     this.progress = 0;
     this.pbp.update(this.progress, 'loading Settings');
     const setting = await this.tm.loadSettings().catch((e) => {

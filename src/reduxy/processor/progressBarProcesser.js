@@ -4,21 +4,26 @@ export class ProgressBarProcesser {
   constructor(pp) {
     this.actionDispatcher = ActionDispatcher.createStandAlone();
   }
-  async update(percentProgress,msg) {
+  async update(percentProgress, msg) {
     if (percentProgress < 100) {
       //this.progress.progress(percentLoaded);
-      const percent = Math.floor(percentProgress*10)/10;
-      await this.actionDispatcher.dispatch(ProgressActionCreator.creatUpdateAction(null,{progress:percent,msg:msg}));
+      const percent = Math.floor(percentProgress * 10) / 10;
+      await this.actionDispatcher.dispatch(ProgressActionCreator.creatUpdateAction(null, {
+        progress: percent,
+        msg: msg
+      }));
     }
   }
   async comple(msg) {
     // setTimeout(()=>{
-    console.log("comple"+"/"+msg)
-      await this.actionDispatcher.dispatch(ProgressActionCreator.creatCompleatAction(null,{msg:msg}))
+    await this.actionDispatcher.dispatch(ProgressActionCreator.creatCompleatAction(null, {msg: msg}))
     // });
   }
   async open(title) {
-    await this.actionDispatcher.dispatch(ProgressActionCreator.creatAddAction(null,{msg:"",title:title}))
+    await this.actionDispatcher.dispatch(ProgressActionCreator.creatAddAction(null, {
+      msg: "",
+      title: title
+    }))
   }
   async close() {
     await this.actionDispatcher.dispatch(ProgressActionCreator.creatRemoveAction());
