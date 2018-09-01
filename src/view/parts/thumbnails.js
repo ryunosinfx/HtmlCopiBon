@@ -108,7 +108,7 @@ export class Thumbnails extends BaseView {
       const imageEntity = imageData.imageEntity;
       const pk = imageEntity.getPk();
       const vnode = await this.thumbnail.crateDataLine(imageData, this.pageMap).catch((e) => {
-        console.log(e)
+        console.error(e)
       });
       images.push(vnode);
     }

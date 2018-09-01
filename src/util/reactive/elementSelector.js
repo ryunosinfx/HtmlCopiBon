@@ -68,7 +68,7 @@ export class ElementSelector {
         if (length > index) {
           vnode.elm = parentNode.childNodes[index];
         } else {
-          console.log("★★★invalid parent index!" + index + "/length:" + length + "/vnode.sel:" + vnode.sel);
+          console.warn("★★★invalid parent index!" + index + "/length:" + length + "/vnode.sel:" + vnode.sel);
         }
       }
     }

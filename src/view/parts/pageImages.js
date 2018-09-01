@@ -52,11 +52,8 @@ export class PageImages extends BaseView {
       //console.log("Pages onViewShow");
       // alert("imagesData:"+imagesData);
     }
-
-      console.error("Pages onViewShow settings:"+store[this.storeKey]+"/"+actionData);
     if (store[this.storeKey]) {
       const settings = store[this.storeKey];
-        console.log("Pages onViewShow settings:"+settings);
       const settingsJson = JSON.stringify(settings);
       if (settingsJson === this.lastSettingOne) {
         return;

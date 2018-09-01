@@ -57,7 +57,7 @@ export class BaseView {
     if (this.updateCount < 1) {
       this.patchFromOtherVnode(currentVnode, null, this.render());
       this.updateReactiveTheTargetView({oldVnode: this.currentVnode, selector: null, isOrverride: true}).catch((e) => {
-        console.log(e)
+        console.error(e)
       });
     }
   }
@@ -108,7 +108,7 @@ export class BaseView {
     }
     // console.log("XXXXXXXXXXXX01 selector:"+selector+"/this.updateCount:"+this.updateCount);
     await this.onViewShow(store, actionData).catch((e) => {
-      console.log(e)
+      console.error(e)
     });
     // console.log("XXXXXXXXXXXX02 selector:"+selector+"/isOrverride:"+isOrverride+"/oldVnode:"+oldVnode);
     if (isOrverride) {

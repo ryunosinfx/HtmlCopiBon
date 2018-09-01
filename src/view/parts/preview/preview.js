@@ -53,15 +53,12 @@ export class Preview extends BaseView {
   }
   async onViewShow(store, actionData) {
     const data = store[this.storeKey];
-      console.error("★preview onViewShow data:"+data);
     if (data) {
       const {isSingle, nowSetNum, list, type, setting} = data;
       if (isSingle!== undefined) {
         this.isSingle = isSingle;
       }
       if (setting) {
-
-          console.error("★preview onViewShow setting:"+JSON.stringify(setting));
         this.setting = setting;
       }
       if (list) {
@@ -74,30 +71,27 @@ export class Preview extends BaseView {
       }
       this.currentVnode.elm.style.display = 'block';
       const pageSetCount = this.list.length;
-      const isR2L = this.setting.pageDirection === "r2l";
-      console.error("★preview onViewShow isR2L:"+isR2L);
+      this.isR2L = this.setting.pageDirection === "r2l";
        // console.log(this.list)
       // alert(this.list+"/isR2L:"+isR2L);
         // alert("list:"+this.list+"/isSingle:"+isSingle);
       if (list) {
         const pageNo = 1;
         this.pageNo = pageNo;
-        this.showPreview(this.list, isSingle, this.pageNo, isR2L);
+        this.showPreview(this.list, isSingle, this.pageNo, this.isR2L);
       } else if (this.previewNextAction.type === type) {
-        console.log("type:" + type);
         if (pageSetCount > nowSetNum) {
           const pageNo = nowSetNum * 1 + 1;
           this.pageNo = pageNo;
-          this.showPreview(this.list, isSingle, this.pageNo, isR2L);
+          this.showPreview(this.list, isSingle, this.pageNo, this.isR2L);
         } else {
           return;
         }
       } else if (this.previewBackAction.type === type) {
-        console.log("type:" + type);
         if (nowSetNum > 1) {
           const pageNo = nowSetNum * 1 - 1;
           this.pageNo = pageNo;
-          this.showPreview(this.list, isSingle, this.pageNo, isR2L);
+          this.showPreview(this.list, isSingle, this.pageNo, this.isR2L);
         } else {
           return;
         }
@@ -107,7 +101,7 @@ export class Preview extends BaseView {
   }
   showPreview(list, isSingle, pageNo, isR2L) {
 
-  this.dispatch("showPreview isR2L:"+isR2L);
+    console.warn("showPreview isR2L:"+isR2L);
     const pageSet = list[pageNo - 1];
     let mainView = null;
     const leftText = isR2L
@@ -118,18 +112,12 @@ export class Preview extends BaseView {
     : "Next";
     const left = div('', ['previewLeft',"button"], {
       on: {
-        click: (
-          isR2L
-          ? this.goNext()
-          : this.goBack())
+        click: this.goNextOrBack(false)
       }
     }, [span('',[leftText,"button","symbol"],"<"),span('',[leftText,"button","text"],leftText)]);
     const right = div('', ['previewRight',"button"], {
       on: {
-        click: (
-          isR2L
-          ? this.goBack()
-          : this.goNext())
+        click: this.goNextOrBack(true)
       }
     }, [span('',[rightText,"button","symbol"],">"),span('',[rightText,"button","text"],rightText)]);
     if (isSingle) {
@@ -210,28 +198,19 @@ export class Preview extends BaseView {
       return false;
     }
   }
-  goNext() {
+  goNextOrBack(isRight) {
     return(event) => {
-      const action = PreviewActionCreator.creatNextAction(this, {
-        isSingle: this.isSingle,
-        pageNo: this.pageNo
-      });
-        console.log("action.type:" + action.type);
+      const action = ((isRight && this.isR2L)|| (!isRight && !this.isR2L))?PreviewActionCreator.creatBackAction(this, {
+          isSingle: this.isSingle,
+          pageNo: this.pageNo
+        }):
+        PreviewActionCreator.creatNextAction(this, {
+          isSingle: this.isSingle,
+          pageNo: this.pageNo
+        })
+        ;
       this.dispatch(action);
       // alert("goNext");
-      event.stopPropagation();
-      return false;
-    }
-  }
-  goBack() {
-    return(event) => {
-      const action = PreviewActionCreator.creatBackAction(this, {
-        isSingle: this.isSingle,
-        pageNo: this.pageNo
-      });
-        console.log("action.type:" + action.type);
-      this.dispatch(action);
-      // alert("goBack");
       event.stopPropagation();
       return false;
     }

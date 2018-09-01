@@ -44,7 +44,7 @@ export class ExportUtilProcesser {
         //alert(zip.binary);
         const binaryEntity = await this.bm.load(zip.binary);
         zip.ab = binaryEntity._ab;
-        console.error(zip.ab)
+        // console.error(zip.ab)
       }
       return zip;
     }

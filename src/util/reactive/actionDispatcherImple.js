@@ -116,7 +116,7 @@ export class ActionDispatcherImple {
           const store = Store.getTemp(storeKey,action);
           if (targetView === activeView) {
             //console.log('A0 callUpdate update id:' + activeView.id);
-            console.log("activeView.updateReactiveTheTargetView:"+action.type+"/"+targetView.id);
+            // console.log("activeView.updateReactiveTheTargetView:"+action.type+"/"+targetView.id);
             const promise = targetView.updateReactiveTheTargetView(store, actionData);
             if(promise){
               if(!promise.then){
@@ -126,7 +126,7 @@ export class ActionDispatcherImple {
               }
               promises.push(promise.then(()=>{},(e)=>{console.error(e)}));
             }else{
-              console.log(activeView);
+              // console.log(activeView);
             }
           } else {
              //console.log('A0 callUpdate updateReactive id:' + activeView.id);

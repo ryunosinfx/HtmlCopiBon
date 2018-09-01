@@ -153,7 +153,7 @@ export class ImageProcessor {
       };
       imgElm.onerror = (e) => {
         console.log('失敗');
-        console.log(e);
+        console.error(e);
         reject(null);
       };
     });
@@ -183,7 +183,7 @@ export class ImageProcessor {
         }
         imgElm.onerror = (e) => {
           console.log('失敗');
-          console.log(e);
+          console.error(e);
           reject(e);
         };
         return

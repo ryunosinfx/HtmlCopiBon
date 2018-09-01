@@ -129,7 +129,7 @@ export class Thumbnail extends BaseView {
         return
       }
       const nowSelectedElm = this.draggableArea.nowSelectedElm;
-      console.log('handleDragEnd imagePKmove:'+(nowSelectedElm?nowSelectedElm.dataset.pk:nowSelectedElm)+"/elm.dataset.pk:"+elm.dataset.pk)
+      // console.log('handleDragEnd imagePKmove:'+(nowSelectedElm?nowSelectedElm.dataset.pk:nowSelectedElm)+"/elm.dataset.pk:"+elm.dataset.pk)
       elm.style.opacity = '1';
       const childNodes = elm.parentNode.childNodes;
       for(let i = 0; i< childNodes.length ; i++) {
@@ -143,7 +143,7 @@ export class Thumbnail extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-        console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
+        // console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
         const action = ImageActionCreator.creatDetailAction(this, {
           imagePK: elm.dataset.pk
         });
@@ -161,7 +161,7 @@ export class Thumbnail extends BaseView {
       type: imageEntity.type
     }
     const imgElm = await this.ip.createImageNodeByData(data).catch((e) => {
-      console.log(e);
+      console.error(e);
       throw e
     });
     const pk = imageEntity.getPk();

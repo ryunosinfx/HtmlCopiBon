@@ -67,19 +67,17 @@ export class ExportImageProcesser {
     this.progress = 0;
     this.pbp.update(this.progress, 'loading Settings');
     const setting = await this.tm.loadSettings().catch((e) => {
-      console.log(e)
+      console.error(e)
     });
     this.progress = 1;
     this.pbp.update(this.progress, 'loading pages');
     const pages = await this.pp.loadPages().catch((e) => {
-      console.log(e)
+      console.error(e)
     });
     this.progress = 2;
-    this.pbp.update(this.progress, 'start executess');
+    await this.pbp.update(this.progress, 'start executess');
     const result = await this.executeParOrder(setting, pages, exportOrders[0]);
-    //console.error("pbp.comple!!!");
-    //console.error("pbp.comple!!!");
-    this.pbp.comple(this.progress);
+    await this.pbp.comple(this.progress);
     return result;
   }
   async executeParOrder(setting, pages, order) {

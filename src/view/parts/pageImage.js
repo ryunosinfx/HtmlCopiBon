@@ -44,7 +44,7 @@ export class PageImage extends BaseView {
         type: binaryEntity.type
       }
       this.thumbnail = await this.ip.createImageNodeByData(data).catch((e) => {
-        console.log(e);
+        console.error(e);
         throw e
       });
       // console.log(this.thumbnail)

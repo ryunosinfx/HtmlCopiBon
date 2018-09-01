@@ -53,7 +53,7 @@ export class ObjectUtil {
         try {
           output[key] = value;
         } catch (e) {
-          console.log(e);
+          console.error(e);
           console.log(output);
           throw e;
         }
