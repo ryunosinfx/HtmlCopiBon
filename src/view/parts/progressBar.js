@@ -19,7 +19,7 @@ export class ProgressBar extends BaseView {
     this.title = "ProgressBar";
   }
 
-  onAfterAttach(store, data) {
+  async onAfterAttach(store, data) {
     ProgressViewReducer.register();
   }
   render() {

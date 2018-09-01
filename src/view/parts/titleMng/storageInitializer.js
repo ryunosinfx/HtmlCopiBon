@@ -20,7 +20,7 @@ export class StorageInitializer extends BaseView {
     const name = div("", ["StorageInitializer"], "StorageInitializer");
     return div("", [this.id + "Frame"], [name, div(this.StorageInitializerId, ["StorageInitializerA"], this.id + "aaaaa")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
 }

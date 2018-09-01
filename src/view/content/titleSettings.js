@@ -28,10 +28,10 @@ export class TitleSettings extends BaseView {
   render() {
     return div(this.bodyId, ["TitleSettings"], this.text);
   }
-  onAfterAttach(store, data) {
+  async onAfterAttach(store, data) {
     SettingViewReducer.register();
     const action = SettingActionCreator.creatLoadAction(this, {});
-    this.dispatch(action);
+    await this.dispatch(action);
   }
   async onViewShow(store, actionData) {
     console.log("TitleSettings onViewShow 01 this.storeKey:" + this.storeKey + '/' + store[this.storeKey]);

@@ -20,7 +20,7 @@ export class TitleNewone extends BaseView {
     const name = div("", ["TitleNewone"], "TitleNewone");
     return div("", [this.id + "Frame"], [name, div(this.TitleNewoneId, ["TitleNewone"], this.id + "aaaaa")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
 }

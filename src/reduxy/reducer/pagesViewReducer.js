@@ -35,6 +35,7 @@ export class PagesViewReducer extends BaseReducer {
     }
   }
   async reduce(store, action) {
+    console.error("PagesViewReducer reduce action:"+action.type)
     if (this.pageAddAction.type === action.type) {
       store[this.storeKey] = await this.add(action.data.imagePk,action.data.pagePk);
       store[this.storeImagesKey] = await this.loadImages();

@@ -31,7 +31,7 @@ export class DownloadLastExportZipButton extends BaseView {
     return div(this.id, [this.id + "Frame"], {
     }, [text]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeZipDLKey]) {

@@ -36,7 +36,7 @@ export class ExportImgZipButton extends BaseView {
       }
     }, [div("", ["button"], [buttonName, exportedState])]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeExportResultKey]) {

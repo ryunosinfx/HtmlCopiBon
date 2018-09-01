@@ -6,13 +6,13 @@ const mainKey = 'aaa';
 const tempStore = null;
 export class Store {
   constructor(service) {}
-  static cloneStore(store,actionClass){
-    subHolder.set(actionClass,store)
+  static cloneStore(store,action){
+    subHolder.set(action,store)
     return ObjectUtil.simpleDeepClone(store);
   }
-  static getTemp(newKey = mainKey, actionClass){
-    const store = subHolder.has(actionClass)
-      ? subHolder.get(actionClass)
+  static getTemp(newKey = mainKey, action){
+    const store = subHolder.has(action)
+      ? subHolder.get(action)
       : null;
     return store;
   }

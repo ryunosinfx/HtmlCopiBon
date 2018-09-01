@@ -30,11 +30,11 @@ export class ExportArea extends BaseView {
     this.exportOrderList = new ExportOrderList();
   }
 
-  onAfterAttach(store, data) {
-    this.exportOrderList.attach(this);
-    this.exportButton.attach(this);
+  async onAfterAttach(store, data) {
+    await this.exportOrderList.attach(this);
+    await this.exportButton.attach(this);
     const action = ExportActionCreator.creatLoadAction();
-    this.dispatch(action);
+    await this.dispatch(action);
   }
   render() {
     return div(this.id, ["ExportArea"], [

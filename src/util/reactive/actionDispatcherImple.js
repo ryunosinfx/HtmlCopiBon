@@ -47,7 +47,16 @@ export class ActionDispatcherImple {
     }
     return true;
   }
-  async dispatch(action) {
+  dispatch(action) {
+    return new Promise(
+      (resolve,reject)=>{
+        setTimeout(()=>{
+          this.dispatchExecute(action).then((data)=>{resolve(data)},(e)=>{reject(e)})
+        })
+      }
+    )
+  }
+  async dispatchExecute(action) {
     const type = action.type;
     if (!type) {
       return false;
@@ -68,14 +77,14 @@ export class ActionDispatcherImple {
       }
       for (let reducer of reducers) {
         //console.log("A01 dispatch type:"+type+"/reducer.reduce:"+reducer.reduce)
-        await reducer.preReduce(store, action).catch((e)=>{console.log(e)});
-        await reducer.reduce(store, action).catch((e)=>{console.log(e)});
-        await reducer.postReduce(store, action).catch((e)=>{console.log(e)});
+        await reducer.preReduce(store, action).catch((e)=>{console.error(e)});
+        await reducer.reduce(store, action).catch((e)=>{console.error(e)});
+        await reducer.postReduce(store, action).catch((e)=>{console.error(e)});
       }
       //console.log("A01 dispatch type:"+type+"/"+reducers[0])
       //console.log(reducers[0])
     }
-    const storeAsClones= Store.cloneStore(store,actionClass);
+    const storeAsClones= Store.cloneStore(store,action);
     // let storeB = Store.getStore(storeKey,actionClass);
     //console.log("A01 dispatch ")
     //console.log(storeB)
@@ -86,26 +95,28 @@ export class ActionDispatcherImple {
       if (this.view.onViewHide(targetView, data) === false) {
         return;
       }
-      result = await this.callUpdate(targetView, data, storeKey,actionClass).catch((e)=>{console.error(e)});
+      result = await this.callUpdate(targetView, data, storeKey,action).catch((e)=>{console.error(e)});
       await this.view.onViewHidden(targetView, data);
     } else {
-      result = await this.callUpdate(targetView, data, storeKey,actionClass).catch((e)=>{console.error(e)});
+      result = await this.callUpdate(targetView, data, storeKey,action).catch((e)=>{console.error(e)});
     }
     //store = Store.getStore(storeKey);
     Store.setStore(storeAsClones,storeKey,actionClass);
     // console.error(storeAsClones);
     // console.error(result);
+
     return true;
   }
-  callUpdate(targetView, actionData, storeKey,actionClass) {
+  callUpdate(targetView, actionData, storeKey,action) {
     return new Promise(
       (resolve,reject)=>{
         const promises = [];
         const activViews = viewAttachQueue.getActiveViewList();
         for (let activeView of activViews) {
-          const store = Store.getTemp(storeKey,actionClass);
+          const store = Store.getTemp(storeKey,action);
           if (targetView === activeView) {
             //console.log('A0 callUpdate update id:' + activeView.id);
+            console.log("activeView.updateReactiveTheTargetView:"+action.type+"/"+targetView.id);
             const promise = targetView.updateReactiveTheTargetView(store, actionData);
             if(promise){
               if(!promise.then){
@@ -119,6 +130,7 @@ export class ActionDispatcherImple {
             }
           } else {
              //console.log('A0 callUpdate updateReactive id:' + activeView.id);
+             console.log("activeView.updateReactive:"+action.type+"/"+targetView.id);
             const promise = activeView.updateReactive(store, actionData);
             if(promise){
               if(!promise.then){

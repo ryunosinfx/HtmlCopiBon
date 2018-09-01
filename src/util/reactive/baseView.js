@@ -126,7 +126,7 @@ export class BaseView {
     // console.log("XXXXXXXXXXXX04 this.id:" + this.id+"/this.updateCount:"+this.updateCount);
     if (this.updateCount <= 2) {
       this.updateCount++;
-      this.onAfterAttachWrap(store, actionData);
+      await this.onAfterAttachWrap(store, actionData);
     } else {
       setTimeout(() => {
         this.updateCount = 0
@@ -178,7 +178,7 @@ export class BaseView {
   }
   init() {}
   // attache to
-  attach(parentView = this.parentView, selector, data) {
+  async attach(parentView = this.parentView, selector, data) {
     this.parentView = parentView;
     let taregetSelecotor = selector;
     if (!selector) {
@@ -195,7 +195,7 @@ export class BaseView {
     this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
     // console.log('A08---attach ==selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
     const action = ActionCreator.creatAttachAction(parentView, this, data);
-    this.dispatch(action);
+    await this.dispatch(action);
   }
   isAttached() {
     const currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
@@ -204,8 +204,8 @@ export class BaseView {
     }
     return false;
   }
-  dispatch(action) {
-    this.dispatcher.dispatch(action);
+  async dispatch(action) {
+    await this.dispatcher.dispatch(action);
     // console.log("dispatchered /this.id:" + this.id);
   }
   getElementById(id) {
@@ -214,16 +214,16 @@ export class BaseView {
       ? elements[0]
       : null;
   }
-  onAfterAttachWrap(store, actionData) {
+  async onAfterAttachWrap(store, actionData) {
     if (this.updateCount > 2) {
       return;
     }
     // console.log("XXXXXXXXXXXX03 id:"+this.id+"/this.updateCount:"+this.updateCount);
     // console.log(nodeFrame.rootVnode);
     // console.error(this.currentVnode);
-    this.onAfterAttach(store, actionData);
+    await this.onAfterAttach(store, actionData);
   }
-  onAfterAttach(store, actionData) {
+  async onAfterAttach(store, actionData) {
     const currentVnode = this.currentVnode;
     // while (viewAttachQueue.hasItem()) {
     //   let item = viewAttachQueue.poll();

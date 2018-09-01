@@ -37,7 +37,7 @@ export class DownloadLastExportPdfButton extends BaseView {
     }, [text]);
     return result;
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storePdfDLKey]) {

@@ -28,16 +28,16 @@ export class ExportButton extends BaseView {
     this.downloadLastExportPdfButton = new DownloadLastExportPdfButton();
     this.deleteExportOneButton = new DeleteExportOneButton();
   }
-  onAfterAttach(store, data) {
-    this.exportAllButton.attach(this);
-    this.exportImgZipButton.attach(this);
-    this.exportPdfButton.attach(this);
-    this.downloadLastExportZipButton.attach(this);
-    this.downloadLastExportPdfButton.attach(this);
-    this.deleteExportOneButton.attach(this);
+  async onAfterAttach(store, data) {
+    await this.exportAllButton.attach(this);
+    await this.exportImgZipButton.attach(this);
+    await this.exportPdfButton.attach(this);
+    await this.downloadLastExportZipButton.attach(this);
+    await this.downloadLastExportPdfButton.attach(this);
+    await this.deleteExportOneButton.attach(this);
     ExportReducer.register();
     const action = ExportActionCreator.creatLoadAction(this);
-    this.dispatch(action);
+    await this.dispatch(action);
   }
 
   async onViewShow(store, actionData) {

@@ -37,7 +37,7 @@ export class ExportPdfButton extends BaseView {
       }
     }, [div("", ["button"], [buttonName, exportedState])]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeKey]) {

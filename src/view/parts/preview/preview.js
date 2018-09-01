@@ -53,12 +53,15 @@ export class Preview extends BaseView {
   }
   async onViewShow(store, actionData) {
     const data = store[this.storeKey];
+      console.error("★preview onViewShow data:"+data);
     if (data) {
       const {isSingle, nowSetNum, list, type, setting} = data;
       if (isSingle!== undefined) {
         this.isSingle = isSingle;
       }
       if (setting) {
+
+          console.error("★preview onViewShow setting:"+JSON.stringify(setting));
         this.setting = setting;
       }
       if (list) {
@@ -72,6 +75,7 @@ export class Preview extends BaseView {
       this.currentVnode.elm.style.display = 'block';
       const pageSetCount = this.list.length;
       const isR2L = this.setting.pageDirection === "r2l";
+      console.error("★preview onViewShow isR2L:"+isR2L);
        // console.log(this.list)
       // alert(this.list+"/isR2L:"+isR2L);
         // alert("list:"+this.list+"/isSingle:"+isSingle);
@@ -80,7 +84,7 @@ export class Preview extends BaseView {
         this.pageNo = pageNo;
         this.showPreview(this.list, isSingle, this.pageNo, isR2L);
       } else if (this.previewNextAction.type === type) {
-        console.log(type);
+        console.log("type:" + type);
         if (pageSetCount > nowSetNum) {
           const pageNo = nowSetNum * 1 + 1;
           this.pageNo = pageNo;
@@ -89,7 +93,7 @@ export class Preview extends BaseView {
           return;
         }
       } else if (this.previewBackAction.type === type) {
-        console.log(type);
+        console.log("type:" + type);
         if (nowSetNum > 1) {
           const pageNo = nowSetNum * 1 - 1;
           this.pageNo = pageNo;
@@ -102,6 +106,8 @@ export class Preview extends BaseView {
     }
   }
   showPreview(list, isSingle, pageNo, isR2L) {
+
+  this.dispatch("showPreview isR2L:"+isR2L);
     const pageSet = list[pageNo - 1];
     let mainView = null;
     const leftText = isR2L
@@ -210,6 +216,7 @@ export class Preview extends BaseView {
         isSingle: this.isSingle,
         pageNo: this.pageNo
       });
+        console.log("action.type:" + action.type);
       this.dispatch(action);
       // alert("goNext");
       event.stopPropagation();
@@ -222,6 +229,7 @@ export class Preview extends BaseView {
         isSingle: this.isSingle,
         pageNo: this.pageNo
       });
+        console.log("action.type:" + action.type);
       this.dispatch(action);
       // alert("goBack");
       event.stopPropagation();

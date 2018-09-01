@@ -34,11 +34,11 @@ export class TitleMng extends BaseView {
     this.titleNewone = new TitleNewone(this);
     this.storageInitializer = new StorageInitializer(this);
   }
-  onAfterAttach(store, data) {
-    this.storageMeter.attach(this);
-    this.titleList.attach(this);
-    this.titleNewone.attach(this);
-    this.storageInitializer.attach(this);
+  async onAfterAttach(store, data) {
+    await this.storageMeter.attach(this);
+    await this.titleList.attach(this);
+    await this.titleNewone.attach(this);
+    await this.storageInitializer.attach(this);
   }
   render() {
     return div(this.id, ["TitleMng"], [

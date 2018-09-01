@@ -50,7 +50,7 @@ export class ExportOrderList extends BaseView {
     const list = div(this.listFrameId, [inputFrameClass], this.buildRows());
     return div(this.listId, [this.id + "Frame"], [name, list, exportOptions]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeSelectedOrderKey]) {

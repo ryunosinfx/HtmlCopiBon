@@ -36,9 +36,9 @@ export class Thumbnails extends BaseView {
     this.draggableArea = draggableArea;
     this.draggableArea.cancelPageArea = null;
   }
-  onAfterAttach(store, data) {
+  async onAfterAttach(store, data) {
     const action = ImageActionCreator.creatLoadImagesAction(this, {});
-    this.dispatch(action);
+    await this.dispatch(action);
   }
   async onViewShow(store, actionData) {
     const pagesData = store[this.storePagesKey];

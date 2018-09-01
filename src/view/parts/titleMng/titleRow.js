@@ -20,7 +20,7 @@ export class TitleRow extends BaseView {
     const name = div("", ["TitleName"], "TitleName");
     return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
 }

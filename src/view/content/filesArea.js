@@ -28,11 +28,11 @@ export class FilesArea extends BaseView {
     PagesViewReducer.register();
   }
 
-  onAfterAttach(store, data) {
-    this.imageDetail.attach(this);
-    this.pageImages.attach(this);
-    this.thumbnails.attach(this);
-    this.preview.attach(this);
+  async onAfterAttach(store, data) {
+    await this.imageDetail.attach(this);
+    await this.pageImages.attach(this);
+    await this.thumbnails.attach(this);
+    await this.preview.attach(this);
   }
   render() {
     return div("", [

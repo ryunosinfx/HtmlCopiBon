@@ -20,7 +20,7 @@ export class PrefList extends BaseView {
     const name = div("", ["PrefList"], "TitleName");
     return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
 

@@ -27,7 +27,7 @@ export class ExportAllButton extends BaseView {
       }
     }, [div("", ["button"], "make zip and pdf!")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeKey]) {

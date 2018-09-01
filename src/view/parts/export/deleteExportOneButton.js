@@ -27,7 +27,7 @@ export class DeleteExportOneButton extends BaseView {
       }
     }, [div("", ["button"], "delete Exports!")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {
     if (store[this.storeRemoveResultKey]) {

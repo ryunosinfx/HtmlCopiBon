@@ -20,7 +20,7 @@ export class StorageMeter extends BaseView {
     const name = div("", ["StorageMeter"], "StorageMeter");
     return div("", [this.id + "Frame"], [name, div(this.StorageMeterId, ["StorageMeter"], this.id + "")]);
   }
-  onAfterAttach(store, data) {}
+  async onAfterAttach(store, data) {}
 
   async onViewShow(store, actionData) {}
 }
