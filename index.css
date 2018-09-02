@@ -43,8 +43,14 @@ div.title {
   padding: 0.5em;
   color:rgb(155, 215, 223);
 }
+div.title span.Version{
+  font-size: 40%;
+  font-weight: bold;
+  padding: 0em;
+  color:rgb(0, 232, 249);
+}
 div.title:after {
-  font-size: 0.5em;
+  font-size: 0.4em;
   padding: 0.5em;
   font-weight:normal;
   content:":The Images Converter For Book Made By Copy Machine!";

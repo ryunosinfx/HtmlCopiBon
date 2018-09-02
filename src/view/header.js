@@ -16,13 +16,16 @@ export class Header extends BaseView {
   constructor(titleText) {
     super("header", "header");
     this.titleText = titleText;
+    this.Version = "v0.01alpha";
   }
   render() {
+    const title = span("",["MainTitle"],this.titleText);
+    const version = span("",["Version"],this.Version);
     const newVnode = div("aaa",{
       style: {
         color: '#000'
       }
-    }, [div("title", ["title"], this.titleText)]);
+    }, [div("title", ["title"], [title,version])]);
     return newVnode;
   }
 }
