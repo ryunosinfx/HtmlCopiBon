@@ -39,7 +39,7 @@ export class Thumbnails extends BaseView {
       await this.showImages(imagesData).catch((e) => {
         console.error(e)
       });;
-      console.error("Thumnails onViewShow count:"+pagesData.length+"/"+imagesData.length+"/"+JSON.stringify(this.pageMap));
+      // console.error("Thumnails onViewShow count:"+pagesData.length+"/"+imagesData.length+"/"+JSON.stringify(this.pageMap));
     }
   }
   render(store, actionData) {

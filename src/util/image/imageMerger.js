@@ -40,6 +40,8 @@ export class ImageMerger {
       const addWidth = imageData.width;
       const addHeight = imageData.height;
       //console.log(width+"*"+height+"*4="+data.length+"/"+width+"*"+height+"*4="+data.length)
+      const plainOffsetY = imageData.offsetY;
+      const plainOffsetX = imageData.offsetX;
       const offsetY = imageData.offsetY && imageData.offsetY > 0 && imageData.offsetY < height ?
         imageData.offsetY :
         !imageData.offsetY || imageData.offsetY < height ? 0 : height;
@@ -57,11 +59,12 @@ export class ImageMerger {
       let maxY = 0;
       let maxX = 0;
       let count = 0;
+      // console.error("offsetY:"+offsetY+"/offsetX:"+offsetX);
       for (let iy = offsetY; iy < endY; iy++) {
-        const addPixcelIndexY = iy - offsetY;
+        const addPixcelIndexY = iy - plainOffsetY;
         maxY = addPixcelIndexY;
         for (let ix = offsetX; ix < endX; ix++) {
-          const addPixcelIndexX = ix - offsetX;
+          const addPixcelIndexX = ix - plainOffsetX;
           const basePixcelIndex = iy * width + ix;
           const addPixcelIndex = addPixcelIndexY * addWidth + addPixcelIndexX;
           count++;
