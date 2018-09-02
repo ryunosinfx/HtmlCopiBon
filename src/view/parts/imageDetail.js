@@ -21,7 +21,7 @@ export class ImageDetail extends BaseView {
     this.startY = 0;
   }
   render(store, actionData) {
-    return div("",[""],[div("", ["ImageDetailTitle"],"ImageDetailTitle"),div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
+    return div("",[""],[div("", ["ImageDetailTitle"],"ImageDetailTitle"),div(this.imageAreaID, ["ImageDetailA"], "No Image Selected")]);
   }
   async onViewShow(store, actionData) {
     if (store.imagesDetailData) {

@@ -1,12 +1,6 @@
-import {
-  PageActionCreator
-} from '../action/pageActionCreator'
-import {
-  MainService
-} from "../../service/mainService"
-import {
-  BaseReducer
-} from '../../util/reactive/baseReducer'
+import {PageActionCreator} from '../action/pageActionCreator'
+import {MainService} from "../../service/mainService"
+import {BaseReducer} from '../../util/reactive/baseReducer'
 import {PageProcessor} from '../processor/pageProcessor'
 import {ImageActionCreator} from '../action/imageActionCreator'
 let pagesViewReducer = null;
@@ -36,7 +30,7 @@ export class PagesViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.pageAddAction.type === action.type) {
-      store[this.storeKey] = await this.add(action.data.imagePk,action.data.pagePk);
+      store[this.storeKey] = await this.add(action.data.imagePk, action.data.pagePk);
       store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pageRemoveAction.type === action.type) {
       store[this.storeKey] = await this.remove(action.data.pagePk);
@@ -45,31 +39,31 @@ export class PagesViewReducer extends BaseReducer {
       store[this.storeKey] = await this.reset();
       store[this.storeImagesKey] = await this.loadImages();
     } else if (this.pagesSortAction.type === action.type) {
-      store[this.storeKey] = await this.move(action.data.formPk,action.data.toPk);
+      store[this.storeKey] = await this.move(action.data.formPk, action.data.toPk);
       store[this.storeImagesKey] = await this.loadImages();
     }
     return store;
   }
-  async loadImages(){
+  async loadImages() {
     return await this.im.loadImages();
   }
-  async add(imagePk,pagePk){
+  async add(imagePk, pagePk) {
     //
-    await this.pp.add(imagePk,pagePk);
+    await this.pp.add(imagePk, pagePk);
     return await this.pp.loadPages();
   }
-  async remove(pagePk){
+  async remove(pagePk) {
     //
     await this.pp.remove(pagePk);
     return await this.pp.loadPages();
   }
-  async reset(){
+  async reset() {
     //
     return await this.pp.resetPagesFull();
   }
-  async move(formPk,toPk){
+  async move(formPk, toPk) {
     //
-    await this.pp.move(formPk,toPk);
+    await this.pp.move(formPk, toPk);
     return await this.pp.loadPages();
   }
 }

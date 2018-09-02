@@ -39,8 +39,18 @@ export class PagesManager {
       if (target.outputImage) {
         await this.em.Binary.delete(target.outputImage);
       }
+      if (target.outputDualImage) {
+        await this.em.Binary.delete(target.outputDualImage);
+      }
+      if (target.outputExpandImage) {
+        await this.em.Binary.delete(target.outputExpandImage);
+      }
       target.baseImage = null;
       target.thumbnail = null;
+      target.outputDualImage = null;
+      target.outputExpandImage = null;
+      target.previewThumbnail = null;
+      target.outputImage = null;
       await this.em.Pages.save(target);
     }
   }

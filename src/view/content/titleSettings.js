@@ -31,6 +31,7 @@ export class TitleSettings extends BaseView {
   async onAfterAttach(store, data) {
     SettingViewReducer.register();
     const action = SettingActionCreator.creatLoadAction(this, {});
+    console.warn("onAfterAttach action:" + action.type);
     await this.dispatch(action);
   }
   async onViewShow(store, actionData) {
@@ -61,8 +62,8 @@ export class TitleSettings extends BaseView {
     }
   }
   async showSettings(setting, outputProfiles) {
-    console.log(setting);
-    console.log(outputProfiles);
+    // console.log(setting);
+    // console.log(outputProfiles);
     const labelClass = this.id + "Label";
     const inputClass = this.id + "Input";
     const title = div("", [this.id + "Title"], "Setting for Output");

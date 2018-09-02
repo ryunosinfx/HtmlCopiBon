@@ -1,10 +1,6 @@
 import vu from "../../util/viewUtil";
-import {
-  BaseView
-} from "../../util/reactive/baseView";
-import {
-  Sorter
-} from "../../util/sorter";
+import {BaseView} from "../../util/reactive/baseView";
+import {Sorter} from "../../util/sorter";
 import {
   a,
   div,
@@ -15,15 +11,9 @@ import {
   input,
   label
 } from "../../util/reactive/base/vtags";
-import {
-  ImageActionCreator
-} from '../../reduxy/action/imageActionCreator'
-import {
-  PageActionCreator
-} from '../../reduxy/action/pageActionCreator'
-import {
-  Thumbnail
-} from './thumbnail'
+import {ImageActionCreator} from '../../reduxy/action/imageActionCreator'
+import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
+import {Thumbnail} from './thumbnail'
 export class Thumbnails extends BaseView {
   constructor(draggableArea) {
     super("Thumnails", "Thumnails");
@@ -31,6 +21,7 @@ export class Thumbnails extends BaseView {
     this.thumbnail = new Thumbnail(this, draggableArea);
     this.ip = this.ms.ip;
     this.storePagesKey = PageActionCreator.getStorePagesKey();
+    this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
     this.pageMap = {}
     this.thumbnails_block = 'thumbnails_block';
     this.draggableArea = draggableArea;
@@ -42,10 +33,13 @@ export class Thumbnails extends BaseView {
   }
   async onViewShow(store, actionData) {
     const pagesData = store[this.storePagesKey];
-    if (store.imagesData && pagesData) {
+    const imagesData = store[this.storeImagesKey];
+    if (imagesData && pagesData) {
       this.updatePageMap(pagesData);
-      await this.showImages(store.imagesData);
-      // console.log("Thumnails onViewShow");
+      await this.showImages(imagesData).catch((e) => {
+        console.error(e)
+      });;
+      console.error("Thumnails onViewShow count:"+pagesData.length+"/"+imagesData.length+"/"+JSON.stringify(this.pageMap));
     }
   }
   render(store, actionData) {
@@ -63,7 +57,7 @@ export class Thumbnails extends BaseView {
     }
   }
   handleDragEnter() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
       if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
         return
@@ -73,19 +67,19 @@ export class Thumbnails extends BaseView {
     }
   }
   handleDragLeave() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
       if (!elm.classList || !elm.classList.contains(this.thumbnails_block)) {
         return
       }
       elm.classList.remove('over'); // this / event.target is previous target element.
-      setTimeout(()=>{
+      setTimeout(() => {
         this.draggableArea.cancelPageArea = null;
-      },100)
+      }, 100)
     }
   }
   handleDrop(event) {
-    return (event) => {
+    return(event) => {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
@@ -94,10 +88,10 @@ export class Thumbnails extends BaseView {
   }
 
   reset() {
-    return (event) => {
+    return(event) => {
       const elm = event.target;
       //alert("reset!")
-      }
+    }
   }
   async showImages(imageDatas) {
     const images = [];
@@ -112,19 +106,20 @@ export class Thumbnails extends BaseView {
       });
       images.push(vnode);
     }
-    const newVnode = div(this.imageAreaID,[this.thumbnails_block], {
-        on: {
-          dragover: this.handleDragEnter(),
-          dragstart: this.handleDragEnter(),
-          dragenter: this.handleDragEnter(),
-          dragleave: this.handleDragLeave(),
-          drop: this.handleDrop(),
-          dragend:this.handleDrop(),
-          click:this.reset()
-        },
-        props:{ "draggable":"true"}
+    const newVnode = div(this.imageAreaID, [this.thumbnails_block], {
+      on: {
+        dragover: this.handleDragEnter(),
+        dragstart: this.handleDragEnter(),
+        dragenter: this.handleDragEnter(),
+        dragleave: this.handleDragLeave(),
+        drop: this.handleDrop(),
+        dragend: this.handleDrop(),
+        click: this.reset()
       },
-      images)
+      props: {
+        "draggable": "true"
+      }
+    }, images)
     this.prePatch("#" + this.imageAreaID, newVnode);
   }
 }

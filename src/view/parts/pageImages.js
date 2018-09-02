@@ -44,26 +44,25 @@ export class PageImages extends BaseView {
     const imagesData = store[this.storeImagesKey];
     const pagesDataJson = JSON.stringify(pagesData);
     const imagesDataJson = JSON.stringify(imagesData);
-    if (imagesData && pagesData && (this.lastPagesData !== pagesDataJson || this.lastImagesData !== imagesDataJson)) {
-      //alert("onViewShow"+imagesData.length+"/"+pagesData.length+"/");
-      await this.showPages(pagesData, imagesData);
-      this.lastPagesData = pagesDataJson;
-      this.lastImagesData = imagesDataJson;
-      //console.log("Pages onViewShow");
-      // alert("imagesData:"+imagesData);
-    }
     if (store[this.storeKey]) {
       const settings = store[this.storeKey];
       const settingsJson = JSON.stringify(settings);
-      if (settingsJson === this.lastSettingOne) {
-        return;
+      // console.log("Pages onViewShow settingsJson:"+settingsJson);
+      if (settingsJson !== this.lastSettingOne) {
+        // alert("imagesData:"+imagesData+"/pagesData:"+pagesData);
+        // alert("store[this.storeKey]:"+store[this.storeKey]+"/"+(JSON.stringify(settings)===this.lastSettingOne));
+        const pageFrames = this.buildPageFrames(settings);
+        this.prePatch("#" + this.childId, div(this.childId, pageFrames));
+        this.lastSettingOne = settingsJson;
       }
-      // alert("store[this.storeKey]:"+store[this.storeKey]+"/"+(JSON.stringify(settings)===this.lastSettingOne));
-      const pageFrames = this.buildPageFrames(settings);
-      this.prePatch("#" + this.childId, div(this.childId, pageFrames));
-      this.lastSettingOne = settingsJson;
     } else {
-      return;
+      // return;
+    }
+    if (imagesData && pagesData && (this.lastPagesData !== pagesDataJson || this.lastImagesData !== imagesDataJson)) {
+      await this.showPages(pagesData, imagesData);
+      this.lastPagesData = pagesDataJson;
+      this.lastImagesData = imagesDataJson;
+      // console.log("Pages onViewShow"+store[this.storeKey]);
     }
   }
   addPage(imagesPk, pagePk) {

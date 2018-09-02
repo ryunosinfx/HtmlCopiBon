@@ -333,11 +333,12 @@ export class ExportImageProcesser {
         printPages.push(null);
       }
       indexA++;
+      console.error(page);
       const data = {
         pageNo: indexA,
         isDummy: false,
         isRight: indexA % 2 > 0 && isSideSynced,
-        binary: page
+        binary: page.baseImage===null?null:page
       }
       printPages.push(data);
     }
@@ -384,7 +385,7 @@ export class ExportImageProcesser {
       left.binary;
     pairPages.rightBin = null;
     pairPages.leftBin = null;
-  //  console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a shapedPagePair:" + shapedPagePair + "/left:" + pairPages.left + "/right:" + pairPages.right);
+   console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a shapedPagePair:" + shapedPagePair + "/left:" + pairPages.left + "/right:" + pairPages.right);
 
     let pageEntity = null;
     this.progress += progressUnit;

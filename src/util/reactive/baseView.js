@@ -91,7 +91,7 @@ export class BaseView {
     this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
     return this.currentVnode;
   }
-  async updateReactiveTheTargetView(store, actionData) {
+  async updateReactiveTheTargetView(store, actionData,action) {
     const oldVnode = store.oldVnode;
     const selector = store.selector;
     const isOrverride = store.isOrverride;
@@ -124,7 +124,8 @@ export class BaseView {
     }
     this.updateCount++;
     // console.log("XXXXXXXXXXXX04 this.id:" + this.id+"/this.updateCount:"+this.updateCount);
-    if (this.updateCount <= 2) {
+    // console.log(action);
+    if (this.updateCount <= 2 &&(!action||action.type==="Attach") ) {
       this.updateCount++;
       await this.onAfterAttachWrap(store, actionData);
     } else {
@@ -140,6 +141,8 @@ export class BaseView {
     return new Promise(
       (resolve,reject)=>{
         // this.updateReactiveCallCount++;
+        // const storePagesKey ="pagesData"
+        //       console.error("updateReactive:"+(store[storePagesKey]?store[storePagesKey].length:null));
         if (this.updateReactiveCallTimer) {
           const clearTimer = this.updateReactiveCallTimer;
           const pre =this.updateReactivePromise.get(clearTimer);

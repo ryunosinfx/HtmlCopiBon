@@ -48,6 +48,7 @@ export class ActionDispatcherImple {
     return true;
   }
   dispatch(action) {
+    // console.error("dispatch:action.type:"+action.type);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         this.dispatchExecute(action).then((data) => {
@@ -63,6 +64,7 @@ export class ActionDispatcherImple {
     if (!type) {
       return false;
     }
+    // console.error("dispatchExecute:action.type:"+action.type);
     const data = action.data;
     const storeKey = action.storeKey;
     const actionClass = action.constructor;
@@ -115,6 +117,7 @@ export class ActionDispatcherImple {
     //store = Store.getStore(storeKey);
     Store.setStore(storeAsClones, storeKey, actionClass);
     // console.error(storeAsClones);
+    // console.error(action.type);
     // console.error(result);
 
     return true;
@@ -128,7 +131,7 @@ export class ActionDispatcherImple {
         if (targetView === activeView) {
           //console.log('A0 callUpdate update id:' + activeView.id);
           // console.log("activeView.updateReactiveTheTargetView:"+action.type+"/"+targetView.id);
-          const promise = targetView.updateReactiveTheTargetView(store, actionData);
+          const promise = targetView.updateReactiveTheTargetView(store, actionData, action);
           if (promise) {
             if (!promise.then) {
               alert("your view has override method name 'updateReactiveTheTargetView'! activeView.id):" + activeView.id);
