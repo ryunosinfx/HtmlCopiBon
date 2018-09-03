@@ -149,7 +149,7 @@ export class PageImages extends BaseView {
     const isPageStartR = startPage === "r";
     const frameNum = Math.ceil(pageNum / 2);
     const isOdd = (pageNum % 2 === 1);
-    const isMatchPageStartSide = (pageDirection.indexOf(startPage) === 0);
+    const isMatchPageStartSide = pageDirection && (pageDirection.indexOf(startPage) === 0);
     const addPageNum = isOdd
       ? 1
       : isMatchPageStartSide
