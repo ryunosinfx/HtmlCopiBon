@@ -618,16 +618,24 @@ div.button.enable {
 
 .TitleMng {
   padding: 10px;
-  background-color: rgb(237, 247, 234);
+  background-color: rgb(228, 171, 176);
 }
 .TitleMng .name{
   padding-bottom: 0.3em;
   font-weight: bold;
 }
-.StorageMeter{
+.TitleMng>.StorageMeter{
   margin:0.5em;
   padding:0.5em;
-  
+
+}
+.TitleListFrame{
+  margin:0.5em;
+  padding:0.5em;
+}
+.TitleMng>.TitleNewone{
+  margin:0.5em;
+  padding:0.5em;
 }
 .display_none {
   display: none;
