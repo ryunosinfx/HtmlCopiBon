@@ -41,20 +41,22 @@ div.title {
   font-weight: bold;
   background-color: rgb(255, 226, 251);
   padding: 0.5em;
-  color:rgb(155, 215, 223);
+  color: rgb(155, 215, 223);
 }
-div.title span.Version{
+
+div.title span.Version {
   font-size: 40%;
   font-weight: bold;
   padding: 0em;
-  color:rgb(0, 232, 249);
+  color: rgb(0, 232, 249);
 }
+
 div.title:after {
   font-size: 0.4em;
   padding: 0.5em;
-  font-weight:normal;
-  content:":The Images Converter For Book Made By Copy Machine!";
-  color:rgb(119, 52, 112);
+  font-weight: normal;
+  content: ":The Images Converter For Book Made By Copy Machine!";
+  color: rgb(119, 52, 112);
 }
 
 div.FileUploadArea input {
@@ -71,9 +73,11 @@ div.FileUploadArea {
   background-color: #a8bae0;
   padding: 0.1em;
 }
-div.FileUploadArea >  div.FileUploadAreaA {
+
+div.FileUploadArea>div.FileUploadAreaA {
   display: block;
-  min-height: 9.8em;;
+  min-height: 9.8em;
+  ;
   height: 9.8em;
   width: 100%;
   border: dotted 3px rgb(100, 94, 153);
@@ -186,11 +190,13 @@ canvas.hidden {
 
 .FilesArea>div>div.ImageDetail {
   min-width: 30%;
-    max-width: 100%;
+  max-width: 100%;
 }
-.ImageDetail > div{
+
+.ImageDetail>div {
   width: 100%;
 }
+
 .ImageDetail .ImageDetailTitle {
   position: relative;
   z-index: 1000;
@@ -203,15 +209,17 @@ canvas.hidden {
 
 .Thumnails {
   flex-direction: column;
-  padding-right:0.2em;
+  padding-right: 0.2em;
   background-color: rgba(200, 200, 200, 0);
 }
+
 .Thumnails .thumbnails_block {
-  padding:1px;
+  padding: 1px;
   background-color: rgba(220, 220, 220, 1);
   border: 0px dotted #dfd;
-  height:100%;
+  height: 100%;
 }
+
 .Thumnails .thumbnails_block.over {
   background-color: rgba(190, 190, 190, 0.8);
   border: 2px dotted #dfd;
@@ -224,9 +232,9 @@ canvas.hidden {
   border: 1px solid #fdd;
   width: 150px;
   cursor: pointer;
-  background-repeat:no-repeat;
-  background-size:contain;
-  background-position:center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .thumbnail_block.over {
@@ -254,7 +262,7 @@ canvas.hidden {
   left: -30px;
 }
 
-.ProgressBar,.Preview {
+.ProgressBar, .Preview {
   top: 0;
   left: 0;
   position: fixed;
@@ -265,7 +273,7 @@ canvas.hidden {
   display: none;
 }
 
-.ProgressBar>div{
+.ProgressBar>div {
   position: fixed;
   top: 50%;
   left: 5%;
@@ -280,6 +288,7 @@ canvas.hidden {
 .ProgressBar>div .progeressTitle {
   padding-bottom: 5px;
 }
+
 .ProgressBar>div .progeressFrame {
   margin: 0 auto;
   width: 95%;
@@ -288,15 +297,18 @@ canvas.hidden {
   z-index: 1000;
   padding: 0px
 }
-.ProgressBar>div .progeressInfo{
+
+.ProgressBar>div .progeressInfo {
   padding-top: 5px;
 }
-.ProgressBar>div .progeressInfo>div{
-  width:70%;
+
+.ProgressBar>div .progeressInfo>div {
+  width: 70%;
   float: left;
 }
-.ProgressBar>div .progeressInfo>div.progeressPoints{
-  width:5em;
+
+.ProgressBar>div .progeressInfo>div.progeressPoints {
+  width: 5em;
 }
 
 .progeress {
@@ -306,6 +318,7 @@ canvas.hidden {
   height: 3em;
   background-color: rgb(120, 231, 194);
 }
+
 .Preview>div {
   position: fixed;
   top: 2%;
@@ -317,17 +330,19 @@ canvas.hidden {
   z-index: 1000;
   padding: 0px
 }
-.Preview>div img{
+
+.Preview>div img {
   max-width: 100%;
   max-height: 100%;
 }
-.Preview>div .previewLeft,.Preview>div .previewRight{
+
+.Preview>div .previewLeft, .Preview>div .previewRight {
   cursor: pointer;
   padding: 10px;
   background-color: rgba(95, 161, 212, 0.58);
-
 }
-.Preview>div .previewInfo{
+
+.Preview>div .previewInfo {
   font-size: 60%;
   padding: 10px;
   color: rgb(43, 176, 218)
@@ -336,12 +351,15 @@ canvas.hidden {
 .Preview>div .preview_dual {
   display: flex;
 }
-.Preview>div .preview_dual .previewImageFrame{
-  width:50%;
+
+.Preview>div .preview_dual .previewImageFrame {
+  width: 50%;
 }
-.Preview>div .preview_dual .previewImageFrame.dummy{
+
+.Preview>div .preview_dual .previewImageFrame.dummy {
   background-color: rgb(174, 181, 184);
 }
+
 .TitleSettings {
   background-color: rgb(159, 117, 242);
   padding: 0.5em;
@@ -386,18 +404,22 @@ canvas.hidden {
 .previewFrame {
   display: flex;
 }
-.previewFrame>div.button{
-  width:2em;
+
+.previewFrame>div.button {
+  width: 2em;
 }
-.previewFrame>div.button span.button{
-  display:block;
-  width:20px;
+
+.previewFrame>div.button span.button {
+  display: block;
+  width: 20px;
   text-align: center;
 }
-.previewFrame>div.button span.button.symbol{
+
+.previewFrame>div.button span.button.symbol {
   font-size: 150%;
 }
-.previewFrame>div.button span.button.text{
+
+.previewFrame>div.button span.button.text {
   font-size: 50%;
 }
 
@@ -455,16 +477,18 @@ canvas.hidden {
   margin: 0.0em auto;
   background-color: rgb(227, 209, 238);
 }
-.thumbnail_block .image_block{
+
+.thumbnail_block .image_block {
   height: 104px;
   width: 106px;
   margin: 0.0em auto;
   background-color: rgb(227, 209, 238);
   cursor: pointer;
-  background-repeat:no-repeat;
-  background-size:contain;
-  background-position:center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
+
 .MenuFrame {
   display: flex;
 }
@@ -474,112 +498,137 @@ canvas.hidden {
   cursor: pointer;
   padding: 5px 10px;
   margin: 2px 1px 0 1px;
-  border: 1px solid rgb(83, 122, 134);
-  border-bottom-width: 0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border: 2px solid rgb(83, 122, 134);
+  border-radius: 20px;
   background-color: rgb(170, 185, 210);
   color: rgb(222, 240, 222)
 }
-.ExportArea .ExportArea{
+
+.ExportArea .ExportArea {
   background-color: rgb(195, 240, 204);
-  border:1px solid rgb(87, 158, 17);
+  border: 1px solid rgb(87, 158, 17);
   padding: 1em;
   margin-bottom: 0.2em;
 }
-.ExportOrdrList .ExportOrdersListTitle{
-    background-color: rgb(162, 233, 176);
-    padding:10px;
-    margin-bottom: 0.3em;
+
+.ExportOrdrList .ExportOrdersListTitle {
+  background-color: rgb(162, 233, 176);
+  padding: 10px;
+  margin-bottom: 0.3em;
 }
-.ExportOrdrList .ExportOrdrListFrame{
-    background-color: rgb(222, 232, 219);
-    padding:15px;
-    border:1px solid rgb(87, 158, 17);
-    margin-bottom: 0.5em;
-}
-.ExportOrdrList .ExportOrdrs{
+
+.ExportOrdrList .ExportOrdrListFrame {
+  background-color: rgb(222, 232, 219);
+  padding: 15px;
+  border: 1px solid rgb(87, 158, 17);
   margin-bottom: 0.5em;
 }
-.ExportButtons{
+
+.ExportOrdrList .ExportOrdrs {
+  margin-bottom: 0.5em;
+}
+
+.ExportButtons {
   display: flex;
   flex-direction: row;
 }
-div.button>div.exportedState{
-  background-color:rgb(148, 222, 164);
+
+div.button>div.exportedState {
+  background-color: rgb(148, 222, 164);
   padding: 0.2em;
-  font-size:60%;
+  font-size: 60%;
 }
-.ExportButtons>div{
+
+.ExportButtons>div {
   display: flex;
-  width:200px;
-  padding:15px;
-  margin:2px;
-  border:1px solid rgb(87, 158, 17);
+  width: 200px;
+  padding: 15px;
+  margin: 2px;
+  border: 1px solid rgb(87, 158, 17);
   cursor: pointer;
   border-radius: 3px;
-      background-color: rgb(141, 233, 159);
+  background-color: rgb(141, 233, 159);
 }
-div.DownloadLastExportZipButtonFrame,div.DownloadLastExportPdfButtonFrame{
+
+div.DownloadLastExportZipButtonFrame, div.DownloadLastExportPdfButtonFrame {
   padding: 0em;
 }
-div.button.disable,div.button.enable{
-  background-color:rgb(104, 131, 116);
-  padding:1em;
+
+div.button.disable, div.button.enable {
+  background-color: rgb(104, 131, 116);
+  padding: 1em;
   margin: 0em;
-  width:100%;
+  width: 100%;
 }
-div.button.enable{
-  background-color:rgb(148, 219, 86);
+
+div.button.enable {
+  background-color: rgb(148, 219, 86);
 }
-.ExportArea .ExportAreaTitle{
-  margin-bottom:0.2em;
+
+.ExportArea .ExportAreaTitle {
+  margin-bottom: 0.2em;
   text-align: center;
   padding: 0.3em;
   font-weight: bold;
   background-color: rgb(151, 238, 143);
 }
-.ExportArea .ExportOrdrs>div{
-  margin:0.1em;
+
+.ExportArea .ExportOrdrs>div {
+  margin: 0.1em;
   padding: 0.4em;
   padding-left: 2em;
   border: 1px solid #aaa;
   cursor: pointer;
   background-color: rgb(232, 242, 229);
 }
-.ExportArea .ExportOrdrs>div:active{
+
+.ExportArea .ExportOrdrs>div:active {
   border: 1px solid #666;
   background-color: rgb(242, 252, 239);
 }
-.ExportArea .ExportOrdrs>div:hover{
+
+.ExportArea .ExportOrdrs>div:hover {
   border: 1px solid #999;
   background-color: rgb(237, 247, 234);
 }
-.ExportArea .ExportOrdrs>div.active{
+
+.ExportArea .ExportOrdrs>div.active {
   font-weight: bold;
-  color:rgb(223, 238, 218);
+  color: rgb(223, 238, 218);
   background-color: rgb(70, 187, 35);
 }
-.ExportArea .ExportOrdrs>label{
+
+.ExportArea .ExportOrdrs>label {
   display: inline-block;
   line-height: 2em;
-  margin:0.1em;
+  margin: 0.1em;
   padding: 0.4em 0.6em;
   border: 0px solid #aaa;
   cursor: pointer;
   background-color: rgb(232, 242, 229);
 }
-.ExportArea .ExportOrdrs>label:active{
+
+.ExportArea .ExportOrdrs>label:active {
   background-color: rgb(174, 223, 160);
 }
-.ExportArea .ExportOrdrs>label:hover{
+
+.ExportArea .ExportOrdrs>label:hover {
   background-color: rgb(237, 247, 234);
 }
-.TitleMng{
-  padding:10px;
-    background-color: rgb(237, 247, 234);
 
+.TitleMng {
+  padding: 10px;
+  background-color: rgb(237, 247, 234);
 }
-.display_none{
-  display:none;
+.TitleMng .name{
+  padding-bottom: 0.3em;
+  font-weight: bold;
+}
+.StorageMeter{
+  margin:0.5em;
+  padding:0.5em;
+  
+}
+.display_none {
+  display: none;
 }
