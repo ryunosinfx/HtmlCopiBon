@@ -37,6 +37,8 @@ export class PreviewProcessor {
           this.progress += progressUnit * 3;
           this.pbp.update(this.progress, 'load binaryEntity' + pageStep);
           const binaryEntity = await this.em.get(previewThumbnail);
+          binaryEntity.parent = pageEnitity;
+          binaryEntity.parentPk = pagePk;
           retPreviews.push(binaryEntity);
         } else {
           this.progress += progressUnit;
@@ -53,6 +55,8 @@ export class PreviewProcessor {
           // console.log(newData.data);
           // console.log(binaryEntity._ab);
           // alert(binaryEntity._ab);
+          binaryEntity.parent = pageEnitity;
+          binaryEntity.parentPk = pagePk;
           retPreviews.push(binaryEntity);
         }
       } else {
@@ -83,11 +87,14 @@ export class PreviewProcessor {
   //
   static getCratePageDataFunc() {
     return(pageNo, className, isRight, binaries, dummyClass) => {
+      const currentBinary = binaries[pageNo - 1];
       return {
         pageNo: pageNo,
+        parent:currentBinary?currentBinary.parent:null,
+        parentPk:currentBinary?currentBinary.parentPk:null,
         isDummy: className === dummyClass,
         isRight: isRight,
-        binary: binaries[pageNo - 1]
+        binary: currentBinary
       }
     }
   }
@@ -168,5 +175,17 @@ export class PreviewProcessor {
       }
     }
     return retFrames;
+  }
+
+  async updatePage(pk,key) {
+    const pageEntity = await this.em.Pages.get(pk);
+      const cratePageData = PreviewProcessor.getCratePageDataFunc();
+    if(pageEntity){
+      const value = pageEntity[key];
+       pageEntity[key] = !value;
+       await this.em.Pages.save(pageEntity);
+
+    }
+    return pageEntity;
   }
 }

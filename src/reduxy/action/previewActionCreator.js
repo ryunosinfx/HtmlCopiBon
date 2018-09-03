@@ -13,7 +13,13 @@ export class PreviewActionCreator {
   static creatBackAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("backPreview", targetView, data, storeKey);
   }
+  static creatUpdateAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("updateOnPreview", targetView, data, storeKey);
+  }
   static getStorePreviewKey(){
     return "previewCommand";
+  }
+  static getStoreUpdatePreviewKey(){
+    return "previewUpdateCommand";
   }
 }

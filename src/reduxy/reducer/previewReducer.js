@@ -14,13 +14,17 @@ export class PreviewReducer extends BaseReducer {
     this.previewCloseAction = PreviewActionCreator.creatCloseAction();
     this.previewNextAction = PreviewActionCreator.creatNextAction();
     this.previewBackAction = PreviewActionCreator.creatBackAction();
+    this.previewUpdateAction = PreviewActionCreator.creatUpdateAction();
     this.atatch(this.previewOpenAction);
     this.atatch(this.previewCloseAction);
     this.atatch(this.previewNextAction);
     this.atatch(this.previewBackAction);
+    this.atatch(this.previewUpdateAction);
     this.storeKey = PreviewActionCreator.getStorePreviewKey();
+    this.storeUpdateKey = PreviewActionCreator.getStoreUpdatePreviewKey();
     this.storeSettingKey = SettingActionCreator.getStoreKey();
     this.addInitializeKey(this.storeKey);
+    this.addInitializeKey(this.storeUpdateKey);
     this.addInitializeKey(this.storeSettingKey);
   }
   static register() {
@@ -55,6 +59,11 @@ export class PreviewReducer extends BaseReducer {
         isSingle: action.data.isSingle,
         nowSetNum: action.data.pageNo,
         type: this.previewBackAction.type
+      };
+    } else if (this.previewUpdateAction.type === action.type) {
+      store[this.storeUpdateKey] = {
+        pk: action.data.pk,
+        page:await this.pvp.updatePage(action.data.pk,action.data.key)
       };
     }
     return store;

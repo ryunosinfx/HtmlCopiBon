@@ -8,6 +8,8 @@ export class Pages extends BaseEntity{
     this.outputDualImage = null;
     this.thumbnail = null;
     this.baseImage = null;
+    this.isForceColor = false;
+    this.isNoCropping = false;
     this.createDate = Date.now();
     this.updateDate = Date.now();
     this.listing = 0;

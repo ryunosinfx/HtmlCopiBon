@@ -356,6 +356,43 @@ canvas.hidden {
   width: 50%;
 }
 
+.previewInfo .options {
+  display: flex;
+  margin-top: 0.2em;
+}
+.previewInfo .options>div {
+  width:10em;
+  padding: 0.2em;
+  cursor: pointer;
+  font-size: 0.7em;
+  color: rgb(29, 154, 114);
+}
+
+.previewInfo .options .checkForceColor.enable {
+  background-color: rgb(236, 145, 145);
+}
+.previewInfo .options .checkForceColor.disable {
+  background-color: rgb(241, 241, 241);
+}
+.previewInfo .options .checkNoCropping.enable {
+  background-color: rgb(233, 220, 134);
+}
+.previewInfo .options .checkNoCropping.disable {
+  background-color: rgb(241, 241, 241);
+}
+.previewInfo .options .checkForceColor.enable::after ,
+.previewInfo .options .checkNoCropping.enable::after {
+  content: "On";
+  color:black;
+}
+
+.previewInfo .options .checkForceColor.disable::after ,
+.previewInfo .options .checkNoCropping.disable::after {
+  content: "Off";
+  color:gray;
+}
+
+
 .Preview>div .preview_dual .previewImageFrame.dummy {
   background-color: rgb(174, 181, 184);
 }

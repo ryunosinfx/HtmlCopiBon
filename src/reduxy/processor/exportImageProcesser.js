@@ -290,7 +290,7 @@ export class ExportImageProcesser {
       height: targetSize.y
     };
     //console.log(setting);
-    const cratePageData = PreviewProcessor.getCratePageDataFunc();
+    // const cratePageData = PreviewProcessor.getCratePageDataFunc();
     const dummyClass = "dummy";
     // const shapedList = PreviewProcessor.buildPageFrames(setting, pages, cratePageData, dummyClass);
     const pairPages = {

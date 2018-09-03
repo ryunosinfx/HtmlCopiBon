@@ -17,6 +17,7 @@ export class Preview extends BaseView {
   constructor() {
     super("Preview", "Preview", true);
     this.storeKey = PreviewActionCreator.getStorePreviewKey();
+    this.storeUpdateKey = PreviewActionCreator.getStoreUpdatePreviewKey();
     this.previewOpenAction = PreviewActionCreator.creatOpenAction();
     this.previewCloseAction = PreviewActionCreator.creatCloseAction();
     this.previewNextAction = PreviewActionCreator.creatNextAction();
@@ -26,7 +27,7 @@ export class Preview extends BaseView {
     this.isSingle = true;
     this.classNameRight = "previeRight";
     this.classNameLeft = "previeLeft";
-    this.dummyClassName ="dummy";
+    this.dummyClassName = "dummy";
     this.closeActionType = this.previewCloseAction.type;
   }
   onAfterAttach(store, data) {
@@ -53,9 +54,21 @@ export class Preview extends BaseView {
   }
   async onViewShow(store, actionData) {
     const data = store[this.storeKey];
+    const dataUpdate = store[this.storeUpdateKey];
+    if (dataUpdate && this.list) {
+      const {page, pk} = dataUpdate;
+      for (let index in this.list) {
+        const pageData = this.list[index];
+        if (pageData.parentPk === pk) {
+          pageData.parent = page;
+          this.showPreview(this.list, this.isSingle, this.pageNo, this.isR2L);
+          break;
+        }
+      }
+    }
     if (data) {
       const {isSingle, nowSetNum, list, type, setting} = data;
-      if (isSingle!== undefined) {
+      if (isSingle !== undefined) {
         this.isSingle = isSingle;
       }
       if (setting) {
@@ -72,9 +85,9 @@ export class Preview extends BaseView {
       this.currentVnode.elm.style.display = 'block';
       const pageSetCount = this.list.length;
       this.isR2L = this.setting.pageDirection === "r2l";
-       // console.log(this.list)
+      // console.log(this.list)
       // alert(this.list+"/isR2L:"+isR2L);
-        // alert("list:"+this.list+"/isSingle:"+isSingle);
+      // alert("list:"+this.list+"/isSingle:"+isSingle);
       if (list) {
         const pageNo = 1;
         this.pageNo = pageNo;
@@ -101,30 +114,47 @@ export class Preview extends BaseView {
   }
   showPreview(list, isSingle, pageNo, isR2L) {
 
-    console.warn("showPreview isR2L:"+isR2L);
+    console.warn("showPreview isR2L:" + isR2L);
     const pageSet = list[pageNo - 1];
     let mainView = null;
     const leftText = isR2L
-    ? "Next"
-    : "Back";
+      ? "Next"
+      : "Back";
     const rightText = isR2L
-    ? "Back"
-    : "Next";
-    const left = div('', ['previewLeft',"button"], {
+      ? "Back"
+      : "Next";
+    const left = div('', [
+      'previewLeft', "button"
+    ], {
       on: {
         click: this.goNextOrBack(false)
       }
-    }, [span('',[leftText,"button","symbol"],"<"),span('',[leftText,"button","text"],leftText)]);
-    const right = div('', ['previewRight',"button"], {
+    }, [
+      span('', [
+        leftText, "button", "symbol"
+      ], "<"),
+      span('', [
+        leftText, "button", "text"
+      ], leftText)
+    ]);
+    const right = div('', [
+      'previewRight', "button"
+    ], {
       on: {
         click: this.goNextOrBack(true)
       }
-    }, [span('',[rightText,"button","symbol"],">"),span('',[rightText,"button","text"],rightText)]);
+    }, [
+      span('', [
+        rightText, "button", "symbol"
+      ], ">"),
+      span('', [
+        rightText, "button", "text"
+      ], rightText)
+    ]);
     if (isSingle) {
       // console.log(pageSet)
       // alert(pageSet+"/pageNo:"+pageNo);
-      const binary = pageSet.binary;
-      const imgVnode = this.buildImageArea(binary,pageNo,null);
+      const imgVnode = this.buildImageArea(pageSet, pageNo, null);
       //alert("isSingle:"+isSingle+"/pageNo:"+pageNo+"/dataUri:"+dataUri);
       mainView = div('', ['preview_single'], {
         style: {
@@ -137,16 +167,18 @@ export class Preview extends BaseView {
     } else {
       // console.log(list);
       // alert("AAAlist:"+list+"/isSingle:"+isSingle);
-      const lNo = (pageNo-1) * 2 + (
+      const lNo = (pageNo - 1) * 2 + (
         isR2L
         ? 1
         : 0);
-      const rNo = (pageNo-1) * 2 + (
+      const rNo = (pageNo - 1) * 2 + (
         isR2L
         ? 0
         : 1);
-      const imgVnodeL = this.buildImageArea(pageSet[0].binary,lNo,false);
-      const imgVnodeR = this.buildImageArea(pageSet[1].binary,rNo,true);
+      const one = pageSet[0];
+      const two = pageSet[1];
+      const imgVnodeL = this.buildImageArea(one, lNo, false);
+      const imgVnodeR = this.buildImageArea(two, rNo, true);
       mainView = div('', ['preview_dual'], {
         style: {
           width: "100%"
@@ -160,27 +192,74 @@ export class Preview extends BaseView {
       style: {}
     }, [left, mainView, right]));
   }
-  buildImageArea(binalyEnitiy, pageNo, isRight) {
+  buildImageArea(pageData, pageNo, isRight) {
+    const pageEnitiy = pageData.parent;
+    // alert(JSON.stringify(pageEnitiy));
+    const parentPk = pageData.parentPk;
+    const binalyEnitiy = pageData.binary;
+    const isForceColor = pageEnitiy?pageEnitiy.isForceColor:null;
+    const isNoCropping = pageEnitiy?pageEnitiy.isNoCropping:null;
+    const isForceColorClass = isForceColor
+      ? "enable"
+      : "disable";
+    const isNoCroppingClass = isNoCropping
+      ? "enable"
+      : "disable";
     const currentClass = isRight === null
       ? ""
       : (
         isRight
         ? this.classNameRight
         : this.classNameLeft);
-    if(binalyEnitiy){
+    if (binalyEnitiy) {
       const dataUri = bc.arrayBuffer2DataURI(binalyEnitiy._ab);
       // console.log(dataUri);
       const imgVnode = img(binalyEnitiy.pk + "_preview", "preview_" + pageNo, "", dataUri, {});
-      const info = div('', ['previewInfo'], {}, "pageNo:" + pageNo);
+      const pageNoText = div('', ["pageNo"], {}, "pageNo:" + pageNo);
+      const checkForceColor = div('', [
+        "checkForceColor", isForceColorClass
+      ], {
+        on: {
+          click: this.onCheckUpdate(parentPk, "isForceColor")
+        }
+      }, "isForceColor");
+      const checkNoCropping = div('', [
+        "checkNoCropping", isNoCroppingClass
+      ], {
+        on: {
+          click: this.onCheckUpdate(parentPk, "isNoCropping")
+        }
+      }, "isNoCropping:");
+      const info = div('', ['previewInfo'], {}, [pageNoText,div('',["options"],[checkForceColor,checkNoCropping])]);
       return div('', ['previewImageFrame'], {}, [info, imgVnode]);
-    }else{
-      const isDummy =  binalyEnitiy === undefined;
-      const noimageMsg =isDummy ?"no Page":"no image set";
-      const dummyClass = isDummy? this.dummyClassName :"";
-      const pageNoString = isDummy? "----":"pageNo:" + pageNo;
+    } else {
+      const isDummy = binalyEnitiy === undefined;
+      const noimageMsg = isDummy
+        ? "no Page"
+        : "no image set";
+      const dummyClass = isDummy
+        ? this.dummyClassName
+        : "";
+      const pageNoString = isDummy
+        ? "----"
+        : "pageNo:" + pageNo;
       const imgVnode = div('', ['previewInfo'], {}, noimageMsg);
-      const info = div('', ['previewInfo'], {},pageNoString );
-      return div('', ['previewImageFrame',dummyClass], {}, [info, imgVnode]);
+      const info = div('', ['previewInfo'], {}, pageNoString);
+      return div('', [
+        'previewImageFrame', dummyClass
+      ], {}, [info, imgVnode]);
+    }
+  }
+  onCheckUpdate(pk, key) {
+    return(event) => {
+      const action = PreviewActionCreator.creatUpdateAction(this, {
+        pk: pk,
+        key: key
+      });
+      // alert("beClose");
+      this.dispatch(action);
+      event.stopPropagation();
+      return false;
     }
   }
   beClose() {
@@ -200,15 +279,15 @@ export class Preview extends BaseView {
   }
   goNextOrBack(isRight) {
     return(event) => {
-      const action = ((isRight && this.isR2L)|| (!isRight && !this.isR2L))?PreviewActionCreator.creatBackAction(this, {
-          isSingle: this.isSingle,
-          pageNo: this.pageNo
-        }):
-        PreviewActionCreator.creatNextAction(this, {
+      const action = ((isRight && this.isR2L) || (!isRight && !this.isR2L))
+        ? PreviewActionCreator.creatBackAction(this, {
           isSingle: this.isSingle,
           pageNo: this.pageNo
         })
-        ;
+        : PreviewActionCreator.creatNextAction(this, {
+          isSingle: this.isSingle,
+          pageNo: this.pageNo
+        });
       this.dispatch(action);
       // alert("goNext");
       event.stopPropagation();
