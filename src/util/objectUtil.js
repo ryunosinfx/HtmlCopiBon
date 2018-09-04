@@ -105,4 +105,31 @@ export class ObjectUtil {
     }
     return obj;
   }
+  static calcSize(target){
+    if(!target){
+      return 1;
+    }
+    let size = 0;
+    let delimiterSize = 0;
+    for(let index in target){
+      const indexSize = (index+"").length;
+      const value = target[index];
+      if(value.byteLength && value.byteLength > 0){
+        const valuseSize = value.byteLength;
+        size+= (indexSize+valuseSize+1+delimiterSize)
+      }else if (typeof value === "function"){
+        continu;
+      }else if (typeof value === "number"){
+        size+= (indexSize+4+1+delimiterSize)
+      }else if (typeof value === "string"){
+        const valuseSize = value.length;
+        size+= (indexSize+valuseSize+1+delimiterSize)
+      }else if (typeof value === "object" && Array.isArray(value)){
+      }else if (typeof value === "object"){
+
+      }
+      delimiterSize=1;
+    }
+    return size;
+  }
 }

@@ -42,4 +42,8 @@ export class BaseEntity {
     this.exclude(cloned);
     return cloned;
   }
+  calcSize(){
+    let size = 0;
+    return size;
+  }
 }
