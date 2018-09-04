@@ -25,6 +25,18 @@ export class ImageResizer {
           0);
     }
   }
+  resizeAsLanczos(iamegData, distImage) {
+    const {
+      data,
+      width,
+      height
+    } = iamegData;
+    const distBitmap = distImage.data;
+    const newWidth = distImage.width;
+    const newHeight = distImage.height;
+    const newData = new Uint8ClampedArray(this.resizeLanczos(data, width, height, newWidth, newHeight, distBitmap));
+    return distImage
+  }
   resizeAsByCubic(iamegData, distImage) {
     const {
       data,

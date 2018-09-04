@@ -22,6 +22,7 @@ export class ExportOrderList extends BaseView {
     this.checkboxIsGrascale = "checkboxIsGrascaleAt" + this.Id;
     this.selectBoxDpiName = "selectBoxDpiNameAt" + this.Id;
     this.checkboxIsMaxSize10M = "checkboxIsMaxSize10MAt" + this.Id;
+    this.checkboxIsLanczose = "checkboxIsLanczoseAt" + this.Id;
   }
 
   render(store, actionData) {
@@ -31,7 +32,7 @@ export class ExportOrderList extends BaseView {
     const inputClass = "ExportOrdersOptions";
     const checkboxIsGrascale = label("",[inputClass],[checkbox(this.checkboxIsGrascale, [""],{
       on:{change:this.exportOrderRow.getSelectOrder()}
-    },"" ),"isGrascale?"]);
+    },"" ),"isGrayscale?"]);
     const dpiList = {};
     let firstKey = "";
     for (let dpiName in dpis) {
@@ -45,7 +46,10 @@ export class ExportOrderList extends BaseView {
     const checkboxIsMaxSize10M =  label("",[inputClass],[checkbox(this.checkboxIsMaxSize10M, [""],{
       on:{change:this.exportOrderRow.getSelectOrder()}
     }, ""),"isMaxSize10MB/Paper?"]);
-    const exportOptions = div("", [inputFrameClass], ["Options:",selectBoxDpiName, checkboxIsGrascale, checkboxIsMaxSize10M]);
+    const checkboxIsLanczose =  label("",[inputClass],[checkbox(this.checkboxIsLanczose, [""],{
+      on:{change:this.exportOrderRow.getSelectOrder()}
+    }, ""),"isLanczose Or ByCubic?"]);
+    const exportOptions = div("", [inputFrameClass], ["Options:",selectBoxDpiName, checkboxIsGrascale, checkboxIsMaxSize10M,checkboxIsLanczose]);
     ////
     const list = div(this.listFrameId, [inputFrameClass], this.buildRows());
     return div(this.listId, [this.id + "Frame"], [name, list, exportOptions]);
@@ -62,9 +66,10 @@ export class ExportOrderList extends BaseView {
   }
   getCurrentOptions() {
     const result = {
-      isGrascale: document.getElementById(this.checkboxIsGrascale).checked,
+      isGrayscale: document.getElementById(this.checkboxIsGrascale).checked,
       dpiName: document.getElementById(this.selectBoxDpiName).value,
-      isMaxSize10M: document.getElementById(this.checkboxIsMaxSize10M).checked
+      isMaxSize10M: document.getElementById(this.checkboxIsMaxSize10M).checked,
+      isLanczose: document.getElementById(this.checkboxIsLanczose).checked
     };
     return result;
 

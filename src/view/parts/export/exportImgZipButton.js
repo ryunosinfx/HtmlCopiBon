@@ -58,8 +58,9 @@ export class ExportImgZipButton extends BaseView {
         basePaper:selectOrder.basePaper,
         orderName:selectOrder.orderName,
         dpiName:selectOptions.dpiName,
-        isGrascale:selectOptions.isGrascale,
-        isMaxSize10M:selectOptions.isMaxSize10M
+        isGrayscale:selectOptions.isGrayscale,
+        isMaxSize10M:selectOptions.isMaxSize10M,
+        isLanczose:selectOptions.isLanczose
       }
     }
   }

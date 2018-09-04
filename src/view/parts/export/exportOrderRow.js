@@ -20,7 +20,7 @@ export class ExportOrderRow extends BaseView {
     this.parent = parent;
     this.selectOrder = null;
     this.ordersMap = {};
-    this.orderOptions={isGrascale:false,dpiName:"dpi72",isMaxSize10M:false}
+    this.orderOptions={isGrayscale:false,dpiName:"dpi72",isMaxSize10M:false,isLanczose:false}
     this.activeClassName = "active";
   }
 

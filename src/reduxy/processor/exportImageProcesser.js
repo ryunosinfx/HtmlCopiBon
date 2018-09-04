@@ -61,15 +61,16 @@ export class ExportImageProcesser {
     const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
     const clopOffset = this.paper.calcClopOffsetPixcel(order.basePaper, targetDpi);
     const frameSizeMm = this.paper.getPaperFrameSizeMm(order.basePaper);
-    const isGrascale = order.isGrascale;
+    const isGrayscale = order.isGrayscale;
     const isMaxSize10M = order.isMaxSize10M;
+    const isLanczose = order.isLanczose;
     const frameSize = {
       x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
       y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
     };
     this.progress = 3;
     this.pbp.update(this.progress, 'expandAndCropSize');
-    await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale);
+    await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose);
     //console.log(pages)
     //console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
     const isPageDirectionR2L = setting.pageDirection === "r2l";
@@ -90,7 +91,7 @@ export class ExportImageProcesser {
     // console.log(ab);
     // plainData1
     //11 save zip
-    this.progress = 80;
+    this.progress = 85;
     this.pbp.update(this.progress, 'start exoprtAsZip');
     const compressed = await this.exoprtAsZip(pages);
     const exports = await this.tm.getExports();
@@ -122,7 +123,7 @@ export class ExportImageProcesser {
     this.pbp.comple(this.progress);
     return exports;
   }
-  async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrascale) {
+  async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose) {
     //console.log("--targetSize--isGrascale:" + isGrascale)
     //console.log(targetSize)
     const expandedPaper = {
@@ -205,7 +206,7 @@ export class ExportImageProcesser {
 
         this.progress += progressUnit;
         this.pbp.update(this.progress, 'maege Replace origin to whitePaper' + pageStep);
-        if (isGrascale) {
+        if (isGrayscale && !pageEntity.isForceColor) {
           this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
         } else {
           this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
@@ -213,11 +214,26 @@ export class ExportImageProcesser {
         //console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
         this.progress += progressUnit;
         this.pbp.update(this.progress, 'expand resizeAsByCubic' + pageStep);
-        this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
-        //console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
-        this.progress += progressUnit;
-        this.pbp.update(this.progress, 'crop!' + pageStep);
-        this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+        if (pageEntity.isNoCropping) {
+          if (isLanczose) {
+            this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper);
+          } else {
+            this.imageResizer.resizeAsByCubic(whitePaper, cropedPaper);
+          }
+          //console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
+          this.progress += progressUnit;
+          this.pbp.update(this.progress, 'No crop!' + pageStep);
+        } else {
+          if (isLanczose) {
+            this.imageResizer.resizeAsLanczos(whitePaper, expandedPaper);
+          } else {
+            this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
+          }
+          //console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
+          this.progress += progressUnit;
+          this.pbp.update(this.progress, 'crop!' + pageStep);
+          this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+        }
         this.progress += progressUnit;
         this.pbp.update(this.progress, 'get ArrayBuffer From ImageBitmapData' + pageStep);
         currentDataAb = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
