@@ -249,7 +249,7 @@ canvas.hidden {
   margin: auto;
 }
 .thumbnail_block div.page_block {
-  height:105px;
+  height:110px;
 }
 .thumbnail_block div.options_block {
   height:5px;
@@ -525,7 +525,7 @@ canvas.hidden {
   height: 150px;
   font-size: 1em;
   margin: 0.1em auto;
-  padding: 0.25em 1em;
+  padding: 0.1em 1em;
 }
 
 .PageFrame .Page {
@@ -541,14 +541,14 @@ canvas.hidden {
 }
 
 .PageFrame .Page .thumbnail_block {
-  height: 104px;
+  height: 110px;
   width: 106px;
   margin: 0.0em auto;
   background-color: rgb(227, 209, 238);
 }
 
 .thumbnail_block .image_block {
-  height: 104px;
+  height: 110px;
   width: 106px;
   margin: 0.0em auto;
   background-color: rgb(227, 209, 238);

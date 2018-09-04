@@ -60,12 +60,28 @@ export class Preview extends BaseView {
       const {page, pk} = dataUpdate;
       for (let index in this.list) {
         const pageData = this.list[index];
-        if (pageData.parentPk === pk) {
-          pageData.parent = page;
-          this.showPreview(this.list, this.isSingle, this.pageNo, this.isR2L);
-          break;
+        if(Array.isArray(pageData)){
+          const one = pageData[0];
+            if (one.parentPk === pk) {
+              one.parent = page;
+              this.showPreview(this.list, this.isSingle, this.pageNo, this.isR2L);
+              break;
+            }
+          const two = pageData[1];
+            if (two.parentPk === pk) {
+              two.parent = page;
+              this.showPreview(this.list, this.isSingle, this.pageNo, this.isR2L);
+              break;
+            }
+        }else{
+          if (pageData.parentPk === pk) {
+            pageData.parent = page;
+            this.showPreview(this.list, this.isSingle, this.pageNo, this.isR2L);
+            break;
+          }
         }
       }
+
     }
     if (data) {
       const {isSingle, nowSetNum, list, type, setting} = data;
@@ -255,7 +271,7 @@ export class Preview extends BaseView {
   onCheckUpdate(key,isRight) {
     return(event) => {
       const action = PreviewActionCreator.creatUpdateAction(this, {
-        pk: pk,
+        pk: isRight?this.parentPkRight:this.parentPkLeft,
         key: key
       });
       // alert("beClose");
