@@ -190,12 +190,18 @@ export class PageImage extends BaseView {
     }
     const src = this.thumbnail
       ? this.thumbnail.src
-      : "aaaaaaaaaaaaaaaaaaa";
+      : null;
     const imageBg = !src?{}:{
       "background-image":"url("+src+")"
     };
     //console.log("★A binaryEntity 01"+this.id+"/src:"+src)
     //const imgVnode = img(this.pk + "_page", [""], "", src, {});
+    const enable = 'enable'
+    const disable = 'disable'
+    const pageBlock = div("", ["page_block"], []);
+    const checkNoCropping = div("", ["checkNoCropping",(pageEntity.isNoCropping?enable:disable)], "isNoCropping");
+    const checkForceColor = div("", ["checkForceColor",(pageEntity.isForceColor?enable:disable)], "isForceColor");
+    const optionsBlock = div("", ["options_block"], [checkForceColor,checkNoCropping]);
     const rowVnode = div(this.id, ["thumbnail_block"], {
       on: {
         dragstart: this.handleDragStart(src),
@@ -214,7 +220,7 @@ export class PageImage extends BaseView {
       props: {
         "draggable": "true"
       }
-    }, [div("", ["page_block"], [])]);
+    }, [pageBlock,optionsBlock]);
     parent.prePatch("#" + this.id, rowVnode);
     return rowVnode;
   }

@@ -37,7 +37,7 @@ div.header {
 }
 
 div.title {
-  font-size: 2em;
+  font-size: 2em;thumbnail_block
   font-weight: bold;
   background-color: rgb(255, 226, 251);
   padding: 0.5em;
@@ -247,6 +247,38 @@ canvas.hidden {
   display: flex;
   height: auto;
   margin: auto;
+}
+.thumbnail_block div.page_block {
+  height:105px;
+}
+.thumbnail_block div.options_block {
+  height:5px;
+  font-size: 0.2em;
+  padding: 0.2em;
+}
+
+.thumbnail_block div.options_block .checkForceColor.enable {
+  background-color: rgb(236, 145, 145);
+}
+.thumbnail_block div.options_block .checkForceColor.disable {
+  background-color: rgb(241, 241, 241);
+}
+.thumbnail_block div.options_block .checkNoCropping.enable {
+  background-color: rgb(233, 220, 134);
+}
+.thumbnail_block div.options_block .checkNoCropping.disable {
+  background-color: rgb(241, 241, 241);
+}
+.thumbnail_block div.options_block .checkForceColor.enable::after ,
+.thumbnail_block div.options_block .checkNoCropping.enable::after {
+  content: "On";
+  color:black;
+}
+
+.thumbnail_block div.options_block .checkForceColor.disable::after ,
+.thumbnail_block div.options_block .checkNoCropping.disable::after {
+  content: "Off";
+  color:gray;
 }
 
 .thumbnail_text {

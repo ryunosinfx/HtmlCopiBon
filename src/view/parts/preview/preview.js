@@ -12,6 +12,7 @@ import {
   label
 } from "../../../util/reactive/base/vtags";
 import {PreviewReducer} from '../../../reduxy/reducer/previewReducer'
+import {ImageActionCreator} from '../../../reduxy/action/imageActionCreator'
 import {PreviewActionCreator} from '../../../reduxy/action/previewActionCreator'
 export class Preview extends BaseView {
   constructor() {
@@ -195,7 +196,8 @@ export class Preview extends BaseView {
   buildImageArea(pageData, pageNo, isRight) {
     const pageEnitiy = pageData.parent;
     // alert(JSON.stringify(pageEnitiy));
-    const parentPk = pageData.parentPk;
+    this.parentPkRight = isRight?pageData.parentPk:this.parentPkRight;
+    this.parentPkLeft = !isRight?pageData.parentPk:this.parentPkLeft;
     const binalyEnitiy = pageData.binary;
     const isForceColor = pageEnitiy?pageEnitiy.isForceColor:null;
     const isNoCropping = pageEnitiy?pageEnitiy.isNoCropping:null;
@@ -220,14 +222,14 @@ export class Preview extends BaseView {
         "checkForceColor", isForceColorClass
       ], {
         on: {
-          click: this.onCheckUpdate(parentPk, "isForceColor")
+          click: this.onCheckUpdate( "isForceColor",isRight)
         }
       }, "isForceColor");
       const checkNoCropping = div('', [
         "checkNoCropping", isNoCroppingClass
       ], {
         on: {
-          click: this.onCheckUpdate(parentPk, "isNoCropping")
+          click: this.onCheckUpdate("isNoCropping",isRight)
         }
       }, "isNoCropping:");
       const info = div('', ['previewInfo'], {}, [pageNoText,div('',["options"],[checkForceColor,checkNoCropping])]);
@@ -250,7 +252,7 @@ export class Preview extends BaseView {
       ], {}, [info, imgVnode]);
     }
   }
-  onCheckUpdate(pk, key) {
+  onCheckUpdate(key,isRight) {
     return(event) => {
       const action = PreviewActionCreator.creatUpdateAction(this, {
         pk: pk,
@@ -263,10 +265,14 @@ export class Preview extends BaseView {
     }
   }
   beClose() {
-    return(event) => {
-      const action = PreviewActionCreator.creatCloseAction(this, {isSingle: this.isSingle});
+    return (event) => {
+      const action = PreviewActionCreator.creatCloseAction(this, {
+        isSingle: this.isSingle
+      });
       // alert("beClose");
       this.dispatch(action);
+      const actionReload = ImageActionCreator.creatLoadImagesAction(this, {});
+      this.dispatch(actionReload);
       event.stopPropagation();
       return false;
     }
