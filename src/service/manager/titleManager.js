@@ -25,6 +25,9 @@ export class TitleManager {
   async loadCurrent() {
     return this.currentTitle;
   }
+  async isExist(titleId){
+    return !!await this.em.Title.get(titleId);
+  }
   async load(titleId = defaultTitle) {
     if (this.currentTitle && this.currentTitle.getPk() === titleId) {
       return this.currentTitle;
@@ -140,6 +143,4 @@ export class TitleManager {
     const title = await this.loadCurrent();
     return await this.im.updateImagesListing(title.images,newList);
   }
-  async exportPDF() {}
-  async exportZip() {}
 }
