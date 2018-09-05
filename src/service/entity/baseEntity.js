@@ -1,4 +1,5 @@
 import {ObjectUtil} from "../../util/objectUtil";
+const refcols=[];
 export class BaseEntity {
   constructor(entitiyName = "BaseEntity", pk = "oid") {
     this.pk = pk;
@@ -45,5 +46,8 @@ export class BaseEntity {
   calcSize(){
     let size = 0;
     return size;
+  }
+  getfCols(){
+    return refcols;
   }
 }

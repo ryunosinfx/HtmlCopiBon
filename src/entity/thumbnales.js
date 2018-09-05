@@ -1,4 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
+const refcols = ['binary']
 export class Thumbnales extends BaseEntity{
   constructor() {
     super("Thumbnales");
@@ -10,5 +11,8 @@ export class Thumbnales extends BaseEntity{
     this.createDate = Date.now();
     this.updateDate = Date.now();
     this.listing = 0;
+  }
+  getfCols(){
+    return refcols;
   }
 }

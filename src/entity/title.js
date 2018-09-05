@@ -1,4 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
+const refcols = ['images','setting','series','pages','outputsPars','exports']
 export class Title extends BaseEntity {
   constructor(titleId, titlePrefix, name) {
     super("Title");
@@ -22,6 +23,9 @@ export class Title extends BaseEntity {
     this.updateDate = Date.now();
     this.listing = 0;
     //console.log(this);
+  }
+  getfCols(){
+    return refcols;
   }
 
 }

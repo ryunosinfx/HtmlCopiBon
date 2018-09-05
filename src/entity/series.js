@@ -1,4 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
+const refcols = ['target']
 export class Series extends BaseEntity{
   constructor(name) {
     super("Series");
@@ -7,5 +8,8 @@ export class Series extends BaseEntity{
     this.no="";
     this.date="";
     this.pageNo=0;
+  }
+  getfCols(){
+    return refcols;
   }
 }

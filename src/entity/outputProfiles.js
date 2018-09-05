@@ -1,4 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
+const refcols = []
 export class OutputProfiles extends BaseEntity {
   constructor(id, prefix, name) {
     super("OutputProfiles");
@@ -11,6 +12,9 @@ export class OutputProfiles extends BaseEntity {
     this.updateDate = Date.now();
     this.listing = 0;
     //console.log(this);
+  }
+  getfCols(){
+    return refcols;
   }
 
 }

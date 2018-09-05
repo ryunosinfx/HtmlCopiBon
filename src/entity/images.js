@@ -1,4 +1,5 @@
 import {BaseEntity} from "../service/entity/baseEntity";
+const refcols = ['binary','thumbnail']
 export class Images extends BaseEntity {
   constructor() {
     super("Images");
@@ -12,5 +13,8 @@ export class Images extends BaseEntity {
     this.createDate = Date.now();
     this.updateDate = Date.now();
     this.listing = 0;
+  }
+  getfCols(){
+    return refcols;
   }
 }

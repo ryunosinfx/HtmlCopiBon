@@ -27,13 +27,13 @@ export class ObjectUtil {
     return JSON.parse(JSON.stringify(obj));
   }
   static simpleDeepClone(obj, newObj, count = 0) {
-    const newCount = count+1;
-    const output = newObj
-      ? newObj
-      : Array.isArray(obj)
-        ? []
-        : {};
-    if(newCount>10){
+    const newCount = count + 1;
+    const output = newObj ?
+      newObj :
+      Array.isArray(obj) ?
+      [] :
+      {};
+    if (newCount > 10) {
       console.log(obj);
       console.log(newCount);
       return output;
@@ -48,7 +48,7 @@ export class ObjectUtil {
             break;
           }
         }
-        output[key] = ObjectUtil.simpleDeepClone(value, baseType,newCount);
+        output[key] = ObjectUtil.simpleDeepClone(value, baseType, newCount);
       } else {
         try {
           output[key] = value;
@@ -105,30 +105,50 @@ export class ObjectUtil {
     }
     return obj;
   }
-  static calcSize(target){
-    if(!target){
+
+  static recalcSize(value, indexSize = 0, delimiterSize = 0) {
+    let size = 0;
+
+    if (!value) {
+      return 1;
+    } else if (value.byteLength && value.byteLength > 0) {
+      const valuseSize = value.byteLength;
+      size += (indexSize + valuseSize + 1 + delimiterSize)
+    } else if (typeof value === "function") {
+      continu;
+    } else if (typeof value === "number") {
+      size += (indexSize + 4 + 1 + delimiterSize)
+    } else if (typeof value === "string") {
+      const valuseSize = value.length;
+      size += (indexSize + valuseSize + 1 + delimiterSize)
+    } else if (typeof value === "object" && Array.isArray(value)) {
+      let tempDerimiterSie = 0
+      size += 2 + delimiterSize;
+      for (let i in value) {
+        const arrayValue = value[i];
+        const itemSize = ObjectUtil.recalcSize(arrayValue);
+        size += itemSize + tempDerimiterSie;
+        tempDerimiterSie = 1;
+      }
+      size += (indexSize + valuseSize + 1 + delimiterSize)
+    } else if (typeof value === "object") {
+      const itemSize = ObjectUtil.calcSize(value);
+        size += (indexSize + itemSize + 1 + delimiterSize)
+    }
+    return size;
+
+  }
+  static calcSize(target) {
+    if (!target) {
       return 1;
     }
     let size = 0;
     let delimiterSize = 0;
-    for(let index in target){
-      const indexSize = (index+"").length;
+    for (let index in target) {
+      const indexSize = (index + "").length;
       const value = target[index];
-      if(value.byteLength && value.byteLength > 0){
-        const valuseSize = value.byteLength;
-        size+= (indexSize+valuseSize+1+delimiterSize)
-      }else if (typeof value === "function"){
-        continu;
-      }else if (typeof value === "number"){
-        size+= (indexSize+4+1+delimiterSize)
-      }else if (typeof value === "string"){
-        const valuseSize = value.length;
-        size+= (indexSize+valuseSize+1+delimiterSize)
-      }else if (typeof value === "object" && Array.isArray(value)){
-      }else if (typeof value === "object"){
-
-      }
-      delimiterSize=1;
+      size += ObjectUtil.recalcSize(value, indexSize, delimiterSize)
+      delimiterSize = 1;
     }
     return size;
   }
