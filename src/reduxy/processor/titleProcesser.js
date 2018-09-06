@@ -16,7 +16,8 @@ export class TitleProcesser {
       title.size = size;
       this.totalSize += size;
     }
-    return titles;
+
+    return {list:titles,totalSize:this.totalSize };
   }
   getTotalSum() {
     return this.totalSize;
@@ -38,7 +39,7 @@ export class TitleProcesser {
     for (let title of titles) {
       await this.removeDescendant(title);
     }
-    return await this.tm.loadTitleList();
+    return await this.loadAll();
   }
   async removeDescendant(target) {
     if (!target) {
