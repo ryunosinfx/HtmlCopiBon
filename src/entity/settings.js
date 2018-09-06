@@ -12,7 +12,7 @@ export class Settings extends BaseEntity{
     this.updateDate = Date.now();
     this.listing = 0;
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 }

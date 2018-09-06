@@ -13,7 +13,7 @@ export class OutputProfiles extends BaseEntity {
     this.listing = 0;
     //console.log(this);
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 

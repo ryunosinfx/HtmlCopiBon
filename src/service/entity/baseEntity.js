@@ -47,7 +47,7 @@ export class BaseEntity {
     let size = 0;
     return size;
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 }

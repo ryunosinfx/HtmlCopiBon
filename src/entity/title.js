@@ -24,7 +24,7 @@ export class Title extends BaseEntity {
     this.listing = 0;
     //console.log(this);
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 

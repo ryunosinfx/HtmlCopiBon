@@ -9,7 +9,7 @@ export class Series extends BaseEntity{
     this.date="";
     this.pageNo=0;
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 }

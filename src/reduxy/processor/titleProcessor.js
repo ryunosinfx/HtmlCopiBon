@@ -1,7 +1,7 @@
-import {TitleActionCreator} from "../action/ｔitleActionCreator"
+import {TitleActionCreator} from "../action/titleActionCreator"
 import {ActionDispatcher} from "../../util/reactive/actionDispatcher";
 import {ObjectUtil} from "../../util/objectUtil";
-export class TitleProcesser {
+export class TitleProcessor {
   constructor(em, tm) {
     this.em = em;
     this.tm = tm;
@@ -17,7 +17,7 @@ export class TitleProcesser {
       this.totalSize += size;
     }
 
-    return {list:titles,totalSize:this.totalSize };
+    return {list: titles, totalSize: this.totalSize};
   }
   getTotalSum() {
     return this.totalSize;
@@ -27,10 +27,25 @@ export class TitleProcesser {
       return 1;
     }
     let size = ObjectUtil.calcSize(target);
-    const refCols = title.getRefCols();
+    const refCols = target.getRefCols();
     for (let colName of refCols) {
-      const entity = await this.em.get(refCols);
-      size += await this.getSizes(entity);
+      const colValue = target[colName];
+      if (!colValue) {
+        continue;
+      }
+      if (Array.isArray(colValue)) {
+        for (let pk of colValue) {
+          if(!pk){
+            size +=2;
+            continue;
+          }
+          const entity = await this.em.get(pk);
+          size += await this.getSizes(entity);
+        }
+      } else if (typeof colValue === "string") {
+        const entity = await this.em.get(colValue);
+        size += await this.getSizes(entity);
+      }
     }
     return size;
   }
@@ -61,6 +76,9 @@ export class TitleProcesser {
     }
   }
   async removeExecute(pk) {
+    if(!pk){
+      return this.tm.loadCurrent();
+    }
     const entity = await this.em.get(pk);
     if (entity) {
       await this.removeDescendant(entity);
@@ -74,7 +92,7 @@ export class TitleProcesser {
   }
   async create(titleId, titlePrefix, name) {
     if (await this.tm.isExist(titleId)) {
-      return async this.tm.load(titleId) ;
+      return await this.tm.load(titleId);
     }
     return await this.tm.createTitle(titleId, titlePrefix, name);
   }

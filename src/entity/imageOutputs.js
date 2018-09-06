@@ -13,7 +13,7 @@ export class ImageOutputs extends BaseEntity {
     this.updateDate = Date.now();
     this.listing = 0;
   }
-  getfCols(){
+  getRefCols(){
     return refcols;
   }
 }

@@ -15,9 +15,9 @@ import {TitleViewReducer} from '../../../reduxy/reducer/titleViewReducer'
 import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator'
 export class StorageInitializer extends BaseView {
   constructor() {
+    super("StorageInitializer", "StorageInitializer");
     this.storeKey = TitleActionCreator.getStoreKey();
     this.storeCurrentKey = TitleActionCreator.getStoreCurrentKey();
-    super("StorageInitializer", "StorageInitializer");
   }
 
   render(store, actionData) {
@@ -32,7 +32,6 @@ export class StorageInitializer extends BaseView {
 
   async onViewShow(store, actionData) {
     if(store[this.storeKey]){
-      alert('aaaaa');
       const {list,totalSize}=store[this.storeKey];
 
     }else if(store[this.storeCurrentKey]){

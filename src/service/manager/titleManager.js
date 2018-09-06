@@ -26,9 +26,12 @@ export class TitleManager {
     return this.currentTitle;
   }
   async isExist(titleId){
-    return !!await this.em.Title.get(titleId);
+    return titleId?!!await this.em.Title.get(titleId):false;
   }
   async load(titleId = defaultTitle) {
+    if(!titleId){
+      return null;
+    }
     if (this.currentTitle && this.currentTitle.getPk() === titleId) {
       return this.currentTitle;
     }
@@ -56,7 +59,7 @@ export class TitleManager {
     }
   }
   async loadTitleList() {
-    return await this.em.Title.loadAllData();;
+    return await this.em.Title.loadAll();
   }
   async saveTitle(title) {
     if (title) {

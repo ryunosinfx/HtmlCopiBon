@@ -130,7 +130,7 @@ export class ObjectUtil {
         size += itemSize + tempDerimiterSie;
         tempDerimiterSie = 1;
       }
-      size += (indexSize + valuseSize + 1 + delimiterSize)
+      size += (indexSize + 1 + delimiterSize)
     } else if (typeof value === "object") {
       const itemSize = ObjectUtil.calcSize(value);
         size += (indexSize + itemSize + 1 + delimiterSize)

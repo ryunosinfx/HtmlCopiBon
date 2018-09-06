@@ -2,14 +2,14 @@ import {TitleActionCreator} from '../action/titleActionCreator'
 import {MainService} from "../../service/mainService"
 import {TitleProcessor} from '../processor/titleProcessor'
 import {BaseReducer} from '../../util/reactive/baseReducer'
-let progressViewReducer = null;
+let titleViewReducer = null;
 export class TitleViewReducer extends BaseReducer {
   constructor() {
     super();
     this.ms = MainService.getInstance();
     this.tm = this.ms.tm;
     this.em = this.ms.em;
-    this.tp = new TitleProcessor();
+    this.tp = new TitleProcessor(this.em ,this.tm );
     this.titleCreatAction = TitleActionCreator.creatAction();
     this.titleRemoveAction = TitleActionCreator.creatRemoveAction();
     this.titleLoadAction = TitleActionCreator.creatLoadAction();
@@ -22,14 +22,14 @@ export class TitleViewReducer extends BaseReducer {
     this.atatch(this.titleChangection);
     this.atatch(this.titleUpdateAction);
     this.atatch(this.titleClearAllAction);
-    this.storeKey = TitleActionCreator.getStoreKey（）；
+    this.storeKey = TitleActionCreator.getStoreKey();
     this.storeCurrentKey = TitleActionCreator.getStoreCurrentKey();
     this.addInitializeKey(this.storeKey);
     this.addInitializeKey(this.storeCurrentKey);
   }
   static register() {
-    if (!progressViewReducer) {
-      progressViewReducer = new ProgressViewReducer();
+    if (!titleViewReducer) {
+      titleViewReducer = new TitleViewReducer();
     }
   }
   async reduce(store, action) {
