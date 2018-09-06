@@ -11,6 +11,7 @@ export class TitleProcessor {
   async loadAll() {
     const titles = await this.tm.loadTitleList();
     this.totalSize = 0;
+    const keys = [];
     for (let title of titles) {
       const size = await this.getSizes(title);
       title.size = size;

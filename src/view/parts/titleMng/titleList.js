@@ -29,7 +29,7 @@ export class TitleList extends BaseView {
 
   async onViewShow(store, actionData) {
     if(store[this.storeKey]){
-      alert('aaaaa');
+      const {list,totalSize}=store[this.storeKey];
     }else if(store[this.storeCurrentKey]){
       alert('bbbbbb');
     }

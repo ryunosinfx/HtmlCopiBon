@@ -31,7 +31,7 @@ export class StorageMeter extends BaseView {
   async onViewShow(store, actionData) {
     if(store[this.storeKey]){
       const {list,totalSize}=store[this.storeKey];
-        alert('totalSize:'+totalSize);
+        // alert('totalSize:'+totalSize);
       const counter= span('', ["StorageMeterCounter"], totalSize+"");
       this.prePatch(".StorageMeterCounter", counter);
     }else if(store[this.storeCurrentKey]){
