@@ -118,8 +118,8 @@ export default class IndexeddbHelper {
   //Select In-line-return promise;Keyで返す。
   async _selectByKey(tableName, key) {
     const db = await this.getOpenDB().catch(this.throwNewError("_selectByKey->getOpenDB tableName:" + tableName));
-    console.log("_selectByKey tableName:" + tableName + "/pk:" + key);
-    console.log(key);
+    // console.log("_selectByKey tableName:" + tableName + "/pk:" + key);
+    // console.log(key);
     return await this._selectByKeyOnTran(db, tableName, key).catch(this.throwNewError("_selectByKey->_selectByKeyOnTran tableName:" + tableName));
   }
   _selectByKeyOnTran(db, tableName, key, tables) {
