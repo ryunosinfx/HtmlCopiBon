@@ -12,16 +12,19 @@ import {
   label
 } from "../../../util/reactive/base/vtags";
 import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator'
+import {TitleRow} from './titleRow'
 export class TitleList extends BaseView {
   constructor() {
     super("TitleList", "TitleList");
       this.storeKey = TitleActionCreator.getStoreKey();
       this.storeCurrentKey = TitleActionCreator.getStoreCurrentKey();
+      thsi.titleRow = new TitleRow();
   }
 
   render(store, actionData) {
-    const name = div("", ["TitleName"], "TitleName");
-    return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
+    const name = div("", ["TitleListName"], "Titles List");
+    const listView = div('', ["TitleListRows"], this.id + "-----------");
+    return div("", [this.id + "Frame"], [name,listView]);
   }
   async onAfterAttach(store, data) {
 
@@ -30,12 +33,15 @@ export class TitleList extends BaseView {
   async onViewShow(store, actionData) {
     if(store[this.storeKey]){
       const {list,totalSize}=store[this.storeKey];
+      this.buildRows(list);
     }else if(store[this.storeCurrentKey]){
       alert('bbbbbb');
     }
   }
 
-  buildRows(){
-
+  buildRows(list){
+    const listRows = thsi.titleRow(list);
+    const vnode = div('', ["TitleListRows"], [listRows]);
+    this.prePatch(".TitleListRows", counter);
   }
 }

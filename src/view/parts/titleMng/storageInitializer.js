@@ -22,7 +22,14 @@ export class StorageInitializer extends BaseView {
 
   render(store, actionData) {
     const name = div("", ["StorageInitializer"], "StorageInitializer");
-    return div("", [this.id + "Frame"], [name, div(this.StorageInitializerId, ["StorageInitializerA"], this.id + "aaaaa")]);
+    const button =  div('', ["StorageInitializerButton"],{
+      {
+        on:{
+          click:this.onClearAll()
+        }
+      }
+    } "Init!");
+    return div("", [this.id + "Frame"], [name,button]);
   }
   async onAfterAttach(store, data) {
       TitleViewReducer.register();

@@ -22,5 +22,10 @@ export class TitleRow extends BaseView {
   }
   async onAfterAttach(store, data) {}
 
-  async onViewShow(store, actionData) {}
+  async onViewShow(store, actionData) {
+
+  }
+  buildRows(title){
+
+  }
 }
