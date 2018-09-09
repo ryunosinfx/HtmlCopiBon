@@ -46,12 +46,10 @@ export class TitleNewone extends BaseView {
   }
   onClisck() {
     return(event) => {
-      const elm = event.target;
       if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       event.preventDefault(); // Necessary. Allows us to drop.
-      event.dataTransfer.dropEffect = 'move'; // See the section on the DataTransfer object.
       return false;
     }
   }

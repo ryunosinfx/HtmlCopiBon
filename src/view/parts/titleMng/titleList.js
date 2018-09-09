@@ -18,7 +18,7 @@ export class TitleList extends BaseView {
     super("TitleList", "TitleList");
       this.storeKey = TitleActionCreator.getStoreKey();
       this.storeCurrentKey = TitleActionCreator.getStoreCurrentKey();
-      thsi.titleRow = new TitleRow();
+      this.titleRow = new TitleRow();
   }
 
   render(store, actionData) {
@@ -40,8 +40,8 @@ export class TitleList extends BaseView {
   }
 
   buildRows(list){
-    const listRows = thsi.titleRow(list);
-    const vnode = div('', ["TitleListRows"], [listRows]);
-    this.prePatch(".TitleListRows", counter);
+    const listRows = this.titleRow.buildRows(list);
+    const vnode = div('', ["TitleListRows"],listRows);
+    this.prePatch(".TitleListRows", vnode);
   }
 }
