@@ -9,23 +9,24 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
-import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator'
+import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator';
 export class TitleNewone extends BaseView {
   constructor() {
     super("TitleNewone", "TitleNewone");
     this.storeKey = TitleActionCreator.getStoreKey();
     this.storeCurrentKey = TitleActionCreator.getStoreCurrentKey();
+    this.idOfName = this.id+"name";
   }
 
   render(store, actionData) {
     //(titleId, titlePrefix, name)
     const name = div("", ["TitleNewone"], "TitleNewone");
-    const nameRow = this.createInputRow("name", "NameInput");
+    const nameRow = this.createInputRow(this.id+"name", "NameInput");
     const prefixRow = this.createInputRow("prefix", "NameInput");
     const titleIdRow = this.createInputRow("titleId", "titleIdInput");
     const button = div("", ["titleIdInput","button"], {
       on: {
-        click: this.onClisck()
+        click: this.onClick()
       }
     }, "create new title.");
     return div("", [this.id + "Frame"], [name, titleIdRow, prefixRow, nameRow,button]);
@@ -44,14 +45,27 @@ export class TitleNewone extends BaseView {
       //
     }
   }
-  onClisck() {
+  onClick() {
     return(event) => {
+      alert("onClick");
+
       if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       event.preventDefault(); // Necessary. Allows us to drop.
       return false;
     }
+  }
+
+  getCurrentOptions() {
+    const result = {
+      isGrayscale: document.getElementById(this.checkboxIsGrascale).checked,
+      dpiName: document.getElementById(this.selectBoxDpiName).value,
+      isMaxSize10M: document.getElementById(this.checkboxIsMaxSize10M).checked,
+      isLanczose: document.getElementById(this.checkboxIsLanczose).checked
+    };
+    return result;
+
   }
   createInputRow(label, inputClass, pattern = "", defaultValue = "") {
     const labelClass = this.id + "Label";

@@ -11,6 +11,7 @@ import {
   input,
   label
 } from "../../../util/reactive/base/vtags";
+import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator';
 export class TitleRow extends BaseView {
   constructor() {
     super("TitleRow", "TitleRow");
@@ -37,15 +38,26 @@ export class TitleRow extends BaseView {
       const prefix = div('', ["prefix"], this.prefix);
       const name = div("", ["TitleName"], title.name);
       const size = div("", ["TitleName"], title.size+" byte");
-      const updateButton = div("", ["TitleUpdate","button"], "update");
-      const deleteButton = div("", ["TitleDelete","button"], "del");
+      const updateButton = div("", ["TitleUpdate","button"],{
+        on:{click:this.onUpdate()}
+      }, "update");
+      const deleteButton = div("", ["TitleDelete","button"], {
+        on:{click:this.onDelete()}
+      }, "del");
       return div("", [this.id + "Row"], [titleId,prefix,name,size,updateButton,deleteButton]);
   }
-  onDelete(){
-
-  }
-  ocUpdate() {
+  onUpdate() {
     return(event) => {
+      alert("onUpdate");
+      const action = TitleActionCreator.creatLoadAction(this);
+      this.dispatch(action);
+      event.preventDefault(); // Necessary. Allows us to drop.
+      return false;
+    }
+  }
+  onDelete(){
+    return(event) => {
+      alert("onDelete");
       const action = TitleActionCreator.creatLoadAction(this);
       this.dispatch(action);
       event.preventDefault(); // Necessary. Allows us to drop.

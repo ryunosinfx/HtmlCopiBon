@@ -45,6 +45,7 @@ export class StorageInitializer extends BaseView {
   }
   onClearAll(){
     return (event)=>{
+      alert("onClearAll!");
       if(confirm('is Clear All Data? This Exection is Not recoverable. ')){
         const actionReload = TitleActionCreator.creatClearAllAction(this, {});
         this.dispatch(actionReload);

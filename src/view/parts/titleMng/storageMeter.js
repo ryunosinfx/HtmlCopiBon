@@ -23,7 +23,7 @@ export class StorageMeter extends BaseView {
     const unit = span('', ["StorageMeterUnit"], " byte");
     const button = span('', ["StorageMeterUnit","button"],{
       on:{
-        click:this.ocReculc()
+        click:this.onReculc()
       }
     }, "reculc!");
     const dataFrame = div('', ["StorageMeter"], [counter, unit, button]);
@@ -41,8 +41,9 @@ export class StorageMeter extends BaseView {
       alert('bbbbbb');
     }
   }
-  ocReculc() {
+  onReculc() {
     return(event) => {
+      alert("onReculc!");
       const action = TitleActionCreator.creatLoadAction(this);
       this.dispatch(action);
       event.preventDefault(); // Necessary. Allows us to drop.
