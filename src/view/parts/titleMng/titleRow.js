@@ -37,8 +37,8 @@ export class TitleRow extends BaseView {
       const prefix = div('', ["prefix"], this.prefix);
       const name = div("", ["TitleName"], title.name);
       const size = div("", ["TitleName"], title.size+" byte");
-      const updateButton = div("", ["TitleUpdate"], "update");
-      const deleteButton = div("", ["TitleDelete"], "del");
+      const updateButton = div("", ["TitleUpdate","button"], "update");
+      const deleteButton = div("", ["TitleDelete","button"], "del");
       return div("", [this.id + "Row"], [titleId,prefix,name,size,updateButton,deleteButton]);
   }
   onDelete(){

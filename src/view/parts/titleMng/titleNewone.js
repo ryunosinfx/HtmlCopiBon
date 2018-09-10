@@ -23,7 +23,7 @@ export class TitleNewone extends BaseView {
     const nameRow = this.createInputRow("name", "NameInput");
     const prefixRow = this.createInputRow("prefix", "NameInput");
     const titleIdRow = this.createInputRow("titleId", "titleIdInput");
-    const button = div("", ["titleIdInput"], {
+    const button = div("", ["titleIdInput","button"], {
       on: {
         click: this.onClisck()
       }

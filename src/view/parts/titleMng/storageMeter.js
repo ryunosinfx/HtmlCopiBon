@@ -21,7 +21,7 @@ export class StorageMeter extends BaseView {
     const name = div("", ["StorageMeter"], "Storage now usage:");
     const counter = span('', ["StorageMeterCounter"], "0");
     const unit = span('', ["StorageMeterUnit"], " byte");
-    const button = span('', ["StorageMeterUnit"],{
+    const button = span('', ["StorageMeterUnit","button"],{
       on:{
         click:this.ocReculc()
       }

@@ -709,3 +709,20 @@ div.button.enable {
 .display_none {
   display: none;
 }
+.TitleMng .StorageMeterFrame{
+ display: flex;
+  padding: 0.1em
+}
+.TitleMng .StorageMeterFrame span.button,.TitleRowRow .button,.TitleNewone .button{
+  display: inline-block;
+  margin-left:1em;
+  background-color: gray;
+  cursor: pointer;
+  padding:0.2em;
+}
+.TitleRowRow{
+   display: flex;
+}
+.TitleRowRow>div{
+  padding:0.2em;
+}
