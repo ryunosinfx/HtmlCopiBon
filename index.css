@@ -698,31 +698,29 @@ div.button.enable {
   padding:0.5em;
 
 }
-.TitleListFrame{
+.TitleListFrame, .StorageInitializerFrame, .TitleMng>.TitleNewone{
   margin:0.5em;
   padding:0.5em;
 }
-.TitleMng>.TitleNewone{
-  margin:0.5em;
-  padding:0.5em;
-}
-.display_none {
-  display: none;
-}
-.TitleMng .StorageMeterFrame{
+.TitleMng .StorageMeterFrame, .StorageInitializerFrame{
  display: flex;
-  padding: 0.1em
+  padding: 0.1em;
+  height:2em;
 }
-.TitleMng .StorageMeterFrame span.button,.TitleRowRow .button,.TitleNewone .button{
+.TitleMng .StorageMeterFrame span.button,.TitleRowRow .button,.TitleNewone .button, .StorageInitializerFrame div.button{
   display: inline-block;
   margin-left:1em;
   background-color: gray;
   cursor: pointer;
+  padding:0.5em;
+  border-radius: 3px;
+}
+.TitleRowRow>div , .StorageInitializerFrame>div{
   padding:0.2em;
 }
 .TitleRowRow{
    display: flex;
 }
-.TitleRowRow>div{
-  padding:0.2em;
+.display_none {
+  display: none;
 }

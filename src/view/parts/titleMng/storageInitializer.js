@@ -22,7 +22,7 @@ export class StorageInitializer extends BaseView {
 
   render(store, actionData) {
     const name = div("", ["StorageInitializer"], "StorageInitializer");
-    const button =  div('', ["StorageInitializerButton"],{
+    const button =  div('', ["StorageInitializerButton button"],{
         on:{
           click:this.onClearAll()
         }

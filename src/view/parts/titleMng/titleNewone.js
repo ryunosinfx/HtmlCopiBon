@@ -21,7 +21,7 @@ export class TitleNewone extends BaseView {
   render(store, actionData) {
     //(titleId, titlePrefix, name)
     const name = div("", ["TitleNewone"], "TitleNewone");
-    const nameRow = this.createInputRow(this.id+"name", "NameInput");
+    const nameRow = this.createInputRow("name", "NameInput");
     const prefixRow = this.createInputRow("prefix", "NameInput");
     const titleIdRow = this.createInputRow("titleId", "titleIdInput");
     const button = div("", ["titleIdInput","button"], {
