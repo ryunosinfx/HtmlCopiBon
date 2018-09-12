@@ -329,7 +329,7 @@ export class ExportImageProcesser {
         pageNo: indexA,
         isDummy: false,
         isRight: indexA % 2 > 0 && isSideSynced,
-        binary: page.baseImage === null
+        binary: !page || page.baseImage === null
           ? null
           : page
       }

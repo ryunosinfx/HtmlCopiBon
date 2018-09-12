@@ -30,6 +30,10 @@ export class PreviewProcessor {
       this.progress += progressUnit;
       this.pbp.update(this.progress, 'load pageEnitity' + pageStep);
       const pageEnitity = await this.em.get(pagePk);
+      if(!pageEnitity){
+        retPreviews.push(null);
+        continue;
+      }
       const previewThumbnail = pageEnitity.previewThumbnail;
       const baseImage = pageEnitity.baseImage;
       if (baseImage) {
