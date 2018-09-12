@@ -75,6 +75,9 @@ export class PageImages extends BaseView {
   async showPages(pagesData, imagesData) {
     const imageMap = {};
     for (let imageData of imagesData) {
+      if(!imageData){
+        continue;
+      }
       const imageEntity = imageData.imageEntity;
       const imagePk = imageEntity.getPk();
       imageMap[imagePk] = imageData;

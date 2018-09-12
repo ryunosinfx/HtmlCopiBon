@@ -28,11 +28,11 @@ export class ObjectUtil {
   }
   static simpleDeepClone(obj, newObj, count = 0) {
     const newCount = count + 1;
-    const output = newObj ?
-      newObj :
-      Array.isArray(obj) ?
-      [] :
-      {};
+    const output = newObj
+      ? newObj
+      : Array.isArray(obj)
+        ? []
+        : {};
     if (newCount > 10) {
       console.log(obj);
       console.log(newCount);
@@ -106,50 +106,65 @@ export class ObjectUtil {
     return obj;
   }
 
-  static recalcSize(value, indexSize = 0, delimiterSize = 0) {
+  static async recalcSize(em, value, indexSize = 0, delimiterSize = 0, counter) {
     let size = 0;
-
+    // console.warn(indexSize)
     if (!value) {
       return 1;
     } else if (value.byteLength && value.byteLength > 0) {
       const valuseSize = value.byteLength;
+      // console.log("====ABvaluseSize:" + valuseSize);
       size += (indexSize + valuseSize + 1 + delimiterSize)
     } else if (typeof value === "function") {
       continu;
     } else if (typeof value === "number") {
       size += (indexSize + 4 + 1 + delimiterSize)
     } else if (typeof value === "string") {
-      const valuseSize = value.length;
-      size += (indexSize + valuseSize + 1 + delimiterSize)
+      const valuseSize = value.length*1;
+      size += (indexSize*1 + valuseSize + 1 + delimiterSize*1);
+      // console.log("====string:valuseSize:" + valuseSize + "/indexSize:"+indexSize+ "/delimiterSize:"+delimiterSize+"/size:" + size+"/value:"+value+"/"+(typeof valuseSize) );
     } else if (typeof value === "object" && Array.isArray(value)) {
       let tempDerimiterSie = 0
       size += 2 + delimiterSize;
       for (let i in value) {
         const arrayValue = value[i];
-        const itemSize = ObjectUtil.recalcSize(arrayValue);
+        const itemSize = await ObjectUtil.recalcSize(em, arrayValue, 0,0,counter);
+        // console.log("====arrayValue:" + arrayValue + "/size:" + size + "/itemSize:" + itemSize);
         size += itemSize + tempDerimiterSie;
         tempDerimiterSie = 1;
       }
       size += (indexSize + 1 + delimiterSize)
     } else if (typeof value === "object") {
-      const itemSize = ObjectUtil.calcSize(value);
-        size += (indexSize + itemSize + 1 + delimiterSize)
+      const itemSize = await ObjectUtil.calcSize(em, value, counter);
+      // console.log("====itemSize:" + itemSize + "/size:" + size);
+      size += (indexSize + itemSize + 1 + delimiterSize)
     }
-    return size;
+    // console.log("====value:" + value + "/size:" + size);
+    return size * 1;
 
   }
-  static calcSize(target) {
+  static async calcSize(em, target, counter = {
+    size: 0
+  }) {
     if (!target) {
       return 1;
     }
-    let size = 0;
     let delimiterSize = 0;
     for (let index in target) {
-      const indexSize = (index + "").length;
       const value = target[index];
-      size += ObjectUtil.recalcSize(value, indexSize, delimiterSize)
+      if (index === "pk" && value.indexOf("Binary-") === 0) {
+        // console.log("====Binary:" + index);
+        const indexSize = (index + "").length*1;
+        const binaryData = await em.get(value)
+        counter.size += await ObjectUtil.recalcSize(em, binaryData, indexSize, delimiterSize, counter);
+        continue;
+      }
+      const indexSize = (index + "").length*1;
+      counter.size += await ObjectUtil.recalcSize(em, value, indexSize, delimiterSize, counter)
       delimiterSize = 1;
+      // console.log("====index:" + index + "/size:" + counter.size);
     }
-    return size;
+    // console.log("====counter.size:" + counter.size);
+    return counter.size * 1;
   }
 }

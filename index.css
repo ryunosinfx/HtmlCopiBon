@@ -37,8 +37,8 @@ div.header {
 }
 
 div.title {
-  font-size: 2em;thumbnail_block
-  font-weight: bold;
+  font-size: 2em;
+  thumbnail_block font-weight: bold;
   background-color: rgb(255, 226, 251);
   padding: 0.5em;
   color: rgb(155, 215, 223);
@@ -248,11 +248,13 @@ canvas.hidden {
   height: auto;
   margin: auto;
 }
+
 .thumbnail_block div.page_block {
-  height:110px;
+  height: 110px;
 }
+
 .thumbnail_block div.options_block {
-  height:5px;
+  height: 5px;
   font-size: 0.2em;
   padding: 0.2em;
 }
@@ -260,25 +262,27 @@ canvas.hidden {
 .thumbnail_block div.options_block .checkForceColor.enable {
   background-color: rgb(236, 145, 145);
 }
+
 .thumbnail_block div.options_block .checkForceColor.disable {
   background-color: rgb(241, 241, 241);
 }
+
 .thumbnail_block div.options_block .checkNoCropping.enable {
   background-color: rgb(233, 220, 134);
 }
+
 .thumbnail_block div.options_block .checkNoCropping.disable {
   background-color: rgb(241, 241, 241);
 }
-.thumbnail_block div.options_block .checkForceColor.enable::after ,
-.thumbnail_block div.options_block .checkNoCropping.enable::after {
+
+.thumbnail_block div.options_block .checkForceColor.enable::after, .thumbnail_block div.options_block .checkNoCropping.enable::after {
   content: "On";
-  color:black;
+  color: black;
 }
 
-.thumbnail_block div.options_block .checkForceColor.disable::after ,
-.thumbnail_block div.options_block .checkNoCropping.disable::after {
+.thumbnail_block div.options_block .checkForceColor.disable::after, .thumbnail_block div.options_block .checkNoCropping.disable::after {
   content: "Off";
-  color:gray;
+  color: gray;
 }
 
 .thumbnail_text {
@@ -392,8 +396,9 @@ canvas.hidden {
   display: flex;
   margin-top: 0.2em;
 }
+
 .previewInfo .options>div {
-  width:10em;
+  width: 10em;
   padding: 0.2em;
   cursor: pointer;
   font-size: 0.7em;
@@ -403,27 +408,28 @@ canvas.hidden {
 .previewInfo .options .checkForceColor.enable {
   background-color: rgb(236, 145, 145);
 }
+
 .previewInfo .options .checkForceColor.disable {
   background-color: rgb(241, 241, 241);
 }
+
 .previewInfo .options .checkNoCropping.enable {
   background-color: rgb(233, 220, 134);
 }
+
 .previewInfo .options .checkNoCropping.disable {
   background-color: rgb(241, 241, 241);
 }
-.previewInfo .options .checkForceColor.enable::after ,
-.previewInfo .options .checkNoCropping.enable::after {
+
+.previewInfo .options .checkForceColor.enable::after, .previewInfo .options .checkNoCropping.enable::after {
   content: "On";
-  color:black;
+  color: black;
 }
 
-.previewInfo .options .checkForceColor.disable::after ,
-.previewInfo .options .checkNoCropping.disable::after {
+.previewInfo .options .checkForceColor.disable::after, .previewInfo .options .checkNoCropping.disable::after {
   content: "Off";
-  color:gray;
+  color: gray;
 }
-
 
 .Preview>div .preview_dual .previewImageFrame.dummy {
   background-color: rgb(174, 181, 184);
@@ -687,40 +693,61 @@ div.button.enable {
 
 .TitleMng {
   padding: 10px;
-  background-color: rgb(228, 171, 176);
+  background-color: rgb(255, 165, 162);
 }
-.TitleMng .name{
+
+.TitleMng .name {
   padding-bottom: 0.3em;
   font-weight: bold;
 }
-.TitleMng>.StorageMeter{
-  margin:0.5em;
-  padding:0.5em;
 
+.TitleMng>.StorageMeter {
+  margin: 0.5em;
+  padding: 0.5em;
+  background-color: rgb(255, 155, 124);
 }
-.TitleListFrame, .StorageInitializerFrame, .TitleMng>.TitleNewone{
-  margin:0.5em;
-  padding:0.5em;
+
+.TitleListFrame, .StorageInitializerFrame, .TitleMng>.TitleNewone {
+  margin: 0.5em;
+  padding: 0.5em;
+  background-color: rgb(255, 155, 124);
 }
-.TitleMng .StorageMeterFrame, .StorageInitializerFrame{
- display: flex;
+
+.TitleMng .StorageMeterFrame, .StorageInitializerFrame {
+  display: flex;
   padding: 0.1em;
-  height:2em;
+  height: 2em;
 }
-.TitleMng .StorageMeterFrame span.button,.TitleRowRow .button,.TitleNewone .button, .StorageInitializerFrame div.button{
+
+.TitleMng .StorageMeterFrame div.StorageMeter {
+  line-height: 1.8em;
+  height: 2em;
+  margin-right: 0.5em;
+}
+
+.TitleMng .StorageMeterFrame span.button, .TitleRowRow .button, .TitleNewone .button, .StorageInitializerFrame div.button {
   display: inline-block;
-  margin-left:1em;
+  margin-left: 1em;
   background-color: gray;
   cursor: pointer;
-  padding:0.5em;
+  padding: 0.5em 2em;
   border-radius: 3px;
 }
-.TitleRowRow>div , .StorageInitializerFrame>div{
-  padding:0.2em;
+
+.TitleMng .StorageMeterFrame span.button {
+  padding: 0.2em 2em;
 }
-.TitleRowRow{
-   display: flex;
+
+.TitleRowRow>div, .StorageInitializerFrame>div {
+  padding: 0.2em;
 }
+.TitleNewoneRow{
+  margin-left: 1em;
+}
+.TitleRowRow {
+  display: flex;
+}
+
 .display_none {
   display: none;
 }

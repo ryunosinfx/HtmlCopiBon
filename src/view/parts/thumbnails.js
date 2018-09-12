@@ -50,6 +50,9 @@ export class Thumbnails extends BaseView {
       delete this.pageMap[key];
     }
     for (let pageEntity of pagesData) {
+      if(!pageEntity){
+        continue;
+      }
       const imagePk = pageEntity.baseImage;
       if (imagePk) {
         this.pageMap[imagePk] = true;

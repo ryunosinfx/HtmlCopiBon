@@ -27,7 +27,7 @@ export class TitleProcessor {
     if (!target) {
       return 1;
     }
-    let size = ObjectUtil.calcSize(target);
+    let size = await ObjectUtil.calcSize(this.em,target);
     const refCols = target.getRefCols();
     for (let colName of refCols) {
       const colValue = target[colName];
@@ -71,6 +71,9 @@ export class TitleProcessor {
         for (let pk of colValue) {
           await this.removeExecute(pk);
         }
+        for (let index in colValue) {
+          delete colValue[index];
+        }
       } else if (typeof colValue === "string") {
         await this.removeExecute(colValue);
       }
@@ -83,6 +86,11 @@ export class TitleProcessor {
     const entity = await this.em.get(pk);
     if (entity) {
       await this.removeDescendant(entity);
+      if(entity.pages){
+        for(let index in entity.pages){
+          delete entity.pages[index];
+        }
+      }
       await this.em.delete(pk);
       const titles = await this.tm.loadTitleList();
       return titles && titles.length > 0

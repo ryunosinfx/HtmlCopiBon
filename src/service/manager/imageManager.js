@@ -36,6 +36,9 @@ export class ImageManager {
         continue;
       }
       const imageEntity = await this.em.get(pk);
+      if(imageEntity){
+
+      }
       imageEntitis.push(imageEntity);
     }
     return await this.createRetList(imageEntitis);
@@ -148,10 +151,12 @@ export class ImageManager {
     //console.log("=★=showFilesInit imageEntitis:" + imageEntitis.length);
     const retList = [];
     for (let imageEntity of imageEntitis) {
-      const pk = imageEntity.getPk();
+      const pk = imageEntity && imageEntity.getPk?imageEntity.getPk():null;
       if (loadedImageMap.has(pk)) {
         const retObj = loadedImageMap.get(pk);
         retList.push(retObj);
+      } else if (!pk) {
+        retList.push(null);
       } else {
         const retObj = await this.processParImage(imageEntity);
         loadedImageMap.set(pk, retObj);
