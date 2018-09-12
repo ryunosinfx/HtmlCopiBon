@@ -564,21 +564,6 @@ canvas.hidden {
   background-position: center;
 }
 
-.MenuFrame {
-  display: flex;
-}
-
-.MenuFrame div {
-  width: 20%;
-  cursor: pointer;
-  padding: 5px 10px;
-  margin: 2px 1px 0 1px;
-  border: 2px solid rgb(83, 122, 134);
-  border-radius: 20px;
-  background-color: rgb(170, 185, 210);
-  color: rgb(222, 240, 222)
-}
-
 .ExportArea .ExportArea {
   background-color: rgb(195, 240, 204);
   border: 1px solid rgb(87, 158, 17);
@@ -748,6 +733,52 @@ div.button.enable {
   display: flex;
 }
 
+
+.MenuFrame {
+  display: flex;
+}
+
+.MenuFrame a {
+  display: inline-block;
+  width: 20%;
+  cursor: pointer;
+  height:2em;
+  padding: 5px 10px;
+  margin: 2px 1px 0 1px;
+  border: 2px solid rgb(83, 122, 134);
+  border-radius: 20px;
+  background-color: rgb(170, 185, 210);
+  color: rgb(222, 240, 222)
+}
+a.dummy {
+  display: inline-block;
+  width: 50px;
+  text-decoration: none;
+}
+nav, scroll-container {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+nav {
+  width: 339px;
+  padding: 5px;
+  border: 1px solid black;
+}
+scroll-container {
+  display: block;
+  width: 350px;
+  height: 200px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+scroll-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 5em;
+}
 .display_none {
   display: none;
 }

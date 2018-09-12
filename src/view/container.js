@@ -36,7 +36,7 @@ export class Container extends BaseView {
     this.titleMng.attach(this);
   }
   render() {
-    const newVnode = div({
+    const newVnode = div('',['scroll-container'],{
       style: {
         color: '#000'
       }
