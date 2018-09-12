@@ -182,9 +182,6 @@ export class Thumbnail extends BaseView {
         dragend:this.handleDragEnd(),
         click:this.selectImage()
       },
-      style:{
-        "background-image":"url("+imgElm.src+")"
-      },
       dataset:{pk:pk,is_image:true},
       props:{ "draggable":"true"}
     });
@@ -200,10 +197,13 @@ export class Thumbnail extends BaseView {
         dragend:this.handleDragEnd(),
         click:this.selectImage()
       },
+      style:{
+        "background-image":"url("+imgElm.src+")"
+      },
       class:classObj,
       dataset:{pk:pk,is_image:true},
       props:{ "draggable":"true"}
-    }, [delButton,imageVnode , textVnode]);
+    }, [delButton, textVnode]);
     return rowVnode;
   }
 }

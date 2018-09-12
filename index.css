@@ -1,5 +1,6 @@
 html, body {
   min-height: 100%;
+    max-height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -11,6 +12,7 @@ div {
 
 div.frame {
   min-height: 99%;
+    max-height: 100%;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -18,10 +20,13 @@ div.frame {
 }
 
 div.footer {
-  min-height: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 3em;
   width: 100%;
   border: solid 1px red;
   padding: 0.5em;
+  z-index:500;
 }
 
 div.copyright {
@@ -31,14 +36,17 @@ div.copyright {
 }
 
 div.header {
-  min-height: 100%;
+  position: fixed;
+  top: 0;
+  height: 4.5em;
   width: 100%;
   border: solid 1px rgb(101, 64, 88);
+  z-index:500;
 }
 
 div.title {
   font-size: 2em;
-  thumbnail_block font-weight: bold;
+  font-weight: bold;
   background-color: rgb(255, 226, 251);
   padding: 0.5em;
   color: rgb(155, 215, 223);
@@ -100,7 +108,7 @@ div.FilesArea {
   min-height: 100%;
   width: 100%;
   border: dotted 1px black;
-  background-color: rgb(124, 110, 241);
+  background-color: rgb(52, 158, 226);
   padding-top: 0.2em;
   padding-bottom: 0.2em;
   text-align: center;
@@ -228,13 +236,17 @@ canvas.hidden {
 .thumbnail_block {
   display: flex;
   flex-direction: column;
-  background-color: green;
+  background-color:rgb(182, 175, 209);
   border: 1px solid #fdd;
   width: 150px;
+  height: 150px;
   cursor: pointer;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+}
+.thumnailsImageArea .thumbnail_block{
+
 }
 
 .thumbnail_block.over {
@@ -242,7 +254,11 @@ canvas.hidden {
   width: 148px;
   border: 2px dotted #dfd;
 }
+.thumbnail_block span.delButton{
+  width:30px;
+  margin-bottom:110px;
 
+}
 .thumbnail_block div {
   display: flex;
   height: auto;
@@ -287,9 +303,11 @@ canvas.hidden {
 
 .thumbnail_text {
   display: block;
-  background-color: blue;
-  border: 1px solid #fdd;
-  font-size: 0.5em
+  background-color: rgb(0, 103, 135);
+  border: 0 solid #fdd;
+  color:rgb(189, 193, 201);
+  font-size: 0.3em;
+  padding: 0.3em
 }
 
 .image_detail_block {
@@ -682,8 +700,10 @@ div.button.enable {
 }
 
 .TitleMng .name {
-  padding-bottom: 0.3em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   font-weight: bold;
+  background-color: rgb(255, 113, 82);
 }
 
 .TitleMng>.StorageMeter {
@@ -736,48 +756,72 @@ div.button.enable {
 
 .MenuFrame {
   display: flex;
+  position:fixed;
+  top:4.6em;
+  width:100%;
+  z-index:500;
 }
 
 .MenuFrame a {
   display: inline-block;
   width: 20%;
   cursor: pointer;
-  height:2em;
+  text-decoration:none;
+  height:2.5em;
   padding: 5px 10px;
   margin: 2px 1px 0 1px;
-  border: 2px solid rgb(83, 122, 134);
+  border: 0px solid rgb(83, 122, 134);
   border-radius: 20px;
   background-color: rgb(170, 185, 210);
-  color: rgb(222, 240, 222)
+  color: rgb(222, 240, 222);
 }
 a.dummy {
   display: inline-block;
   width: 50px;
   text-decoration: none;
 }
-nav, scroll-container {
+.MenuFrame>a.MenuButton.active:nth-child(1) {
+  background-color:rgb(249, 111, 52);
+}
+.MenuFrame>a.MenuButton.active:nth-child(2) {
+  background-color:rgb(104, 65, 199);
+}
+.MenuFrame>a.MenuButton.active:nth-child(3) {
+  background-color:rgb(72, 159, 222);
+}
+.MenuFrame>a.MenuButton.active:nth-child(4) {
+  background-color:rgb(123, 193, 68);
+}
+.MenuFrame>a.MenuButton.active:nth-child(5) {
+  background-color:rgb(80, 50, 60);
+}
+.MenuFrame>a.MenuButton.active {
+  font-weight: bold;
+  border-width: 0 ;
+}
+nav, div.scroll-container {
   display: block;
   margin: 0 auto;
   text-align: center;
 }
-nav {
-  width: 339px;
-  padding: 5px;
-  border: 1px solid black;
+div.main-container{
+width: 100%;
+height: 100%;
+
 }
-scroll-container {
+div.main-container{
+  position:absolute;
+  top:0;
+  padding-top:8em;
+  height: 100%;
+  padding-bottom:3em;
+}
+div.scroll-container {
   display: block;
-  width: 350px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
   scroll-behavior: smooth;
-}
-scroll-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  font-size: 5em;
 }
 .display_none {
   display: none;

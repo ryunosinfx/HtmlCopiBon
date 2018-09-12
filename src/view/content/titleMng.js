@@ -41,7 +41,7 @@ export class TitleMng extends BaseView {
     await this.storageInitializer.attach(this);
   }
   render() {
-    return div(this.id, ["TitleMng"], [
+    return div(this.id+"Frame", ["TitleMng"], [
       div("",['name'],'Title Manager'),
       div(this.storageMeter.id),
       div(this.titleList.id),

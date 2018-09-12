@@ -18,7 +18,7 @@ import {ProgressBar} from "./parts/progressBar";
 import {TitleMng} from "./content/titleMng";
 export class Container extends BaseView {
   constructor() {
-    super("container", "container");
+    super("container", "main-container");
     this.fileUploadArea = new FileUploadArea();
     this.titleSettings = new TitleSettings();
     this.filesArea = new FilesArea();

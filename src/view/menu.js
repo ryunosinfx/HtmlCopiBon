@@ -7,10 +7,10 @@ export class Menu  extends BaseView {
     this.text="Menu";
     this.menuButtonClass="MenuButton";
     this.selected ="";
-    this.anckerOfStep0 ='#'+'step0'
-    this.anckerOfStep1 ='#'+'step1'
-    this.anckerOfStep2 ='#'+'step2'
-    this.anckerOfStep3 ='#'+'step3'
+    this.anckerOfStep0 ='#'+'TitleMng'
+    this.anckerOfStep1 ='#'+'TitleSettings'
+    this.anckerOfStep2 ='#'+'fuaPArent'
+    this.anckerOfStep3 ='#'+'ExportArea'
     this.anckerOfStep4 ='#'+'step4'
     this.idOfStep0 ='step0'
     this.idOfStep1 ='step1'
@@ -30,16 +30,21 @@ export class Menu  extends BaseView {
 
   onClick(id){
     return (event)=>{
-      alert("onClick id:"+id);
+      // alert("onClick id:"+id);
+      const parent = document.getElementById(this.id+'Frame');
+      for(let child of parent.children){
+        child.classList.remove("active");
+      };
+      document.getElementById(id).classList.add("active");
     }
   }
   createButtons(){
     const menuTabs = [];
-    menuTabs.push(a('',[this.menuButtonClass],this.anckerOfStep1,{on:{click:this.onClick(this.idOfStep0)}},this.idOfStepLabel0))
-    menuTabs.push(a('',[this.menuButtonClass],this.anckerOfStep1,{on:{click:this.onClick(this.idOfStep1)}},this.idOfStepLabel1))
-    menuTabs.push(a('',[this.menuButtonClass],this.anckerOfStep2,{on:{click:this.onClick(this.idOfStep2)}},this.idOfStepLabel2))
-    menuTabs.push(a('',[this.menuButtonClass],this.anckerOfStep3,{on:{click:this.onClick(this.idOfStep3)}},this.idOfStepLabel3))
-    menuTabs.push(a('',[this.menuButtonClass],this.anckerOfStep4,{on:{click:this.onClick(this.idOfStep4)}},this.idOfStepLabel4))
+    menuTabs.push(a(this.idOfStep0,[this.menuButtonClass],this.anckerOfStep0,{on:{click:this.onClick(this.idOfStep0)}},this.idOfStepLabel0))
+    menuTabs.push(a(this.idOfStep1,[this.menuButtonClass],this.anckerOfStep1,{on:{click:this.onClick(this.idOfStep1)}},this.idOfStepLabel1))
+    menuTabs.push(a(this.idOfStep2,[this.menuButtonClass],this.anckerOfStep2,{on:{click:this.onClick(this.idOfStep2)}},this.idOfStepLabel2))
+    menuTabs.push(a(this.idOfStep3,[this.menuButtonClass],this.anckerOfStep3,{on:{click:this.onClick(this.idOfStep3)}},this.idOfStepLabel3))
+    menuTabs.push(a(this.idOfStep4,[this.menuButtonClass],this.anckerOfStep4,{on:{click:this.onClick(this.idOfStep4)}},this.idOfStepLabel4))
     return menuTabs;
   }
 }
