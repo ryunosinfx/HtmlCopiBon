@@ -9,7 +9,7 @@ export class MainService {
     thread.postMessage("WASMcaller","");
     return mainServiceImpl;
   }
-  async init(){
-    await mainServiceImpl.init();
+  async init(appTitle,appVersion){
+    await mainServiceImpl.init(appTitle,appVersion);
   }
 }

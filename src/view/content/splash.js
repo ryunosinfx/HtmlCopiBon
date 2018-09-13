@@ -1,13 +1,16 @@
 import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
-export class TitleMng  extends BaseView {
+export class Splash  extends BaseView {
   constructor() {
-    super("TitleMng", "TitleMng");
-    this.text="TitleMng";
+    super("Splash", "Splash");
   }
   render() {
-    return div(this.id, "TitleMng", this.text);
+    const appTitle = div('',[],'');
+      const appVerion = div('',[],'');
+        const meesage = div('',[],'');
+
+    return div(this.id, ["Splash"], [appTitle]);
   }
   // loadTitleList
   // newTitle

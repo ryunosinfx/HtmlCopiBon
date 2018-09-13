@@ -26,7 +26,9 @@ export class MainServiceImpl {
     this.em = new EntityManager();
     this.ip = new ImageProcessService();
   }
-  async init() {
+  async init(appTitle,appVersion) {
+    this.appTitle = appTitle;
+    this.appVersion = appVersion;
     await this.em.initAsNewUser([Images, Series, Thumbnales, Title, Pages, Settings, OutputProfiles,ImageOutputs]);
     this.ip = new ImageProcessService();
     this.bm = new BinaryManager(this.em);
@@ -46,5 +48,11 @@ export class MainServiceImpl {
 
   getViewPartsLoader() {
     return this.vpl;
+  }
+  getAppTitle(){
+    return this.appTitle;
+  }
+  getAppVersion(){
+    return this.appVersion;
   }
 }

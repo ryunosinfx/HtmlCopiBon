@@ -1,14 +1,15 @@
 import css from "../index.css";
 import {MainFrame} from "./view/mainFrame"
 import {MainService} from "./service/mainService"
-const title = "CopiBon";
+const appTitle = "CopiBon";
+const appVersion = "v0.0.3alpha";
 export default class CopiBonService {
   constructor() {
     this.mainService = MainService.getInstance();
   }
   async init() {
-    await this.mainService.init();
-    this.mf = new MainFrame(this.mainService,title);
+    await this.mainService.init(appTitle,appVersion);
+    this.mf = new MainFrame(this.mainService);
     //this.mf.initialize(title);
     ///
     // const sumModule = await import ("./sum.wasm");

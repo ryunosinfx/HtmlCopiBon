@@ -15,8 +15,8 @@ import {
 export class Header extends BaseView {
   constructor(titleText) {
     super("header", "header");
-    this.titleText = titleText;
-    this.Version = "v0.02alpha";
+    this.titleText = this.ms.getAppTitle();
+    this.Version =  this.ms.getAppVersion();
   }
   render() {
     const title = span("",["MainTitle"],this.titleText);

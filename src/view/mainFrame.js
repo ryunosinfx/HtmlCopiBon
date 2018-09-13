@@ -15,14 +15,14 @@ import {
   label
 } from "../util/reactive/base/vtags";
 export class MainFrame extends BaseView {
-  constructor(ms,title) {
+  constructor(ms) {
     super("frame", "frame");
     this.ms = ms;
     BaseView.setMainService(ms);
-    this.initialize(title);
+    this.initialize();
   }
-  initialize(title) {
-    this.header = new Header(title);
+  initialize() {
+    this.header = new Header(this.ms);
     this.footer = new Footer();
     this.container = new Container();
     this.menu = new Menu();
