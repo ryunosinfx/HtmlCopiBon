@@ -1,5 +1,4 @@
 import {EntityManager} from "./entity/entityManager";
-import {ViewPartsLoader} from "./viewPartsLoader";
 import {TitleManager} from "./manager/titleManager";
 import {BinaryManager} from "./manager/binaryManager";
 import {PagesManager} from "./manager/pagesManager";
@@ -22,7 +21,6 @@ const title = "CopiBon";
 const titlePrefix = "title_";
 export class MainServiceImpl {
   constructor() {
-    this.vpl = new ViewPartsLoader();
     this.em = new EntityManager();
     this.ip = new ImageProcessService();
   }
@@ -44,10 +42,6 @@ export class MainServiceImpl {
     this.im.setTitleManager(this.tm);
     this.pm.setTitleManager(this.tm);
     await this.tm.load();
-  }
-
-  getViewPartsLoader() {
-    return this.vpl;
   }
   getAppTitle(){
     return this.appTitle;

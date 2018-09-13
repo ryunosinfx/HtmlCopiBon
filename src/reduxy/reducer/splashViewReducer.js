@@ -9,7 +9,7 @@ export class SplashViewReducer extends BaseReducer {
     this.splashRemoveAction = SplashActionCreator.creatRemoveAction();
     this.atatch(this.splashAddAction);
     this.atatch(this.splashRemoveAction);
-    this.storeKey = "progress";
+    this.storeKey = SplashActionCreator.getStoreKey();
     this.addInitializeKey(this.storeKey);
   }
   static register() {
@@ -19,13 +19,13 @@ export class SplashViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.splashAddAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(true, 0, false, action.data.msg, action.data.title);
+      store[this.storeKey] = this.createSplash(true, 0, false, action.data.msg, action.data.title);
     } else if (this.splashRemoveAction.type === action.type) {
-      store[this.storeKey] = this.createProgress(false, 0, false);
+      store[this.storeKey] = this.createSplash(false, 0, false);
     }
     return store;
   }
-  createProgress(isVisible, progress, isComple, msg, title) {
+  createSplash(isVisible, progress, isComple, msg, title) {
     return {isVisible: isVisible, progress: progress, msg: msg, isComple: isComple, title: title}
   }
 }

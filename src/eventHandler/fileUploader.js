@@ -1,4 +1,3 @@
-import {ProgressBar} from "../view/parts/progressBar";
 import {BaseEventHandler} from "./baseEventHandler";
 import {ImageActionCreator} from '../reduxy/action/imageActionCreator'
 import {ImageViewReducer} from '../reduxy/reducer/imageViewReducer'

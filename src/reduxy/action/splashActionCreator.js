@@ -7,4 +7,7 @@ export class SplashActionCreator {
   static creatRemoveAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("removeSplash", targetView, data, storeKey);
   }
+  static getStoreKey(){
+    return "splash";
+  }
 }

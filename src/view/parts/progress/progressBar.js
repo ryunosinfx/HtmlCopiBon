@@ -1,5 +1,5 @@
-import vu from "../../util/viewUtil";
-import {BaseView} from "../../util/reactive/baseView";
+import vu from "../../../util/viewUtil";
+import {BaseView} from "../../../util/reactive/baseView";
 import {
   a,
   div,
@@ -9,8 +9,8 @@ import {
   span,
   input,
   label
-} from "../../util/reactive/base/vtags";
-import {ProgressViewReducer} from '../../reduxy/reducer/progressViewReducer'
+} from "../../../util/reactive/base/vtags";
+import {ProgressViewReducer} from '../../../reduxy/reducer/progressViewReducer'
 export class ProgressBar extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");

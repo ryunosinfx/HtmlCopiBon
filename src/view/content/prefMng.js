@@ -1,10 +1,12 @@
 import vu from "../../util/viewUtil";
 import {BaseView} from "../../util/reactive/baseView";
 import {a,div,li,ul,img,span,input,label} from "../../util/reactive/base/vtags";
-export class TitleMng  extends BaseView {
+export class PrefMng  extends BaseView {
   constructor() {
-    super("TitleMng", "TitleMng");
-    this.text="TitleMng";
+    super("prefMng", "prefMng");
+    this.text="prefMng";
+  }
+  async onAfterAttach(store, data) {
   }
   render() {
     return div(this.id, "TitleMng", this.text);

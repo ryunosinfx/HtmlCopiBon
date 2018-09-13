@@ -14,6 +14,7 @@ import {
   input,
   label
 } from "../util/reactive/base/vtags";
+import {Splash} from "./parts/splash/splash";
 export class MainFrame extends BaseView {
   constructor(ms) {
     super("frame", "frame");
@@ -28,6 +29,7 @@ export class MainFrame extends BaseView {
     this.menu = new Menu();
     this.baseFrame = null;
     this.view = '';
+    this.splash = new Splash();
     this.initialPatch();
   }
   async onViewShow(store, data){
@@ -35,6 +37,7 @@ export class MainFrame extends BaseView {
     this.menu.attach(this,'#menu');
     this.container.attach(this,'#container');
     this.footer.attach(this,'#footer');
+    this.splash.attach(this);
   }
   render(titleText) {
     let newVnode = div('frame', ['frame'], {}, [
@@ -61,7 +64,8 @@ export class MainFrame extends BaseView {
         style: {
           color: '#000'
         }
-      }, 'footer!!?')
+      }, 'footer!!?'),
+        div(this.splash.id)
     ]);
     return newVnode;
   }

@@ -280,4 +280,12 @@ export class BaseView {
   getAnker() {
     return this.elm;
   }
+
+  show() {
+    this.currentVnode.elm.style.display = '';
+  }
+
+  close() {
+    this.currentVnode.elm.style.display = 'none';
+  }
 }

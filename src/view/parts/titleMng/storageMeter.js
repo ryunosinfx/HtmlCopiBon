@@ -10,6 +10,7 @@ import {
   label
 } from "../../../util/reactive/base/vtags";
 import {TitleActionCreator} from '../../../reduxy/action/titleActionCreator'
+import {SplashActionCreator} from '../../../reduxy/action/splashActionCreator'
 export class StorageMeter extends BaseView {
   constructor() {
     super("StorageMeter", "StorageMeter");
@@ -37,6 +38,8 @@ export class StorageMeter extends BaseView {
       // alert('totalSize:'+totalSize);
       const counter = span('', ["StorageMeterCounter"], totalSize + "");
       this.prePatch(".StorageMeterCounter", counter);
+      const action = SplashActionCreator.creatRemoveAction(this);
+      this.dispatch(action);
     } else if (store[this.storeCurrentKey]) {
       alert('bbbbbb');
     }

@@ -14,7 +14,7 @@ import {FileUploadArea} from "./content/fileUploadArea";
 import {TitleSettings} from "./content/titleSettings";
 import {ExportArea} from "./content/exportArea";
 import {FilesArea} from "./content/filesArea";
-import {ProgressBar} from "./parts/progressBar";
+import {ProgressBar} from "./parts/progress/progressBar";
 import {TitleMng} from "./content/titleMng";
 export class Container extends BaseView {
   constructor() {
