@@ -185,7 +185,7 @@ export class BaseView {
     this.parentView = parentView;
     let taregetSelecotor = selector;
     if (!selector) {
-      console.warn("★attach selector is null :" + selector + "/this.id:" + this.id);
+      // console.warn("★attach selector is null :" + selector + "/this.id:" + this.id);
       taregetSelecotor = this.id;
     }
     if (this.isAttached()) {

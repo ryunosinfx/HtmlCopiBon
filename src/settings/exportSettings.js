@@ -43,6 +43,11 @@ export const printMargin = {
   conbini: 5
 }
 export const basePaper = {
+  B6: {
+    target: "B6",
+    frame: "B6",
+    multiple: 1
+  },
   A5: {
     target: "A5",
     frame: "A5",

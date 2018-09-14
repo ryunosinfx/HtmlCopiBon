@@ -110,7 +110,10 @@ export class ExportImageProcesser {
     //console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld + "/size:" + size);
     const now = (new Date().getTime());
     const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
-    const exportImageNewPk = await this.iom.save(exportImagePk, (await this.tm.getCurrentTitleName()) + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName, size);
+    const settings = await this.tm.loadSettings();
+    const defaultTitle = await this.tm.getCurrentTitleName();
+    const exportPrefix = settings.name?settings.name:defaultTitle;
+    const exportImageNewPk = await this.iom.save(exportImagePk, exportPrefix+ yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName, size);
     // console.log(compressed);
     if (exportImageNewPk) {
       exports.push(exportImageNewPk);
