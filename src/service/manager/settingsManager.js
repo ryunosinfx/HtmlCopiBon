@@ -27,6 +27,7 @@ export class SettingsManager {
     setting.outputProfile = this.opm.getDefaultPk();
     setting.listing = 0;
     const saved = await this.em.Settings.save(setting);
+    alert(JSON.stringify(saved));
     return saved;
   }
   async save(pk, name, pageNum, startPage, pageDirection,outputProfile, listing = 0) {

@@ -49,8 +49,8 @@ export class PageImages extends BaseView {
       const settingsJson = JSON.stringify(settings);
       // console.log("Pages onViewShow settingsJson:"+settingsJson);
       if (settingsJson !== this.lastSettingOne) {
-        // alert("imagesData:"+imagesData+"/pagesData:"+pagesData);
-        // alert("store[this.storeKey]:"+store[this.storeKey]+"/"+(JSON.stringify(settings)===this.lastSettingOne));
+        //alert("imagesData:"+imagesData+"/pagesData:"+pagesData);
+         // alert("store[this.storeKey]:"+this.lastSettingOne+"/"+(JSON.stringify(settings)));
         const pageFrames = this.buildPageFrames(settings);
         this.prePatch("#" + this.childId, div(this.childId, pageFrames));
         this.lastSettingOne = settingsJson;

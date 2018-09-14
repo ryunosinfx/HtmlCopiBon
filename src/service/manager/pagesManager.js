@@ -81,6 +81,9 @@ export class PagesManager {
   async move(fromPk, toPk) {
     const targetFrom = await this.em.Pages.get(fromPk);
     const targetTo = await this.em.Pages.get(toPk);
+    if(!targetFrom|| !targetTo){
+      return 
+    }
     const previewThumbnailFrom = targetFrom.previewThumbnail;
     const previewThumbnailTo = targetTo.previewThumbnail;
     const outputImageFrom = targetFrom.outputImage;

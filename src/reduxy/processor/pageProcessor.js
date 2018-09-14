@@ -61,6 +61,30 @@ export class PageProcessor {
         pages.push(addOne.getPk());
       }
     }
+
+    for(let index =0;index<pageNum;index++){
+      if (index >= pages.length) {
+        const addOne = await this.pm.save(null, null, null,null,null, index);
+        pages.push(addOne.getPk());
+        // console.warn("index:"+index+"/pk:"+pk+"/pages[index]:"+pages[index]);
+        continue;
+      }
+      const pk = pages[index];
+      if (!pk || typeof pk !== "string") {
+        const addOne = await this.pm.save(null, null, null,null,null, index);
+        pages[index] = addOne.getPk();
+        // console.warn("index:"+index+"/pk:"+pk+"/pages[index]:"+pages[index]);
+        continue;
+      }
+      const pageEntity = await this.em.get(pk);
+      if (!pageEntity) {
+        const addOne = await this.pm.save(null, null, null,null,null, index);
+        pages[index] = addOne.getPk();
+        // console.warn("index:"+index+"/pk:"+pk+"/pages[index]:"+pages[index]);
+        continue;
+      }
+      // console.warn("index:"+index+"/pk:"+pk+"/pages[index]:"+pages[index]+"/pageNum:"+pageNum);
+    }
     await this.tm.saveTitle(title);
   }
   async loadPages() {

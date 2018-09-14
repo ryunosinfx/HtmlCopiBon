@@ -63,10 +63,10 @@ export class SettingViewReducer extends BaseReducer {
       store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
         console.error(e)
       });
-      await this.pp.resetPagesFull().catch((e) => {
+      const result = await this.pp.resetPagesFull().catch((e) => {
         console.error(e)
       });
-      store[this.storePagesKey] = await this.pp.loadPages().catch((e) => {
+      store[this.storePagesKey] = await this.pp.loadPages(result).catch((e) => {
         console.error(e)
       });
       store[this.storeImagesKey] = await this.im.loadImages().catch((e) => {
@@ -78,8 +78,10 @@ export class SettingViewReducer extends BaseReducer {
   async update(data) {
     const title = await this.tm.load();
     const pk = title.getPk();
-    this.sm.save(pk, data.name, data.pageNum, data.startPage, data.pageDirection, data.outputProfile, data.listing);
+
+    const saved = await this.sm.save(pk, data.name, data.pageNum, data.startPage, data.pageDirection, data.outputProfile, data.listing);
     const settingEntityLoad = await this.sm.loadByPk(pk);
+
     if (!settingEntityLoad) {
       const settingEntity = await this.sm.createDefault(pk);
       return settingEntity;
