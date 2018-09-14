@@ -186,7 +186,7 @@ canvas.hidden {
 
 .FilesArea>div>div {
   display: flex;
-  min-width: 160px;
+  min-width: 130px;
   overflow: hidden;
 }
 
@@ -238,11 +238,11 @@ canvas.hidden {
   flex-direction: column;
   background-color:rgb(182, 175, 209);
   border: 1px solid #fdd;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   cursor: pointer;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 120,120,contain;
   background-position: center;
   margin-bottom: 1.3em;
 }
@@ -257,7 +257,7 @@ canvas.hidden {
 }
 .thumbnail_block span.delButton{
   width:30px;
-  margin-bottom:110px;
+  margin-bottom:88px;
 
 }
 .thumbnail_block div {
@@ -309,7 +309,7 @@ canvas.hidden {
   color:rgb(189, 193, 201);
   font-size: 0.3em;
   padding: 0.3em;
-  height:35px;
+  height:45px;
 }
 
 .image_detail_block {
