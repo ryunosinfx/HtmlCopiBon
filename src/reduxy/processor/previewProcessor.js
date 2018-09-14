@@ -29,6 +29,10 @@ export class PreviewProcessor {
       const pageStep = "[" + pageCount + "/" + pegaNum + "]";
       this.progress += progressUnit;
       this.pbp.update(this.progress, 'load pageEnitity' + pageStep);
+      if(!pagePk){
+        retPreviews.push(null);
+        continue;
+      }
       const pageEnitity = await this.em.get(pagePk);
       if(!pageEnitity){
         retPreviews.push(null);

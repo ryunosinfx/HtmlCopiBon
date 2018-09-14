@@ -5,7 +5,7 @@ export class ImageProcessService {
   }
   async createThumbnail(arrayBuffer,type){
     const retURI = await this.ip.create(arrayBuffer,100,100,type);
-    console.log(retURI);
+    // console.log(retURI);
     return retURI;
   }
 

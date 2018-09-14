@@ -131,7 +131,7 @@ export class Preview extends BaseView {
   }
   showPreview(list, isSingle, pageNo, isR2L) {
 
-    console.warn("showPreview isR2L:" + isR2L);
+    // console.warn("showPreview isR2L:" + isR2L);
     const pageSet = list[pageNo - 1];
     let mainView = null;
     const leftText = isR2L
