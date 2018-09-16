@@ -1,50 +1,115 @@
 import vu from "../util/viewUtil";
 import {BaseView} from "../util/reactive/baseView";
-import {a,div,li,ul,img,span,input,label} from "../util/reactive/base/vtags";
-export class Menu  extends BaseView {
+import {
+  a,
+  div,
+  li,
+  ul,
+  img,
+  span,
+  input,
+  label
+} from "../util/reactive/base/vtags";
+import {MenuSelectActionCreator} from '../reduxy/action/menuSelectActionCreator'
+import {MenuSelectViewReducer} from '../reduxy/reducer/menuSelectViewReducer'
+export class Menu extends BaseView {
   constructor() {
     super("menu", "Menu");
-    this.text="Menu";
-    this.menuButtonClass="MenuButton";
-    this.selected ="";
-    this.anckerOfStep0 ='#'+'TitleMng'
-    this.anckerOfStep1 ='#'+'TitleSettings'
-    this.anckerOfStep2 ='#'+'fuaPArent'
-    this.anckerOfStep3 ='#'+'ExportArea'
-    this.anckerOfStep4 ='#'+'step4'
-    this.idOfStep0 ='step0'
-    this.idOfStep1 ='step1'
-    this.idOfStep2 ='step2'
-    this.idOfStep3 ='step3'
-    this.idOfStep4 ='step4'
-    this.idOfStepLabel0 ='Step0 Select or New'
-    this.idOfStepLabel1 ='Step1 Work Setting'
-    this.idOfStepLabel2 ='Step2 Select Files'
-    this.idOfStepLabel3 ='Step3 Export'
-    this.idOfStepLabel4 ='Step4 Pref'
-
+    this.text = "Menu";
+    this.storeKey = MenuSelectActionCreator.getStoreKey();
+    this.menuButtonClass = "MenuButton";
+    this.selected = "";
+    this.steps = [];
+    this.steps.push({
+      id: 'step0',
+      ancker: '#' + 'TitleMng',
+      label: 'Step0 Select or New',
+      targets: ['TitleMng']
+    });
+    this.steps.push({
+      id: 'step1',
+      ancker: '#' + 'TitleSettings',
+      label: 'Step1 Work Setting',
+      targets: ['TitleSettings']
+    });
+    this.steps.push({
+      id: 'step2',
+      ancker: '#' + 'fuaPArent',
+      label: 'Step2 Select Files',
+      targets: ['fuaPArent', 'FilesArea']
+    });
+    this.steps.push({
+      id: 'step3',
+      ancker: '#' + 'ExportArea',
+      label: 'Step3 Export',
+      targets: ['ExportArea']
+    });
+    this.steps.push({
+      id: 'step4',
+      ancker: '#' + 'step4',
+      label: 'Step4 Pref',
+      targets: ['']
+    });
+    this.isSelectByManual = false;
   }
   render() {
-    return div(this.id+'Frame', ["MenuFrame"], this.createButtons());
+    return div(this.id + 'Frame', ["MenuFrame"], this.createButtons());
   }
-
-  onClick(id){
-    return (event)=>{
-      // alert("onClick id:"+id);
-      const parent = document.getElementById(this.id+'Frame');
-      for(let child of parent.children){
-        child.classList.remove("active");
-      };
-      document.getElementById(id).classList.add("active");
+  async onAfterAttach(store, data) {
+    MenuSelectViewReducer.register();
+  }
+  async onViewShow(store, actionData) {
+    if (store[this.storeKey]) {
+      const id = store[this.storeKey];
+      this.hilightMenu(id);
     }
   }
-  createButtons(){
+  onClick(id) {
+    return(event) => {
+      this.isSelectByManual = true;
+      this.hilightMenu(id);
+      setTimeout(() => {
+        this.isSelectByManual = false;
+      }, 1000);
+    }
+  }
+  hilightMenu(id) {
+    const parent = document.getElementById(this.id + 'Frame');
+    if (this.isSelectByManual) {
+      for (let step of this.steps) {
+        if (step.id === id) {
+          for (let child of parent.children) {
+            child.classList.remove("active");
+          };
+          document.getElementById(step.id).classList.add("active");
+          return;
+        }
+      }
+      console.log("step.id id:" + id);
+      return;
+    }
+    for (let child of parent.children) {
+      child.classList.remove("active");
+    };
+    for (let step of this.steps) {
+      for (let target of step.targets) {
+        if (target === id) {
+          console.log("---id" + id);
+          document.getElementById(step.id).classList.add("active");
+          return;
+        }
+      }
+    }
+  }
+  createButtons() {
     const menuTabs = [];
-    menuTabs.push(a(this.idOfStep0,[this.menuButtonClass],this.anckerOfStep0,{on:{click:this.onClick(this.idOfStep0)}},this.idOfStepLabel0))
-    menuTabs.push(a(this.idOfStep1,[this.menuButtonClass],this.anckerOfStep1,{on:{click:this.onClick(this.idOfStep1)}},this.idOfStepLabel1))
-    menuTabs.push(a(this.idOfStep2,[this.menuButtonClass],this.anckerOfStep2,{on:{click:this.onClick(this.idOfStep2)}},this.idOfStepLabel2))
-    menuTabs.push(a(this.idOfStep3,[this.menuButtonClass],this.anckerOfStep3,{on:{click:this.onClick(this.idOfStep3)}},this.idOfStepLabel3))
-    menuTabs.push(a(this.idOfStep4,[this.menuButtonClass],this.anckerOfStep4,{on:{click:this.onClick(this.idOfStep4)}},this.idOfStepLabel4))
+    for (let step of this.steps) {
+      menuTabs.push(a(step.id, [this.menuButtonClass], step.ancker, {
+        on: {
+          click: this.onClick(step.id)
+        }
+      }, step.label))
+    }
     return menuTabs;
   }
 }
