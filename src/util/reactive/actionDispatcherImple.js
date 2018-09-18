@@ -146,7 +146,7 @@ export class ActionDispatcherImple {
           }
         } else {
           //console.log('A0 callUpdate updateReactive id:' + activeView.id);
-          console.log("activeView.updateReactive:" + action.type + "/" + targetView.id);
+          // console.log("activeView.updateReactive:" + action.type + "/" + targetView.id);
           const promise = activeView.updateReactive(store, actionData);
           if (promise) {
             if (!promise.then) {

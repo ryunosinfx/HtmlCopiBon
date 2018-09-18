@@ -85,7 +85,6 @@ export class Menu extends BaseView {
           return;
         }
       }
-      console.log("step.id id:" + id);
       return;
     }
     for (let child of parent.children) {
@@ -94,7 +93,6 @@ export class Menu extends BaseView {
     for (let step of this.steps) {
       for (let target of step.targets) {
         if (target === id) {
-          console.log("---id" + id);
           document.getElementById(step.id).classList.add("active");
           return;
         }

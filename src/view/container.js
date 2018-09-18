@@ -40,6 +40,7 @@ export class Container extends BaseView {
     await this.addScrollMap(this.titleMng);
     this.buildFinish();
     this.currentVnode.elm.childNodes[0].addEventListener('scroll', this.onScroll());
+    this.currentCheck();
   }
   async addScrollMap(part) {
     await part.attach(this);
