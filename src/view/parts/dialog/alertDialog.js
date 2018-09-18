@@ -11,7 +11,7 @@ import {
   label
 } from "../../../util/reactive/base/vtags";
 import {ProgressViewReducer} from '../../../reduxy/reducer/progressViewReducer'
-export class ProgressBar extends BaseView {
+export class AlertDialog extends BaseView {
   constructor() {
     super("ProgressBar", "ProgressBar");
     this.storeKey = "progress";

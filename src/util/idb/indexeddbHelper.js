@@ -7,6 +7,8 @@ export default class IndexeddbHelper {
     this.indexedDB = window.indexedDB;
     this.dbName = dbName;
     this.keyPathMap = {};
+    this.db = null;
+    this.lastVersion = null;
   }
 
   getOpenDB(newVersion) {
@@ -17,6 +19,7 @@ export default class IndexeddbHelper {
         resolve(event.target.result);
       };
       request.onupgradeneeded = (event) => {
+
         resolve(event.target.result);
       };
       request.onabort = (e) => {
@@ -26,6 +29,9 @@ export default class IndexeddbHelper {
         reject(e);
       };
     });
+  }
+  closeDB(){
+
   }
 
   getObjectStore(db, tableName, tables, mode) {
