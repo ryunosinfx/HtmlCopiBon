@@ -11,6 +11,7 @@ export default class IndexeddbHelper {
 		this.lastVersion = null;
 		this.timer = null;
 		this.isDBClosed = true;
+		this.tableCache = {};
 	}
 
 	getOpenDB(newVersion) {
@@ -18,6 +19,7 @@ export default class IndexeddbHelper {
 			this.lastVersion = newVersion;
 			if (this.lastVersion && this.db) {
 				this.db.close();
+				// this.cacheClear();
 			} else if (this.db && this.isDBClosed === false) {
 				resolve(this.db);
 				return;
@@ -45,6 +47,7 @@ export default class IndexeddbHelper {
 	closeDB() {
 		if (this.lastVersion) {
 			this.db.close();
+			// this.cacheClear();
 			this.isDBClosed = true;
 		} else {
 			if (this.timer) {
@@ -52,12 +55,26 @@ export default class IndexeddbHelper {
 			}
 			this.timer = setTimeout(() => {
 				this.db.close();
+				// this.cacheClear();
 				this.isDBClosed = true;
 			}, 1000);
 		}
 	}
+	cacheClear() {
+		const keys = [];
+		for (let index in this.tableCache) {
+			keys.push(index);
+		}
+		for (let index of keys) {
+			delete this.tableCache[index];
+		}
+	}
 
 	getObjectStore(db, tableName, tables, mode) {
+		// if (this.tableCache[tableName] && MODE_R === mode) {
+		// 	console.warn("tableName:" + tableName + "/" + this.tableCache[tableName]);
+		// 	return this.tableCache[tableName];
+		// }
 		let transaction = db.transaction(tables, mode);
 		transaction.oncomplete = (event) => {
 			this.closeDB();
@@ -65,10 +82,13 @@ export default class IndexeddbHelper {
 		transaction.onerror = (event) => {
 			this.closeDB();
 		};
-		return transaction.objectStore(tableName);
+		const table = transaction.objectStore(tableName);
+		// this.tableCache[tableName] = table;
+		return table;
 	}
 	throwNewError(callerName) {
 		return (e) => {
+			console.warn(e);
 			if (e.stack) {
 				console.log(e.stack);
 			} else {
