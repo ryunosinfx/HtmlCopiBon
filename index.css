@@ -1,6 +1,6 @@
 html, body {
   min-height: 100%;
-    max-height: 100%;
+  max-height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -12,7 +12,7 @@ div {
 
 div.frame {
   min-height: 99%;
-    max-height: 100%;
+  max-height: 100%;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -26,7 +26,7 @@ div.footer {
   width: 100%;
   border: solid 1px red;
   padding: 0.5em;
-  z-index:500;
+  z-index: 500;
 }
 
 div.copyright {
@@ -41,7 +41,7 @@ div.header {
   height: 4.5em;
   width: 100%;
   border: solid 1px rgb(101, 64, 88);
-  z-index:500;
+  z-index: 500;
 }
 
 div.title {
@@ -49,6 +49,7 @@ div.title {
   font-weight: bold;
   background-color: rgb(255, 226, 251);
   padding: 0.5em;
+  line-height: 0.5em;
   color: rgb(155, 215, 223);
 }
 
@@ -113,6 +114,10 @@ div.FilesArea {
   padding-bottom: 0.2em;
   text-align: center;
   font-size: 2em;
+}
+
+div.FilesArea>div {
+  min-width: 470px;
 }
 
 span.imageDataLine {
@@ -186,28 +191,31 @@ canvas.hidden {
 
 .FilesArea>div>div {
   display: flex;
-  min-width: 130px;
+  min-width: 115px;
   overflow: hidden;
 }
 
 .FilesArea>div>div.PageImages {
-  min-width: 310px;
-  width: 310px;
+  min-width: 225px;
+  width: 225px;
   max-width: 50%;
 }
 
 .FilesArea>div>div.ImageDetail {
-  min-width: 30%;
-  max-width: 100%;
+  width:100%;
+  /* max-width: calc(100% - 320px); */
 }
 
 .ImageDetail>div {
   width: 100%;
 }
 
+.ImageDetail .ImageDetailA {
+  width: 100%;
+}
+
 .ImageDetail .ImageDetailTitle {
   position: relative;
-  z-index: 1000;
   font-size: 12px;
   background-color: rgb(227, 169, 159);
   text-align: left;
@@ -236,30 +244,30 @@ canvas.hidden {
 .thumbnail_block {
   display: flex;
   flex-direction: column;
-  background-color:rgb(182, 175, 209);
+  background-color: rgb(182, 175, 209);
   border: 1px solid #fdd;
-  width: 120px;
+  width: 110px;
   height: 120px;
   cursor: pointer;
   background-repeat: no-repeat;
-  background-size: 120,120,contain;
+  background-size: 110, 110, contain;
   background-position: center;
   margin-bottom: 1.3em;
 }
-.thumnailsImageArea .thumbnail_block{
 
-}
+.thumnailsImageArea .thumbnail_block {}
 
 .thumbnail_block.over {
   background-color: rgba(24, 129, 12, 0.8);
   width: 148px;
   border: 2px dotted #dfd;
 }
-.thumbnail_block span.delButton{
-  width:30px;
-  margin-bottom:88px;
 
+.thumbnail_block span.delButton {
+  width: 30px;
+  margin-bottom: 88px;
 }
+
 .thumbnail_block div {
   display: flex;
   height: auto;
@@ -306,10 +314,10 @@ canvas.hidden {
   display: block;
   background-color: rgb(0, 103, 135);
   border: 0 solid #fdd;
-  color:rgb(189, 193, 201);
+  color: rgb(189, 193, 201);
   font-size: 0.3em;
   padding: 0.3em;
-  height:45px;
+  height: 45px;
 }
 
 .image_detail_block {
@@ -519,7 +527,7 @@ canvas.hidden {
 }
 
 .previewCallButton {
-  width: 150px;
+  width: 110px;
   background-color: rgb(156, 111, 146);
   font-size: 50%;
   padding: 10px;
@@ -547,11 +555,11 @@ canvas.hidden {
   display: inline-block;
   display: flex;
   background-color: rgb(166, 121, 191);
-  width: 300px;
+  width: 220px;
   height: 150px;
   font-size: 1em;
   margin: 0.1em auto;
-  padding: 0.1em 1em;
+  padding: 0.1em 0em;
 }
 
 .PageFrame .Page {
@@ -611,6 +619,7 @@ canvas.hidden {
 .ExportButtons {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 div.button>div.exportedState {
@@ -621,7 +630,7 @@ div.button>div.exportedState {
 
 .ExportButtons>div {
   display: flex;
-  width: 200px;
+  width: 144px;
   padding: 15px;
   margin: 2px;
   border: 1px solid rgb(87, 158, 17);
@@ -748,76 +757,87 @@ div.button.enable {
 .TitleRowRow>div, .StorageInitializerFrame>div {
   padding: 0.2em;
 }
-.TitleNewoneRow{
+
+.TitleNewoneRow {
   margin-left: 1em;
 }
+
 .TitleRowRow {
   display: flex;
 }
 
-
 .MenuFrame {
   display: flex;
-  position:fixed;
-  top:4.6em;
-  width:100%;
-  z-index:500;
+  position: fixed;
+  top: 4.6em;
+  width: 100%;
+  z-index: 500;
 }
 
 .MenuFrame a {
   display: inline-block;
   width: 20%;
   cursor: pointer;
-  text-decoration:none;
-  height:2.5em;
+  text-decoration: none;
+  min-height: 2.5em;
   padding: 5px 10px;
   margin: 2px 1px 0 1px;
   border: 0px solid rgb(83, 122, 134);
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: rgb(170, 185, 210);
   color: rgb(222, 240, 222);
 }
+
 a.dummy {
   display: inline-block;
   width: 50px;
   text-decoration: none;
 }
+
 .MenuFrame>a.MenuButton.active:nth-child(1) {
-  background-color:rgb(249, 111, 52);
+  background-color: rgb(249, 111, 52);
 }
+
 .MenuFrame>a.MenuButton.active:nth-child(2) {
-  background-color:rgb(104, 65, 199);
+  background-color: rgb(104, 65, 199);
 }
+
 .MenuFrame>a.MenuButton.active:nth-child(3) {
-  background-color:rgb(72, 159, 222);
+  background-color: rgb(72, 159, 222);
 }
+
 .MenuFrame>a.MenuButton.active:nth-child(4) {
-  background-color:rgb(123, 193, 68);
+  background-color: rgb(123, 193, 68);
 }
+
 .MenuFrame>a.MenuButton.active:nth-child(5) {
-  background-color:rgb(80, 50, 60);
+  background-color: rgb(80, 50, 60);
 }
+
 .MenuFrame>a.MenuButton.active {
   font-weight: bold;
-  border-width: 0 ;
+  border-width: 0;
 }
+
 nav, div.scroll-container {
   display: block;
   margin: 0 auto;
   text-align: center;
 }
-div.main-container{
-width: 100%;
-height: 100%;
 
-}
-div.main-container{
-  position:absolute;
-  top:0;
-  padding-top:8em;
+div.main-container {
+  width: 100%;
   height: 100%;
-  padding-bottom:3em;
 }
+
+div.main-container {
+  position: absolute;
+  top: 0;
+  padding-top: 8em;
+  height: 100%;
+  padding-bottom: 3em;
+}
+
 div.scroll-container {
   display: block;
   width: 100%;
@@ -825,8 +845,9 @@ div.scroll-container {
   overflow: auto;
   scroll-behavior: smooth;
 }
-div.Splash{
-  position:fixed;
+
+div.Splash {
+  position: fixed;
   top: 0;
   left: 0;
   height: 100%;
@@ -836,26 +857,31 @@ div.Splash{
   display: flex;
   flex-direction: column;
 }
-div.Splash>div{
-  width:100%;
+
+div.Splash>div {
+  width: 100%;
   font-size: 200%;
 }
-div.Splash>div.appTitle{
+
+div.Splash>div.appTitle {
   font-size: 500%;
   padding-top: 30%;
   padding-left: 20%;
   font-weight: bold;
 }
-div.Splash>div.appVerion{
+
+div.Splash>div.appVerion {
   font-size: 100%;
   padding-top: 0%;
   padding-left: 50%;
 }
-div.Splash>div.message{
+
+div.Splash>div.message {
   font-size: 300%;
   padding-top: 20%;
 }
-div.Splash>div.message>div{
+
+div.Splash>div.message>div {
   text-align: center;
 }
 
@@ -869,51 +895,53 @@ div.loader {
 
 .loader span {
   text-shadow:
-    0 0 2px rgba(204, 208, 212,0.9),
+    0 0 2px rgba(204, 208, 212, 0.9),
     0 15px 25px rgba(0, 0, 0, 0.3),
     0 -2px 3px rgba(0, 0, 0, 0.1),
     0 -5px 10px rgba(255, 255, 255, 0.5),
     0 5px 10px rgba(0, 0, 0, 0.3),
     0 3px 4px rgba(255, 255, 255, 0.2),
     0 0 20px rgba(255, 255, 255, 0.45);
-
-    animation: loading 0.95s ease-in-out infinite alternate;
+  animation: loading 0.95s ease-in-out infinite alternate;
 }
 
 @keyframes loading {
-	to {text-shadow:
-    0 0 2px rgba(204, 208, 212,0.2),
-    0 0 3px rgba(0, 0, 0, 0.02),
-    0 0 0 rgba(0, 0, 0, 0),
-    0 0 0 rgba(255, 255, 255, 0),
-    0 0 0 rgba(0, 0, 0, 0),
-    0 0 0 rgba(255, 255, 255, 0),
-    0 0 0 rgba(255, 255, 255, 0);}
+  to {
+    text-shadow:
+      0 0 2px rgba(204, 208, 212, 0.2),
+      0 0 3px rgba(0, 0, 0, 0.02),
+      0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 rgba(255, 255, 255, 0),
+      0 0 0 rgba(0, 0, 0, 0),
+      0 0 0 rgba(255, 255, 255, 0),
+      0 0 0 rgba(255, 255, 255, 0);
+  }
 }
 
 .loader span:nth-child(2) {
-  animation-delay:0.15s;
+  animation-delay: 0.15s;
 }
 
 .loader span:nth-child(3) {
-  animation-delay:0.30s;
+  animation-delay: 0.30s;
 }
 
 .loader span:nth-child(4) {
-  animation-delay:0.45s;
+  animation-delay: 0.45s;
 }
 
 .loader span:nth-child(5) {
-  animation-delay:0.60s;
+  animation-delay: 0.60s;
 }
 
 .loader span:nth-child(6) {
-  animation-delay:0.75s;
+  animation-delay: 0.75s;
 }
 
 .loader span:nth-child(7) {
-  animation-delay:0.90s;
+  animation-delay: 0.90s;
 }
+
 .display_none {
   display: none;
 }
