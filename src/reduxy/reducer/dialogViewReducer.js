@@ -19,8 +19,8 @@ export class DialogViewReducer extends BaseReducer {
     this.addInitializeKey(this.storeKey);
   }
   static register() {
-    if (!splashViewReducer) {
-      splashViewReducer = new SplashViewReducer();
+    if (!dialogViewReducer) {
+      dialogViewReducer = new DialogViewReducer();
     }
   }
   async reduce(store, action) {

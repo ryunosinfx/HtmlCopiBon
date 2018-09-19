@@ -16,6 +16,7 @@ import { ExportArea } from "./content/exportArea";
 import { FilesArea } from "./content/filesArea";
 import { ProgressBar } from "./parts/progress/progressBar";
 import { TitleMng } from "./content/titleMng";
+import { Dialog } from "./parts/dialog/dialog";
 import { MenuSelectActionCreator } from '../reduxy/action/menuSelectActionCreator'
 export class Container extends BaseView {
 	constructor() {
@@ -26,6 +27,7 @@ export class Container extends BaseView {
 		this.exportArea = new ExportArea();
 		this.progressBar = new ProgressBar();
 		this.titleMng = new TitleMng();
+		this.dialog = new Dialog();
 		this.contentsScrollTops = [];
 		this.contentsScrollRanges = [];
 		this.contentsIdMap = {};
@@ -33,6 +35,7 @@ export class Container extends BaseView {
 
 	async onAfterAttach(store, data) {
 		await this.progressBar.attach(this);
+		await this.dialog.attach(this);
 		await this.addScrollMap(this.titleSettings);
 		await this.addScrollMap(this.fileUploadArea);
 		await this.addScrollMap(this.filesArea);
