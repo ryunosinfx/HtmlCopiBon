@@ -959,7 +959,31 @@ div.loader {
   width: 320px;
   height: 300px;
 
-  background-color:rgba(10, 10, 10,1);
+  background-color:#dce4e8;
+}
+#Dialog>div div.dialogTitle{
+  height:3em;
+  padding:0.5em;
+}
+#Dialog>div div.dialogInfo{
+  height:13em;
+  padding:0.5em;
+}
+#Dialog>div div.dialogDeside{
+  height:3em;
+  padding:0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+#Dialog>div div.dialogDeside>div{
+  cursor: pointer;
+  padding: 0.2em;
+  width:130px;
+  background-color: #96e8d8;
+  margin: 0 0.2em;
+  border-radius: 3px;
 }
 .display_none {
   display: none;
