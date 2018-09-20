@@ -942,6 +942,25 @@ div.loader {
   animation-delay: 0.90s;
 }
 
+
+#Dialog{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top:0;
+  left: 0;
+  z-index: 1200;
+  width: 100%;
+  height: 100%;
+  background-color:rgba(10, 10, 10, 0.5);
+}
+#Dialog>div{
+  width: 320px;
+  height: 300px;
+
+  background-color:rgba(10, 10, 10,1);
+}
 .display_none {
   display: none;
 }

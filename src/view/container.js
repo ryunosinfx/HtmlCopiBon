@@ -71,6 +71,7 @@ export class Container extends BaseView {
 			}
 		}, [
 			div(this.progressBar.id),
+			div(this.dialog.id),
 			div(this.titleSettings.id),
 			div(this.fileUploadArea.id),
 			div(this.filesArea.id),

@@ -12,8 +12,12 @@ export class DialogViewReducer extends BaseReducer {
   constructor() {
     super();
     this.dialogOpenAction = DialogActionCreator.creatOpenAction();
+    this.dialogAlertAction = DialogActionCreator.creatAlertAction();
+    this.dialogConfirmAction = DialogActionCreator.creatConfirmAction();
     this.dialogCloseAction = DialogActionCreator.creatCloseAction();
     this.atatch(this.dialogOpenAction);
+    this.atatch(this.dialogAlertAction);
+    this.atatch(this.dialogConfirmAction);
     this.atatch(this.dialogCloseAction);
     this.storeKey = DialogActionCreator.getStoreKey();
     this.addInitializeKey(this.storeKey);
@@ -25,16 +29,20 @@ export class DialogViewReducer extends BaseReducer {
   }
   async reduce(store, action) {
     if (this.dialogOpenAction.type === action.type) {
-      store[this.storeKey] = this.createDialog(true, 0, false, action.data.msg, action.data.title, action.data.nextActions);
+      store[this.storeKey] = this.createDialog(true, action.type, false, action.data.msg, action.data.title, action.data.nextActions);
+    } else if (this.dialogAlertAction.type === action.type) {
+      store[this.storeKey] = this.createDialog(true, action.type, false, action.data.msg, action.data.title, action.data.nextActions);
+    } else if (this.dialogConfirmAction.type === action.type) {
+      store[this.storeKey] = this.createDialog(true, action.type, false, action.data.msg, action.data.title, action.data.nextActions);
     } else if (this.dialogCloseAction.type === action.type) {
       store[this.storeKey] = this.createDialog(false, 0, false);
     }
     return store;
   }
-  createDialog(isVisible, progress, isComple, msg, title, nextActions) {
+  createDialog(isVisible, type, isComple, msg, title, nextActions) {
     return {
       isVisible: isVisible,
-      progress: progress,
+      type: type,
       msg: msg,
       isComple: isComple,
       title: title,

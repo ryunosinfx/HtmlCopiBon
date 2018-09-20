@@ -16,6 +16,9 @@ export class Dialog extends BaseView {
 	constructor() {
 		super("Dialog", "Dialog");
 		this.storeKey = DialogActionCreator.getStoreKey();
+    this.dialogOpenAction = DialogActionCreator.creatOpenAction();
+    this.dialogAlertAction = DialogActionCreator.creatAlertAction();
+    this.dialogConfirmAction = DialogActionCreator.creatConfirmAction();
 		this.title = "Dialog";
 	}
 
@@ -46,7 +49,7 @@ export class Dialog extends BaseView {
 	async onViewShow(store, actionData) {
 		if (store[this.storeKey]) {
 			//alert("onViewShow");
-			this.showProgress(store[this.storeKey]);
+			this.showDialog(store[this.storeKey]);
 			//console.log("Dialog onViewShow");
 		}
 	}
@@ -60,8 +63,8 @@ export class Dialog extends BaseView {
 			alert("cancel!")
 		}
 	}
-	showProgress(data) {
-		const { isVisible, isConfirm, isComple, msg, title } = data;
+	showDialog(data) {
+		const { isVisible, type, isComple, msg, title } = data;
 		if (title) {
 			this.title = title;
 		}
@@ -74,9 +77,12 @@ export class Dialog extends BaseView {
 			}, ));
 			this.prePatch(".dialogTitle", div("", ["dialogTitle"], {}, this.title));
 			this.prePatch(".dialogMessage", div("", ["dialogMessage"], {}, msg));
-			if (isComple) {
-				this.currentVnode.elm.style.display = 'none';
+			const buttons = [];
+			buttons.pssh(div('', ['dialogOk'], {on:{click:this.onOK()}},"OK"));
+			if(this.dialogConfirmAction.type === type){
+				buttons.pssh(div('', ['dialogCancel'], {on:{click: this.onCancel()}},"Cancel"));
 			}
+			this.prePatch(".dialogDeside", 	div('', ['dialogDeside'], buttons));
 		} else {
 			this.currentVnode.elm.style.display = 'none';
 			this.prePatch(".dialog", div("", ["dialog"], {
