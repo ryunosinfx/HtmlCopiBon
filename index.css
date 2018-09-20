@@ -42,6 +42,7 @@ div.header {
   width: 100%;
   border: solid 1px rgb(101, 64, 88);
   z-index: 500;
+  background-color: rgb(255, 226, 251);
 }
 
 div.title {
@@ -217,10 +218,11 @@ canvas.hidden {
 .ImageDetail .ImageDetailTitle {
   position: relative;
   font-size: 12px;
-  background-color: rgb(227, 169, 159);
+  background-color: #44cec7;
   text-align: left;
   padding: 10px;
   width: 100%;
+  z-index: 900;
 }
 
 .Thumnails {
@@ -467,6 +469,7 @@ canvas.hidden {
   background-color: rgb(159, 117, 242);
   padding: 0.5em;
   margin: 0.1em 0;
+  margin-top: 1em;
 }
 
 .TitleSettingsTitle {
@@ -528,7 +531,7 @@ canvas.hidden {
 
 .previewCallButton {
   width: 110px;
-  background-color: rgb(156, 111, 146);
+  background-color: #0b47b5;
   font-size: 50%;
   padding: 10px;
   margin: 1px;
@@ -538,7 +541,7 @@ canvas.hidden {
 
 .pageFrameHeader {
   font-size: 60%;
-  background-color: rgb(59, 2, 62);
+  background-color: rgb(4, 29, 56);
   color: white;
   padding: 5px;
 }
@@ -554,7 +557,7 @@ canvas.hidden {
 .PageFrame {
   display: inline-block;
   display: flex;
-  background-color: rgb(166, 121, 191);
+  background-color: rgb(90, 123, 144);
   width: 220px;
   height: 150px;
   font-size: 1em;
@@ -571,7 +574,8 @@ canvas.hidden {
 }
 
 .PageFrame .Dummy {
-  background-color: rgb(106, 91, 115);
+  background-color: rgb(108, 110, 115);
+  color: rgb(108, 110, 115);
 }
 
 .PageFrame .Page .thumbnail_block {
