@@ -15,9 +15,11 @@ import {
 import {
   ImageActionCreator
 } from '../../reduxy/action/imageActionCreator'
-import {PageActionCreator} from '../../reduxy/action/pageActionCreator'
+import {
+  PageActionCreator
+} from '../../reduxy/action/pageActionCreator'
 export class Thumbnail extends BaseView {
-  constructor(parent,draggableArea) {
+  constructor(parent, draggableArea) {
     super("Thumnail" + parent.id, "Thumnail");
     this.parent = parent;
     this.draggableArea = draggableArea;
@@ -45,7 +47,7 @@ export class Thumbnail extends BaseView {
   handleDragStart(dragImageSrc) {
     return (event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.style.opacity = '0.4'; // this / event.target is the source nodevent.
@@ -61,7 +63,7 @@ export class Thumbnail extends BaseView {
   handleDragOver() {
     return (event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       event.preventDefault(); // Necessary. Allows us to drop.
@@ -72,7 +74,7 @@ export class Thumbnail extends BaseView {
   handleDragEnter() {
     return (event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.classList.add('over');
@@ -81,7 +83,7 @@ export class Thumbnail extends BaseView {
   handleDragLeave() {
     return (event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       elm.classList.remove('over'); // this / event.target is previous target element.
@@ -92,20 +94,20 @@ export class Thumbnail extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       const nowSelectedElm = this.draggableArea.nowSelectedElm;
-      if(nowSelectedElm && nowSelectedElm.dataset.pk  && nowSelectedElm !== elm){
+      if (nowSelectedElm && nowSelectedElm.dataset.pk && nowSelectedElm !== elm) {
         const selectedPk = nowSelectedElm.dataset.pk;
         if (nowSelectedElm.dataset.is_image) {
           //console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
           const action = ImageActionCreator.creatSortImagesAction(this, {
             imagePKmove: selectedPk,
-            imagePKdrop:elm.dataset.pk
+            imagePKdrop: elm.dataset.pk
           });
           this.dispatch(action);
-        }else if (nowSelectedElm.dataset.is_page) {
+        } else if (nowSelectedElm.dataset.is_page) {
           //console.log('sort handleDrop imagePKmove:'+selectedPk+"/elm.dataset.pk:"+elm.dataset.pk)
           const action = PageActionCreator.creatRemovePageAction(this, {
             pagePk: selectedPk
@@ -125,14 +127,14 @@ export class Thumbnail extends BaseView {
   handleDragEnd(event) {
     return (event) => {
       const elm = event.target;
-      if(!elm.classList || !elm.classList.contains(this.thumbnail_block)){
+      if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
         return
       }
       const nowSelectedElm = this.draggableArea.nowSelectedElm;
       // console.log('handleDragEnd imagePKmove:'+(nowSelectedElm?nowSelectedElm.dataset.pk:nowSelectedElm)+"/elm.dataset.pk:"+elm.dataset.pk)
       elm.style.opacity = '1';
       const childNodes = elm.parentNode.childNodes;
-      for(let i = 0; i< childNodes.length ; i++) {
+      for (let i = 0; i < childNodes.length; i++) {
         const col = childNodes[i];
         col.classList.remove('over');
       }
@@ -143,15 +145,15 @@ export class Thumbnail extends BaseView {
       event.stopPropagation(); // Stops some browsers from redirecting.
       event.preventDefault();
       const elm = event.target;
-        // console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
-        const action = ImageActionCreator.creatDetailAction(this, {
-          imagePK: elm.dataset.pk
-        });
-        this.dispatch(action);
+      // console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
+      const action = ImageActionCreator.creatDetailAction(this, {
+        imagePK: elm.dataset.pk
+      });
+      this.dispatch(action);
       return false;
     }
   }
-  async crateDataLine(imageData,pagesMap ={}) {
+  async crateDataLine(imageData, pagesMap = {}) {
     const imageEntity = imageData.imageEntity;
     const binaryEntity = imageData.binaryEntity;
     //console.log(binaryEntity)
@@ -179,30 +181,46 @@ export class Thumbnail extends BaseView {
         dragenter: this.handleDragEnter(),
         dragleave: this.handleDragLeave(),
         drop: this.handleDrop(),
-        dragend:this.handleDragEnd(),
-        click:this.selectImage()
+        dragend: this.handleDragEnd(),
+        click: this.selectImage(),
+        touchstart: this.handleDragStart(imgElm.src),
+        touchmove: this.handleDragOver(),
+        touchend: this.handleDragEnd()
       },
-      dataset:{pk:pk,is_image:true},
-      props:{ "draggable":"true"}
+      dataset: {
+        pk: pk,
+        is_image: true
+      },
+      props: {
+        "draggable": "true"
+      }
     });
     const classObj = {};
     classObj[this.displayNone] = pagesMap[pk];
-    const rowVnode = div("", [this.thumbnail_block],{
+    const rowVnode = div("", [this.thumbnail_block], {
       on: {
         dragstart: this.handleDragStart(imgElm.src),
         dragover: this.handleDragOver(),
         dragenter: this.handleDragEnter(),
         dragleave: this.handleDragLeave(),
         drop: this.handleDrop(),
-        dragend:this.handleDragEnd(),
-        click:this.selectImage()
+        dragend: this.handleDragEnd(),
+        click: this.selectImage(),
+        touchstart: this.handleDragStart(imgElm.src),
+        touchmove: this.handleDragOver(),
+        touchend: this.handleDragEnd()
       },
-      style:{
-        "background-image":"url("+imgElm.src+")"
+      style: {
+        "background-image": "url(" + imgElm.src + ")"
       },
-      class:classObj,
-      dataset:{pk:pk,is_image:true},
-      props:{ "draggable":"true"}
+      class: classObj,
+      dataset: {
+        pk: pk,
+        is_image: true
+      },
+      props: {
+        "draggable": "true"
+      }
     }, [delButton, textVnode]);
     return rowVnode;
   }
