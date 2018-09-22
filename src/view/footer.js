@@ -4,7 +4,7 @@ import { a, div, li, ul, img, span, input, label } from "../util/reactive/base/v
 export class Footer extends BaseView {
 	constructor() {
 		super("footer", "footer");
-		this.copyright = "ryunosinfx";
+		this.copyright = "copyright:ryunosinfx - Licenced MIT";
 	}
 	render() {
 		const newVnode = div({

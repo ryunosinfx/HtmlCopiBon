@@ -15,7 +15,7 @@ import { DialogViewReducer } from '../../../reduxy/reducer/dialogViewReducer'
 let dialogInstance = null;
 export class Dialog extends BaseView {
 	constructor() {
-		super("Dialog", "Dialog");
+		super("Dialog", ["Dialog", BaseView.ModalWindowClass()]);
 		this.storeKey = DialogActionCreator.getStoreKey();
 		this.dialogOpenAction = DialogActionCreator.creatOpenAction();
 		this.dialogAlertAction = DialogActionCreator.creatAlertAction();
