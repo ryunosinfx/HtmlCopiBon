@@ -1,6 +1,7 @@
 html, body {
   min-height: 100%;
   max-height: 100%;
+  height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -12,13 +13,13 @@ div {
 div.frame {
   display:flex;
   justify-content: center;
-  min-height: 99%;
+  min-height: 100%;
   max-height: 100%;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   margin: 0;
-  background-color: #b4c8cc;
+  background-color: #c9d5de;
 }
 div.frame>div{
     max-width:940px;
@@ -53,18 +54,18 @@ div.header {
   top: 0;
   height: 4.5em;
   width: 100%;
-  border: solid 0px rgb(101, 64, 88);
+  border: solid 1px #052240;
+  border-bottom-width: 3.2em;
   z-index: 500;
-  background-color: rgb(255, 226, 251);
+  background-color: #e8eeef;
 }
 
 div.title {
   font-size: 2em;
   font-weight: bold;
-  background-color: rgb(255, 226, 251);
-  padding: 0.5em;
+  padding: 0.5em 0.9em ;
   line-height: 0.5em;
-  color: rgb(155, 215, 223);
+  color: #1664a2;
 }
 
 div.title span.Version {
@@ -79,7 +80,7 @@ div.title:after {
   padding: 0.5em;
   font-weight: normal;
   content: ":The Images Converter For Book Made By Copy Machine!";
-  color: rgb(119, 52, 112);
+  color: #2196f3
 }
 
 div.FileUploadArea input {
@@ -247,13 +248,13 @@ canvas.hidden {
 .Thumnails .thumbnails_block {
   padding: 1px;
   background-color: rgba(220, 220, 220, 1);
-  border: 0px dotted #dfd;
+  border: 0px dotted #cad2b1;
   height: 100%;
 }
 
 .Thumnails .thumbnails_block.over {
   background-color: rgba(190, 190, 190, 0.8);
-  border: 2px dotted #dfd;
+  border: 2px dotted #cad2b1;
 }
 
 .thumbnail_block {
@@ -273,9 +274,9 @@ canvas.hidden {
 .thumnailsImageArea .thumbnail_block {}
 
 .thumbnail_block.over {
-  background-color: rgba(24, 129, 12, 0.8);
+  background-color: #0bd5d8;
   width: 110px;
-  border: 2px dotted #dfd;
+  border: 2px dotted #cad2b1;
 }
 
 .thumbnail_block span.delButton {
@@ -411,7 +412,17 @@ canvas.hidden {
   padding: 0px
 }
 
-.Preview>div img {
+.Preview>div div.img {
+  max-width: 100%;
+  max-height: calc(100% - 72px);
+}
+.Preview>div div.img.right {
+  text-align: left;
+}
+.Preview>div div.img.left {
+  text-align: right;
+}
+.Preview>div div.img>img {
   max-width: 100%;
   max-height: 100%;
 }
@@ -421,10 +432,15 @@ canvas.hidden {
   padding: 10px;
   background-color: rgba(95, 161, 212, 0.58);
 }
+.Preview>div .previewLeft>.Dummy, .Preview>div .previewRight>.close {
+  display: inline-block;
+  width:1em;
+  height:1em;
+}
 
 .Preview>div .previewInfo {
   font-size: 60%;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   color: rgb(43, 176, 218)
 }
 
@@ -435,15 +451,20 @@ canvas.hidden {
 .Preview>div .preview_dual .previewImageFrame {
   width: 50%;
 }
+.Preview>div .previewImageFrame {
+    display: flex;
+    flex-direction: column;
+}
 
 .previewInfo .options {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 0.2em;
 }
 
 .previewInfo .options>div {
   width: 10em;
-  padding: 0.2em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
   cursor: pointer;
   font-size: 0.7em;
   color: rgb(29, 154, 114);
@@ -524,6 +545,12 @@ canvas.hidden {
 .previewFrame {
   display: flex;
 }
+.previewFrame.right {
+  justify-content: right;
+}
+.previewFrame.left {
+  justify-content: left;
+}
 
 .previewFrame>div.button {
   width: 2em;
@@ -542,6 +569,31 @@ canvas.hidden {
 .previewFrame>div.button span.button.text {
   font-size: 50%;
 }
+.previewFrame>div.button span.button.dummy {
+  font-size: 100%;
+  height:25px;
+}
+
+.previewFrame>div.button span.button.close {
+  font-size: 85%;
+  font-weight: bold;
+  text-align: center;
+  background-color: #2d3031;
+  color: #babdce;
+  height:35px;
+  width:35px;
+  border-radius: 22px;
+  border: 5px solid #babdce;
+  margin-top:-18px;
+  margin-right:-18px;
+  margin-bottom:3px;
+  margin-left:18px;
+}
+.previewFrame>div.button span.button.close:hover {
+  color: white;
+  border: 5px solid white;
+}
+
 
 .previewCallButton {
   width: 110px;
@@ -551,6 +603,12 @@ canvas.hidden {
   margin: 1px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.previewCallButton:hover {
+  background-color: #072763;
+  color: #9a98de;
+  font-weight: bold;
 }
 
 .pageFrameHeader {
@@ -644,6 +702,8 @@ div.button>div.exportedState {
   background-color: rgb(148, 222, 164);
   padding: 0.2em;
   font-size: 60%;
+  max-width:100%;
+  word-wrap: break-word;
 }
 
 .ExportButtons>div {
@@ -655,6 +715,10 @@ div.button>div.exportedState {
   cursor: pointer;
   border-radius: 3px;
   background-color: rgb(141, 233, 159);
+}
+
+.ExportButtons>div>div{
+  max-width:100%;
 }
 
 div.DownloadLastExportZipButtonFrame, div.DownloadLastExportPdfButtonFrame {
@@ -787,14 +851,17 @@ div#menu{
   position: fixed;
   top: 4.6em;
   z-index: 500;
+  width: 100%;
 }
 .MenuFrame {
   display: flex;
   width: 100%;
   max-width: 940px;
+  align-items: stretch;
 }
 
 .MenuFrame a {
+  flex-grow:0;
   display: inline-block;
   width: 20%;
   cursor: pointer;
@@ -882,12 +949,15 @@ div.Splash {
 
 div.Splash>div.splashTitle {
   width:360px;
-  height:320px;
-  background-color: #205561;
+  height:300px;
+  background-color: #e8eeef;
+  border: solid 1px #052240;
   padding:1em;
+  border-bottom:203px solid #052240;
 }
 
 div.Splash div.appTitle {
+  color: #1664a2;
   font-size: 500%;
   padding-top: 30px;
   letter-spacing: -0.05em;
@@ -899,7 +969,7 @@ div.Splash div.appVerion {
   font-size: 100%;
   padding-top: 0%;
   padding-left: 50%;
-  color: #4683b5;
+  color: rgb(0, 232, 249);
 }
 
 div.Splash div.message {

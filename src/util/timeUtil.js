@@ -8,7 +8,7 @@ const re_ss = /ss/;
 export const unixTimeToDateFormat = (unixtime, format = "yyyy-MM-dd hh:mm:ss") => {
 	const d = new Date(unixtime);
 	const year = d.getFullYear();
-	const month = ('0' + d.getMonth() + 1)
+	const month = ('0' + (d.getMonth() * 1 + 1))
 		.slice(-2);
 	const day = ('0' + d.getDate())
 		.slice(-2);;

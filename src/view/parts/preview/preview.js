@@ -96,7 +96,7 @@ export class Preview extends BaseView {
 			} else if (type === this.previewCloseAction.type) {
 				this.list = null;
 				// alert("onViewShow beClose");
-				this.closePreview();
+				this.close();
 				return;
 			}
 			this.currentVnode.elm.style.display = 'block';
@@ -130,7 +130,6 @@ export class Preview extends BaseView {
 		}
 	}
 	showPreview(list, isSingle, pageNo, isR2L) {
-
 		// console.warn("showPreview isR2L:" + isR2L);
 		const pageSet = list[pageNo - 1];
 		let mainView = null;
@@ -148,6 +147,9 @@ export class Preview extends BaseView {
 			}
 		}, [
 			span('', [
+				"dummy", "button", "symbol"
+			], ""),
+			span('', [
 				leftText, "button", "symbol"
 			], "<"),
 			span('', [
@@ -161,6 +163,9 @@ export class Preview extends BaseView {
 				click: this.goNextOrBack(true)
 			}
 		}, [
+			span('', [
+				"close", "button", "symbol"
+			], { on: { click: this.beClose() } }, "X"),
 			span('', [
 				rightText, "button", "symbol"
 			], ">"),
@@ -248,8 +253,9 @@ export class Preview extends BaseView {
 					click: this.onCheckUpdate("isNoCropping", isRight)
 				}
 			}, "isNoCropping:");
+			const pageSide = isRight === null ? "" : isRight ? "right" : "left";
 			const info = div('', ['previewInfo'], {}, [pageNoText, div('', ["options"], [checkForceColor, checkNoCropping])]);
-			return div('', ['previewImageFrame'], {}, [info, imgVnode]);
+			return div('', ['previewImageFrame'], {}, [info, div('', ["img", pageSide], [imgVnode])]);
 		} else {
 			const isDummy = binalyEnitiy === undefined;
 			const noimageMsg = isDummy ?
@@ -315,9 +321,5 @@ export class Preview extends BaseView {
 			event.stopPropagation();
 			return false;
 		}
-	}
-	closePreview() {
-		// alert("beClose");
-		this.currentVnode.elm.style.display = 'none';
 	}
 }

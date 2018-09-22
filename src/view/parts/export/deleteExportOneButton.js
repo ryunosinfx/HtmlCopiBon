@@ -33,15 +33,17 @@ export class DeleteExportOneButton extends BaseView {
 	async onViewShow(store, actionData) {
 		if (store[this.storeRemoveResultKey]) {
 			//  alert("delete exports!");
-			await Dialog.opneAlert("Let's start!", "delete exports!");
 			const action = ExportActionCreator.creatLoadAction(this);
 			this.dispatch(action);
 		}
 	}
 	click() {
-		return (event) => {
-			const action = ExportActionCreator.creatRemoveAction();
-			this.dispatch(action);
+		return async (event) => {
+			const result = await Dialog.opneConfirm("Let's start!", "delete exports?");
+			if (result) {
+				const action = ExportActionCreator.creatRemoveAction();
+				this.dispatch(action);
+			}
 			event.stopPropagation();
 			return false;
 		}
