@@ -1,4 +1,4 @@
-import IdbUtil from './idbUtil'
+import { IdbUtil } from './idbUtil'
 const MODE_R = "readonly";
 const MODE_RW = "readwrite";
 export default class IndexeddbHelper {
@@ -179,6 +179,41 @@ export default class IndexeddbHelper {
 	_selectByKeyOnTran(db, tableName, key, tables) {
 		return new Promise((resolve, reject) => {
 			let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
+			let request = objectStore.get(key); //keyはsonomama
+			request.onsuccess = (event) => {
+				resolve(request.result);
+			};
+			request.onerror = (e) => {
+				reject(e);
+			};
+		});
+	}
+	//public
+	async selectByKeys(payload) {
+		let { tableName, keys } = payload;
+		return await this._selectByKeys(tableName, keys);
+	}
+	//Select In-line-return promise;Keyで返す。
+	async _selectByKeys(tableName, keys) {
+		const db = await this.getOpenDB()
+			.catch(this.throwNewError("_selectByKeys->getOpenDB tableName:" + tableName));
+		return await this._selectByKeysOnTran(db, tableName, keys)
+			.catch(this.throwNewError("_selectByKeys->_selectByKeyOnTran tableName:" + tableName));
+	}
+	async _selectByKeysOnTran(db, tableName, keys, tables) {
+		let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
+		const retMap = {};
+		for (let key of keys) {
+			const result = await this._getByKeyFromeObjectStore(objectStore, key);
+			retMap[key] = result;
+		}
+		return retMap;
+	}
+	_getByKeyFromeObjectStore(objectStore, key) {
+		return new Promise((resolve, reject) => {
+			if (!key) {
+				resolve(null);
+			}
 			let request = objectStore.get(key); //keyはsonomama
 			request.onsuccess = (event) => {
 				resolve(request.result);
