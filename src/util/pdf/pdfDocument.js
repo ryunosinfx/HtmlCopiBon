@@ -1,4 +1,4 @@
-export class PdfBuilder {
+export class PdfDocument {
   constructor() {}
   createFile(){}
 }

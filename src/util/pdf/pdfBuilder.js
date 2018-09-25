@@ -1,4 +1,4 @@
 export class PdfBuilder {
   constructor() {}
-  createDoc(){}
+  createDoc(title){}
 }
