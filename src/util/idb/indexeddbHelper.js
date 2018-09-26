@@ -12,6 +12,7 @@ export default class IndexeddbHelper {
 		this.timer = null;
 		this.isDBClosed = true;
 		this.tableCache = {};
+
 	}
 
 	getOpenDB(newVersion) {
@@ -47,7 +48,6 @@ export default class IndexeddbHelper {
 	closeDB() {
 		if (this.lastVersion) {
 			this.db.close();
-			// this.cacheClear();
 			this.isDBClosed = true;
 		} else {
 			if (this.timer) {
@@ -55,7 +55,6 @@ export default class IndexeddbHelper {
 			}
 			this.timer = setTimeout(() => {
 				this.db.close();
-				// this.cacheClear();
 				this.isDBClosed = true;
 			}, 1000);
 		}
@@ -69,12 +68,26 @@ export default class IndexeddbHelper {
 			delete this.tableCache[index];
 		}
 	}
-
+	setCache(key, value) {
+		if (!value || !value.data) {
+			return;
+		}
+		const data = value.data;
+		for (let key in data) {
+			const elm = data[key];
+			if (elm && elm.byteLength) {
+				return;
+			}
+		}
+		this.tableCache[key] = value;
+	}
+	getCache(key) {
+		return this.tableCache[key];
+	}
 	getObjectStore(db, tableName, tables, mode) {
-		// if (this.tableCache[tableName] && MODE_R === mode) {
-		// 	console.warn("tableName:" + tableName + "/" + this.tableCache[tableName]);
-		// 	return this.tableCache[tableName];
-		// }
+		if (MODE_R === mode) {
+			this.cacheClear();
+		}
 		let transaction = db.transaction(tables, mode);
 		transaction.oncomplete = (event) => {
 			this.closeDB();
@@ -83,7 +96,6 @@ export default class IndexeddbHelper {
 			this.closeDB();
 		};
 		const table = transaction.objectStore(tableName);
-		// this.tableCache[tableName] = table;
 		return table;
 	}
 	throwNewError(callerName) {
@@ -146,6 +158,7 @@ export default class IndexeddbHelper {
 			req.onsuccess = (event) => {
 				let cursor = event.target.result;
 				if (cursor) {
+					console.log(cursor.value)
 					list.push(cursor.value);
 					if (isGetFirstOne) {
 						resolve(list[0]);
@@ -178,14 +191,21 @@ export default class IndexeddbHelper {
 	}
 	_selectByKeyOnTran(db, tableName, key, tables) {
 		return new Promise((resolve, reject) => {
-			let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
-			let request = objectStore.get(key); //keyはsonomama
-			request.onsuccess = (event) => {
-				resolve(request.result);
-			};
-			request.onerror = (e) => {
-				reject(e);
-			};
+			const cache = this.getCache(key);
+			if (cache) {
+				resolve(cache);
+			} else {
+				let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
+				let request = objectStore.get(key); //keyはsonomama
+				request.onsuccess = (event) => {
+					const result = request.result;
+					resolve(result);
+					this.setCache(key, result);
+				};
+				request.onerror = (e) => {
+					reject(e);
+				};
+			}
 		});
 	}
 	//public
@@ -204,7 +224,11 @@ export default class IndexeddbHelper {
 		let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
 		const retMap = {};
 		for (let key of keys) {
-			const result = await this._getByKeyFromeObjectStore(objectStore, key);
+			const cache = this.getCache(key);
+			const result = cache ? cache : await this._getByKeyFromeObjectStore(objectStore, key);
+			if (!cache) {
+				this.setCache(key, result);
+			}
 			retMap[key] = result;
 		}
 		return retMap;
