@@ -61,14 +61,17 @@ export default class IndexeddbHelper {
 	}
 	cacheClear() {
 		const keys = [];
-		for (let index in this.tableCache) {
-			keys.push(index);
+		for (let tableName in this.tableCache) {
+			keys.push(tableName);
 		}
-		for (let index of keys) {
-			delete this.tableCache[index];
+		for (let tableName of keys) {
+			const tableCache = this.tableCache[tableName];
+			for (let index in tableCache) {
+				delete tableCache[index];
+			}
 		}
 	}
-	setCache(key, value) {
+	setCache(tableName, key, value) {
 		if (!value || !value.data) {
 			return;
 		}
@@ -79,10 +82,14 @@ export default class IndexeddbHelper {
 				return;
 			}
 		}
-		this.tableCache[key] = value;
+		if (!this.tableCache[tableName]) {
+			this.tableCache[tableName] = {};
+		}
+		this.tableCache[tableName][key] = value;
 	}
-	getCache(key) {
-		return this.tableCache[key];
+	getCache(tableName, key) {
+		const tableCache = this.tableCache[tableName];
+		return tableCache ? tableCache[key] : null;
 	}
 	getObjectStore(db, tableName, tables, mode) {
 		if (MODE_R === mode) {
@@ -191,7 +198,7 @@ export default class IndexeddbHelper {
 	}
 	_selectByKeyOnTran(db, tableName, key, tables) {
 		return new Promise((resolve, reject) => {
-			const cache = this.getCache(key);
+			const cache = this.getCache(tableName, key);
 			if (cache) {
 				resolve(cache);
 			} else {
@@ -200,7 +207,7 @@ export default class IndexeddbHelper {
 				request.onsuccess = (event) => {
 					const result = request.result;
 					resolve(result);
-					this.setCache(key, result);
+					this.setCache(tableName, key, result);
 				};
 				request.onerror = (e) => {
 					reject(e);
@@ -224,10 +231,10 @@ export default class IndexeddbHelper {
 		let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
 		const retMap = {};
 		for (let key of keys) {
-			const cache = this.getCache(key);
+			const cache = this.getCache(tableName, key);
 			const result = cache ? cache : await this._getByKeyFromeObjectStore(objectStore, key);
 			if (!cache) {
-				this.setCache(key, result);
+				this.setCache(tableName, key, result);
 			}
 			retMap[key] = result;
 		}
