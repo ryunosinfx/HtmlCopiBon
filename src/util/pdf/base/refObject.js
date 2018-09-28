@@ -31,6 +31,9 @@ export class RefObject {
       index++;
     }
   }
+  getRefNo() {
+    return refMap.get(this);
+  }
   isRegisterd() {
     return refMap.has(this);
   }
@@ -44,9 +47,35 @@ export class RefObject {
     return NEWLINE;
   }
   createFile() {}
-  createObject() {
+  createObject(value) {
     let retText = '';
+    if (value === null || value === undefined) {
 
+    } else if (typeof value === 'string') {
+      if (KeyKeywords[value]) {
+        retText += "/" + value;
+      } else {
+        retText += "(" + value + ')';
+      }
+    } else if (typeof value === 'number') {
+      retText += value;
+    } else if (typeof value === 'object' && Array.isArray(value)) {
+      const newArray = [];
+      for (let val of value) {
+        newArray.push(this.createObject(val));
+      }
+      retText += '[ ' + newArray.join(' ') + ' ]';
+    } else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
+      
+    } else if (typeof value === 'object') {
+      retText += '<<' + NEWLINE
+      for (let key in value) {
+        const val = value[key]
+        const row = '/' + key + ' ' + this.createObject(val);
+        retText += row + NEWLINE;
+      }
+      retText += '>>' + NEWLINE;
+    }
     return retText;
   }
   createStream() {}
