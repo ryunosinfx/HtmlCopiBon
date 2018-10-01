@@ -222,18 +222,18 @@ export class ExportImageProcesser {
 				this.pbp.update(this.progress, 'expand resizeAsByCubic' + pageStep);
 				if (pageEntity.isNoCropping) {
 					if (isLanczose) {
-						this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper);
+						await this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper);
 					} else {
-						this.imageResizer.resizeAsByCubic(whitePaper, cropedPaper);
+						await this.imageResizer.resizeAsByCubic(whitePaper, cropedPaper);
 					}
 					//console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;
 					this.pbp.update(this.progress, 'No crop!' + pageStep);
 				} else {
 					if (isLanczose) {
-						this.imageResizer.resizeAsLanczos(whitePaper, expandedPaper);
+						await this.imageResizer.resizeAsLanczos(whitePaper, expandedPaper);
 					} else {
-						this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
+						await this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
 					}
 					//console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;

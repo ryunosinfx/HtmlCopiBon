@@ -1,9 +1,10 @@
 import { BaseWorker } from "./baseWorker";
+const cache = {};
 export class WASMcaller extends BaseWorker {
 	constructor() {
 		super("WASMcaller");
 	}
-	execute() {
+	async execute() {
 		const msg = "hello WASMcaller! now:" + Date.now();
 		console.log(msg);
 		this.call()
@@ -22,4 +23,6 @@ export class WASMcaller extends BaseWorker {
 		console.log(msg);
 	};
 }
-const aWASMcaller = new WASMcaller();
+if (!cache.aWASMcaller) {
+	cache.aWASMcaller = new WASMcaller();
+}
