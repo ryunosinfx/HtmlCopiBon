@@ -13,6 +13,7 @@ export class RefObject {
     this.exportText = '';
     this.map = {};
     this.isBePlaneMap = false;
+    this.afterRegsterRefMap =[];
   }
   createExport() {
 
@@ -23,12 +24,18 @@ export class RefObject {
   static getRefList() {
     return refList;
   }
-  addRefMap() {
+  registerRefMap(obj) {
+    this.afterRegsterRefMap.push(obj);
+  }
+  registerRefMap() {
     refList.push(this);
     let index = 1;
     for (let obj of refList) {
       refMap.set(obj, index + " 0 ");
       index++;
+    }
+    for(let obj of this.afterRegsterRefMap){
+      obj.registerRefMap();
     }
   }
   getRefNo() {
@@ -66,7 +73,7 @@ export class RefObject {
       }
       retText += '[ ' + newArray.join(' ') + ' ]';
     } else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
-      
+
     } else if (typeof value === 'object') {
       retText += '<<' + NEWLINE
       for (let key in value) {

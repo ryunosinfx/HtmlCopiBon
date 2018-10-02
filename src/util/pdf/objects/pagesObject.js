@@ -1,9 +1,9 @@
 
 import {RefObject} from '../base/refObject'
-export class PageObject extends RefObject {
+export class PagesObject extends RefObject {
   constructor() {
     super();
-    this.setElm('Type','Page');
+    this.setElm('Type','Pages');
   }
   toArrayBuffer(){
 
