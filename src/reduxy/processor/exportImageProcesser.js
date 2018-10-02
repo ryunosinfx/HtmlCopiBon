@@ -213,9 +213,9 @@ export class ExportImageProcesser {
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'maege Replace origin to whitePaper' + pageStep);
 				if (isGrayscale && !pageEntity.isForceColor) {
-					this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
+					await this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
 				} else {
-					this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+					await this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
 				}
 				//console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
 				this.progress += progressUnit;
@@ -238,7 +238,7 @@ export class ExportImageProcesser {
 					//console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;
 					this.pbp.update(this.progress, 'crop!' + pageStep);
-					this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+					await this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
 				}
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'get ArrayBuffer From ImageBitmapData' + pageStep);
@@ -413,7 +413,7 @@ export class ExportImageProcesser {
 			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
 			origin.offsetX = 0;
 			origin.offsetY = 0;
-			this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+			await this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
 		}
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'set right' + pageStep);
@@ -421,7 +421,7 @@ export class ExportImageProcesser {
 			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
 			origin.offsetX = targetSize.x;
 			origin.offsetY = 0;
-			this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+			await this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
 		}
 		//ping?
 		this.progress += progressUnit;

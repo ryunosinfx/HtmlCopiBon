@@ -13,27 +13,30 @@ export class ImageMerger extends ImageCalcBase {
 			maxByte;
 		return minByte;
 	}
-	maegeReplaceMt(imageDataBase, images, isBaseWhite) {
+	async maegeReplace(imageDataBase, images, isBaseWhite, isOtherThread) {
+		if (isOtherThread) {
+			// this.thread.
+			this.threadInit();
+			return await this.execute("resizeAsLanczos", { iamegData, distImage });
+		}
 		this.beWhiteImage(imageDataBase, isBaseWhite);
 		this.mergeImages(imageDataBase, images, this.replace());
 	}
-	maegeLinninrMt(imageDataBase, images, isBaseWhite) {
+	async maegeLinninr(imageDataBase, images, isBaseWhite, isOtherThread) {
+		if (isOtherThread) {
+			// this.thread.
+			this.threadInit();
+			return await this.execute("resizeAsLanczos", { iamegData, distImage });
+		}
 		this.beWhiteImage(imageDataBase, isBaseWhite);
 		this.mergeImages(imageDataBase, images, this.linier());
 	}
-	maegeMultiplicationMt(imageDataBase, images, isBaseWhite) {
-		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.multiplication());
-	}
-	maegeReplace(imageDataBase, images, isBaseWhite) {
-		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.replace());
-	}
-	maegeLinninr(imageDataBase, images, isBaseWhite) {
-		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.linier());
-	}
-	maegeMultiplication(imageDataBase, images, isBaseWhite) {
+	async maegeMultiplication(imageDataBase, images, isBaseWhite, isOtherThread) {
+		if (isOtherThread) {
+			// this.thread.
+			this.threadInit();
+			return await this.execute("resizeAsLanczos", { iamegData, distImage });
+		}
 		this.beWhiteImage(imageDataBase, isBaseWhite);
 		this.mergeImages(imageDataBase, images, this.multiplication());
 	}

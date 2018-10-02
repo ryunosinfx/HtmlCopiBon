@@ -35,7 +35,7 @@ export class ImageResizer extends ImageCalcBase {
 		if (isOtherThread) {
 			// this.thread.
 			this.threadInit();
-			await this.execute("resizeAsLanczos", { iamegData, distImage });
+			return await this.execute("resizeAsLanczos", { iamegData, distImage });
 		}
 		return this.resizeAsLanczosExe(iamegData, distImage);
 	}
@@ -44,7 +44,7 @@ export class ImageResizer extends ImageCalcBase {
 		if (isOtherThread) {
 			// this.thread.
 			this.threadInit();
-			await this.execute("resizeAsByCubic", { iamegData, distImage });
+			return await this.execute("resizeAsByCubic", { iamegData, distImage });
 		}
 		return this.resizeAsByCubicExe(iamegData, distImage);
 	}
