@@ -1,14 +1,11 @@
 
 import {RefObject} from '../base/refObject'
 export class PageObject extends RefObject {
-  constructor() {
+  constructor(sizeName="A4") {
     super();
     this.setElm('Type','Page');
   }
-  toArrayBuffer(){
-
-  }
-  convertStr2Ab(str){
+  setParent(parent){
 
   }
 }

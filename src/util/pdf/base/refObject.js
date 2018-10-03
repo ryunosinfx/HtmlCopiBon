@@ -2,10 +2,13 @@ import {
   BinaryUtil
 } from '../util/binaryUtil'
 import {
+  UnicodeEncoder
+} from '../util/unicodeEncoder'
+import {
   KeyKeywords
 } from '../constants/pdfConstants'
 const refMap = new Map();
-const NEWLINE = '\r\n';
+const NEWLINE = '\n';
 const refMap = new Map();
 const refList = [];
 export class RefObject {
@@ -13,7 +16,7 @@ export class RefObject {
     this.exportText = '';
     this.map = {};
     this.isBePlaneMap = false;
-    this.afterRegsterRefMap =[];
+    this.afterRegsterRefMap = [];
   }
   createExport() {
 
@@ -24,7 +27,7 @@ export class RefObject {
   static getRefList() {
     return refList;
   }
-  registerRefMap(obj) {
+  registerAfterRefMap(obj) {
     this.afterRegsterRefMap.push(obj);
   }
   registerRefMap() {
@@ -34,7 +37,7 @@ export class RefObject {
       refMap.set(obj, index + " 0 ");
       index++;
     }
-    for(let obj of this.afterRegsterRefMap){
+    for (let obj of this.afterRegsterRefMap) {
       obj.registerRefMap();
     }
   }
@@ -54,7 +57,14 @@ export class RefObject {
     return NEWLINE;
   }
   createFile() {}
-  createObject(value) {
+  createObject() {
+    const u8aStart = UnicodeEncoder.encodeUTF8(this.getRefNo() + 'obj' + NEWLINE);
+    const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap(this.map));
+    const u8aStream = UnicodeEncoder.encodeUTF8(this.createStream(this.map));
+    const u8aEnd = UnicodeEncoder.encodeUTF8('endobj' + NEWLINE);
+    return BinaryUtil.joinU8as([u8aStart, u8aMain, u8aStream, u8aEnd]);
+  }
+  createMap(value) {
     let retText = '';
     if (value === null || value === undefined) {
 
@@ -69,7 +79,7 @@ export class RefObject {
     } else if (typeof value === 'object' && Array.isArray(value)) {
       const newArray = [];
       for (let val of value) {
-        newArray.push(this.createObject(val));
+        newArray.push(this.createMap(val));
       }
       retText += '[ ' + newArray.join(' ') + ' ]';
     } else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
@@ -78,12 +88,14 @@ export class RefObject {
       retText += '<<' + NEWLINE
       for (let key in value) {
         const val = value[key]
-        const row = '/' + key + ' ' + this.createObject(val);
+        const row = '/' + key + ' ' + this.createMap(val);
         retText += row + NEWLINE;
       }
       retText += '>>' + NEWLINE;
     }
     return retText;
   }
-  createStream() {}
+  createStream() {
+    return '';
+  }
 }

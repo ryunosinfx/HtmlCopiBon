@@ -5,11 +5,7 @@ export class CatalogObject extends RefObject {
     super();
     this.setElm('Type','Catalog');
     this.setElm('Pages',pagesObj);
-  }
-  toArrayBuffer(){
-
-  }
-  convertStr2Ab(str){
-
+    this.setElm('Version',0);
+    this.registerAfterRefMap(pagesObj);
   }
 }
