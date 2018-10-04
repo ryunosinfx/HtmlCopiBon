@@ -11,6 +11,7 @@ export class PagesObject extends RefObject {
   addPage(pageObj){
     this.pages.push(pageObj);
     pageObj.registerRefMap();
+    pageObj.setParent(this);
     this.setElm('Kids',this.pages);
     this.setElm('Count',this.pages.length);
   }

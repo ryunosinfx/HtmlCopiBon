@@ -3,7 +3,7 @@ export class BinaryUtil {
   toArrayBuffer() {
 
   }
-  joinU8as(u8as) {
+  static joinU8as(u8as) {
     let len = 0;
     let index = 0;
     const u8aEdge = [];
@@ -25,6 +25,16 @@ export class BinaryUtil {
       index++;
     }
     return retU8a;
+  }
+  convertStr2Ab(str) {
+    const string = btoa(unescape(encodeURIComponent(str)));
+    const charList = string.split('');
+    const len = charList.length;
+    const ua = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      ua[i] = charList[i].charCodeAt(0);
+    }
+    return ua.buffer;
   }
   convertStr2Ab(str) {
     const string = btoa(unescape(encodeURIComponent(str)));
