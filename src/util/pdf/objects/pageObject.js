@@ -26,4 +26,7 @@ export class PageObject extends RefObject {
   setContents(contents) {
     this.setElm('Contents', contents);
   }
+  getFontName(){
+    return this.fontName;
+  }
 }

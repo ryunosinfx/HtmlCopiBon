@@ -57,10 +57,13 @@ export class RefObject {
     return NEWLINE;
   }
   createFile() {}
+  static getAsU8a(text){
+    return UnicodeEncoder.encodeUTF8(text + NEWLINE);
+  }
   createObject() {
     const u8aStart = UnicodeEncoder.encodeUTF8(this.getRefNo() + 'obj' + NEWLINE);
     const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap(this.map));
-    const u8aStream = UnicodeEncoder.encodeUTF8(this.createStream(this.map));
+    const u8aStream = this.createStream(this.map);
     const u8aEnd = UnicodeEncoder.encodeUTF8('endobj' + NEWLINE);
     return BinaryUtil.joinU8as([u8aStart, u8aMain, u8aStream, u8aEnd]);
   }
@@ -96,6 +99,6 @@ export class RefObject {
     return retText;
   }
   createStream() {
-    return '';
+    return UnicodeEncoder.encodeUTF8('');
   }
 }
