@@ -43,7 +43,7 @@ export class ImageProcessor {
 		}
 		this.canvas.width = newPaperData.width;
 		this.canvas.height = newPaperData.height;
-		await this.imageMerger.maegeReplace(newPaperData, [data], true);
+		await this.imageMerger.margeReplace(newPaperData, [data], true);
 		// console.log("newData---------------------------------------------------width:" + sizeOfImage.width + "/height:" + sizeOfImage.height)
 		// console.log(newData)
 		// console.log(data)

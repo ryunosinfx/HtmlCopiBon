@@ -37,7 +37,11 @@ export class ImageResizer extends ImageCalcBase {
 			this.threadInit();
 			return await this.execute("resizeAsLanczos", { iamegData, distImage });
 		}
-		return this.resizeAsLanczosExe(iamegData, distImage);
+		if (!distImage) {
+			return this.resizeAsLanczosExe(iamegData.iamegData, iamegData.distImage);
+		} else {
+			return this.resizeAsLanczosExe(iamegData, distImage);
+		}
 	}
 
 	async resizeAsByCubic(iamegData, distImage, isOtherThread) {
@@ -46,7 +50,11 @@ export class ImageResizer extends ImageCalcBase {
 			this.threadInit();
 			return await this.execute("resizeAsByCubic", { iamegData, distImage });
 		}
-		return this.resizeAsByCubicExe(iamegData, distImage);
+		if (!distImage) {
+			return this.resizeAsByCubicExe(iamegData.iamegData, iamegData.distImage);
+		} else {
+			return this.resizeAsByCubicExe(iamegData, distImage);
+		}
 	}
 
 	resizeAsLanczosExe(iamegData, distImage) {

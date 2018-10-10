@@ -1,6 +1,7 @@
-// import { ImageWorker } from "../../worker/imageWorker";
 import { Thread } from "../thread/thread";
+// import { ImageWorker } from "../../worker/imageWorker";
 const instances = {};
+const wokerKey = "ImageWorker";
 export class ImageCalcBase {
 	constructor(key) {
 		this.key = key;
@@ -16,8 +17,7 @@ export class ImageCalcBase {
 	async execute(methodName, dataMap) {
 		dataMap["methodName"] = methodName;
 		dataMap["className"] = this.key;
-		const key = " ImageWorker.getKey();"
-		this.thread.postMessage(key, dataMap);
+		return await this.thread.postMessage(wokerKey, dataMap);
 	}
 	getClassName() {
 		return this.key;

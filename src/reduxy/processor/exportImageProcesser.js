@@ -208,16 +208,16 @@ export class ExportImageProcesser {
 				};
 				origin.offsetX = offsetX;
 				origin.offsetY = offsetY;
-				//console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight + "/isGrascale:" + isGrascale)
+				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa1a/" + whitePaper.data.length + '/w:' + sizeWhitePaperWidth + '/h:' + sizeWhitePaperHeight); // + "/isGrascale:" + isGrascale)
 
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'maege Replace origin to whitePaper' + pageStep);
 				if (isGrayscale && !pageEntity.isForceColor) {
-					await this.imageMerger.maegeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite);
+					await this.imageMerger.margeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite, true);
 				} else {
-					await this.imageMerger.maegeReplace(whitePaper, [origin], isBaseWhite);
+					await this.imageMerger.margeReplace(whitePaper, [origin], isBaseWhite, true);
 				}
-				//console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
+				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'expand resizeAsByCubic' + pageStep);
 				if (pageEntity.isNoCropping) {
@@ -235,10 +235,11 @@ export class ExportImageProcesser {
 					} else {
 						await this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper);
 					}
-					//console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
+					// console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;
 					this.pbp.update(this.progress, 'crop!' + pageStep);
 					await this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
+					// console.log("aaaaaaaaaaaaaaaaaaaaaaaa3b/" + cropedPaper.data.length)
 				}
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'get ArrayBuffer From ImageBitmapData' + pageStep);
@@ -363,8 +364,12 @@ export class ExportImageProcesser {
 			const pageStep = "[" + pageCount + "/" + pageNum + "]";
 			this.progress += progressUnit;
 			this.pbp.update(this.progress, 'exportDualImage4Print' + pageStep);
+
+			// console.log("exportDualImage4Print　pageStep:" + pageStep + "/" + cropedPaperDual.data.length);
+			// console.log(cropedPaperDual);
 			await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair, isPageDirectionR2L, isMaxSize10M, pageStep, progressUnit);
 		}
+		// console.log(cropedPaperDual);
 	}
 	async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair, isPageDirectionR2L, isMaxSize10M, pageStep, progressUnit) {
 		//console.log(shapedPagePair);
@@ -413,7 +418,11 @@ export class ExportImageProcesser {
 			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
 			origin.offsetX = 0;
 			origin.offsetY = 0;
-			await this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+			// console.log("A pairPages.leftBin　pageStep:" + pageStep);
+			// console.log(cropedPaperDual);
+			// console.log(origin);
+			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, true);
+			// console.log("pairPages.leftBin");
 		}
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'set right' + pageStep);
@@ -421,7 +430,11 @@ export class ExportImageProcesser {
 			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
 			origin.offsetX = targetSize.x;
 			origin.offsetY = 0;
-			await this.imageMerger.maegeReplace(cropedPaperDual, [origin], false);
+			// console.log("B pairPages.rightBin　pageStep:" + pageStep);
+			// console.log(cropedPaperDual);
+			// console.log(origin);
+			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, true);
+			// console.log("pairPages.rightBin");
 		}
 		//ping?
 		this.progress += progressUnit;

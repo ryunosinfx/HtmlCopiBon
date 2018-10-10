@@ -13,12 +13,12 @@ export class ImageCropper {
 		};
 		imageData.offsetX = offsetX;
 		imageData.offsetY = offsetY;
-		await this.imageMerger.maegeReplace(imagaDataBase, [imageData], false)
+		await this.imageMerger.margeReplace(imagaDataBase, [imageData], false)
 		return imagaDataBase;
 	}
 	async corpImageToData(imageData, distData, offset) {
 		imageData.offsetX = offset.x;
 		imageData.offsetY = offset.y;
-		await this.imageMerger.maegeReplace(distData, [imageData], false);
+		await this.imageMerger.margeReplace(distData, [imageData], false);
 	}
 }

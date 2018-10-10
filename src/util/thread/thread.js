@@ -6,48 +6,89 @@ export class Thread {
 
 	postMessage(key, dataMap) {
 		return new Promise((resolve, reject) => {
+			console.warn(key + "/" + dataMap);
+			console.warn(dataMap);
 			const { transObject, tranceArray } = Thread.buildPostObj(key, dataMap);
-			this.worker.postMessage(transObject, tranceArray);
-			this.worker.onmessage = (event) => {
-				resolve(event.data);
+			for (let trance of tranceArray) {
+				console.warn("trance:" + trance.length + "/" + trance.byteLength);
 			}
-			this.worker.onerror = (event) => {
-				reject(event);
+			try {
+				this.worker.postMessage(transObject, tranceArray);
+				this.worker.onmessage = (event) => {
+					const returendData = event.data;
+					resolve(returendData);
+				}
+				this.worker.onerror = (event) => {
+					console.log(event);
+					reject(event);
+				}
+			} catch (e) {
+				console.error(e);
+				console.error(e.stack);
 			}
 		});
 	}
+
 	static buildPostObj(key, dataMap) {
 		const tranceArray = [];
-		const transObject = {
-			key: key
-		};
+		if (dataMap) {
+			dataMap.key = key;
+		} else {
+			dataMap = {
+				key: key
+			};
+		}
+		Thread.buildPostObjExec("", dataMap, tranceArray);
+		return { transObject: dataMap, tranceArray };
+	}
+
+	static buildPostObjExec(keyPrefix, dataMap, tranceArray) {
 		if (!dataMap) {
 			// nothig todo
-		} else if (Array.isArray(dataMap)) {
+			return
+		}
+		if (Array.isArray(dataMap)) {
 			let count = 0;
-			for (let value of dataList) {
-				if (value.buffer) {
-					tranceArray.push(value.buffer);
-				} else if (value.byteLength) {
-					tranceArray.push(value);
-				}
-				transObject[count] = value;
+			console.log("buildPostObjExec keyPrefix:" + keyPrefix);
+			for (let value of dataMap) {
+				Thread.buildPostObjExecParValue(keyPrefix, count, value, tranceArray);
 				count++;
 			}
 		} else if (typeof dataMap === 'object' && Object.keys(dataMap)
 			.length > 0) {
-			for (let objKey in Object.keys(dataMap)) {
-				const value = dataMap[dataMap];
-				transObject[objKey] = value;
-				if (value.buffer) {
-					tranceArray.push(value.buffer);
-				} else if (value.byteLength) {
-					tranceArray.push(value);
+			for (let objKey in dataMap) {
+				const value = dataMap[objKey];
+				if (value === undefined) {
+					continue;
 				}
+				Thread.buildPostObjExecParValue(keyPrefix, objKey, value, tranceArray);
 			}
+		} else {
+			Thread.buildPostObjExecParValue(keyPrefix, null, dataMap, tranceArray);
 		}
-		const retData = { transObject: transObject, tranceArray: tranceArray };
-		return retData;
+	}
+	static buildPostObjExecParValue(keyPrefix, currentKey, value, tranceArray) {
+		const type = typeof value;
+		let isNotObject = false;
+		const key = keyPrefix ? keyPrefix + (currentKey || currentKey === 0 ? "." + currentKey : "") : currentKey + "";
+		if (!value) {
+			isNotObject = true;
+		} else if (value.buffer) {
+			tranceArray.push(value.buffer);
+			isNotObject = true;
+		} else if (value.byteLength) {
+			tranceArray.push(value);
+			isNotObject = true;
+		} else if (value instanceof ImageData) {
+			tranceArray.push(value.data.buffer);
+			isNotObject = true;
+		} else if (type === "boolean" || type === "number" || type === "string") {
+			isNotObject = true;
+		}
+		if (!isNotObject && currentKey) {
+			Thread.buildPostObjExec(key, value, tranceArray)
+		}
+
 	}
 	close() {
 		this.worker.terminate();

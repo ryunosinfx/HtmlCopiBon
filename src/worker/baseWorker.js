@@ -12,7 +12,7 @@ export class BaseWorker {
 	getWorkerKey() {
 		return this.key;
 	}
-	async execute() {
+	async execute(srcData) {
 		const msg = "hello world! now:" + Date.now();
 		console.log(msg);
 		return msg;

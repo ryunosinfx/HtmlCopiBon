@@ -13,32 +13,45 @@ export class ImageMerger extends ImageCalcBase {
 			maxByte;
 		return minByte;
 	}
-	async maegeReplace(imageDataBase, images, isBaseWhite, isOtherThread) {
-		if (isOtherThread) {
-			// this.thread.
-			this.threadInit();
-			return await this.execute("resizeAsLanczos", { iamegData, distImage });
-		}
-		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.replace());
+	async margeReplace(imageDataBase, images, isBaseWhite, isOtherThread) {
+		await this.margeExc(imageDataBase, images, isBaseWhite, isOtherThread, "margeReplace", this.replace());
 	}
-	async maegeLinninr(imageDataBase, images, isBaseWhite, isOtherThread) {
-		if (isOtherThread) {
-			// this.thread.
-			this.threadInit();
-			return await this.execute("resizeAsLanczos", { iamegData, distImage });
-		}
-		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.linier());
+	async margeLinninr(imageDataBase, images, isBaseWhite, isOtherThread) {
+		await this.margeExc(imageDataBase, images, isBaseWhite, isOtherThread, "margeLinninr", this.linier());
 	}
-	async maegeMultiplication(imageDataBase, images, isBaseWhite, isOtherThread) {
+	async margeMultiplication(imageDataBase, images, isBaseWhite, isOtherThread) {
+		await this.margeExc(imageDataBase, images, isBaseWhite, isOtherThread, "margeMultiplication", this.multiplication());
+	}
+	async margeExc(imageDataBase, images, isBaseWhite, isOtherThread, name, func) {
+		let isImageEmpty = true;
+		if (!images && !isOtherThread) {
+			images = imageDataBase.images
+			isBaseWhite = imageDataBase.isBaseWhite
+			imageDataBase = imageDataBase.imageDataBase
+		}
+		const threadImages = [];
+		if (images) {
+			for (let image of images) {
+				if (image && image.data && image.data.length > 0) {
+					isImageEmpty = false;
+					threadImages.push({ width: image.width, height: image.height, data: image.data, offsetX: image.offsetX, offsetY: image.offsetY });
+				}
+			}
+		}
+		if (isImageEmpty) {
+			return;
+		}
 		if (isOtherThread) {
 			// this.thread.
 			this.threadInit();
-			return await this.execute("resizeAsLanczos", { iamegData, distImage });
+			const result = await this.execute(name, { imageDataBase, images: threadImages, isBaseWhite });
+			if (result && result.imageDataBase && result.imageDataBase.data && result.imageDataBase.data.byteLength > 0 && imageDataBase.data.byteLength < 1) {
+				imageDataBase.data = result.imageDataBase.data;
+			}
+			return result;
 		}
 		this.beWhiteImage(imageDataBase, isBaseWhite);
-		this.mergeImages(imageDataBase, images, this.multiplication());
+		this.mergeImages(imageDataBase, images, func);
 	}
 	beWhiteImage(imageDataBase, isBaseWhite) {
 		if (isBaseWhite) {

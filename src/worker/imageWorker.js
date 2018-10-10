@@ -10,15 +10,18 @@ export class ImageWorker extends BaseWorker {
 		this.classes = {};
 		this.classes[im.getClassName()] = im;
 		this.classes[ir.getClassName()] = ir;
+		// console.log("ImageWorker")
 	}
 	static getKey() {
 		return key;
 	}
 	async execute(srcData) {
-		console.log(srcData);
+		// console.log("ImageWorker execute key:" + this.key);
+		// console.log(srcData);
 		const result = await this.call(srcData)
 			.catch((e) => {
 				console.log(e)
+				console.error(e.stack);
 			});
 		return result;
 	}
@@ -27,9 +30,9 @@ export class ImageWorker extends BaseWorker {
 		const methodName = srcData.methodName;
 		const instance = this.classes[className];
 		if (instance && instance[methodName]) {
-
+			instance[methodName](srcData);
 		}
-		return
+		return srcData
 	};
 }
 const aImageWorker = new ImageWorker();
