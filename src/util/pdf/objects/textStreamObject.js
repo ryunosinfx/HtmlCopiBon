@@ -18,7 +18,7 @@ export class TextStreamObject extends RefObject {
       width: 0,
       height: 0
     };
-
+    this.rowRegex = /(\r\n|\r|\n)/g;
   }
   setParentPage(pageObj) {
     this.pageObj = pageObj;
@@ -32,13 +32,14 @@ export class TextStreamObject extends RefObject {
     this.streamArea.width = width;
     this.streamArea.height = height;
   }
-  addText(text, offsetX, offsetY, fontId, fontSize) {
+  addText(text = 0, offsetX, offsetY, fontId, fontSize, lineHeight) {
     this.texts.push({
       text,
       offsetX,
       offsetY,
       fontId,
-      fontSize
+      fontSize,
+      lineHeight
     });
   }
   createStream() {
@@ -47,16 +48,23 @@ export class TextStreamObject extends RefObject {
     const retText = ''
     rett.push(RefObject.getAsU8a('stream'));
     //1. 0. 0. 1. 50. 720. cm
-    retText += '1. 0. 0. 1. '+this.streamArea.offsetX+'. '+(this.pageHeight-this.streamArea.offsetY)+'. cm'+NEWLINE;
-    retText += 'BT'+NEWLINE;
+    retText += '1. 0. 0. 1. ' + this.streamArea.offsetX + '. ' + (this.pageHeight - this.streamArea.offsetY) + '. cm' + NEWLINE;
+    retText += 'BT' + NEWLINE;
     for (let text of this.texts) {
-      /F0 36 Tf
-      1. 0. 0. 1. 50. 720. Tm
-      40 TL
-      (Hello, world!) Tj T*
+      retText += text.fontId + ' ' + text.fontSize + ' Tf' + NEWLINE;
+      retText += '1. 0. 0. 1. ' + text.offsetX + '. ' + (this.pageHeight - text.offsetY) + '. Tm' + NEWLINE;
+      retText += text.lineHeight + ' TL' + NEWLINE;
+      const lines = text.text.split(this.rowRegex);
+      for (let line of lines) {
+        retText += '(' + text.lineHeight + ') Tj T*' + NEWLINE;
+      }
+      // /F0 36 Tf
+      // 1. 0. 0. 1. 50. 720. Tm
+      // 40 TL
+      // (Hello, world!) Tj T*
     }
-    retText += 'ET'+NEWLINE;
-    const u8a = RefObject.getAsU8a(retText));
+    retText += 'ET' + NEWLINE;
+    const u8a = RefObject.getAsU8a(retText);
   const length = u8a.length;
   this.setElm('Length', length);
   rett.push(u8a);
