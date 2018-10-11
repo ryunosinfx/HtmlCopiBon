@@ -7,11 +7,19 @@ import {
 import {
   UnicodeEncoder
 } from '../util/unicodeEncoder'
-export class ImageContentsObject extends RefObject {
-  constructor(imageId) {
+export class ImageXObject extends RefObject {
+  constructor(imageId, jpegDataUri, width, height) {
     super();
+    this.setElm('Type', 'XObject');
+    this.setElm('Subtype', 'Image');
+    this.setElm('Width', width);
+    this.setElm('Height', height);
+    this.setElm('BitsPerComponent', 8);
     this.setElm('Length', 0);
+    this.setElm('ColorSpace', 'DeviceRGB');
+    this.setElm('Filter', 'DCTDecode');
     this.imageId = imageId;
+    this.jpegDataUri = jpegDataUri;
   }
   setParentPage(pageObj) {
     this.pageObj = pageObj;
@@ -23,14 +31,10 @@ export class ImageContentsObject extends RefObject {
     const u8as = [];
     const retText = ''
     u8as.push(RefObject.getAsU8a('stream'));
-    retText += 'q' + NEWLINE;
-    retText += '1 0 0 1 '+this.pageWidth+' '+this.pageHeight+' cm' + NEWLINE;
-    retText += '/'+this.imageId+' Do' + NEWLINE;
-    retText += 'Q' + NEWLINE;
-    const u8a = RefObject.getAsU8a(retText);
-    const length = u8a.length;
+    const jpegU8a = BinaryUtil.convertDataUri2U8a(this.jpegDataUri);
+    const length = jpegU8a.length;
     this.setElm('Length', length);
-    u8as.push(u8a);
+    u8as.push(jpegU8a);
     u8as.push(RefObject.getAsU8a('endstream'));
     return BinaryUtil.jpegU8a(u8as);
   }

@@ -44,9 +44,9 @@ export class TextStreamObject extends RefObject {
   }
   createStream() {
     const NEWLINE = RefObject.getNewLine();
-    const rett = [];
+    const u8as = [];
     const retText = ''
-    rett.push(RefObject.getAsU8a('stream'));
+    u8as.push(RefObject.getAsU8a('stream'));
     //1. 0. 0. 1. 50. 720. cm
     retText += '1. 0. 0. 1. ' + this.streamArea.offsetX + '. ' + (this.pageHeight - this.streamArea.offsetY) + '. cm' + NEWLINE;
     retText += 'BT' + NEWLINE;
@@ -65,10 +65,10 @@ export class TextStreamObject extends RefObject {
     }
     retText += 'ET' + NEWLINE;
     const u8a = RefObject.getAsU8a(retText);
-  const length = u8a.length;
-  this.setElm('Length', length);
-  rett.push(u8a);
-  rett.push(RefObject.getAsU8a('endstream'));
-  return u8a;
-}
+    const length = u8a.length;
+    this.setElm('Length', length);
+    u8as.push(u8a);
+    u8as.push(RefObject.getAsU8a('endstream'));
+    return BinaryUtil.jpegU8a(u8as);
+  }
 }

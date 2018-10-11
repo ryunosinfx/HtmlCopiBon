@@ -26,15 +26,16 @@ export class BinaryUtil {
     }
     return retU8a;
   }
-  convertStr2Ab(str) {
-    const string = btoa(unescape(encodeURIComponent(str)));
-    const charList = string.split('');
-    const len = charList.length;
-    const ua = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      ua[i] = charList[i].charCodeAt(0);
+  static convertDataUri2U8a(dataUri) {
+    const dataUriParts = dataUri.split(',');
+    const base64 = dataUriParts[1];
+    const binStr = atob(base64);
+    const binLen = binStr.length;
+    const u8a = new Uint8Array(new ArrayBuffer(binLen));
+    for (let i = 0; i < binLen; i++) {
+      u8a[i] = binStr.charCodeAt(i);
     }
-    return ua.buffer;
+    return u8a;
   }
   convertStr2Ab(str) {
     const string = btoa(unescape(encodeURIComponent(str)));
