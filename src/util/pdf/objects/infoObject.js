@@ -1,11 +1,12 @@
 
 import {RefObject} from '../base/refObject'
 export class InfoObject extends RefObject {
-  constructor(pagesObj) {
+  constructor() {
     super();
     this.setElm('Type','Info');
-    this.setElm('Pages',pagesObj);
-    this.setElm('Version',0);
-    this.registerAfterRefMap(pagesObj);
+    this.setElm('Creator','pagesObj');
+    this.setElm('CreationDate','pagesObj');
+    this.setElm('ModDate','pagesObj');
+    this.setElm('Producer','pagesObj');
   }
 }

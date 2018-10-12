@@ -10,7 +10,7 @@ import {
 export class ImageResourcesObject extends RefObject {
   constructor(imageId) {
     super();
-    this.setElm('Length', 0);
+    this.setElm('ProcSet', ['PDF','ImageC']);
     this.imageId = imageId;
     this.jpegDataUri = jpegDataUri;
   }
@@ -20,6 +20,9 @@ export class ImageResourcesObject extends RefObject {
     this.pageHeight = this.pageObj.height;
   }
   setImageXObject(imageXObject){
-    
+      const xObjectMap = new RefObject();
+      xObjectMap.setBePlaneMap();
+      const imageId = imageXObject.getImageId(;)
+      xObjectMap.setElm(imageId, imageXObject);
   }
 }
