@@ -2,6 +2,9 @@ import { ImageCalcBase } from "./imageCalcBase";
 export class ImageMerger extends ImageCalcBase {
 	constructor() {
 		super("ImageMerger");
+		this["margeReplace"] = this.margeReplace;
+		this["margeLinninr"] = this.margeLinninr;
+		this["margeMultiplication"] = this.margeMultiplication;
 	}
 	trimByte(byteX) {
 		const x = Math.floor(byteX);
@@ -15,6 +18,8 @@ export class ImageMerger extends ImageCalcBase {
 	}
 	async margeReplace(imageDataBase, images, isBaseWhite, isOtherThread) {
 		await this.margeExc(imageDataBase, images, isBaseWhite, isOtherThread, "margeReplace", this.replace());
+		// console.warn("margeReplace-imageDataBase")
+		// console.warn(imageDataBase)
 	}
 	async margeLinninr(imageDataBase, images, isBaseWhite, isOtherThread) {
 		await this.margeExc(imageDataBase, images, isBaseWhite, isOtherThread, "margeLinninr", this.linier());
@@ -34,7 +39,7 @@ export class ImageMerger extends ImageCalcBase {
 			for (let image of images) {
 				if (image && image.data && image.data.length > 0) {
 					isImageEmpty = false;
-					threadImages.push({ width: image.width, height: image.height, data: image.data, offsetX: image.offsetX, offsetY: image.offsetY });
+					threadImages.push(this.convertImageDataToObj(image));
 				}
 			}
 		}
@@ -44,10 +49,11 @@ export class ImageMerger extends ImageCalcBase {
 		if (isOtherThread) {
 			// this.thread.
 			this.threadInit();
-			const result = await this.execute(name, { imageDataBase, images: threadImages, isBaseWhite });
-			if (result && result.imageDataBase && result.imageDataBase.data && result.imageDataBase.data.byteLength > 0 && imageDataBase.data.byteLength < 1) {
-				imageDataBase.data = result.imageDataBase.data;
-			}
+			const dataMap = { imageDataBase, images: threadImages, isBaseWhite };
+			const result = await this.execute(name, dataMap);
+			// console.warn("margeExc-imageDataBase")
+			// console.warn(dataMap)
+			// console.warn(imageDataBase)
 			return result;
 		}
 		this.beWhiteImage(imageDataBase, isBaseWhite);

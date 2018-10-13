@@ -3,7 +3,8 @@ import { ImageCalcBase } from "./imageCalcBase";
 export class ImageResizer extends ImageCalcBase {
 	constructor() {
 		super("ImageResizer");
-
+		this["resizeAsLanczos"] = this.resizeAsLanczos;
+		this["resizeAsByCubic"] = this.resizeAsByCubic;
 	}
 	culcWeightByCubic(alpha) {
 		return (x) => {
@@ -32,31 +33,63 @@ export class ImageResizer extends ImageCalcBase {
 	}
 
 	async resizeAsLanczos(iamegData, distImage, isOtherThread) {
-		if (isOtherThread) {
-			// this.thread.
-			this.threadInit();
-			return await this.execute("resizeAsLanczos", { iamegData, distImage });
-		}
-		if (!distImage) {
-			return this.resizeAsLanczosExe(iamegData.iamegData, iamegData.distImage);
-		} else {
-			return this.resizeAsLanczosExe(iamegData, distImage);
-		}
+		// if (isOtherThread) {
+		// 	// this.thread.
+		// 	this.threadInit();
+		// 	return await this.execute("resizeAsLanczos", { iamegData, distImage });
+		// }
+		// if (!distImage) {
+		// 	return this.resizeAsLanczosExe(iamegData.iamegData, iamegData.distImage);
+		// } else {
+		// 	return this.resizeAsLanczosExe(iamegData, distImage);
+		// }
+		return this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsLanczos");
 	}
 
 	async resizeAsByCubic(iamegData, distImage, isOtherThread) {
+		// if (isOtherThread) {
+		// 	// this.thread.
+		// 	this.threadInit();
+		// 	return await this.execute("resizeAsByCubic", { iamegData, distImage });
+		// }
+		// if (!distImage) {
+		// 	return this.resizeAsByCubicExe(iamegData.iamegData, iamegData.distImage);
+		// } else {
+		// 	return this.resizeAsByCubicExe(iamegData, distImage);
+		// }
+		return this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsByCubic");
+	}
+
+	async resizeExc(iamegData, distImage, isOtherThread, name) {
 		if (isOtherThread) {
 			// this.thread.
 			this.threadInit();
-			return await this.execute("resizeAsByCubic", { iamegData, distImage });
-		}
-		if (!distImage) {
-			return this.resizeAsByCubicExe(iamegData.iamegData, iamegData.distImage);
+			// console.log("resizeExc1 name:" + name + "/isOtherThread:" + isOtherThread);
+			// console.log(iamegData);
+			// console.log(distImage);
+			const result = await this.execute(name, { iamegData, distImage });
+			// console.log("resizeExc1a name:" + name + "/isOtherThread:" + isOtherThread);
+			// console.log(result);
+			return result;
 		} else {
-			return this.resizeAsByCubicExe(iamegData, distImage);
+			// console.log("resizeExc2 name:" + name);
+			// console.log(iamegData);
+			// console.log(distImage);
+			if (!distImage) {
+				distImage = iamegData.distImage
+				iamegData = iamegData.iamegData
+				// console.log("resizeExc3 name:" + name);
+				// console.log(iamegData);
+				// console.log(distImage);
+			}
+			if (name === "resizeAsByCubic") {
+				return this.resizeAsByCubicExe(iamegData, distImage);
+			}
+			if (name === "resizeAsLanczos") {
+				return this.resizeAsLanczosExe(iamegData, distImage);
+			}
 		}
 	}
-
 	resizeAsLanczosExe(iamegData, distImage) {
 		const {
 			data,
