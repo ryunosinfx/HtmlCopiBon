@@ -26,6 +26,9 @@ export class ImageXObject extends RefObject {
     this.pageWidth = this.pageObj.width;
     this.pageHeight = this.pageObj.height;
   }
+  getImageId(){
+    return this.imageId;
+  }
   createStream() {
     const NEWLINE = RefObject.getNewLine();
     const u8as = [];
