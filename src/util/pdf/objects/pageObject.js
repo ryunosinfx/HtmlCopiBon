@@ -22,9 +22,11 @@ export class PageObject extends RefObject {
   }
   setResources(resources) {
     this.setElm('Resources', resources);
+    resources.registerRefMap();
   }
   setContents(contents) {
     this.setElm('Contents', contents);
+    contents.registerRefMap();
   }
   getFontName(){
     return this.fontName;
