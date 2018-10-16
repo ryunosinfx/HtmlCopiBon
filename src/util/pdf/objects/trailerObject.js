@@ -9,8 +9,11 @@ import {
 } from '../base/refObject'
 const CRLF = '\r\n';
 export class TrailerObject extends RefObject {
-  constructor(sizeName = "A4") {
+  constructor() {
     super();
+  }
+  setInfo(infoObj){
+    infoObj.registerRefMap();
   }
   createXref(startOffset) {
     const NEWLINE = RefObject.getNewLine();
@@ -19,14 +22,43 @@ export class TrailerObject extends RefObject {
     const len + list.length;
     retText += '0 ' + len + NEWLINE
     const results = [];
-    retText +='0000000000 65535 f' + CRLF;
+    let rootObj = null;
+    let infoObj = null;
+    retText += '0000000000 65535 f' + CRLF;
     let currentBytes = startOffset;
     for (let i = 0; i < len; i++) {
       const refObje = list[i];
       const u8a = refObje.createObject();
-      retText +='0000000000 00000 n' + CRLF;
-
+      retText += ('0000000000' + currentBytes).slice(-10) + ' 00000 n' + CRLF;
+      currentBytes += u8a.length;
+      results.push(u8a);
+      if (refObje.isRoot) {
+        rootObj = refObje;
+      }
+      if (refObje.isInfo) {
+        infoObj = refObje;
+      }
     }
-    return retText;
+    retText += 'trailer' + NEWLINE
+    retText += '<<' + NEWLINE
+    retText += '/Root ' + rootObj.getRefNo() + 'R' + NEWLINE
+    if (isInfo) {
+      retText += '/Info ' + infoObj.getRefNo() + 'R' + NEWLINE
+    }
+    retText += '/Size' + len + NEWLINE
+    retText += '>>' + NEWLINE
+    retText += 'startxref' + NEWLINE
+    retText += currentBytes + NEWLINE
+    retText += '%%EOF'
+    const trailerU8a = RefObject.getAsU8a(retText);
+    results.push(trailerU8a);
+    // <<
+    // /Root 1 0 R
+    // /Size 6
+    // >>
+    // startxref
+    // 440
+    // %%EOF
+    return BinaryUtil.jpegU8a(results);
   }
 }

@@ -17,6 +17,8 @@ export class RefObject {
     this.map = {};
     this.isBePlaneMap = false;
     this.afterRegsterRefMap = [];
+    this.isRoot = false;
+    this.isInfo = false;
   }
   createExport() {
 
@@ -57,7 +59,7 @@ export class RefObject {
     return NEWLINE;
   }
   createFile() {}
-  static getAsU8a(text){
+  static getAsU8a(text) {
     return UnicodeEncoder.encodeUTF8(text + NEWLINE);
   }
   createObject() {
@@ -86,7 +88,7 @@ export class RefObject {
       }
       retText += '[ ' + newArray.join(' ') + ' ]';
     } else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
-
+      retText+= this.getRefNo()+'R';
     } else if (typeof value === 'object') {
       retText += '<<' + NEWLINE
       for (let key in value) {
