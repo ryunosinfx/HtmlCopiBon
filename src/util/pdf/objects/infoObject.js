@@ -1,12 +1,13 @@
 
 import {RefObject} from '../base/refObject'
+import {getNow} from '../util/pdfTimeUtil'
 export class InfoObject extends RefObject {
   constructor() {
     super();
     this.setElm('Type','Info');
-    this.setElm('Creator','pagesObj');
-    this.setElm('CreationDate','pagesObj');
-    this.setElm('ModDate','pagesObj');
-    this.setElm('Producer','pagesObj');
+    this.setElm('Creator','It is me!');
+    this.setElm('CreationDate',getNow());
+    this.setElm('ModDate',getNow());
+    this.setElm('Producer','aaa');
   }
 }

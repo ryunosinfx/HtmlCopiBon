@@ -88,7 +88,7 @@ export class RefObject {
       }
       retText += '[ ' + newArray.join(' ') + ' ]';
     } else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
-      retText+= this.getRefNo()+'R';
+      retText += this.getRefNo() + 'R';
     } else if (typeof value === 'object') {
       retText += '<<' + NEWLINE
       for (let key in value) {

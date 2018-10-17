@@ -26,6 +26,16 @@ export class BinaryUtil {
     }
     return retU8a;
   }
+  static hexString2U8a(hexStr){
+    const retArrray = [];
+    const hexList = hexStr.split('\x')
+    for(let hex of hexList){
+      if(hex && !Number.isNaN(parseInt(hex,16))){
+        retArrray.push(parseInt(hex,16));
+      }
+    }
+    return new Uint8Array(retArrray);
+  }
   static convertDataUri2U8a(dataUri) {
     const dataUriParts = dataUri.split(',');
     const base64 = dataUriParts[1];
