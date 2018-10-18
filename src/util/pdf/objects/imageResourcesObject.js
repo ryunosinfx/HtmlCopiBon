@@ -14,11 +14,6 @@ export class ImageResourcesObject extends RefObject {
     this.imageId = imageId;
     this.jpegDataUri = jpegDataUri;
   }
-  setParentPage(pageObj) {
-    this.pageObj = pageObj;
-    this.pageWidth = this.pageObj.width;
-    this.pageHeight = this.pageObj.height;
-  }
   setImageXObject(imageXObject){
       const xObjectMap = new RefObject();
       xObjectMap.setBePlaneMap();

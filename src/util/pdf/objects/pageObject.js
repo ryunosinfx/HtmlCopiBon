@@ -25,6 +25,9 @@ export class PageObject extends RefObject {
     resources.registerRefMap();
   }
   setContents(contents) {
+    if(contents.setParentPage){
+      contents.setParentPage(this);
+    }
     this.setElm('Contents', contents);
     contents.registerRefMap();
   }

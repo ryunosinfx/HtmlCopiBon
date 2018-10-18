@@ -12,6 +12,9 @@ export class TrailerObject extends RefObject {
   constructor() {
     super();
   }
+  setRoot(rootObj){
+    rootObj.registerRefMap();
+  }
   setInfo(infoObj){
     infoObj.registerRefMap();
   }

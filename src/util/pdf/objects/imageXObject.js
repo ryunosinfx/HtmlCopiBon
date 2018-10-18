@@ -21,11 +21,6 @@ export class ImageXObject extends RefObject {
     this.imageId = imageId;
     this.jpegDataUri = jpegDataUri;
   }
-  setParentPage(pageObj) {
-    this.pageObj = pageObj;
-    this.pageWidth = this.pageObj.width;
-    this.pageHeight = this.pageObj.height;
-  }
   getImageId(){
     return this.imageId;
   }
