@@ -46,29 +46,35 @@ export class PdfDocument {
     this.trailer = new TrailerObject();
     this.trailer.setRoot(this.root);
     this.trailer.setInfo(this.info);
-    this.imageCount=0;
+    this.imageCount = 0;
   }
-  addDummyPage(){
-
+  addDummyPage() {
+    const page = new Pagesbject(this.pageSize);
+    this.pages.addPage(page);
   }
-  addImagePage(dataUri){
-    const imageId = 'img'+this.imageCount;
+  addImagePage(dataUri, width, height) {
+    if(!dataUri){
+      this.addDummyPage();
+      return;
+    }
+    const imageId = 'img' + this.imageCount;
     const ic = new ImageContentsObject(imageId);
     const ir = new ImageResourcesObject(imageId);
-    const page =new Pagesbject(this.pageSize);
+    const page = new Pagesbject(this.pageSize);
+    const binaryU8a = BinaryUtil.convertDataUri2U8a(dataUri);
+    const imageXobj = new ImageXObject(imageId, binaryU8a, width, height);
     this.pages.addPage(page);
     page.setContents(ic);
     page.setResources(ir);
-    ir
-    const page =new Pagesbject(this.pageSize);
-
-
+    ir.setImageXObject(imageXobj);
     this.imageCount++;
   }
-  createFile(){
+  createFile() {
     const retArray = [];
-    retArray.push(Header.getU8a());
-
+    const headerU8a = Header.getU8a();
+    retArray.push(headerU8a);
+    const body = this.trailer.createXref(headerU8a.length);
+    retArray.push(body);
     return BinaryUtil.joinU8as(retArray);
   }
 }
