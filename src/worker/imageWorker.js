@@ -30,7 +30,12 @@ export class ImageWorker extends BaseWorker {
 		const methodName = srcData.methodName;
 		const instance = this.classes[className];
 		if (instance && instance[methodName]) {
-			instance[methodName](srcData);
+			try {
+				// console.warn("ImageWorker execute call");
+				await instance[methodName](srcData);
+			} catch (e) {
+				console.erroe(e);
+			}
 		}
 		return srcData
 	};

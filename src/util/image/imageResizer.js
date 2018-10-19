@@ -1,5 +1,7 @@
 import { ByteUtil } from "./byteUtil";
 import { ImageCalcBase } from "./imageCalcBase";
+import bc from "../binaryConverter";
+const threadCount = 5;
 export class ImageResizer extends ImageCalcBase {
 	constructor() {
 		super("ImageResizer");
@@ -33,64 +35,152 @@ export class ImageResizer extends ImageCalcBase {
 	}
 
 	async resizeAsLanczos(iamegData, distImage, isOtherThread) {
-		// if (isOtherThread) {
-		// 	// this.thread.
-		// 	this.threadInit();
-		// 	return await this.execute("resizeAsLanczos", { iamegData, distImage });
-		// }
-		// if (!distImage) {
-		// 	return this.resizeAsLanczosExe(iamegData.iamegData, iamegData.distImage);
-		// } else {
-		// 	return this.resizeAsLanczosExe(iamegData, distImage);
-		// }
-		return this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsLanczos");
+		// console.log("resizeAsLanczos.resizeExcWithThread；iamegData:" + iamegData);
+		return await this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsLanczos");
 	}
 
 	async resizeAsByCubic(iamegData, distImage, isOtherThread) {
-		// if (isOtherThread) {
-		// 	// this.thread.
-		// 	this.threadInit();
-		// 	return await this.execute("resizeAsByCubic", { iamegData, distImage });
-		// }
-		// if (!distImage) {
-		// 	return this.resizeAsByCubicExe(iamegData.iamegData, iamegData.distImage);
-		// } else {
-		// 	return this.resizeAsByCubicExe(iamegData, distImage);
-		// }
-		return this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsByCubic");
+		// console.log("resizeAsByCubic.resizeExcWithThread；iamegData:" + iamegData);
+		const result = await this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsByCubic")
+			.catch((e) => {
+				console.error("resizeAsByCubic resizeExcWithThread；iamegData");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});;
+		// console.log("resizeAsByCubic.resizeExcWithThread； result:" + result);
+		return result;
 	}
 
 	async resizeExc(iamegData, distImage, isOtherThread, name) {
 		if (isOtherThread) {
-			// this.thread.
-			this.threadInit();
-			// console.log("resizeExc1 name:" + name + "/isOtherThread:" + isOtherThread);
-			// console.log(iamegData);
-			// console.log(distImage);
-			const result = await this.execute(name, { iamegData, distImage });
-			// console.log("resizeExc1a name:" + name + "/isOtherThread:" + isOtherThread);
-			// console.log(result);
-			return result;
-		} else {
-			// console.log("resizeExc2 name:" + name);
-			// console.log(iamegData);
-			// console.log(distImage);
 			if (!distImage) {
 				distImage = iamegData.distImage
 				iamegData = iamegData.iamegData
-				// console.log("resizeExc3 name:" + name);
-				// console.log(iamegData);
-				// console.log(distImage);
 			}
+			this.threadInit();
+			// console.log("resizeExc execute.iamegData:" + iamegData);
+			const result = await this.execute(name, { iamegData, distImage });
+			return result;
+		} else {
+			// console.log("resizeExc.iamegData:" + iamegData);
+			let rowCount = null;
+			let offsetY = null;
+			if (!distImage) {
+				if (iamegData.rowCount) {
+					rowCount = iamegData.rowCount
+					offsetY = iamegData.offsetY
+					distImage = iamegData.distImage
+					iamegData = iamegData.iamegData
+					// console.log("resizeExc resizeExcWithThread.offsetY:" + offsetY + "/rowCount:" + rowCount);
+				} else {
+					// console.log("resizeExc resizeExcWithThread S1.iamegData:" + iamegData + "/name:" + name);
+					const result = await this.resizeExcWithThread(iamegData, distImage, name);
+					// console.log("resizeExc resizeExcWithThread S2.result:" + result + "/name:" + name);
+					return result;
+				}
+			}
+			// console.log(distImage);
 			if (name === "resizeAsByCubic") {
-				return this.resizeAsByCubicExe(iamegData, distImage);
+				// console.log("resizeExc resizeExcWithThread T1.iamegData:" + iamegData + "/name:" + name);
+				return this.resizeAsByCubicExe(iamegData, distImage, offsetY, rowCount);
 			}
 			if (name === "resizeAsLanczos") {
-				return this.resizeAsLanczosExe(iamegData, distImage);
+				// console.log("resizeExc resizeExcWithThread U1.iamegData:" + iamegData + "/name:" + name);
+				return this.resizeAsLanczosExe(iamegData, distImage, offsetY, rowCount);
 			}
 		}
 	}
-	resizeAsLanczosExe(iamegData, distImage) {
+	resizeExcWithThread(iamegData, distImage, name) {
+		// console.log("resizeExcWithThread A .iamegData:" + iamegData);
+		return new Promise((resolve, reject) => {
+			// console.log("resizeExcWithThread. B iamegData:" + iamegData);
+			distImage = iamegData.distImage
+			iamegData = iamegData.iamegData
+
+			this.threadInit();
+			const distBitmap = distImage.data;
+			const newWidth = distImage.width;
+			const newHeight = distImage.height;
+			const currentBitmap = iamegData.data;
+			const currentWidth = iamegData.width;
+			const currentHeight = iamegData.height;
+			const promises = [];
+			let total = 0;
+			const parLength = Math.floor(newHeight / threadCount);;
+			// console.log("resizeExcWithThread. C threadCount:" + threadCount + "/name:" + name);
+			for (let i = 0; i < threadCount; i++) {
+				const limitHeight = (threadCount - 1 === i) ? newHeight - total : parLength;
+				// todo Plus
+				const newData = new Uint8ClampedArray(newWidth * 4 * limitHeight);
+				const newDistData = { data: newData, width: newWidth, height: newHeight };
+				const currentImageLen = currentBitmap.length;
+				const newIData = new Uint8ClampedArray(currentImageLen);
+				// console.log("resizeExcWithThread. D limitHeight:" + limitHeight + "/i:" + i);
+				for (let j = 0; j < currentImageLen; j++) {
+					newIData[j] = currentBitmap[j];
+				}
+				const newImageData = { data: newIData, width: currentWidth, height: currentHeight };
+
+				// console.log("resizeExcWithThread. E limitHeight:" + limitHeight + "/i:" + i);
+				const promise = this.execute(name, { iamegData: newImageData, distImage: newDistData, offsetY: total, rowCount: limitHeight });
+				total += limitHeight;
+				promises.push(promise);
+			}
+			Promise.all(promises)
+				.then((values) => {
+					// console.log("resizeExcWithThread -----A--- values.length:" + values.length);
+					// console.log(values)
+					// console.log(bc.arrayBuffer2base64(distBitmap.buffer));
+					for (let val of values) {
+						// console.log(val)
+						const {
+							data,
+							width,
+							height,
+							offsetY,
+							rowCount
+						} = val.distImage;
+						const startIndex = offsetY * 4 * newWidth;
+						const endIndex = (offsetY + rowCount) * 4 * newWidth;
+						let index = 0;
+						for (let j = startIndex; j < endIndex; j++) {
+							distBitmap[j] = data[index];
+							index++;
+						}
+						// console.log(bc.arrayBuffer2base64(data.buffer));
+					}
+					// console.log("resizeExcWithThread -----B--- values.length:" + values.length);
+					resolve(distBitmap.buffer);
+				})
+				.catch((e) => {
+					console.error(e.stack);
+					console.error(e);
+					console.error(e.currentTarget);
+					console.error(e.returnValue);
+					console.error(e.srcElement);
+					console.error(e.target);
+					console.error(e.type);
+					console.error(e.eventPhase);
+					console.error(e.timeStamp);
+					console.error(e.message);
+					console.error(e.lineno);
+					console.error(e.error);
+					reject(e)
+				});
+
+		});
+	}
+	resizeAsLanczosExe(iamegData, distImage, offsetY, rowCount) {
 		const {
 			data,
 			width,
@@ -99,10 +189,14 @@ export class ImageResizer extends ImageCalcBase {
 		const distBitmap = distImage.data;
 		const newWidth = distImage.width;
 		const newHeight = distImage.height;
-		const newData = new Uint8ClampedArray(this.resizeLanczos(data, width, height, newWidth, newHeight, distBitmap));
+		distImage.offsetY = offsetY;
+		distImage.rowCount = rowCount;
+		// console.log("resizeAsByCubicExe offsetY:" + offsetY + "/newWidth:" + newWidth + "/rowCount:" + rowCount + "/newHeight:" + newHeight);
+		const newData = new Uint8ClampedArray(this.resizeLanczos(data, width, height, newWidth, newHeight, distBitmap, offsetY, rowCount));
+		// console.log(bc.arrayBuffer2base64(distBitmap.buffer));
 		return distImage
 	}
-	resizeAsByCubicExe(iamegData, distImage) {
+	resizeAsByCubicExe(iamegData, distImage, offsetY, rowCount) {
 		const {
 			data,
 			width,
@@ -111,9 +205,17 @@ export class ImageResizer extends ImageCalcBase {
 		const distBitmap = distImage.data;
 		const newWidth = distImage.width;
 		const newHeight = distImage.height;
-		const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap));
+		distImage.offsetY = offsetY;
+		distImage.rowCount = rowCount;
+		// console.log("A offsetY:[" + offsetY + "]" + "--resizeAsByCubicExe A1 offsetY:" + offsetY + "/newWidth:" + newWidth + "/rowCount:" + rowCount + "/newHeight:" + newHeight);
+		// console.log("A1 offsetY:[" + offsetY + "]" + bc.arrayBuffer2base64(data.buffer));
+		// console.log("A2 offsetY:[" + offsetY + "]" + bc.arrayBuffer2base64(distBitmap.buffer));
+		const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap, offsetY, rowCount));
+		// console.log("B offsetY:[" + offsetY + "]" + "--resizeAsByCubicExe A2 offsetY:" + offsetY + "/newWidth:" + newWidth + "/rowCount:" + rowCount + "/newHeight:" + newHeight);
+		// console.log("B offsetY:[" + offsetY + "]" + bc.arrayBuffer2base64(distBitmap.buffer));
 		return distImage
 	}
+	/////////////
 	resize(iamegData, newWidth, newHeight, distImage) {
 		const {
 			data,
@@ -124,14 +226,14 @@ export class ImageResizer extends ImageCalcBase {
 		const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap));
 		return distImage
 	}
-	resizeLanczos(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap) {
-		return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(3), 6, distBitmap);
+	resizeLanczos(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap, offsetY, rowCount) {
+		return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.lanczosWeight(3), 6, distBitmap, offsetY, rowCount);
 	}
-	resizeByCubic(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap) {
-		return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(-1.0), 4, distBitmap);
+	resizeByCubic(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap, offsetY, rowCount) {
+		return this.resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, this.culcWeightByCubic(-1.0), 4, distBitmap, offsetY, rowCount);
 	}
 	// TODO run with maltiThead
-	resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidthF, newHeightF, weightFunc, size, distBitmap) {
+	resizeExecute(originBitmap, sourceWidth, sourceHeight, newWidthF, newHeightF, weightFunc, size, distBitmap, offsetY, rowCount) {
 		const newWidth = Math.floor(newWidthF);
 		const newHeight = Math.floor(newHeightF);
 		const sw = Math.floor(sourceWidth);
@@ -149,12 +251,15 @@ export class ImageResizer extends ImageCalcBase {
 		const sizeHalf = size / 2;
 		const sizeHalfm1 = sizeHalf - 1;
 		const xMap = {};
-		for (let iy = 0; iy < newHeight; iy++) {
+		const threadRowCount = rowCount ? rowCount : newHeight;
+		const threadOffsetY = offsetY ? offsetY : 0;
+		const threadEnd = threadOffsetY + threadRowCount;
+		for (let iy = threadOffsetY; iy < threadEnd; iy++) {
 			const wfy = hf * iy;
 			const y = Math.floor(wfy);
 			const startY = y - sizeHalfm1;
 			const endY = y + sizeHalf;
-			const y32bitOffsetDist = iy * 4 * newWidth;
+			const y32bitOffsetDist = (iy - threadOffsetY) * 4 * newWidth;
 			for (let ix = 0; ix < newWidth; ix++) {
 				const wfx = wf * ix;
 				const x = Math.floor(wfx);
@@ -183,7 +288,7 @@ export class ImageResizer extends ImageCalcBase {
 						b += src[offset32bit + 2] * w;
 					}
 				}
-				// console.log("newHeight y32bitOffsetDist:"+y32bitOffsetDist);
+				// console.log("newHeight y32bitOffsetDist:" + y32bitOffsetDist);
 				const offset32bitDist = y32bitOffsetDist + ix * 4;
 				dist[offset32bitDist] = ByteUtil.trimByte(r);
 				dist[offset32bitDist + 1] = ByteUtil.trimByte(g);

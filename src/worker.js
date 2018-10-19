@@ -13,7 +13,7 @@ const defaultWorker = new DefaultWorker();
 onmessage = (event) => {
 	const srcData = event.data;
 	const key = srcData ? srcData.key : "";
-	// console.log("hello Worker key:" + key);
+	// console.log("!!!!!!!!!!!!!!!!!!!!hello Worker key:" + key);
 	// console.log(srcData);
 	const worker = BaseWorker.getWorkerInstance(key);
 	worker.execute(srcData)

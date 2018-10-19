@@ -1,4 +1,5 @@
-const defaultWorker = "./dest/worker.js";
+const defaultWorker = "./worker.js";
+const defaultWorkerFromWorker = "./worker.js";
 export class Thread {
 	constructor(workerJsPath = defaultWorker) {
 		this.worker = new Worker(workerJsPath);
@@ -14,6 +15,7 @@ export class Thread {
 			// 	console.warn("trance:" + trance.length + "/" + trance.byteLength);
 			// }
 			// console.warn("trance！ー！＝！＝！＝！:-----");
+
 			try {
 				this.worker.postMessage(transObject, tranceArray);
 				this.worker.onmessage = (event) => {
@@ -23,6 +25,17 @@ export class Thread {
 				}
 				this.worker.onerror = (event) => {
 					console.log(event);
+					const e = event;
+					console.error(e.currentTarget);
+					console.error(e.returnValue);
+					console.error(e.srcElement);
+					console.error(e.target);
+					console.error(e.type);
+					console.error(e.eventPhase);
+					console.error(e.timeStamp);
+					console.error(e.message);
+					console.error(e.lineno);
+					console.error(e.error);
 					reject(event);
 				}
 			} catch (e) {
