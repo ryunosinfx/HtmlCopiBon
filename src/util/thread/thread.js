@@ -1,4 +1,4 @@
-const defaultWorker = "./worker.js";
+const defaultWorker = "worker.js";
 const defaultWorkerFromWorker = "./worker.js";
 export class Thread {
 	constructor(workerJsPath = defaultWorker) {
