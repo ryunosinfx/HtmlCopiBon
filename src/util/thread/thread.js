@@ -47,7 +47,7 @@ export class Thread {
 
 	static buildPostObj(key, dataMap) {
 		const tranceArray = [];
-		if (dataMap) {
+		if (dataMap && typeof dataMap === "string") {
 			dataMap.key = key;
 		} else {
 			dataMap = {
@@ -92,6 +92,7 @@ export class Thread {
 		}
 	}
 	static buildPostObjExecParValue(currentKey, value, tranceArray) {
+		//「このデバッグ出力を消すと落ちる」
 		console.log("trance buildPostObjExecParValue currentKey:" + currentKey + "/" + tranceArray.length);
 		// console.log(tranceArray);
 		const type = typeof value;
