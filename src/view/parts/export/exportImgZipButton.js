@@ -13,6 +13,7 @@ import {
 import { unixTimeToDateFormat } from "../../../util/timeUtil";
 import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
 import { FileDownloader } from "../../../util/fileDownloader";
+import { getNowUnixtime } from "../../../util/timeUtil";
 import { Dialog } from "../dialog/dialog";
 export class ExportImgZipButton extends BaseView {
 	constructor() {
@@ -26,6 +27,7 @@ export class ExportImgZipButton extends BaseView {
 		this.stateId = "exportedStateZip";
 		this.isExported = false;
 		this.exportOrderData = null;
+		this.startTime = null;
 	}
 
 	render(store, actionData) {
@@ -41,10 +43,13 @@ export class ExportImgZipButton extends BaseView {
 
 	async onViewShow(store, actionData) {
 		if (store[this.storeExportResultKey]) {
-			const isSuccess = this.buildButton(store[this.storeExportResultKey]);
+			const data = store[this.storeExportResultKey];
+			const zip = data.zip;
+			const isSuccess = this.buildButton(data);
+			const duration = (getNowUnixtime() - this.startTime) / 1000;
 			if (isSuccess) {
 				setTimeout(() => {
-					Dialog.opneAlert("Build Zip File Complete!", "OK download zip file!");
+					Dialog.opneAlert("Build Zip File Complete!", "OK download zip file! " + zip.size + "byte  Duration:" + duration + "sec");
 				}, 1000)
 				//":" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
 			}
@@ -95,6 +100,7 @@ export class ExportImgZipButton extends BaseView {
 			}
 			const result = await Dialog.opneConfirm("Comfirm", "is export orverride ok?");
 			if (!this.isExported || this.isExported && result) {
+				this.startTime = getNowUnixtime();
 				const action = ExportActionCreator.createExecuteAction(this, { exportOrders: [this.exportOrderData] });
 				this.dispatch(action);
 			}

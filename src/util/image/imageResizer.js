@@ -1,7 +1,7 @@
 import { ByteUtil } from "./byteUtil";
 import { ImageCalcBase } from "./imageCalcBase";
 import bc from "../binaryConverter";
-const threadCount = 5;
+const threadCount = 4;
 export class ImageResizer extends ImageCalcBase {
 	constructor() {
 		super("ImageResizer");
@@ -56,7 +56,7 @@ export class ImageResizer extends ImageCalcBase {
 				console.error(e.message);
 				console.error(e.lineno);
 				console.error(e.error);
-			});;
+			});
 		// console.log("resizeAsByCubic.resizeExcWithThread； result:" + result);
 		return result;
 	}

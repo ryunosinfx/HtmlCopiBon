@@ -219,7 +219,7 @@ export class ExportImageProcesser {
 				}
 				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
 				this.progress += progressUnit;
-				this.pbp.update(this.progress, 'expand resizeAsByCubic' + pageStep);
+				this.pbp.update(this.progress, (isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep);
 				if (pageEntity.isNoCropping) {
 					if (isLanczose) {
 						await this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper, true);

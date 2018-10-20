@@ -83,7 +83,7 @@ export class ImageProcessor {
 		return newImageData;
 	}
 	getImageDataFromArrayBuffer(ab) {
-		console.time('resize getImageDataFromArrayBuffer');
+		// console.time('resize getImageDataFromArrayBuffer');
 		return new Promise((resolve, reject) => {
 			let dataUri = bc.arrayBuffer2DataURI(ab);
 			ab = null;
@@ -98,7 +98,7 @@ export class ImageProcessor {
 				this.ctx.drawImage(img, 0, 0);
 				const imageData = this.ctx.getImageData(0, 0, width, height);
 				resolve(imageData);
-				console.timeEnd('resize getImageDataFromArrayBuffer');
+				// console.timeEnd('resize getImageDataFromArrayBuffer');
 			}
 			img.onerror = (e) => {
 				reject(e);
