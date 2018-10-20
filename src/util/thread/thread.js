@@ -92,8 +92,8 @@ export class Thread {
 		}
 	}
 	static buildPostObjExecParValue(currentKey, value, tranceArray) {
-		// console.log("trance buildPostObjExecParValue currentKey:" + currentKey);
-		// console.log(tranceArray);
+		console.log("trance buildPostObjExecParValue currentKey:" + currentKey);
+		console.log(tranceArray);
 		const type = typeof value;
 		let isNotObject = false;
 		if (!value) {
