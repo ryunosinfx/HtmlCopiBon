@@ -36,7 +36,11 @@ export class ImageResizer extends ImageCalcBase {
 
 	async resizeAsLanczos(iamegData, distImage, isOtherThread) {
 		// console.log("resizeAsLanczos.resizeExcWithThread；iamegData:" + iamegData);
-		return await this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsLanczos");
+		return await this.resizeExc(iamegData, distImage, isOtherThread, "resizeAsLanczos")
+			.catch((e) => {
+				console.log(e)
+				console.error(e.stack);
+			});
 	}
 
 	async resizeAsByCubic(iamegData, distImage, isOtherThread) {
@@ -69,7 +73,11 @@ export class ImageResizer extends ImageCalcBase {
 			}
 			this.threadInit();
 			// console.log("resizeExc execute.iamegData:" + iamegData);
-			const result = await this.execute(name, { iamegData, distImage });
+			const result = await this.execute(name, { iamegData, distImage })
+				.catch((e) => {
+					console.log(e)
+					console.error(e.stack);
+				});
 			return result;
 		} else {
 			// console.log("resizeExc.iamegData:" + iamegData);
@@ -84,7 +92,11 @@ export class ImageResizer extends ImageCalcBase {
 					// console.log("resizeExc resizeExcWithThread.offsetY:" + offsetY + "/rowCount:" + rowCount);
 				} else {
 					// console.log("resizeExc resizeExcWithThread S1.iamegData:" + iamegData + "/name:" + name);
-					const result = await this.resizeExcWithThread(iamegData, distImage, name);
+					const result = await this.resizeExcWithThread(iamegData, distImage, name)
+						.catch((e) => {
+							console.log(e)
+							console.error(e.stack);
+						});
 					// console.log("resizeExc resizeExcWithThread S2.result:" + result + "/name:" + name);
 					return result;
 				}

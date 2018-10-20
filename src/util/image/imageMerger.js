@@ -50,7 +50,11 @@ export class ImageMerger extends ImageCalcBase {
 			// this.thread.
 			this.threadInit();
 			const dataMap = { imageDataBase, images: threadImages, isBaseWhite };
-			const result = await this.execute(name, dataMap);
+			const result = await this.execute(name, dataMap)
+				.catch((e) => {
+					console.log(e)
+					console.error(e.stack);
+				});;
 			// console.warn("margeExc-imageDataBase")
 			// console.warn(dataMap)
 			// console.warn(imageDataBase)
