@@ -1,5 +1,6 @@
 import { StorageService } from "./storageService"
 import { Binary } from "./binary";
+import { ObjectUtil } from "../../util/objectUtil";
 import { PrimaryKey } from "./primaryKey";
 import { PrimaryKeyAutoIncrementService } from "./primaryKeyAutoIncrementService";
 const title = "CopiBon";
@@ -7,6 +8,7 @@ const USER_ID = "default";
 const titlePrefix = "title_";
 const BINALY_PK_ROW = "BINALY_PK_ROW";
 const entityManagerImpls = {};
+const binarySizeMap = {};
 const binaryEntity = new Binary();
 export class EntityManagerImpl {
 	constructor(entityManager, entityClass, userId = USER_ID) {
@@ -14,6 +16,7 @@ export class EntityManagerImpl {
 		this.entityClass = entityClass;
 		this.entity = new entityClass();
 		this.entityName = this.entity.getEntityName();
+		this.isBinary = binaryEntity.getEntityName() === this.entityName;
 		this.ss = new StorageService(entityClass);
 		this.pkais = new PrimaryKeyAutoIncrementService(userId);
 		this.em = entityManager;
@@ -24,7 +27,13 @@ export class EntityManagerImpl {
 		return await this.ss.setStore(this.userId);
 	}
 	async save(data) {
-		return await this.saveExecute(data, false);
+		const result = await this.saveExecute(data, false);
+		if (this.isBinary) {
+			const currentPK = result.getPk();
+			let size = await ObjectUtil.recalcSize(this, result);
+			binarySizeMap[currentPK] = size;
+		}
+		return result;
 	}
 	async saveWithBinary(data) {
 		return await this.saveExecute(data, true);
@@ -119,11 +128,27 @@ export class EntityManagerImpl {
 	async getAsMap(keys) {
 		return await this.ss.getAsMap(keys, this.entity);
 	}
-	async get(pk) {
+	async get(pk, isSizeOnly) {
+		if (isSizeOnly) {
+			if (binarySizeMap[pk]) {
+				return binarySizeMap[pk] * 1;
+			}
+		}
+		const key = "EntityManagerImpl.get pk:" + pk + "/entityName:" + this.entityName;
+		console.time(key)
+		const result = await this.ss.get(pk, this.entity);
 		// console.log("get this.entityName:" + this.entityName + "/pk:" + pk);
-		return await this.ss.get(pk, this.entity);
+		console.timeEnd(key)
+		if (this.isBinary) {
+			let size = await ObjectUtil.recalcSize(this, result);
+			binarySizeMap[pk] = size;
+		}
+		return result;
 	}
 	async delete(pk) {
+		if (this.isBinary) {
+			delete binarySizeMap[pk];
+		}
 		return await this.ss.delete(pk);
 	}
 

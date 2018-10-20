@@ -212,14 +212,18 @@ export class ExportImageProcesser {
 
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'maege Replace origin to whitePaper' + pageStep);
+
+				console.time("maege Replace origin to whitePaper" + pageStep)
 				if (isGrayscale && !pageEntity.isForceColor) {
 					await this.imageMerger.margeReplace(whitePaper, [this.imageFilter.beGrascale(origin)], isBaseWhite, true);
 				} else {
 					await this.imageMerger.margeReplace(whitePaper, [origin], isBaseWhite, true);
 				}
+				console.timeEnd("maege Replace origin to whitePaper" + pageStep)
 				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, (isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep);
+				console.time((isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep)
 				if (pageEntity.isNoCropping) {
 					if (isLanczose) {
 						await this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper, true);
@@ -241,6 +245,7 @@ export class ExportImageProcesser {
 					await this.imageCropper.corpImageToData(expandedPaper, cropedPaper, clopOffset);
 					// console.log("aaaaaaaaaaaaaaaaaaaaaaaa3b/" + cropedPaper.data.length)
 				}
+				console.timeEnd((isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep)
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'get ArrayBuffer From ImageBitmapData' + pageStep);
 				currentDataAb = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
@@ -278,7 +283,8 @@ export class ExportImageProcesser {
 		}
 	}
 	async exoprtAsZip(pages) {
-		const zip = new Zlib.Zip();
+		console.time("exoprtAsZip")
+		const zip = new Zlib.Zip({ compress: false });
 		let pageNum = 0;
 		let lastOne = null;
 		for (let pageEntity of pages) {
@@ -302,7 +308,10 @@ export class ExportImageProcesser {
 
 			}
 		}
-		return zip.compress();
+		//uncompress
+		const result = zip.compress();
+		console.timeEnd("exoprtAsZip")
+		return result;
 	}
 	async exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M) {
 		//6 new WhiteImageCreate
@@ -328,6 +337,7 @@ export class ExportImageProcesser {
 		const printPages = [];
 		const printPairs = [];
 		let indexA = 0;
+		console.time("exportDualImage4Print A1:");
 		for (let page of pages) {
 			if (indexA === 0 && isSideSynced) {
 				printPages.push(null);
@@ -343,7 +353,9 @@ export class ExportImageProcesser {
 			}
 			printPages.push(data);
 		}
+		console.timeEnd("exportDualImage4Print A1:");
 
+		console.time("exportDualImage4Print A2:");
 		for (let index = 0; index < printPages.length; index++) {
 			const newPair = [null, null];
 			newPair[0] = printPages[index];
@@ -359,6 +371,8 @@ export class ExportImageProcesser {
 		let pageCount = 0;
 		const stepNum = 9
 		const progressUnit = 20 / (stepNum * pageNum)
+		console.timeEnd("exportDualImage4Print A2:");
+		console.time("exportDualImage4Print A3:");
 		for (let printPagePair of printPairs) {
 			pageCount++;
 			const pageStep = "[" + pageCount + "/" + pageNum + "]";
@@ -369,9 +383,11 @@ export class ExportImageProcesser {
 			// console.log(cropedPaperDual);
 			await this.buildDualImage(targetSize, cropedPaperDual, pairPages, printPagePair, isPageDirectionR2L, isMaxSize10M, pageStep, progressUnit);
 		}
+		console.timeEnd("exportDualImage4Print A3:");
 		// console.log(cropedPaperDual);
 	}
 	async buildDualImage(targetSize, cropedPaperDual, pairPages, shapedPagePair, isPageDirectionR2L, isMaxSize10M, pageStep, progressUnit) {
+		console.time("exportDualImage4Print buildDualImageA3 pageStep:" + pageStep);
 		//console.log(shapedPagePair);
 		const one = shapedPagePair[0];
 		const two = shapedPagePair[1];
@@ -464,6 +480,7 @@ export class ExportImageProcesser {
 			await this.em.Pages.save(pairPages.left);
 			await this.em.delete(pairPages.leftBin);
 		}
+		console.timeEnd("exportDualImage4Print buildDualImageA3 pageStep:" + pageStep);
 	}
 	exportPdfExecute(exportOrders) {
 		alert('ExportImageProcesser exportPdfExecute');

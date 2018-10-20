@@ -151,12 +151,13 @@ export class ImageResizer extends ImageCalcBase {
 							rowCount
 						} = val.distImage;
 						const startIndex = offsetY * 4 * newWidth;
-						const endIndex = (offsetY + rowCount) * 4 * newWidth;
-						let index = 0;
-						for (let j = startIndex; j < endIndex; j++) {
-							distBitmap[j] = data[index];
-							index++;
-						}
+						// const endIndex = (offsetY + rowCount) * 4 * newWidth;
+						// let index = 0;
+						distBitmap.set(data, startIndex);
+						// for (let j = startIndex; j < endIndex; j++) {
+						// 	distBitmap[j] = data[index];
+						// 	index++;
+						// }
 						// console.log(bc.arrayBuffer2base64(data.buffer));
 					}
 					// console.log("resizeExcWithThread -----B--- values.length:" + values.length);
