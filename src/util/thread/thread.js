@@ -47,7 +47,7 @@ export class Thread {
 
 	static buildPostObj(key, dataMap) {
 		const tranceArray = [];
-		if (dataMap && typeof dataMap === "string") {
+		if (dataMap && typeof dataMap === "object") {
 			dataMap.key = key;
 		} else {
 			dataMap = {
