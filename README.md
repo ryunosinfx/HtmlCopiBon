@@ -17,6 +17,10 @@ This product is pure client side html to build copy book data for FujiXerox copy
  - file format: jpeg
  - file size: 10MiB
 
+## Manual @ japanese
+Manual 
+https://togetter.com/li/1270172
+
 ## Demo
 Demo？ Now build upping!
-https://ryunosinfx.github.io/HtmlCopiBon/
+https://ryunosinfx.github.io/HtmlCopiBon/dest/
