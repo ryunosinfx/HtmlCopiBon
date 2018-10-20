@@ -53,7 +53,22 @@ export class ExportImageProcesser {
 			});
 		this.progress = 2;
 		await this.pbp.update(this.progress, 'start executess');
-		const result = await this.executeParOrder(setting, pages, exportOrders[0]);
+		const result = await this.executeParOrder(setting, pages, exportOrders[0])
+			.catch((e) => {
+				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});
 		await this.pbp.comple(this.progress);
 		return result;
 	}
@@ -72,7 +87,22 @@ export class ExportImageProcesser {
 		};
 		this.progress = 3;
 		this.pbp.update(this.progress, 'expandAndCropSize');
-		await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose);
+		await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose)
+			.catch((e) => {
+				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});
 		//console.log(pages)
 		//console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
 		const isPageDirectionR2L = setting.pageDirection === "r2l";
@@ -84,7 +114,22 @@ export class ExportImageProcesser {
 
 		this.progress = 60;
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
-		await this.exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M);
+		await this.exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M)
+			.catch((e) => {
+				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});;
 
 		//console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
 		//10 load images and add tozip
@@ -95,7 +140,22 @@ export class ExportImageProcesser {
 		//11 save zip
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsZip');
-		const compressed = await this.exoprtAsZip(pages);
+		const compressed = await this.exoprtAsZip(pages)
+			.catch((e) => {
+				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});;
 		const exports = await this.tm.getExports();
 		let exportImagePk = null;
 		let outputOld = null;
