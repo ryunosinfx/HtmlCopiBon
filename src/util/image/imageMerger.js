@@ -54,7 +54,7 @@ export class ImageMerger extends ImageCalcBase {
 				.catch((e) => {
 					console.log(e)
 					console.error(e.stack);
-				});;
+				});
 			// console.warn("margeExc-imageDataBase")
 			// console.warn(dataMap)
 			// console.warn(imageDataBase)

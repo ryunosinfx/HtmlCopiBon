@@ -21,7 +21,7 @@ export class BinaryManager {
 		}
 		return await this.em.Binary.delete(binaryPk);
 	}
-	async save(pk, name, ab) {
+	async save(pk, name, ab, addDataMap) {
 		console.time('BinaryManager.save');
 		// console.log("BinaryManager save!!A!! pk:" + pk);
 		// console.log(binary);
@@ -38,6 +38,11 @@ export class BinaryManager {
 		} else {
 			binEntity.updateDate = Date.now();
 			binEntity._ab = ab;
+		}
+		if (addDataMap && typeof addDataMap === "object") {
+			for (let key in addDataMap) {
+				binEntity[key] = addDataMap[key];
+			}
 		}
 		const binaryEntitySaved = await this.em.Binary.save(binEntity)
 		console.timeEnd('BinaryManager.save');

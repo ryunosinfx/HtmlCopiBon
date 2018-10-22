@@ -35,6 +35,7 @@ export class ExportImageProcesser {
 		this.imageFilter = new ImageFilter();
 		this.pbp = new ProgressBarProcesser();
 		this.progress = 0;
+		this.delList = [];
 	}
 	async exportExecute(exportOrders = [order]) {
 		// 0 load Title & pages ExecutePerPage
@@ -140,6 +141,7 @@ export class ExportImageProcesser {
 		//11 save zip
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsZip');
+		await this.delOnList();
 		const compressed = await this.exoprtAsZip(pages)
 			.catch((e) => {
 				console.error("ExportImageProcesser exportExecute executeParOrder");
@@ -182,8 +184,8 @@ export class ExportImageProcesser {
 			exports.push(exportImageNewPk);
 			await this.tm.saveCurrent();
 		}
+		await this.delOnList();
 		// return pk list PK!PK!
-
 		this.progress = 100;
 		this.pbp.update(this.progress, 'end all!');
 		this.pbp.comple(this.progress);
@@ -308,7 +310,9 @@ export class ExportImageProcesser {
 				console.timeEnd((isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep)
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'get ArrayBuffer From ImageBitmapData' + pageStep);
-				currentDataAb = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+
+				//currentDataAb = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
+				currentDataAb = cropedPaper.data.buffer;
 				const plain = cropedPaper.data;
 				//console.log(Zlib);
 				//console.log("aaaaaaaaaaaaaaaaaaaaaaaa4a-/")
@@ -327,7 +331,7 @@ export class ExportImageProcesser {
 				const outputOld = pageEntity.outputExpandImage;
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'save ArrayBuffer' + pageStep);
-				const outputNew = await this.bm.save(outputOld, "expandPage", currentDataAb);
+				const outputNew = await this.bm.save(outputOld, "expandPage", currentDataAb, { width: cropedPaper.width, height: cropedPaper.height });
 				pageEntity.outputExpandImage = outputNew;
 				this.progress += progressUnit;
 				this.pbp.update(this.progress, 'save pageEntity' + pageStep);
@@ -363,7 +367,7 @@ export class ExportImageProcesser {
 					zip.addFile(new Uint8Array(outputBinaryEntity._ab), {
 						filename: UnicodeEncoder.stringToByteArray('page' + currentPageNo + "-" + nextPageNo + '.jpg')
 					});
-					await this.bm.remove(lastOne);
+					this.delList.push(lastOne);
 				}
 
 			}
@@ -472,13 +476,15 @@ export class ExportImageProcesser {
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'load pairPages.right' + pageStep);
 		if (pairPages.right && pairPages.right.outputExpandImage) {
-			pairPages.rightBin = await this.em.get(pairPages.right.outputExpandImage);
+			// pairPages.rightBin = await this.em.get(pairPages.right.outputExpandImage);
+			pairPages.rightBin = await this.loadBinaryWidCleanUp(pairPages.right.outputExpandImage);
 			pageEntity = pairPages.right;
 		}
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'load pairPages.left' + pageStep);
 		if (pairPages.left && pairPages.left.outputExpandImage) {
-			pairPages.leftBin = await this.em.get(pairPages.left.outputExpandImage);
+			// pairPages.leftBin = await this.em.get(pairPages.left.outputExpandImage);
+			pairPages.leftBin = await this.loadBinaryWidCleanUp(pairPages.left.outputExpandImage);
 			pageEntity = pairPages.left;
 		}
 		if (!pageEntity) {
@@ -491,7 +497,9 @@ export class ExportImageProcesser {
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'set Left' + pageStep);
 		if (pairPages.leftBin) {
-			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
+			const data = pairPages.leftBin._ab;
+			//	const data = await this.ip.getImageDataFromArrayBuffer(pairPages.leftBin._ab);
+			const origin = { data: new Uint8Array(data), width: pairPages.leftBin.width, height: pairPages.leftBin.height }
 			origin.offsetX = 0;
 			origin.offsetY = 0;
 			// console.log("A pairPages.leftBin　pageStep:" + pageStep);
@@ -503,7 +511,9 @@ export class ExportImageProcesser {
 		this.progress += progressUnit;
 		this.pbp.update(this.progress, 'set right' + pageStep);
 		if (pairPages.rightBin) {
-			const origin = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
+			const data = pairPages.rightBin._ab;
+			// const data = await this.ip.getImageDataFromArrayBuffer(pairPages.rightBin._ab);
+			const origin = { data: new Uint8Array(data), width: pairPages.rightBin.width, height: pairPages.rightBin.height }
 			origin.offsetX = targetSize.x;
 			origin.offsetY = 0;
 			// console.log("B pairPages.rightBin　pageStep:" + pageStep);
@@ -541,6 +551,18 @@ export class ExportImageProcesser {
 			await this.em.delete(pairPages.leftBin);
 		}
 		console.timeEnd("exportDualImage4Print buildDualImageA3 pageStep:" + pageStep);
+	}
+	async loadBinaryWidCleanUp(pk) {
+		const binaryEntity = await this.em.get(pk);
+		this.delList.push(pk);
+		return binaryEntity;
+	}
+	async delOnList() {
+		for (let pk of this.delList) {
+			// const outputNew = await this.bm.save(pk, "expandPage", new Uint8Array(1)
+			// 	.buffer, { width: 1, height: 1 });
+			await this.bm.remove(pk);
+		}
 	}
 	exportPdfExecute(exportOrders) {
 		alert('ExportImageProcesser exportPdfExecute');

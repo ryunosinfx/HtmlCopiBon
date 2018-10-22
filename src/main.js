@@ -2,7 +2,7 @@ import css from "../index.css";
 import { MainFrame } from "./view/mainFrame"
 import { MainService } from "./service/mainService"
 const appTitle = "CopiBon";
-const appVersion = "v0.0.７alpha";
+const appVersion = "v0.0.8alpha";
 export default class CopiBonService {
 	constructor() {
 		this.mainService = MainService.getInstance();

@@ -66,6 +66,10 @@ export class TitleProcessor {
 		for (let title of titles) {
 			await this.removeDescendant(title);
 		}
+		//dual!
+		for (let title of titles) {
+			await this.removeDescendant(title);
+		}
 		return await this.loadAll();
 	}
 	async removeDescendant(target) {
