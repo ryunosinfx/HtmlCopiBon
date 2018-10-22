@@ -26,8 +26,7 @@ export const unixTimeToDateFormat = (unixtime, format = "yyyy-MM-dd hh:mm:ss") =
     .replace(re_ss, sec);
 }
 export const getNowUnixtime = () => {
-  new Date()
-    .getTime();
+  return new Date().getTime();
 }
 export const getNow = () => {
   //(D:20181012023235+02'00')

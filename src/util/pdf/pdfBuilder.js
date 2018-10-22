@@ -18,5 +18,4 @@ export class PdfBuilder {
     }
     return pdfDoc.createFile();
   }
-
 }
