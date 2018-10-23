@@ -12,7 +12,6 @@ import {
 
 import { unixTimeToDateFormat } from "../../../util/timeUtil";
 import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
-import { FileDownloader } from "../../../util/fileDownloader";
 import { getNowUnixtime } from "../../../util/timeUtil";
 import { Dialog } from "../dialog/dialog";
 export class ExportImgZipButton extends BaseView {

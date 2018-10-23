@@ -9,6 +9,7 @@ import { UnicodeEncoder } from "../../util/unicodeEncoder";
 import { MainService } from "../../service/mainService"
 import { PreviewProcessor } from "./previewProcessor"
 import { ProgressBarProcesser } from "./progressBarProcesser"
+import { ExportImageProcesser } from "./exportImageProcesser"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
 import { Zlib } from "zlibjs/bin/zip.min"
 
@@ -37,9 +38,15 @@ export class ExportImageProcesser {
 		this.progress = 0;
 		this.delList = [];
 	}
-	async exportExecute(exportOrders = [order]) {
+	async exportZipExecute(exportOrders = [order]) {
+		return await this.exportExecute(exportOrders = [order], true);
+	}
+	async exportPdfExecute(exportOrders) {
+		return await this.exportExecute(exportOrders = [order], false);
+	}
+	async exportExecute(exportOrders = [order], isZip = true) {
 		// 0 load Title & pages ExecutePerPage
-		await this.pbp.open('Export and save files for print as zip');
+		await this.pbp.open('Export and save files for print as ' + (isZip ? "zip" : "pdf"));
 		this.progress = 0;
 		this.pbp.update(this.progress, 'loading Settings');
 		const setting = await this.tm.loadSettings()
@@ -54,7 +61,7 @@ export class ExportImageProcesser {
 			});
 		this.progress = 2;
 		await this.pbp.update(this.progress, 'start executess');
-		const result = await this.executeParOrder(setting, pages, exportOrders[0])
+		const result = await this.executeParOrder(setting, pages, exportOrders[0], isZip)
 			.catch((e) => {
 				console.error("ExportImageProcesser exportExecute executeParOrder");
 				console.error(e.stack);
@@ -73,7 +80,7 @@ export class ExportImageProcesser {
 		await this.pbp.comple(this.progress);
 		return result;
 	}
-	async executeParOrder(setting, pages, order) {
+	async executeParOrder(setting, pages, order, isZip) {
 		//-1 order consts calc
 		const targetDpi = this.paper.getDpi(order.dpiName);
 		const targetSize = this.paper.getTargetPaperSize(order.basePaper, order.dpiName);
@@ -104,14 +111,14 @@ export class ExportImageProcesser {
 				console.error(e.lineno);
 				console.error(e.error);
 			});
-		//console.log(pages)
-		//console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a-/")
+		const exports = isZip ? (await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)) : (await this.executeAsPdf(targetSize, setting, pages, isMaxSize10M));
+		return exports;
+	}
+	async executeAsZip(targetSize, setting, pages, isMaxSize10M) {
 		const isPageDirectionR2L = setting.pageDirection === "r2l";
 		const isRightStart = setting.startPage === "r";
 		const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
-		// alert(setting.pageDirection+"/"+setting.startPage+" "+isPageDirectionR2L+"/"+isRightStart+" "+isSideSynced);
 		const isOdd = pages.length % 2 > 0;
-		// const hasAddSet = (isSideSynced && isOdd) || (!isSideSynced && !isOdd);
 
 		this.progress = 60;
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
@@ -130,14 +137,7 @@ export class ExportImageProcesser {
 				console.error(e.message);
 				console.error(e.lineno);
 				console.error(e.error);
-			});;
-
-		//console.log("aaaaaaaaaaaaaaaaaaaaaaaa5b-/")
-		//10 load images and add tozip
-		// const ab = this.ip.getArrayBufferFromImageBitmapData(cropedPaper);
-		// console.log("cropedPaper getArrayBufferFromImageBitmapData ab:"+cropedPaper.width+"/"+cropedPaper.height);
-		// console.log(ab);
-		// plainData1
+			});
 		//11 save zip
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsZip');
@@ -157,29 +157,60 @@ export class ExportImageProcesser {
 				console.error(e.message);
 				console.error(e.lineno);
 				console.error(e.error);
-			});;
+			});
+		return await this.commonEnd(compressed, "zip");
+	}
+	async executeAsPdf(targetSize, setting, pages, isMaxSize10M) {
+		const isPageDirectionR2L = setting.pageDirection === "r2l";
+		const isRightStart = setting.startPage === "r";
+		const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
+		const isOdd = pages.length % 2 > 0;
+
+		this.progress = 60;
+		this.pbp.update(this.progress, 'start exportDualImage4Print');
+		this.progress = 85;
+		this.pbp.update(this.progress, 'start exoprtAsPdf');
+		const pdf = await this.exoprtAsZip(pages)
+			.catch((e) => {
+				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error(e.stack);
+				console.error(e);
+				console.error(e.currentTarget);
+				console.error(e.returnValue);
+				console.error(e.srcElement);
+				console.error(e.target);
+				console.error(e.type);
+				console.error(e.eventPhase);
+				console.error(e.timeStamp);
+				console.error(e.message);
+				console.error(e.lineno);
+				console.error(e.error);
+			});
+		return await this.commonEnd(pdf, "pdf");
+	}
+	//End
+	async commonEnd(result, type) {
 		const exports = await this.tm.getExports();
 		let exportImagePk = null;
 		let outputOld = null;
 		for (let exportPk of exports) {
 			const imageOutput = await this.iom.load(exportPk);
-			if (imageOutput && imageOutput.type === "zip") {
+			if (imageOutput && imageOutput.type === type) {
 				exportImagePk = exportPk;
 				outputOld = imageOutput.binary;
 				break;
 			}
 		}
-		const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
-		const size = compressed.byteLength;
-		//console.log("aaaaaaaaaaaaaaaaaaaaaaaa8b-/" + outputNew + "/" + outputOld + "/size:" + size);
+		const outputNew = await this.bm.save(outputOld, "expandPage", result);
+		const size = result.byteLength;
 		const now = (new Date()
 			.getTime());
 		const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
 		const settings = await this.tm.loadSettings();
 		const defaultTitle = await this.tm.getCurrentTitleName();
 		const exportPrefix = settings.name ? settings.name : defaultTitle;
-		const exportImageNewPk = await this.iom.save(exportImagePk, exportPrefix + yyyyMMddThhmmss + ".zip", outputNew, "zip", order.orderName, size);
-		// console.log(compressed);
+		const exportImageNewPk = await this.iom.save(exportImagePk, exportPrefix + yyyyMMddThhmmss + "." + type, outputNew, type, order.orderName, size);
+		// console.log(result);
 		if (exportImageNewPk) {
 			exports.push(exportImageNewPk);
 			await this.tm.saveCurrent();
@@ -563,8 +594,5 @@ export class ExportImageProcesser {
 			// 	.buffer, { width: 1, height: 1 });
 			await this.bm.remove(pk);
 		}
-	}
-	exportPdfExecute(exportOrders) {
-		alert('ExportImageProcesser exportPdfExecute');
 	}
 }
