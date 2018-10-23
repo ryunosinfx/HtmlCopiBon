@@ -12,9 +12,10 @@ export class PdfBuilder {
         continue;
       }
       const dataUri = item.dataUri;
+      const ab = item.ab;
       const height = item.height;
       const width = item.width;
-      pdfDoc.addImagePage(dataUri, width, height);
+      pdfDoc.addImagePage(dataUri, ab, width, height);
     }
     return pdfDoc.createFile();
   }
