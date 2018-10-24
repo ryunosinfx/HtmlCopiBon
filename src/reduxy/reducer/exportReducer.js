@@ -1,8 +1,8 @@
 import { ExportActionCreator } from '../action/exportActionCreator'
 import { MainService } from "../../service/mainService"
 import { BaseReducer } from '../../util/reactive/baseReducer'
-import { ExportImageProcesser } from '../processor/exportImageProcesser'
-import { ExportUtilProcesser } from '../processor/exportUtilProcesser'
+import { ExportImageProcessor } from '../processor/exportImageProcessor'
+import { ExportUtilProcessor } from '../processor/exportUtilProcessor'
 import { PageProcessor } from '../processor/pageProcessor'
 import { ImageActionCreator } from '../action/imageActionCreator'
 let exportReducer = null;
@@ -32,8 +32,8 @@ export class ExportReducer extends BaseReducer {
 		this.atatch(this.selectOrderAction);
 
 		this.pp = new PageProcessor();
-		this.eip = new ExportImageProcesser(this.pp);
-		this.eup = new ExportUtilProcesser(this.pp);
+		this.eip = new ExportImageProcessor(this.pp);
+		this.eup = new ExportUtilProcessor(this.pp);
 		this.storeKey = ExportActionCreator.getStoreKey();
 		this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
 		this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();

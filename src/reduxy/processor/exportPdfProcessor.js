@@ -2,13 +2,13 @@ import {
 	MainService
 } from "../../service/mainService"
 import {
-	ProgressBarProcesser
-} from "./progressBarProcesser"
+	ProgressBarProcessor
+} from "./progressBarProcessor"
 import {
 	PdfBuilder
 } from "../../util/pdf/pdfBuilder"
 
-export class ExportPdfProcesser {
+export class ExportPdfProcessor {
 	constructor(pp) {
 		this.pp = pp;
 		this.ms = MainService.getInstance();

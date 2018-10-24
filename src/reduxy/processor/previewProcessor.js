@@ -1,6 +1,6 @@
 import { Sorter } from "../../util/sorter";
 import { MainService } from "../../service/mainService"
-import { ProgressBarProcesser } from "./progressBarProcesser"
+import { ProgressBarProcessor } from "./progressBarProcessor"
 export class PreviewProcessor {
 	constructor() {
 		this.ms = MainService.getInstance();
@@ -9,7 +9,7 @@ export class PreviewProcessor {
 		this.ip = this.ms.ip;
 		this.previewMaxWidth = 1000;
 		this.previewMaxHeight = 1000;
-		this.pbp = new ProgressBarProcesser();
+		this.pbp = new ProgressBarProcessor();
 		this.progress = 0;
 	}
 

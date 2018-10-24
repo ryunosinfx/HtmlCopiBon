@@ -9,7 +9,7 @@ const order = {
 	basePaper: "mangaPaperA4ExpandTatikiri",
 	dpiName: "dpi600"
 };
-export class ExportUtilProcesser {
+export class ExportUtilProcessor {
 	constructor() {
 		this.ms = MainService.getInstance();
 		this.em = this.ms.em;
@@ -35,7 +35,7 @@ export class ExportUtilProcesser {
 	}
 	async loadZip(exportPk) {
 		if (exportPk) {
-			alert('ExportImageProcesser loadZip is NULL!');
+			alert('ExportUtilProcessor loadZip is NULL!');
 		} else {
 			const imageOutpus = await this.load();
 			const zip = imageOutpus.zip;
@@ -51,7 +51,7 @@ export class ExportUtilProcesser {
 	}
 	async loadPdf(exportPk) {
 		if (exportPk) {
-			alert('ExportImageProcesser loadPdf exportPk is NULL!');
+			alert('ExportUtilProcessor loadPdf exportPk is NULL!');
 		} else {
 			const imageOutpus = await this.load();
 			const pdf = imageOutpus.pdf;

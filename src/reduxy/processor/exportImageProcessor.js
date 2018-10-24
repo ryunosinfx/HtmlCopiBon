@@ -8,8 +8,8 @@ import { ImageFilter } from "../../util/image/imageFilter";
 import { UnicodeEncoder } from "../../util/unicodeEncoder";
 import { MainService } from "../../service/mainService"
 import { PreviewProcessor } from "./previewProcessor"
-import { ProgressBarProcesser } from "./progressBarProcesser"
-import { ExportPdfProcesser } from "./exportPdfProcesser"
+import { ProgressBarProcessor } from "./progressBarProcessor"
+import { ExportPdfProcessor } from "./exportPdfProcessor"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
 import { Zlib } from "zlibjs/bin/zip.min"
 
@@ -18,7 +18,7 @@ const order = {
 	basePaper: "mangaPaperA4ExpandTatikiri",
 	dpiName: "dpi600"
 };
-export class ExportImageProcesser {
+export class ExportImageProcessor {
 	constructor(pp) {
 		this.pp = pp;
 		this.ms = MainService.getInstance();
@@ -34,8 +34,8 @@ export class ExportImageProcesser {
 		this.imageResizer = new ImageResizer();
 		this.imageCropper = new ImageCropper();
 		this.imageFilter = new ImageFilter();
-		this.pbp = new ProgressBarProcesser();
-		this.epp = new ExportPdfProcesser();
+		this.pbp = new ProgressBarProcessor();
+		this.epp = new ExportPdfProcessor();
 
 		this.progress = 0;
 		this.delList = [];
@@ -65,7 +65,7 @@ export class ExportImageProcesser {
 		await this.pbp.update(this.progress, 'start executess');
 		const result = await this.executeParOrder(setting, pages, exportOrders[0], isZip)
 			.catch((e) => {
-				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
 				console.error(e);
 				console.error(e.currentTarget);
@@ -99,7 +99,7 @@ export class ExportImageProcesser {
 		this.pbp.update(this.progress, 'expandAndCropSize');
 		await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose)
 			.catch((e) => {
-				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
 				console.error(e);
 				console.error(e.currentTarget);
@@ -126,7 +126,7 @@ export class ExportImageProcesser {
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
 		await this.exportDualImage4Print(targetSize, setting, pages, isSideSynced, isOdd, isPageDirectionR2L, isMaxSize10M)
 			.catch((e) => {
-				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
 				console.error(e);
 				console.error(e.currentTarget);
@@ -146,7 +146,7 @@ export class ExportImageProcesser {
 		await this.delOnList();
 		const compressed = await this.exoprtAsZip(pages)
 			.catch((e) => {
-				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
 				console.error(e);
 				console.error(e.currentTarget);
@@ -172,9 +172,11 @@ export class ExportImageProcesser {
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsPdf');
-		const pdf = await this.epp.createPdf(pages)
+		alert(targetSize);
+		const targetPaper = this.paper.getTragetPaper(targetSize);
+		const pdf = await this.epp.createPdf(targetPaper, pages)
 			.catch((e) => {
-				console.error("ExportImageProcesser exportExecute executeParOrder");
+				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
 				console.error(e);
 				console.error(e.currentTarget);
