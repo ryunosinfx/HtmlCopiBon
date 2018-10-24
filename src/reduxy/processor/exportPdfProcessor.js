@@ -8,7 +8,7 @@ import {
 	PdfBuilder
 } from "../../util/pdf/pdfBuilder"
 
-export class ExportImageProcesser {
+export class ExportPdfProcesser {
 	constructor(pp) {
 		this.pp = pp;
 		this.ms = MainService.getInstance();

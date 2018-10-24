@@ -9,7 +9,7 @@ import { UnicodeEncoder } from "../../util/unicodeEncoder";
 import { MainService } from "../../service/mainService"
 import { PreviewProcessor } from "./previewProcessor"
 import { ProgressBarProcesser } from "./progressBarProcesser"
-import { ExportImageProcesser } from "./exportImageProcesser"
+import { ExportPdfProcesser } from "./exportPdfProcesser"
 // import {Zlib, Zip, Raw, PKZIP} from "zlibjs/bin/zlib_and_gzip.min"
 import { Zlib } from "zlibjs/bin/zip.min"
 
@@ -35,14 +35,16 @@ export class ExportImageProcesser {
 		this.imageCropper = new ImageCropper();
 		this.imageFilter = new ImageFilter();
 		this.pbp = new ProgressBarProcesser();
+		this.epp = new ExportPdfProcesser();
+
 		this.progress = 0;
 		this.delList = [];
 	}
 	async exportZipExecute(exportOrders = [order]) {
-		return await this.exportExecute(exportOrders = [order], true);
+		return await this.exportExecute(exportOrders, true);
 	}
 	async exportPdfExecute(exportOrders) {
-		return await this.exportExecute(exportOrders = [order], false);
+		return await this.exportExecute(exportOrders, false);
 	}
 	async exportExecute(exportOrders = [order], isZip = true) {
 		// 0 load Title & pages ExecutePerPage
@@ -111,7 +113,7 @@ export class ExportImageProcesser {
 				console.error(e.lineno);
 				console.error(e.error);
 			});
-		const exports = isZip ? (await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)) : (await this.executeAsPdf(targetSize, setting, pages, isMaxSize10M));
+		const exports = isZip ? (await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)) : (await this.executeAsPdf(order.basePaper, setting, pages, isMaxSize10M));
 		return exports;
 	}
 	async executeAsZip(targetSize, setting, pages, isMaxSize10M) {
@@ -170,7 +172,7 @@ export class ExportImageProcesser {
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsPdf');
-		const pdf = await this.exoprtAsZip(pages)
+		const pdf = await this.epp.createPdf(pages)
 			.catch((e) => {
 				console.error("ExportImageProcesser exportExecute executeParOrder");
 				console.error(e.stack);

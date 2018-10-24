@@ -71,6 +71,10 @@ export class Paper {
     const targetPaper = basePaper[basePaperSet];
     return paperSizeSet[targetPaper.frame];
   }
+  getTragetPaper(basePaperSet) {
+    const targetPaper = basePaper[basePaperSet];
+    return targetPaper.target;
+  }
   getPaperSizeMm(paperSize) {
     return paperSizeSet[paperSize];
   }
