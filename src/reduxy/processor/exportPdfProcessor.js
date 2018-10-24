@@ -7,6 +7,7 @@ import {
 import {
 	PdfBuilder
 } from "../../util/pdf/pdfBuilder"
+import { Paper } from "../../util/image/paper";
 
 export class ExportPdfProcessor {
 	constructor(pp) {
@@ -16,20 +17,24 @@ export class ExportPdfProcessor {
 		this.bm = this.ms.bm;
 		this.im = this.ms.im;
 		this.ip = this.ms.ip;
+		this.paper = new Paper();
 		this.delList = [];
 	}
-	async createPdf(paperSize, pages) {
+	async createPdf(paperSize, pages, targetSize) {
 		const letList = [];
 		const pdfImage = {
-			data: new Uint8ClampedArray(targetSize.x * targetSize.y * 4),
+			data: new Uint8Array(targetSize.x * targetSize.y * 4),
 			width: targetSize,
 			height: targetSize.y
 		};
 		for (let page of pages) {
+			if (!page) {
+				continue;
+			}
 			const binaryEntity = await this.loadBinaryWidCleanUp(page.outputExpandImage);
-			pdfImage.data = new new Uint8ClampedArray(UinaryEntity._ab);
-			pdfImage.width = UinaryEntity.width;
-			pdfImage.height = UinaryEntity.height;
+			pdfImage.data = new Uint8ClampedArray(binaryEntity._ab);
+			pdfImage.width = binaryEntity.width;
+			pdfImage.height = binaryEntity.height;
 			let pdfImageAb = this.ip.getArrayBufferFromImageBitmapDataAsJpg(pdfImage, 1.0);
 			letList.push({
 				ab: pdfImageAb,
@@ -40,18 +45,8 @@ export class ExportPdfProcessor {
 		const pdfBuilder = new PdfBuilder();
 		const result = pdfBuilder.createImagesDoc(paperSize, letList);
 		this.delOnList();
-
-		let exportImagePk = null;
-		let outputOld = null;
-		for (let exportPk of exports) {
-			const imageOutput = await this.iom.load(exportPk);
-			if (imageOutput && imageOutput.type === "pdf") {
-				exportImagePk = exportPk;
-				outputOld = imageOutput.binary;
-				break;
-			}
-		}
-		const outputNew = await this.bm.save(outputOld, "expandPage", compressed);
+		console.log(result)
+		alert(result)
 		return result;
 	}
 
@@ -64,7 +59,7 @@ export class ExportPdfProcessor {
 		for (let pk of this.delList) {
 			// const outputNew = await this.bm.save(pk, "expandPage", new Uint8Array(1)
 			// 	.buffer, { width: 1, height: 1 });
-			await this.bm.remove(pk);
+			// await this.bm.remove(pk);
 		}
 	}
 }

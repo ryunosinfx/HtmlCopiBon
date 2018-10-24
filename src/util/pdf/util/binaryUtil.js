@@ -19,6 +19,8 @@ export class BinaryUtil {
 		const retU8a = new Uint8Array(len);
 		for (let u8a of u8as) {
 			const edge = u8aEdge[index];
+			const start = edge.start;
+			const end = edge.end;
 			for (let i = start; i < end; i++) {
 				retU8a[i] = u8a[i - start];
 			}

@@ -1,80 +1,80 @@
 import {
-  RefObject
+	RefObject
 } from './base/refObject'
 import {
-  Header
+	Header
 } from './base/header'
 import {
-  BinaryUtil
+	BinaryUtil
 } from './util/binaryUtil'
 import {
-  CatalogObject
+	CatalogObject
 } from './objects/catalogObject'
 import {
-  FontObject
+	FontObject
 } from './objects/fontObject'
 import {
-  ImageContentsObject
+	ImageContentsObject
 } from './objects/imageContentsObject'
 import {
-  ImageResourcesObject
+	ImageResourcesObject
 } from './objects/imageResourcesObject'
 import {
-  ImageXObject
+	ImageXObject
 } from './objects/imageXObject'
 import {
-  InfoObject
+	InfoObject
 } from './objects/infoObject'
 import {
-  PageObject
+	PageObject
 } from './objects/pageObject'
 import {
-  PagesObject
+	PagesObject
 } from './objects/pagesObject'
 import {
-  TextStreamObject
+	TextStreamObject
 } from './objects/textStreamObject'
 import {
-  TrailerObject
+	TrailerObject
 } from './objects/trailerObject'
 export class PdfDocument {
-  constructor(pageSizse) {
-    this.pageSize = pageSizse;
-    this.info = new InfoObject();
-    this.pages = new PagesObject();
-    this.root = new CatalogObject(this.pages);
-    this.trailer = new TrailerObject();
-    this.trailer.setRoot(this.root);
-    this.trailer.setInfo(this.info);
-    this.imageCount = 0;
-  }
-  addDummyPage() {
-    const page = new Pagesbject(this.pageSize);
-    this.pages.addPage(page);
-  }
-  addImagePage(dataUri, ab, width, height) {
-    if (!dataUri && !ab) {
-      this.addDummyPage();
-      return;
-    }
-    const imageId = 'img' + this.imageCount;
-    const ic = new ImageContentsObject(imageId);
-    const ir = new ImageResourcesObject(imageId);
-    const page = new Pagesbject(this.pageSize);
-    const binaryU8a = ab && ab.byteLength > 0 ? ab : BinaryUtil.convertDataUri2U8a(dataUri);
-    const imageXobj = new ImageXObject(imageId, binaryU8a, width, height);
-    this.pages.addPage(page);
-    page.setContents(ic);
-    page.setResources(ir);
-    ir.setImageXObject(imageXobj);
-    this.imageCount++;
-  }
-  createFile() {
-    const retArray = [];
-    const headerU8a = Header.getU8a();
-    retArray.push(headerU8a);
-    const body = this.trailer.createXref(headerU8a.length);
-    retArray.push(body);
-    return BinaryUtil.joinU8as(retArray);
-  }
+	constructor(pageSizse) {
+		this.pageSize = pageSizse;
+		this.info = new InfoObject();
+		this.pages = new PagesObject();
+		this.root = new CatalogObject(this.pages);
+		this.trailer = new TrailerObject();
+		this.trailer.setRoot(this.root);
+		this.trailer.setInfo(this.info);
+		this.imageCount = 0;
+	}
+	addDummyPage() {
+		const page = new PageObject(this.pageSize);
+		this.pages.addPage(page);
+	}
+	addImagePage(dataUri, ab, width, height) {
+		if (!dataUri && !ab) {
+			this.addDummyPage();
+			return;
+		}
+		const imageId = 'img' + this.imageCount;
+		const ic = new ImageContentsObject(imageId);
+		const ir = new ImageResourcesObject(imageId);
+		const page = new PageObject(this.pageSize);
+		const binaryU8a = ab && ab.byteLength > 0 ? ab : BinaryUtil.convertDataUri2U8a(dataUri);
+		const imageXobj = new ImageXObject(imageId, binaryU8a, width, height);
+		this.pages.addPage(page);
+		page.setContents(ic);
+		page.setResources(ir);
+		ir.setImageXObject(imageXobj);
+		this.imageCount++;
+	}
+	createFile() {
+		const retArray = [];
+		const headerU8a = Header.getU8a();
+		retArray.push(headerU8a);
+		const body = this.trailer.createXref(headerU8a.length);
+		retArray.push(body);
+		return BinaryUtil.joinU8as(retArray);
+	}
 }

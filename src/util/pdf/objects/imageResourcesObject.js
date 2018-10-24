@@ -12,7 +12,6 @@ export class ImageResourcesObject extends RefObject {
 		super();
 		this.setElm('ProcSet', ['PDF', 'ImageC']);
 		this.imageId = imageId;
-		this.jpegDataUri = jpegDataUri;
 	}
 	setImageXObject(imageXObject) {
 		const xObjectMap = new RefObject();

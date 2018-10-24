@@ -172,9 +172,8 @@ export class ExportImageProcessor {
 		this.pbp.update(this.progress, 'start exportDualImage4Print');
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsPdf');
-		alert(targetSize);
 		const targetPaper = this.paper.getTragetPaper(targetSize);
-		const pdf = await this.epp.createPdf(targetPaper, pages)
+		const pdf = await this.epp.createPdf(targetPaper, pages, targetSize)
 			.catch((e) => {
 				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
@@ -190,6 +189,7 @@ export class ExportImageProcessor {
 				console.error(e.lineno);
 				console.error(e.error);
 			});
+		alert("pdf:" + pdf);
 		return await this.commonEnd(pdf, "pdf");
 	}
 	//End

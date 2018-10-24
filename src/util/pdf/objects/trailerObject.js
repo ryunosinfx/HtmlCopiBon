@@ -5,6 +5,9 @@ import {
 	UnitUtil
 } from '../util/unitUtil'
 import {
+	BinaryUtil
+} from '../util/binaryUtil'
+import {
 	RefObject
 } from '../base/refObject'
 const CRLF = '\r\n';
@@ -20,7 +23,7 @@ export class TrailerObject extends RefObject {
 	}
 	createXref(startOffset) {
 		const NEWLINE = RefObject.getNewLine();
-		const retText = 'xref' + NEWLINE
+		let retText = 'xref' + NEWLINE
 		const list = RefObject.getRefList();
 		const len = list.length;
 		retText += '0 ' + len + NEWLINE
@@ -46,7 +49,7 @@ export class TrailerObject extends RefObject {
 		retText += 'trailer' + NEWLINE
 		retText += '<<' + NEWLINE
 		retText += '/Root ' + rootObj.getRefNo() + 'R' + NEWLINE
-		if (isInfo) {
+		if (infoObj) {
 			retText += '/Info ' + infoObj.getRefNo() + 'R' + NEWLINE
 		}
 		retText += '/Size' + len + NEWLINE
@@ -63,6 +66,6 @@ export class TrailerObject extends RefObject {
 		// startxref
 		// 440
 		// %%EOF
-		return BinaryUtil.jpegU8a(results);
+		return BinaryUtil.joinU8as(results);
 	}
 }
