@@ -43,8 +43,8 @@ export class ExportPdfButton extends BaseView {
 	async onAfterAttach(store, data) {}
 
 	async onViewShow(store, actionData) {
-		if (store[this.storeKey]) {
-			const data = store[this.storeKey];
+		if (store[this.storeExportResultKey]) {
+			const data = store[this.storeExportResultKey];
 			const pdf = data.pdf;
 			const isSuccess = this.buildButton(data);
 			const duration = (getNowUnixtime()*1- this.startTime) / 1000;
@@ -54,17 +54,7 @@ export class ExportPdfButton extends BaseView {
 				}, 1000)
 				//":" + JSON.stringify(store[this.storeExportResultKey]) + "/this.isExported:" + this.isExported);
 			}
-			// if (pdf) {
-			// 	const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
-			// 	this.prePatch("#" + this.stateId, div(this.stateId, ["exportedState"], exportString));
-			// 	this.isExported = true;
-			// } else {
-			// 	this.prePatch("#" + this.stateId, div(this.stateId, ["exportedStateNone"], "no export"));
-			// 	this.isExported = false;;
-			// }
-		} else if (store[this.storeExportResultKey]) {
-			// console.log(data);
-			// alert("OK download zip file!");
+		} else if (store[this.storeKey]) {
 			this.buildButton(store[this.storeKey]);
 		}
 

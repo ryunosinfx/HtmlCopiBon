@@ -9,6 +9,7 @@ export default class IndexeddbHelper {
 		this.keyPathMap = {};
 		this.db = null;
 		this.lastVersion = null;
+		this.isUpdateOpen = false;
 		this.timer = null;
 		this.isDBClosed = true;
 		this.tableCache = {};
@@ -20,10 +21,13 @@ export default class IndexeddbHelper {
 			this.lastVersion = newVersion;
 			if ((this.lastVersion || isForceOpen) && this.db) {
 				this.db.close();
+				this.isUpdateOpen=true;
 				// this.cacheClear();
 			} else if (this.db && this.isDBClosed === false) {
 				resolve(this.db);
 				return;
+			}else{
+				this.isUpdateOpen=false;
 			}
 			// TODO instance
 			let request = this.indexedDB.open(this.dbName, newVersion);
@@ -46,7 +50,7 @@ export default class IndexeddbHelper {
 		});
 	}
 	closeDB() {
-		if (this.lastVersion) {
+		if (this.isUpdateOpen) {
 			this.db.close();
 			this.isDBClosed = true;
 		} else {
