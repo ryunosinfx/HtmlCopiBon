@@ -21,13 +21,15 @@ export default class IndexeddbHelper {
 			this.lastVersion = newVersion;
 			if ((this.lastVersion || isForceOpen) && this.db) {
 				this.db.close();
-				this.isUpdateOpen=true;
+				this.isUpdateOpen = true;
 				// this.cacheClear();
 			} else if (this.db && this.isDBClosed === false) {
 				resolve(this.db);
 				return;
-			}else{
-				this.isUpdateOpen=false;
+			} else if (this.lastVersion || isForceOpen) {
+				this.isUpdateOpen = true;
+			} else {
+				this.isUpdateOpen = false;
 			}
 			// TODO instance
 			let request = this.indexedDB.open(this.dbName, newVersion);
@@ -200,18 +202,19 @@ export default class IndexeddbHelper {
 		return await this._selectByKeyOnTran(db, tableName, key)
 			.catch(this.throwNewError("_selectByKey->_selectByKeyOnTran tableName:" + tableName));
 	}
-	_selectByKeyOnTran(db, tableName, key, tables) {
+	_selectByKeyOnTran(db, tableName, key, tables, mode = MODE_R) {
 		return new Promise((resolve, reject) => {
-			const cache = this.getCache(tableName, key);
+			const cachekey = tableName + "_" + mode;
+			const cache = this.getCache(cachekey, key);
 			if (cache) {
 				resolve(cache);
 			} else {
-				let objectStore = this.getObjectStore(db, tableName, [tableName], MODE_R);
+				let objectStore = this.getObjectStore(db, tableName, [tableName], mode);
 				let request = objectStore.get(key); //keyはsonomama
 				request.onsuccess = (event) => {
 					const result = request.result;
 					resolve(result);
-					this.setCache(tableName, key, result);
+					this.setCache(cachekey, key, result);
 				};
 				request.onerror = (e) => {
 					reject(e);
@@ -284,7 +287,7 @@ export default class IndexeddbHelper {
 		const db = await this.getOpenDB(undefined, true)
 			.catch(this.throwNewError("_insertUpdate->getOpenDB tableName:" + tableName));
 		const tables = IdbUtil.currentTables(tableName);
-		const value = await this._selectByKeyOnTran(db, tableName, key, tables)
+		const value = await this._selectByKeyOnTran(db, tableName, key, tables, MODE_RW)
 			.catch(this.throwNewError("_insertUpdate->_selectByKeyOnTran tableName:" + tableName));
 		if (callback) {
 			callback(value, data);
