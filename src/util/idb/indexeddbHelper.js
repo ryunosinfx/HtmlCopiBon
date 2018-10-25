@@ -13,20 +13,19 @@ export default class IndexeddbHelper {
 		this.timer = null;
 		this.isDBClosed = true;
 		this.tableCache = {};
-
 	}
 
-	getOpenDB(newVersion, isForceOpen) {
+	getOpenDB(newVersion) {
 		return new Promise((resolve, reject) => {
 			this.lastVersion = newVersion;
-			if ((this.lastVersion || isForceOpen) && this.db) {
+			if ((this.lastVersion) && this.db) {
 				this.db.close();
 				this.isUpdateOpen = true;
 				// this.cacheClear();
 			} else if (this.db && this.isDBClosed === false) {
 				resolve(this.db);
 				return;
-			} else if (this.lastVersion || isForceOpen) {
+			} else if (this.lastVersion) {
 				this.isUpdateOpen = true;
 			} else {
 				this.isUpdateOpen = false;
@@ -98,7 +97,7 @@ export default class IndexeddbHelper {
 		return tableCache ? tableCache[key] : null;
 	}
 	getObjectStore(db, tableName, tables, mode) {
-		if (MODE_R === mode) {
+		if (mode === MODE_R) {
 			this.cacheClear();
 		}
 		let transaction = db.transaction(tables, mode);
@@ -113,7 +112,7 @@ export default class IndexeddbHelper {
 	}
 	throwNewError(callerName) {
 		return (e) => {
-			console.warn(e);
+			console.error(e);
 			if (e.stack) {
 				console.log(e.stack);
 			} else {
@@ -284,7 +283,7 @@ export default class IndexeddbHelper {
 	//private
 	async _insertUpdate(tableName, keyPathName, data, callback) {
 		const key = data[keyPathName];
-		const db = await this.getOpenDB(undefined, true)
+		const db = await this.getOpenDB()
 			.catch(this.throwNewError("_insertUpdate->getOpenDB tableName:" + tableName));
 		const tables = IdbUtil.currentTables(tableName);
 		const value = await this._selectByKeyOnTran(db, tableName, key, tables, MODE_RW)
@@ -308,6 +307,7 @@ export default class IndexeddbHelper {
 				resolve({ data, key });
 			};
 			objectStoreRequest.onerror = (e) => {
+				console.error(e);
 				reject(e);
 			};
 		});
@@ -320,6 +320,7 @@ export default class IndexeddbHelper {
 				resolve({ data, key });
 			};
 			request.onerror = (e) => {
+				console.error(e);
 				resolve(e);
 			};
 		});
@@ -331,7 +332,7 @@ export default class IndexeddbHelper {
 	}
 	//Delete
 	async _deleteWithRange(tableName, range, condetions) {
-		const db = await this.getOpenDB(undefined, true)
+		const db = await this.getOpenDB()
 			.catch(this.throwNewError("_deleteWithRange->getOpenDB tableName:" + tableName));
 		const tables = IdbUtil.currentTables(tableName);
 		return await this._deleteWithRangeExecute(db, tableName, range, condetions, tables);
@@ -371,7 +372,7 @@ export default class IndexeddbHelper {
 	}
 	//Delete
 	async _delete(tableName, keyPathValue) {
-		const db = await this.getOpenDB(undefined, true)
+		const db = await this.getOpenDB()
 			.catch(this.throwNewError("_delete->getOpenDB tableName:" + tableName));
 		const tables = IdbUtil.currentTables(tableName);
 		return await this._deleteOnTran(db, tableName, keyPathValue, tables);
@@ -384,6 +385,7 @@ export default class IndexeddbHelper {
 				resolve({ tableName, key });
 			}
 			request.onerror = (e) => {
+				console.error(e);
 				reject(e);
 			};
 		});
