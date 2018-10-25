@@ -9,13 +9,14 @@ export class BinaryUtil {
 		const u8aEdge = [];
 		for (let u8a of u8as) {
 			const start = len;
-			len += u8as.len;
+			len += u8a.length;
 			const end = len;
 			u8aEdge.push({
 				start,
 				end
 			});
 		}
+		console.log("joinU8as.len:" + len);
 		const retU8a = new Uint8Array(len);
 		for (let u8a of u8as) {
 			const edge = u8aEdge[index];

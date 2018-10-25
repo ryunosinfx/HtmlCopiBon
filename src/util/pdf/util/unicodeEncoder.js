@@ -17,7 +17,7 @@ export class UnicodeEncoder {
 				codePoints.push(charCode);
 			}
 		}
-		console.log(codePoints)
+		// console.log(codePoints)
 		return codePoints;
 	}
 
