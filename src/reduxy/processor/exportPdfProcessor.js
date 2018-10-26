@@ -28,9 +28,11 @@ export class ExportPdfProcessor {
 			height: targetSize.y
 		};
 		for (let page of pages) {
-			if (!page) {
+			if (!page||!page.outputExpandImage) {
+				letList.push({})
 				continue;
 			}
+
 			const binaryEntity = await this.loadBinaryWidCleanUp(page.outputExpandImage);
 			pdfImage.data = new Uint8ClampedArray(binaryEntity._ab);
 			pdfImage.width = binaryEntity.width;
@@ -46,11 +48,15 @@ export class ExportPdfProcessor {
 		const result = pdfBuilder.createImagesDoc(paperSize, letList);
 		this.delOnList();
 		console.log(result)
-		alert(result)
+		console.log(result.byteLength)
+		// alert(result)
 		return result;
 	}
 
 	async loadBinaryWidCleanUp(pk) {
+		if(!pk){
+			return null;
+		}
 		const binaryEntity = await this.em.get(pk);
 		this.delList.push(pk);
 		return binaryEntity;
@@ -59,7 +65,7 @@ export class ExportPdfProcessor {
 		for (let pk of this.delList) {
 			// const outputNew = await this.bm.save(pk, "expandPage", new Uint8Array(1)
 			// 	.buffer, { width: 1, height: 1 });
-			await this.bm.remove(pk);
+			// await this.bm.remove(pk);
 		}
 	}
 }
