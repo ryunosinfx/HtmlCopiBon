@@ -52,7 +52,7 @@ export class TrailerObject extends RefObject {
 		if (infoObj) {
 			retText += '/Info ' + infoObj.getRefNo() + 'R' + NEWLINE
 		}
-		retText += '/Size' + len + NEWLINE
+		retText += '/Size ' + len + NEWLINE
 		retText += '>>' + NEWLINE
 		retText += 'startxref' + NEWLINE
 		retText += currentBytes + NEWLINE

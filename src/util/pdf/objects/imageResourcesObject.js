@@ -18,5 +18,6 @@ export class ImageResourcesObject extends RefObject {
 		xObjectMap.setBePlaneMap();
 		const imageId = imageXObject.getImageId();
 		xObjectMap.setElm(imageId, imageXObject);
+		imageXObject.registerRefMap();
 	}
 }

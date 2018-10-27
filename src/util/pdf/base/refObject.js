@@ -35,7 +35,8 @@ export class RefObject {
 		refList.push(this);
 		let index = 1;
 		for (let obj of refList) {
-			refMap.set(obj, index + " 0 ");
+			const indexPrefix = index + " 0 ";
+			refMap.set(obj, indexPrefix);
 			index++;
 		}
 		for (let obj of this.afterRegsterRefMap) {
@@ -62,18 +63,18 @@ export class RefObject {
 		return UnicodeEncoder.encodeUTF8(text + NEWLINE);
 	}
 	createObject() {
-		const u8aStart = UnicodeEncoder.encodeUTF8(this.getRefNo() + 'obj' + NEWLINE);
-		const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap(this.map));
 		const u8aStream = this.createStream(this.map);
+		const u8aStart = UnicodeEncoder.encodeUTF8(this.getRefNo() + 'obj' + NEWLINE);
+		const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap("", this.map));
 		const u8aEnd = UnicodeEncoder.encodeUTF8('endobj' + NEWLINE);
 		return BinaryUtil.joinU8as([u8aStart, u8aMain, u8aStream, u8aEnd]);
 	}
-	createMap(value) {
+	createMap(keyword, value) {
 		let retText = '';
 		if (value === null || value === undefined) {
 
 		} else if (typeof value === 'string') {
-			if (KeyKeywords[value]) {
+			if (KeyKeywords[keyword]) {
 				retText += "/" + value;
 			} else {
 				retText += "(" + value + ')';
@@ -82,17 +83,18 @@ export class RefObject {
 			retText += value;
 		} else if (typeof value === 'object' && Array.isArray(value)) {
 			const newArray = [];
-			for (let val of value) {
-				newArray.push(this.createMap(val));
+			for (let index in value) {
+				const val = value[index];
+				newArray.push(this.createMap(keyword, val));
 			}
 			retText += '[ ' + newArray.join(' ') + ' ]';
 		} else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
-			retText += this.getRefNo() + 'R';
+			retText += value.getRefNo() + 'R';
 		} else if (typeof value === 'object') {
 			retText += '<<' + NEWLINE
 			for (let key in value) {
 				const val = value[key]
-				const row = '/' + key + ' ' + this.createMap(val);
+				const row = '/' + key + ' ' + this.createMap(key, val);
 				retText += row + NEWLINE;
 			}
 			retText += '>>' + NEWLINE;

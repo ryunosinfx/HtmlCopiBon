@@ -9,7 +9,7 @@ export class BinaryUtil {
 		const u8aEdge = [];
 		for (let u8a of u8as) {
 			const start = len;
-			len += u8a.length;
+			len += u8a.byteLength;
 			const end = len;
 			u8aEdge.push({
 				start,
@@ -31,7 +31,9 @@ export class BinaryUtil {
 	}
 	static hexString2U8a(hexStr) {
 		const retArrray = [];
-		const hexList = hexStr.split('\\x');
+		const hexList = hexStr.split(/\x/g);
+		console.log("BinaryUtil.hexString2U8a hexStr:" + hexStr + " /len:" + hexList.length)
+		console.log(hexList)
 		for (let hex of hexList) {
 			if (hex && !Number.isNaN(parseInt(hex, 16))) {
 				retArrray.push(parseInt(hex, 16));

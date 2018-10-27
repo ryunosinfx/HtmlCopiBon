@@ -8,7 +8,7 @@ import {
 	UnicodeEncoder
 } from '../util/unicodeEncoder'
 export class ImageXObject extends RefObject {
-	constructor(imageId, jpegDataUri, width, height) {
+	constructor(imageId, u8a, width, height) {
 		super();
 		this.setElm('Type', 'XObject');
 		this.setElm('Subtype', 'Image');
@@ -19,7 +19,8 @@ export class ImageXObject extends RefObject {
 		this.setElm('ColorSpace', 'DeviceRGB');
 		this.setElm('Filter', 'DCTDecode');
 		this.imageId = imageId;
-		this.jpegDataUri = jpegDataUri;
+		console.log("ImageXObject.constructor u8a:" + u8a.byteLength)
+		this.jpegU8a = u8a;
 	}
 	getImageId() {
 		return this.imageId;
@@ -29,11 +30,13 @@ export class ImageXObject extends RefObject {
 		const u8as = [];
 		const retText = ''
 		u8as.push(RefObject.getAsU8a('stream'));
-		const jpegU8a = BinaryUtil.convertDataUri2U8a(this.jpegDataUri);
-		const length = jpegU8a.length;
+		const length = this.jpegU8a.byteLength;
 		this.setElm('Length', length);
-		u8as.push(jpegU8a);
-		u8as.push(RefObject.getAsU8a('endstream'));
-		return BinaryUtil.joinU8as(u8as);
+		u8as.push(this.jpegU8a);
+		u8as.push(RefObject.getAsU8a(NEWLINE + 'endstream'));
+		console.log("ImageXObject.createStream this.jpegU8a:" + this.jpegU8a.byteLength)
+		const result = BinaryUtil.joinU8as(u8as);
+		console.log("ImageXObject.createStream result:" + result.byteLength)
+		return result;
 	}
 }
