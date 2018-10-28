@@ -19,5 +19,6 @@ export class ImageResourcesObject extends RefObject {
 		const imageId = imageXObject.getImageId();
 		xObjectMap.setElm(imageId, imageXObject);
 		imageXObject.registerRefMap();
+		this.setElm('XObject', xObjectMap);
 	}
 }

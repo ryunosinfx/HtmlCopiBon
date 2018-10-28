@@ -1,10 +1,11 @@
 export const KeyKeywords = {
 	Type: true,
-	SubType: true,
+	Subtype: true,
 	BaseFont: true,
 	PDF: true,
 	ColorSpace: true,
-	Filter: true
+	Filter: true,
+	ProcSet: true
 };
 //72dpi 25.4mm 1mm=2.834645669
 export const pageSazeMapA = {

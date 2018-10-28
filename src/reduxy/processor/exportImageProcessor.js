@@ -189,7 +189,7 @@ export class ExportImageProcessor {
 				console.error(e.lineno);
 				console.error(e.error);
 			});
-		alert("pdf:" + pdf);
+		// alert("pdf:" + pdf);
 		return await this.commonEnd(pdf, "pdf");
 	}
 	//End

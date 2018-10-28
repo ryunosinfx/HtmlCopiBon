@@ -61,7 +61,7 @@ export class PdfDocument {
 		const ic = new ImageContentsObject(imageId);
 		const ir = new ImageResourcesObject(imageId);
 		const page = new PageObject(this.pageSize);
-		const binaryU8a = ab && ab.byteLength > 0 ? ab : BinaryUtil.convertDataUri2U8a(dataUri);
+		const binaryU8a = ab && ab.byteLength > 0 ? new Uint8Array(ab) : BinaryUtil.convertDataUri2U8a(dataUri);
 		const imageXobj = new ImageXObject(imageId, binaryU8a, width, height);
 		this.pages.addPage(page);
 		page.setContents(ic);

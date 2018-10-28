@@ -90,6 +90,14 @@ export class RefObject {
 			retText += '[ ' + newArray.join(' ') + ' ]';
 		} else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
 			retText += value.getRefNo() + 'R';
+		} else if (typeof value === 'object' && value.isRegisterd && value.map) {
+			retText += '<<' + NEWLINE
+			for (let key in value.map) {
+				const val = value.map[key]
+				const row = '/' + key + ' ' + this.createMap(key, val);
+				retText += row + NEWLINE;
+			}
+			retText += '>>';
 		} else if (typeof value === 'object') {
 			retText += '<<' + NEWLINE
 			for (let key in value) {
