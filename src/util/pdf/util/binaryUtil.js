@@ -31,7 +31,7 @@ export class BinaryUtil {
 	}
 	static hexString2U8a(hexStr) {
 		const retArrray = [];
-		const hexList = hexStr.split(/\x/g);
+		const hexList = hexStr.split(",");
 		console.log("BinaryUtil.hexString2U8a hexStr:" + hexStr + " /len:" + hexList.length)
 		console.log(hexList)
 		for (let hex of hexList) {

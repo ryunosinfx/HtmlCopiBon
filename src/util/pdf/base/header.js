@@ -15,7 +15,7 @@ export class Header {
 	}
 	static getU8a() {
 		const u8aMain = UnicodeEncoder.encodeUTF8(Header.getText());
-		const binStrU8a = UnicodeEncoder.encodeUTF8('\xe2\xe3\xcf\xd3');
+		const binStrU8a = BinaryUtil.hexString2U8a('e2,e3,cf,d3');
 		const u8aNewLine = UnicodeEncoder.encodeUTF8(NEW_LINE);
 		return BinaryUtil.joinU8as([u8aMain, binStrU8a, u8aNewLine]);
 	}

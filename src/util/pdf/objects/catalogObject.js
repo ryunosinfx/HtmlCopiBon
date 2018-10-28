@@ -6,7 +6,7 @@ export class CatalogObject extends RefObject {
 		super();
 		this.setElm('Type', 'Catalog');
 		this.setElm('Pages', pagesObj);
-		this.setElm('Version', 0);
+		// this.setElm('Version', 0);
 		this.registerAfterRefMap(pagesObj);
 		this.isRoot = true;
 	}

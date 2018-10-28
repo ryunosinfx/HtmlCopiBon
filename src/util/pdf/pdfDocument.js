@@ -50,7 +50,7 @@ export class PdfDocument {
 	}
 	addDummyPage() {
 		const page = new PageObject(this.pageSize);
-		this.pages.addPage(page);
+		//this.pages.addPage(page);
 	}
 	addImagePage(dataUri, ab, width, height) {
 		if (!dataUri && !ab) {
