@@ -24,7 +24,7 @@ export class ImageContentsObject extends RefObject {
 		let retText = ''
 		u8as.push(RefObject.getAsU8a('stream'));
 		retText += 'q' + NEWLINE;
-		retText += '1 0 0 1 ' + this.pageWidth + ' ' + this.pageHeight + ' cm' + NEWLINE;
+		retText += this.pageWidth + ' 0 0' + ' ' + this.pageHeight + ' 0 0 cm' + NEWLINE;
 		retText += '/' + this.imageId + ' Do' + NEWLINE;
 		retText += 'Q';
 		const u8a = RefObject.getAsU8a(retText);

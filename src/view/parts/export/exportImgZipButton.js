@@ -46,7 +46,8 @@ export class ExportImgZipButton extends BaseView {
 			const zip = data.zip;
 			const isSuccess = this.buildButton(data);
 			const duration = (getNowUnixtime() - this.startTime) / 1000;
-			if (isSuccess) {
+			if (isSuccess && this.startTime) {
+				this.startTime = null;
 				setTimeout(() => {
 					Dialog.opneAlert("Build Zip File Complete!", "OK download zip file! " + zip.size + "byte  Duration:" + duration + "sec");
 				}, 1000)

@@ -10,7 +10,7 @@ import {
 const NEW_LINE = RefObject.getNewLine();
 export class Header {
 	static getText() {
-		const retText = '%PDF-1.7' + NEW_LINE + '%';
+		const retText = '%PDF-1.４' + NEW_LINE + '%';
 		return retText;
 	}
 	static getU8a() {

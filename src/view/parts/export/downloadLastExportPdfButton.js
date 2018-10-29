@@ -64,6 +64,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 					}
 				}, [text]));
 				this.isExported = true;
+				alert("this.isExported :" + this.isExported);
 			} else {
 				const text = div(this.stateId, [
 					"button", "disable"
@@ -77,8 +78,9 @@ export class DownloadLastExportPdfButton extends BaseView {
 					}
 				}, [text]));
 				this.isExported = false;
+				alert("this.isExported :" + this.isExported);
 			}
-		}
+		} else {}
 	}
 	click() {
 		return (event) => {

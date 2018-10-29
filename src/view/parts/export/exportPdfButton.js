@@ -47,8 +47,9 @@ export class ExportPdfButton extends BaseView {
 			const data = store[this.storeExportResultKey];
 			const pdf = data.pdf;
 			const isSuccess = this.buildButton(data);
-			const duration = (getNowUnixtime()*1- this.startTime) / 1000;
-			if (isSuccess) {
+			const duration = (getNowUnixtime() * 1 - this.startTime) / 1000;
+			if (isSuccess && this.startTime) {
+				this.startTime = null;
 				setTimeout(() => {
 					Dialog.opneAlert("Build Pdf File Complete!", "OK download pdf file! " + pdf.size + "byte  Duration:" + duration + "sec");
 				}, 1000)
@@ -95,7 +96,7 @@ export class ExportPdfButton extends BaseView {
 			}
 			const result = await Dialog.opneConfirm("Comfirm", "is export orverride ok?");
 			if (!this.isExported || this.isExported && result) {
-				this.startTime = getNowUnixtime();
+				this.startTime = getNowUnixtime() * 1;
 				const action = ExportActionCreator.createExecutePdfAction(this, { exportOrders: [this.exportOrderData] });
 				this.dispatch(action);
 			}
