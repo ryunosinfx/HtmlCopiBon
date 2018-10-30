@@ -88,9 +88,9 @@ export class BaseView {
 		if (!this.currentVnode) {
 			console.error('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
 		}
-		//console.log('!!A!!prePatch ' +  JSON.stringify(this.currentVnode) + '/this.id:' + this.id+"/selector:"+selector+"/"+this.es.getElements(this.currentVnode , selector)[0]);
+		console.log('!!A!!prePatch ' +  JSON.stringify(this.currentVnode) + '/this.id:' + this.id+"/selector:"+selector+"/"+this.es.getElements(this.currentVnode , selector)[0]);
 		this.currentVnode.data['name'] = this.name + Date.now();
-		// console.log('!!B!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
+		console.log('!!B!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
 		this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
 		return this.currentVnode;
 	}

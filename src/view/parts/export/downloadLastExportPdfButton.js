@@ -35,9 +35,12 @@ export class DownloadLastExportPdfButton extends BaseView {
 				click: this.click()
 			}
 		}, [text]);
+			// alert("render this.isExported :" + this.isExported+'/this.id:'+this.id);
 		return result;
 	}
-	async onAfterAttach(store, data) {}
+	async onAfterAttach(store, data) {
+		// alert("onAfterAttach this.isExported :" + this.isExported+'/this.id:'+this.id);
+	}
 
 	async onViewShow(store, actionData) {
 		if (store[this.storePdfDLKey]) {
@@ -51,7 +54,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 			const data = store[this.storeKey];
 			const pdf = data.pdf;
 			if (pdf) {
-				const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
+				// const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
 				const text = div(this.stateId, [
 					"button", "enable"
 				], "download PDF!");
@@ -64,7 +67,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 					}
 				}, [text]));
 				this.isExported = true;
-				alert("this.isExported :" + this.isExported);
+				alert("this.isExported :" + this.isExported+'/this.id:'+this.id);
 			} else {
 				const text = div(this.stateId, [
 					"button", "disable"

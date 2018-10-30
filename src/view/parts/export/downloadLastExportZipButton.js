@@ -45,7 +45,7 @@ export class DownloadLastExportZipButton extends BaseView {
       const data = store[this.storeKey];
       const zip = data.zip;;
       if (zip) {
-        const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+        // const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
         const text = div(this.stateId, [
           "button", "enable"
         ],{
