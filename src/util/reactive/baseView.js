@@ -81,17 +81,20 @@ export class BaseView {
 		// console.log('C01 --baseView.patchFromOtherVnode currentVnode;' + currentVnode + '/selector:' + selector + '/currentSelector:' + currentSelector + '/this:' + this.currentVnode + '/' + this.es.getElements(result, selector));
 		return result;
 	}
-	prePatch(selector, newVnode) {
+	prePatch(selector, newVnode, isShowLog) {
 		if (!this.currentVnode) {
 			this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
 		}
 		if (!this.currentVnode) {
 			console.error('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
 		}
-		console.log('!!A!!prePatch ' +  JSON.stringify(this.currentVnode) + '/this.id:' + this.id+"/selector:"+selector+"/"+this.es.getElements(this.currentVnode , selector)[0]);
+		console.log('!!A!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id + "/selector:" + selector + "/" + this.es.getElements(this.currentVnode, selector)[0]);
 		this.currentVnode.data['name'] = this.name + Date.now();
-		console.log('!!B!!prePatch ' + this.currentVnode + '/this.id:' + this.id);
+		console.log('!!B!!prePatch newVnode,' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
+		this.es.isShowLog = isShowLog;
 		this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
+		this.es.isShowLog = null;
+		console.log('!!C!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
 		return this.currentVnode;
 	}
 	async updateReactiveTheTargetView(store, actionData, action) {

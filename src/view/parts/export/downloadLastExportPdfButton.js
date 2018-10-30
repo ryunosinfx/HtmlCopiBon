@@ -35,7 +35,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 				click: this.click()
 			}
 		}, [text]);
-			// alert("render this.isExported :" + this.isExported+'/this.id:'+this.id);
+		// alert("render this.isExported :" + this.isExported+'/this.id:'+this.id);
 		return result;
 	}
 	async onAfterAttach(store, data) {
@@ -65,9 +65,9 @@ export class DownloadLastExportPdfButton extends BaseView {
 					on: {
 						click: this.click()
 					}
-				}, [text]));
+				}, [text]), true);
 				this.isExported = true;
-				alert("this.isExported :" + this.isExported+'/this.id:'+this.id);
+				alert("this.isExported :" + this.isExported + '/this.id:' + this.id);
 			} else {
 				const text = div(this.stateId, [
 					"button", "disable"
@@ -81,7 +81,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 					}
 				}, [text]));
 				this.isExported = false;
-				alert("this.isExported :" + this.isExported);
+				// alert("this.isExported :" + this.isExported);
 			}
 		} else {}
 	}
