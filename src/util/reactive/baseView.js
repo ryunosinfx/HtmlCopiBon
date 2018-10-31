@@ -88,13 +88,13 @@ export class BaseView {
 		if (!this.currentVnode) {
 			console.error('!!!!prePatch nodeFrame.rootVnode: ' + JSON.stringify(nodeFrame.rootVnode));
 		}
-		console.log('!!A!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id + "/selector:" + selector + "/" + this.es.getElements(this.currentVnode, selector)[0]);
+		// console.log('!!A!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id + "/selector:" + selector + "/" + this.es.getElements(this.currentVnode, selector)[0]);
 		this.currentVnode.data['name'] = this.name + Date.now();
-		console.log('!!B!!prePatch newVnode,' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
+		// console.log('!!B!!prePatch newVnode,' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
 		this.es.isShowLog = isShowLog;
 		this.currentVnode = this.es.prePatch(this.currentVnode, selector, newVnode);
 		this.es.isShowLog = null;
-		console.log('!!C!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
+		// console.log('!!C!!prePatch ' + JSON.stringify(this.currentVnode) + '/this.id:' + this.id);
 		return this.currentVnode;
 	}
 	async updateReactiveTheTargetView(store, actionData, action) {

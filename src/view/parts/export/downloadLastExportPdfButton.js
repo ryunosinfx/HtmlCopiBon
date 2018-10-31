@@ -54,34 +54,22 @@ export class DownloadLastExportPdfButton extends BaseView {
 			const data = store[this.storeKey];
 			const pdf = data.pdf;
 			if (pdf) {
-				// const exportString = pdf.name + " / " + pdf.orderName + " / " + unixTimeToDateFormat(pdf.updateDate);
-				const text = div(this.stateId, [
-					"button", "enable"
-				], "download PDF!");
-				this.prePatch("#" + this.id, div(this.id, [
-					this.id + "Frame",
-					"enable"
-				], {
-					on: {
-						click: this.click()
-					}
-				}, [text]), true);
-				this.isExported = true;
-				alert("this.isExported :" + this.isExported + '/this.id:' + this.id);
-			} else {
-				const text = div(this.stateId, [
-					"button", "disable"
-				], "no export PDF");
-				this.prePatch("#" + this.id, div(this.id, [
-					this.id + "Frame",
-					"disable"
-				], {
-					on: {
-						click: this.click()
-					}
-				}, [text]));
-				this.isExported = false;
-				// alert("this.isExported :" + this.isExported);
+        // const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+        const text = div(this.stateId, [
+          "button", "enable"
+        ],{
+          on: {
+            click: this.click()
+          }
+        }, "download PDF!");
+        this.prePatch("#" + this.stateId, text);
+        this.isExported = true;
+      } else {
+        const text = div(this.stateId, [
+          "button", "disable"
+        ], "no export PDF");
+        this.prePatch("#" + this.stateId, text);
+        this.isExported = false;
 			}
 		} else {}
 	}

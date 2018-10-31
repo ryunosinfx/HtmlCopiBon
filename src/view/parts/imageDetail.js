@@ -57,6 +57,26 @@ export class ImageDetail extends BaseView {
       alert("click");
     }
   }
+  toNativeSize() {
+    return(event) => {
+      alert("toNativeSize");
+    }
+  }
+  toWindowSize() {
+    return(event) => {
+      alert("toWindowSize");
+    }
+  }
+  toDoubleWindowSize() {
+    return(event) => {
+      alert("toDoubleWindowSize");
+    }
+  }
+  toHelfWindowSize() {
+    return(event) => {
+      alert("toHelfWindowSize");
+    }
+  }
   onMouseOn() {
     return(event) => {
       // alert("onMouseOn");
