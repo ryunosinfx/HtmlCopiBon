@@ -239,7 +239,7 @@ canvas.hidden {
   z-index: 900;
   display:flex;;
   flex-direction: row;
-
+  flex-wrap: wrap;
 }
 .ImageDetail .ImageDetailTitle>div {
   width:40px;
@@ -247,15 +247,27 @@ canvas.hidden {
   border-radius: 5px;
   background-color: gray;
   color:white;
+  margin: 0.2em;
   margin-left: 0.5em;
   text-align: center;
   cursor:pointer;
-
 }
 .ImageDetail .ImageDetailTitle>div.active {
   background-color: black;
   color:white;
   font-weight: bold;
+}
+.image_detail_block.WINDOW>div>img{
+  max-width:100%;
+}
+.image_detail_block.DOUBLE>div>img{
+  max-width:200%;
+}
+.image_detail_block.QUAD>div>img{
+  max-width:400%;
+}
+.image_detail_block.HELF>div>img{
+  max-width:50%;
 }
 .Thumnails {
   flex-direction: column;
