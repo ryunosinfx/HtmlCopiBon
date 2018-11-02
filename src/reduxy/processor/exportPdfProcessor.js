@@ -20,14 +20,20 @@ export class ExportPdfProcessor {
 		this.paper = new Paper();
 		this.delList = [];
 	}
-	async createPdf(paperSize, pages, targetSize) {
+	async createPdf(paperSize, pages, targetSize, settings) {
 		const letList = [];
+		const pageNum = settings.pageNum;
 		const pdfImage = {
 			data: new Uint8Array(targetSize.x * targetSize.y * 4),
 			width: targetSize,
 			height: targetSize.y
 		};
+		let pageCount = 0;
 		for (let page of pages) {
+			pageCount++;
+			if (pageNum < pageCount) {
+				break;
+			}
 			if (!page || !page.outputExpandImage) {
 				letList.push({})
 				continue;

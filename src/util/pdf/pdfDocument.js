@@ -53,16 +53,20 @@ export class PdfDocument {
 		//this.pages.addPage(page);
 	}
 	addImagePage(dataUri, ab, width, height) {
+		let u8aImage = new Uint8Array(ab);
+		let currentWidth = width;
+		let currentHeight = height;
 		if (!dataUri && !ab) {
-			this.addDummyPage();
-			return;
+			u8aImage = new Uint8Array([255, 255, 255, 255]);
+			currentWidth = 1;
+			currentHeight = 1;
 		}
 		const imageId = 'img' + this.imageCount;
 		const ic = new ImageContentsObject(imageId);
 		const ir = new ImageResourcesObject(imageId);
 		const page = new PageObject(this.pageSize);
-		const binaryU8a = ab && ab.byteLength > 0 ? new Uint8Array(ab) : BinaryUtil.convertDataUri2U8a(dataUri);
-		const imageXobj = new ImageXObject(imageId, binaryU8a, width, height);
+		const binaryU8a = !dataUri ? u8aImage : BinaryUtil.convertDataUri2U8a(dataUri);
+		const imageXobj = new ImageXObject(imageId, binaryU8a, currentWidth, currentHeight);
 		this.pages.addPage(page);
 		page.setContents(ic);
 		page.setResources(ir);

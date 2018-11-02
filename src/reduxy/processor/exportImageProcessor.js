@@ -173,7 +173,9 @@ export class ExportImageProcessor {
 		this.progress = 85;
 		this.pbp.update(this.progress, 'start exoprtAsPdf');
 		const targetPaper = this.paper.getTragetPaper(targetSize);
-		const pdf = await this.epp.createPdf(targetPaper, pages, targetSize)
+		// console.log(setting);
+		// alert(setting);
+		const pdf = await this.epp.createPdf(targetPaper, pages, targetSize, setting)
 			.catch((e) => {
 				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
