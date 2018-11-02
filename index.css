@@ -269,6 +269,22 @@ canvas.hidden {
 .image_detail_block.HELF>div>img{
   max-width:50%;
 }
+.image_detail_block.FULL>div:first-child{
+  position:fixed;
+  z-index: 9999;
+  min-width:100%;
+  min-height:100%;
+  top:0;
+  left:0;
+  background-color: rgba(17, 19, 21, 0.44);
+}
+.image_detail_block.FULL>div>img{
+  position:fixed;
+  z-index: 10000;
+  top:5px;
+  left:5px;
+  width:calc(100% - 10px);
+}
 .Thumnails {
   flex-direction: column;
   padding-right: 0.2em;
