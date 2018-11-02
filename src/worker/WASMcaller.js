@@ -24,5 +24,5 @@ export class WASMcaller extends BaseWorker {
 	};
 }
 if (!cache.aWASMcaller) {
-	cache.aWASMcaller = new WASMcaller();
+	// cache.aWASMcaller = new WASMcaller();
 }
