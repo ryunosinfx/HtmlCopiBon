@@ -16,10 +16,7 @@ export class DownloadLastExportZipButton extends BaseView {
   constructor() {
     super("DownloadLastExportZipButton", "DownloadLastExportZipButton", true);
     this.storeKey = ExportActionCreator.getStoreKey();
-    this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
     this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
-    this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
-    this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
     this.stateId = this.id + "Button";
     this.isExported = false;
   }

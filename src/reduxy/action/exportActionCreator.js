@@ -22,6 +22,12 @@ export class ExportActionCreator {
   static createDownloadPdfAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("downloadPdfExport", targetView, data, storeKey);
   }
+  static createDownloadImgAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("downloadUploadedImgZip", targetView, data, storeKey);
+  }
+  static createDownloadFullBKAction(targetView, data, storeKey = null) {
+    return ActionCreator.createBaseAction("downloadFullBackup", targetView, data, storeKey);
+  }
   static createSelectOrderAction(targetView, data, storeKey = null) {
     return ActionCreator.createBaseAction("selectOrderExport", targetView, data, storeKey);
   }
@@ -33,6 +39,12 @@ export class ExportActionCreator {
   }
   static getStoreZipDLKey(){
     return "exportZipDL";
+  }
+  static getStoreUploadedImgZipDLKey(){
+    return "exportUploadedImgZipDL";
+  }
+  static getStoreFullBackupZipDLKey(){
+    return "exportFullBackupZipDL";
   }
   static getStoreRemoveResultKey(){
     return "exportRemoveResult";

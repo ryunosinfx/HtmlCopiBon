@@ -12,11 +12,12 @@ import {
 import { unixTimeToDateFormat } from "../../../util/timeUtil";
 import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
 import { FileDownloader } from "../../../util/fileDownloader";
-export class DownloadLastExportPdfButton extends BaseView {
+export class DownloadUploadedImgZipButton extends BaseView {
 	constructor() {
-		super("DownloadLastExportPdfButton", "DownloadLastExportPdfButton", true);
+		super("DownloadUploadedImgZipButton", "DownloadUploadedImgZipButton", true);
 		this.storeKey = ExportActionCreator.getStoreKey();
 		this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
+		this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
 		this.stateId = this.id + "Button";
 		this.isExported = false;
 	}
@@ -43,7 +44,7 @@ export class DownloadLastExportPdfButton extends BaseView {
 		if (store[this.storePdfDLKey]) {
 			const output = store[this.storePdfDLKey];
 			if (output.ab) {
-				FileDownloader.download(output.name, output.ab, "application/pdf");
+				FileDownloader.download(output.name, output.ab, "application/zip");
 			} else {
 				alert("not exported!");
 			}
