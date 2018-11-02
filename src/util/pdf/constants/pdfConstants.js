@@ -44,7 +44,7 @@ export const paperSizeSet = {
 }
 export const pageSazeMap = (() => {
 	const retMap = {};
-	const retio = 1 / 24.5 * 72;
+	const retio = 1 / 25.4 * 72;
 	for (let key in paperSizeSet) {
 		const value = paperSizeSet[key];
 		const x = Math.floor(value.x * 10 * retio) / 10;

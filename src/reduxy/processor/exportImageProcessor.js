@@ -97,7 +97,7 @@ export class ExportImageProcessor {
 		};
 		this.progress = 3;
 		this.pbp.update(this.progress, 'expandAndCropSize');
-		await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose)
+		await this.expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose, setting.pageNum)
 			.catch((e) => {
 				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
@@ -228,7 +228,7 @@ export class ExportImageProcessor {
 		this.pbp.comple(this.progress);
 		return exports;
 	}
-	async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose) {
+	async expandAndCropSize(targetSize, frameSizeMm, frameSize, clopOffset, pages, isGrayscale, isLanczose, pageNum) {
 		//console.log("--targetSize--isGrascale:" + isGrascale)
 		//console.log(targetSize)
 		const expandedPaper = {
@@ -252,12 +252,15 @@ export class ExportImageProcessor {
 		this.progress = 5;
 		this.pbp.update(this.progress, 'start pages');
 		//50
-		const pegaNum = pages.length;
+		const pegaNum = pageNum; //pages.length;
 		const stepNum = 9
 		const progressUnit = 50 / (stepNum * pegaNum)
 		let pageCount = 0;
 		for (let pageEntity of pages) {
 			pageCount++;
+			if (pageCount > pegaNum) {
+				break;
+			}
 			const pageStep = "[" + pageCount + "/" + pegaNum + "]";
 			if (pageEntity && pageEntity.baseImage) {
 				// console.log(pageEntity)

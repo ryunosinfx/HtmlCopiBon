@@ -25,6 +25,13 @@ export class RefObject {
 	static getRefMap() {
 		return refMap;
 	}
+	static init() {
+		const len = refList.length;
+		for (let i = 0; i < len; i++) {
+			refList.pop();
+		}
+		refMap.clear();
+	}
 	static getRefList() {
 		return refList;
 	}

@@ -52,6 +52,8 @@ export class ExportPdfProcessor {
 			// console.log(pdfImageAb);
 		}
 		const pdfBuilder = new PdfBuilder();
+		// console.log(paperSize)
+		// alert(paperSize)
 		const result = pdfBuilder.createImagesDoc(paperSize, letList);
 		this.delOnList();
 		// console.log(result)

@@ -39,6 +39,7 @@ import {
 } from './objects/trailerObject'
 export class PdfDocument {
 	constructor(pageSizse) {
+		RefObject.init();
 		this.pageSize = pageSizse;
 		this.info = new InfoObject();
 		this.pages = new PagesObject();
