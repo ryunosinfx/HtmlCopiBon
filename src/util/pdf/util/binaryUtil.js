@@ -16,7 +16,7 @@ export class BinaryUtil {
 				end
 			});
 		}
-		console.log("joinU8as.len:" + len);
+		// console.log("joinU8as.len:" + len);
 		const retU8a = new Uint8Array(len);
 		for (let u8a of u8as) {
 			const edge = u8aEdge[index];
@@ -32,8 +32,8 @@ export class BinaryUtil {
 	static hexString2U8a(hexStr) {
 		const retArrray = [];
 		const hexList = hexStr.split(",");
-		console.log("BinaryUtil.hexString2U8a hexStr:" + hexStr + " /len:" + hexList.length)
-		console.log(hexList)
+		// console.log("BinaryUtil.hexString2U8a hexStr:" + hexStr + " /len:" + hexList.length)
+		// console.log(hexList)
 		for (let hex of hexList) {
 			if (hex && !Number.isNaN(parseInt(hex, 16))) {
 				retArrray.push(parseInt(hex, 16));

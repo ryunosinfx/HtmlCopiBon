@@ -199,7 +199,7 @@ export default class IndexeddbHelper {
 		// console.log("_selectByKey tableName:" + tableName + "/pk:" + key);
 		// console.log(key);
 		return await this._selectByKeyOnTran(db, tableName, key)
-			.catch(this.throwNewError("_selectByKey->_selectByKeyOnTran tableName:" + tableName));
+			.catch(this.throwNewError("_selectByKey->_selectByKeyOnTran tableName:" + tableName + "/mode:" + MODE_R));
 	}
 	_selectByKeyOnTran(db, tableName, key, tables, mode = MODE_R) {
 		return new Promise((resolve, reject) => {
@@ -287,7 +287,7 @@ export default class IndexeddbHelper {
 			.catch(this.throwNewError("_insertUpdate->getOpenDB tableName:" + tableName));
 		const tables = IdbUtil.currentTables(tableName);
 		const value = await this._selectByKeyOnTran(db, tableName, key, tables, MODE_RW)
-			.catch(this.throwNewError("_insertUpdate->_selectByKeyOnTran tableName:" + tableName));
+			.catch(this.throwNewError("_insertUpdate->_selectByKeyOnTran tableName:" + tableName + "/MODE_RW"));
 		if (callback) {
 			callback(value, data);
 		}

@@ -69,7 +69,8 @@ export class ExportPdfButton extends BaseView {
 				dpiName: selectOptions.dpiName,
 				isGrayscale: selectOptions.isGrayscale,
 				isMaxSize10M: selectOptions.isMaxSize10M,
-				isLanczose: selectOptions.isLanczose
+				isLanczose: selectOptions.isLanczose,
+				isSaddleStitchingOrder: selectOptions.isSaddleStitchingOrder
 			}
 		}
 	}

@@ -77,7 +77,7 @@ export class PdfDocument {
 	createFile() {
 		const retArray = [];
 		const headerU8a = Header.getU8a();
-		console.log("headerU8a:" + headerU8a.byteLength);
+		// console.log("headerU8a:" + headerU8a.byteLength);
 		retArray.push(headerU8a);
 		const body = this.trailer.createXref(headerU8a.byteLength);
 		retArray.push(body);

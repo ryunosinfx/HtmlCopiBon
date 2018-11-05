@@ -91,6 +91,7 @@ export class ExportImageProcessor {
 		const isGrayscale = order.isGrayscale;
 		const isMaxSize10M = order.isMaxSize10M;
 		const isLanczose = order.isLanczose;
+		const isSaddleStitchingOrder = order.isSaddleStitchingOrder;
 		const frameSize = {
 			x: this.paper.calcPixcel(targetDpi, frameSizeMm.x),
 			y: this.paper.calcPixcel(targetDpi, frameSizeMm.y)
@@ -113,7 +114,7 @@ export class ExportImageProcessor {
 				console.error(e.lineno);
 				console.error(e.error);
 			});
-		const exports = isZip ? (await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)) : (await this.executeAsPdf(order.basePaper, setting, pages, isMaxSize10M));
+		const exports = isZip ? (await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)) : (await this.executeAsPdf(order.basePaper, setting, pages, isMaxSize10M, isSaddleStitchingOrder));
 		return exports;
 	}
 	async executeAsZip(targetSize, setting, pages, isMaxSize10M) {
@@ -162,7 +163,7 @@ export class ExportImageProcessor {
 			});
 		return await this.commonEnd(compressed, "zip");
 	}
-	async executeAsPdf(targetSize, setting, pages, isMaxSize10M) {
+	async executeAsPdf(targetSize, setting, pages, isMaxSize10M, isSaddleStitchingOrder) {
 		const isPageDirectionR2L = setting.pageDirection === "r2l";
 		const isRightStart = setting.startPage === "r";
 		const isSideSynced = (isPageDirectionR2L && isRightStart) || (!isPageDirectionR2L && !isRightStart);
@@ -175,7 +176,7 @@ export class ExportImageProcessor {
 		const targetPaper = this.paper.getTragetPaper(targetSize);
 		// console.log(setting);
 		// alert(setting);
-		const pdf = await this.epp.createPdf(targetPaper, pages, targetSize, setting)
+		const pdf = await this.epp.createPdf(targetPaper, pages, targetSize, setting, isSaddleStitchingOrder)
 			.catch((e) => {
 				console.error("ExportImageProcessor exportExecute executeParOrder");
 				console.error(e.stack);
