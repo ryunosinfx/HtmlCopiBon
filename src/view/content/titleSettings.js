@@ -121,7 +121,7 @@ export class TitleSettings extends BaseView {
 			on: {
 				click: this.update()
 			}
-		}, "Save! LastUpdae:" + unixTimeToDateFormat(setting.updateDate));
+		}, "Save! LastUpdate:" + unixTimeToDateFormat(setting.updateDate));
 		const childlen = [title, frame, button];
 		this.prePatch("#" + this.bodyId, div(this.bodyId, ["TitleSettings"], childlen));
 	}
