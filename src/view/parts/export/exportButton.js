@@ -16,6 +16,8 @@ import {ExportImgZipButton} from "./exportImgZipButton";
 import {ExportPdfButton} from './exportPdfButton'
 import {DownloadLastExportZipButton} from './downloadLastExportZipButton'
 import {DownloadLastExportPdfButton} from './downloadLastExportPdfButton'
+import {DownloadUploadedImgZipButton} from './downloadUploadedImgZipButton'
+import {DownloadFullBackupZipButton} from './downloadFullBackupZipButton'
 import {DeleteExportOneButton} from './deleteExportOneButton'
 export class ExportButton extends BaseView {
   constructor() {
@@ -26,6 +28,8 @@ export class ExportButton extends BaseView {
     this.exportPdfButton = new ExportPdfButton();
     this.downloadLastExportZipButton = new DownloadLastExportZipButton();
     this.downloadLastExportPdfButton = new DownloadLastExportPdfButton();
+    this.downloadUploadedImgZipButton = new DownloadUploadedImgZipButton();
+    this.downloadFullBackupZipButton = new DownloadFullBackupZipButton();
     this.deleteExportOneButton = new DeleteExportOneButton();
   }
   async onAfterAttach(store, data) {
@@ -34,6 +38,8 @@ export class ExportButton extends BaseView {
     await this.exportPdfButton.attach(this);
     await this.downloadLastExportZipButton.attach(this);
     await this.downloadLastExportPdfButton.attach(this);
+    await this.downloadUploadedImgZipButton.attach(this);
+    await this.downloadFullBackupZipButton.attach(this);
     await this.deleteExportOneButton.attach(this);
     ExportReducer.register();
     const action = ExportActionCreator.creatLoadAction(this);
