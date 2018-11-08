@@ -21,6 +21,8 @@ export class ExportReducer extends BaseReducer {
 		this.exportDownloadAction = ExportActionCreator.createDownloadAction();
 		this.exportExecutePdfAction = ExportActionCreator.createExecutePdfAction();
 		this.exportDownloadPdfAction = ExportActionCreator.createDownloadPdfAction();
+		this.createDownloadImgAction = ExportActionCreator.createDownloadImgAction();
+		this.createDownloadFullBKAction = ExportActionCreator.createDownloadFullBKAction();
 		this.selectOrderAction = ExportActionCreator.createSelectOrderAction();
 		this.atatch(this.exportExecuteAction);
 		this.atatch(this.exportExecuteAllAction);
@@ -29,6 +31,8 @@ export class ExportReducer extends BaseReducer {
 		this.atatch(this.exportDownloadAction);
 		this.atatch(this.exportExecutePdfAction);
 		this.atatch(this.exportDownloadPdfAction);
+		this.atatch(this.createDownloadImgAction);
+		this.atatch(this.createDownloadFullBKAction);
 		this.atatch(this.selectOrderAction);
 
 		this.pp = new PageProcessor();
@@ -39,12 +43,16 @@ export class ExportReducer extends BaseReducer {
 		this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
 		this.storeRemoveResultKey = ExportActionCreator.getStoreRemoveResultKey();
 		this.storeExportResultKey = ExportActionCreator.getStoreExportResultKey();
+		this.storeUploadedImgZipDLKey = ExportActionCreator.getStoreUploadedImgZipDLKey();
+		this.storeFullBackupZipDLKey = ExportActionCreator.getStoreFullBackupZipDLKey();
 		this.storeSelectedOrderKey = ExportActionCreator.getStoreSelectedOrderKey();
 		this.addInitializeKey(this.storeKey);
 		this.addInitializeKey(this.storePdfDLKey);
 		this.addInitializeKey(this.storeZipDLKey);
 		this.addInitializeKey(this.storeRemoveResultKey);
 		this.addInitializeKey(this.storeExportResultKey);
+		this.addInitializeKey(this.storeUploadedImgZipDLKey);
+		this.addInitializeKey(this.storeFullBackupZipDLKey);
 		this.addInitializeKey(this.storeSelectedOrderKey);
 	}
 	static register() {
@@ -73,6 +81,10 @@ export class ExportReducer extends BaseReducer {
 			store[this.storeExportResultKey] = loadPks;
 		} else if (this.exportDownloadPdfAction.type === action.type) {
 			store[this.storePdfDLKey] = await this.loadPdf(action.data.exportPk);
+		} else if (this.createDownloadImgAction.type === action.type) {
+			store[this.storeUploadedImgZipDLKey] = await this.loadUploadedImageZip();
+		} else if (this.createDownloadFullBKAction.type === action.type) {
+			store[this.storeFullBackupZipDLKey] = await this.loadFullBackupZip(action.data.exportPk);
 		} else if (this.selectOrderAction.type === action.type) {
 			if (action.data.selectOrder && action.data.selectOptions) {
 				const newData = {
@@ -99,6 +111,14 @@ export class ExportReducer extends BaseReducer {
 	// whh save single data ? the data is too Big for indexeddb !
 	async loadPdf(exportPk) {
 		return await this.eup.loadPdf(exportPk);
+	}
+	// whh save single data ? the data is too Big for indexeddb !
+	async loadUploadedImageZip(exportPk) {
+		return await this.eup.loadUploadedImagesZip(exportPk);
+	}
+	// whh save single data ? the data is too Big for indexeddb !
+	async loadFullBackupZip(exportPk) {
+		return await this.eup.loadFullBackupZip(exportPk);
 	}
 	async remove(exportPk) {
 		//

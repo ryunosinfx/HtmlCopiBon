@@ -12,10 +12,10 @@ import {
 import { unixTimeToDateFormat } from "../../../util/timeUtil";
 import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
 import { FileDownloader } from "../../../util/fileDownloader";
-export class DownloadUploadedImgZipButton extends BaseView {
+export class DownloadFullBackupZipButton extends BaseView {
 	constructor() {
-		super("DownloadUploadedImgZipButton", "DownloadUploadedImgZipButton", true);
-		this.storeUploadedImgZipDLKey = ExportActionCreator.getStoreUploadedImgZipDLKey();
+		super("DownloadFullBackupZipButton", "DownloadFullBackupZipButton", true);
+		this.storeFullBackupZipDLKey = ExportActionCreator.getStoreFullBackupZipDLKey();
 		this.stateId = this.id + "Button";
 		this.isExported = false;
 	}
@@ -23,7 +23,7 @@ export class DownloadUploadedImgZipButton extends BaseView {
 	render(store, actionData) {
 		const text = div(this.stateId, [
 			"button", "enable"
-		], "-Download Uploaded Images Zip-");
+		], "-Download Full Backup Zip-");
 		const result = div(this.id, [
 			this.id + "Frame"
 		], {
@@ -39,8 +39,8 @@ export class DownloadUploadedImgZipButton extends BaseView {
 	}
 
 	async onViewShow(store, actionData) {
-		if (store[this.storeUploadedImgZipDLKey]) {
-			const data = store[this.storeUploadedImgZipDLKey];
+		if (store[this.storeFullBackupZipDLKey]) {
+			const data = store[this.storeFullBackupZipDLKey];
 			const pdf = data.pdf;
 			if (pdf) {
         // const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
@@ -50,7 +50,7 @@ export class DownloadUploadedImgZipButton extends BaseView {
           on: {
             click: this.click()
           }
-        }, "Download Uploaded Images Zip!");
+        }, "Download Full Backup Zip!");
         this.prePatch("#" + this.stateId, text);
 			}
 		} else {}
@@ -58,7 +58,7 @@ export class DownloadUploadedImgZipButton extends BaseView {
 	click() {
 		return (event) => {
 			if (this.isExported) {
-				const action = ExportActionCreator.createDownloadImgAction(); //createDownloadPdfAction
+				const action = ExportActionCreator.createDownloadFullBKAction(); //createDownloadPdfAction
 				this.dispatch(action);
 			}
 			event.stopPropagation();
