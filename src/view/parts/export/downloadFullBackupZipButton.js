@@ -43,24 +43,22 @@ export class DownloadFullBackupZipButton extends BaseView {
 			const data = store[this.storeFullBackupZipDLKey];
 			const pdf = data.pdf;
 			if (pdf) {
-        // const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
-        const text = div(this.stateId, [
-          "button", "enable"
-        ],{
-          on: {
-            click: this.click()
-          }
-        }, "Download Full Backup Zip!");
-        this.prePatch("#" + this.stateId, text);
+				// const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
+				const text = div(this.stateId, [
+					"button", "enable"
+				], {
+					on: {
+						click: this.click()
+					}
+				}, "Download Full Backup Zip!");
+				this.prePatch("#" + this.stateId, text);
 			}
 		} else {}
 	}
 	click() {
 		return (event) => {
-			if (this.isExported) {
-				const action = ExportActionCreator.createDownloadFullBKAction(); //createDownloadPdfAction
-				this.dispatch(action);
-			}
+			const action = ExportActionCreator.createDownloadFullBKAction(); //createDownloadPdfAction
+			this.dispatch(action);
 			event.stopPropagation();
 			return false;
 		}

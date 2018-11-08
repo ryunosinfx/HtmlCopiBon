@@ -768,7 +768,7 @@ div.button>div.exportedState {
   max-width:100%;
 }
 
-div.DownloadLastExportZipButtonFrame, div.DownloadLastExportPdfButtonFrame {
+div.DownloadLastExportZipButtonFrame, div.DownloadLastExportPdfButtonFrame, div.DownloadUploadedImgZipButtonFrame, div.DownloadFullBackupZipButtonFrame {
   padding: 0em;
 }
 

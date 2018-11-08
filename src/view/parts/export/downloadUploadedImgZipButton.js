@@ -40,27 +40,18 @@ export class DownloadUploadedImgZipButton extends BaseView {
 
 	async onViewShow(store, actionData) {
 		if (store[this.storeUploadedImgZipDLKey]) {
-			const data = store[this.storeUploadedImgZipDLKey];
-			const pdf = data.pdf;
-			if (pdf) {
-        // const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
-        const text = div(this.stateId, [
-          "button", "enable"
-        ],{
-          on: {
-            click: this.click()
-          }
-        }, "Download Uploaded Images Zip!");
-        this.prePatch("#" + this.stateId, text);
+			const output = store[this.storeUploadedImgZipDLKey];
+			if (output) {
+				if (output.ab) {
+					FileDownloader.download(output.name, output.ab, "application/zip");
+				}
 			}
-		} else {}
+		}
 	}
 	click() {
 		return (event) => {
-			if (this.isExported) {
-				const action = ExportActionCreator.createDownloadImgAction(); //createDownloadPdfAction
-				this.dispatch(action);
-			}
+			const action = ExportActionCreator.createDownloadImgAction(); //createDownloadPdfAction
+			this.dispatch(action);
 			event.stopPropagation();
 			return false;
 		}
