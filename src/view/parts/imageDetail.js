@@ -125,7 +125,7 @@ export class ImageDetail extends BaseView {
 	}
 	onClick() {
 		return (event) => {
-			alert("click");
+			// alert("click");
 			this.toNativeSize()
 		}
 	}
