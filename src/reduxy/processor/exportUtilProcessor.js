@@ -137,7 +137,7 @@ export class ExportUtilProcessor {
 						filename: UnicodeEncoder.stringToByteArray(imageEntity.imageEntity.name)
 					});
 					console.log("exoprtAsUploadedZip" + binaryEntity)
-					// this.delList.push(lastOne);
+					this.delList.push(lastOne);
 				}
 			}
 		}

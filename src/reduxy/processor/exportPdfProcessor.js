@@ -122,7 +122,7 @@ export class ExportPdfProcessor {
 		for (let pk of this.delList) {
 			const outputNew = await this.bm.save(pk, "expandPage", new Uint8Array(1)
 				.buffer, { width: 1, height: 1 });
-			// await this.bm.remove(pk);
+			await this.bm.remove(pk);
 		}
 	}
 }
