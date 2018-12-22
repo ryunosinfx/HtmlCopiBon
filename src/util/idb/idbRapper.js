@@ -1,11 +1,11 @@
 import constant from './constant'
-import idbh from './indexeddbHelper'
+import { IndexeddbHelper } from './indexeddbHelper'
 const initQueue = [];
 export default class IdbRapper {
 
 	constructor(objectStoreName, keypathName = "pk") {
 		if (constant.idbh === undefined) {
-			constant.idbh = new idbh(constant.dbName);
+			constant.idbh = new IndexeddbHelper(constant.dbName);
 		}
 		this.idbh = constant.idbh;
 		this.keyPathName = keypathName;
