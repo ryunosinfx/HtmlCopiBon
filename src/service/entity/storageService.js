@@ -1,7 +1,9 @@
-import idb from "../../util/idb/idbWrapper";
+import { indexedbwrapper } from "indexedbwrapper";
+import constant from './constant'
 const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
 const idbAccessors = new Map();
+indexedbwrapper.setDbName(constant.dbName);
 export class StorageService {
 	constructor(entityClass) {
 		this.entityClass = entityClass;
@@ -21,7 +23,7 @@ export class StorageService {
 	async createStoreByName(storeNameKey, userId = USER_ID) {
 		const idbAccessor = idbAccessors.has(storeNameKey) ?
 			idbAccessors.get(storeNameKey) :
-			new idb(storeNameKey);
+			new indexedbwrapper(storeNameKey);
 		await idbAccessor.init()
 			.catch((e) => {
 				console.log(e)
