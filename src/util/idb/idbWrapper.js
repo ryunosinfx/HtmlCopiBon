@@ -1,16 +1,20 @@
 import constant from './constant'
 import { IndexeddbHelper } from './indexeddbHelper'
 const initQueue = [];
-export default class IdbRapper {
+let dbName = constant.dbName;
+export default class IdbWrapper {
 
 	constructor(objectStoreName, keypathName = "pk") {
 		if (constant.idbh === undefined) {
-			constant.idbh = new IndexeddbHelper(constant.dbName);
+			constant.idbh = new IndexeddbHelper(dbName);
 		}
 		this.idbh = constant.idbh;
 		this.keyPathName = keypathName;
 		this.objectStoreName = objectStoreName;
 		//tableName, keyPathName
+	}
+	static setDbName(dbNameNew) {
+		dbName = dbNameNew;
 	}
 	init() {
 		return new Promise((reslve, reject) => {

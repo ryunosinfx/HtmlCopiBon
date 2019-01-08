@@ -1,4 +1,4 @@
-import idb from "../../util/idb/idbRapper";
+import idb from "../../util/idb/idbWrapper";
 const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
 const idbAccessors = new Map();
