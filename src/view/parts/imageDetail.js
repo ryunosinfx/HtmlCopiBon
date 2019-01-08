@@ -61,7 +61,7 @@ export class ImageDetail extends BaseView {
 		}, "W/2");
 		const toFullWindowSizeButton = div(this.id + "toFullWindowSizeButton", ["toFullWindowSizeButton"], {
 			on: {
-				click: this.toHelfWindowSize()
+				click: this.toFullWindowSize()
 			}
 		}, "FW");
 		const title = span("", ["ImageDetailTitleText"], "ImageDetailTitle");
@@ -125,8 +125,7 @@ export class ImageDetail extends BaseView {
 	}
 	onClick() {
 		return (event) => {
-			// alert("click");
-			this.toNativeSize()
+			this.toNativeSize()(event);
 		}
 	}
 	setSelectStyle(id, className) {
