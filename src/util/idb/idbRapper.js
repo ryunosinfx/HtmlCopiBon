@@ -14,7 +14,7 @@ export default class IdbRapper {
 	}
 	init() {
 		return new Promise((reslve, reject) => {
-			this.idbh._createStore(this.objectStoreName, this.keyPathName)
+			this.idbh.createStore(this.objectStoreName, this.keyPathName)
 				.then(() => {
 					reslve(true)
 				}, (e) => {
@@ -52,19 +52,19 @@ export default class IdbRapper {
 			storeData[this.keyPathName] = key;
 		} else if (key !== undefined) {}
 		//console.log("saveData 003:" + key + "/" + dataObj +"/this.objectStoreName:"+this.objectStoreName);
-		let value = await this.idbh._insertUpdate(this.objectStoreName, this.keyPathName, storeData, callback);
+		let value = await this.idbh.insertUpdate(this.objectStoreName, this.keyPathName, storeData, callback);
 		//console.log("saveData 004:" + key + "/" + dataObj+"/"+JSON.stringify(value)+"/"+value.data.data);
 	}
 	async loadDataMap(keys) {
 		if (keys !== undefined) {
-			let recordAsLoadedData = await this.idbh._selectByKeys(this.objectStoreName, keys);
+			let recordAsLoadedData = await this.idbh.selectByKeys(this.objectStoreName, keys);
 			return recordAsLoadedData;
 		}
 		return null;
 	}
 	async loadData(key) {
 		if (key !== undefined) {
-			let recordAsLoadedData = await this.idbh._selectByKey(this.objectStoreName, key);
+			let recordAsLoadedData = await this.idbh.selectByKey(this.objectStoreName, key);
 			return recordAsLoadedData;
 		}
 		return null;
@@ -76,11 +76,11 @@ export default class IdbRapper {
 			recordAsDefaultLoad.data;
 	}
 	async loadAllData() {
-		return await this.idbh._selectAll(this.objectStoreName);
+		return await this.idbh.selectAll(this.objectStoreName);
 	}
 	async deleteData(key) {
 		if (key !== undefined) {
-			return await this.idbh._delete(this.objectStoreName, key);
+			return await this.idbh.delete(this.objectStoreName, key);
 		}
 		return null;
 	}

@@ -173,53 +173,43 @@ export class IndexeddbHelper {
 	}
 
 	//Select In-line-Keyで返す。
-	async _selectAll(tableName, range, direction) {
+	async selectAll(tableName, range, direction) {
 		return await this.enQueueReadTask(cmdSelectAll, { tableName, range, direction });
-		// return await this.core._selectAll(tableName, range, direction);
 	};
 	//Select In-line-return promise;Keyで返す。
-	async _selectByKey(tableName, key) {
+	async selectByKey(tableName, key) {
 		return await this.enQueueReadTask(cmdSelectByKey, { tableName, key });
-		// return await this.core._selectByKey(tableName, key);
 	}
 	//Select In-line-return promise;Keyで返す。
-	async _selectByKeys(tableName, keys) {
+	async selectByKeys(tableName, keys) {
 		return await this.enQueueReadTask(cmdSelectByKeys, { tableName, keys });
-		// return await this.core._selectByKeys(tableName, keys);
 	}
 	//Select FirstOnek
-	async _selectFirstOne(tableName, range, direction) {
+	async selectFirstOne(tableName, range, direction) {
 		return await this.enQueueReadTask(cmdSelectFirstOne, { tableName, range, direction });
-		// return await this.core._selectFirstOne(tableName, range, direction);
 	};
 
 	//private
-	async _insertUpdate(tableName, keyPathName, data, callback) {
+	async insertUpdate(tableName, keyPathName, data, callback) {
 		return await this.enQueueWriteTask(cmdInsertUpdate, { tableName, keyPathName, data, callback });
-		// return await this.core._insertUpdate(tableName, keyPathName, data, callback);
 	}
 	//Delete
-	async _deleteWithRange(tableName, range, condetions) {
+	async deleteWithRange(tableName, range, condetions) {
 		return await this.enQueueWriteTask(cmdDeleteWithRange, { tableName, range, direction });
-		// return await this.core._deleteWithRange(tableName, range, condetions);
 	};
 	//Delete
-	async _delete(tableName, keyPathValue) {
+	async delete(tableName, keyPathValue) {
 		return await this.enQueueWriteTask(cmdDelete, { tableName, keyPathValue });
-		// return await this.core._delete(tableName, keyPathValue);
 	};
 	//truncate
-	async _truncate(tableName) {
+	async truncate(tableName) {
 		return await this.enQueueWriteTask(cmdTruncate, { tableName });
-		// return await this.core._truncate(tableName);
 	};
 	//truncate
-	async _createStore(tableName, keyPathName, isAutoIncrement) {
+	async createStore(tableName, keyPathName, isAutoIncrement) {
 		return await this.enQueueWriteTask(cmdCreateStore, { tableName, keyPathName, isAutoIncrement });
-		// return await this.core._createStore(tableName, keyPathName, isAutoIncrement);
 	};
 	async getObjectStoreNames() {
 		return await this.enQueueReadTask(cmdGetObjectStoreNames, {});
-		// return await this.core.getObjectStoreNames();
 	}
 }
