@@ -2,8 +2,7 @@ import { indexedbwrapper } from "indexedbwrapper";
 import constant from './constant'
 const USER_ID = "default";
 const PK_INCREMENT_STORE = "pk_increment";
-const idbAccessors = new Map();
-indexedbwrapper.setDbName(constant.dbName);
+const idb = new indexedbwrapper(constant.dbName);
 export class StorageService {
 	constructor(entityClass) {
 		this.entityClass = entityClass;
@@ -13,24 +12,9 @@ export class StorageService {
 			this.targetObj.getEntityName() :
 			entityClass;
 	}
-	getStoreNameKey(userId = USER_ID) {
-		return userId + "_" + this.targetObj.getEntityName();
-	}
 	async createStore(userId = USER_ID) {
-		const storeNameKey = this.getStoreNameKey(userId);
-		return await this.createStoreByName(storeNameKey, userId);
-	}
-	async createStoreByName(storeNameKey, userId = USER_ID) {
-		const idbAccessor = idbAccessors.has(storeNameKey) ?
-			idbAccessors.get(storeNameKey) :
-			new indexedbwrapper(storeNameKey);
-		await idbAccessor.init()
-			.catch((e) => {
-				console.log(e)
-			});
-		idbAccessors.set(storeNameKey, idbAccessor);
-		this.idbAccessor = idbAccessor;
-		return idbAccessor;
+		const storeNameKey = userId + "_" + this.targetObj.getEntityName();
+		return await await idb.getObAccessor(storeNameKey);
 	}
 	async setStore(userId = USER_ID) {
 		this.idbAccessor = await this.createStore(userId);
@@ -42,11 +26,11 @@ export class StorageService {
 			saveData = data.toObj();
 		}
 		// console.log(saveData);
-		await this.idbAccessor.saveDataDefault(pk, saveData);
+		await this.idbAccessor.put(pk, saveData);
 		return data; //
 	}
 	async loadAll() {
-		const list = await this.idbAccessor.loadAllData();
+		const list = await this.idbAccessor.getAll();
 		const retList = [];
 		for (let row of list) {
 			const cloned = this.getEntity(row);
@@ -62,7 +46,7 @@ export class StorageService {
 				key;
 			pkList.push(pk);
 		}
-		const recordMap = await this.idbAccessor.loadDataMap(pkList);
+		const recordMap = await this.idbAccessor.getAsMap(pkList);
 		const retMap = {};
 		for (let key in recordMap) {
 			const record = recordMap[key];
@@ -74,7 +58,7 @@ export class StorageService {
 		const pk = key && key.pk ?
 			key.pk :
 			key;
-		const record = await this.idbAccessor.loadData(pk);
+		const record = await this.idbAccessor.getRecord(pk);
 		return this.getEntity(record);
 	}
 	getEntity(record) {
@@ -89,6 +73,6 @@ export class StorageService {
 		return targetObj;
 	}
 	async delete(key) {
-		return await this.idbAccessor.deleteData(key);
+		return await this.idbAccessor.delete(key);
 	}
 }
