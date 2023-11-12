@@ -1,6 +1,5 @@
-import { TitleActionCreator } from "../action/titleActionCreator"
-import { ActionDispatcher } from "../../util/reactive/actionDispatcher";
-import { ObjectUtil } from "../../util/objectUtil";
+import { ActionDispatcher } from '../../util/reactive/actionDispatcher.js';
+import { ObjectUtil } from '../../util/objectUtil.js';
 export class TitleProcessor {
 	constructor(em, tm) {
 		this.em = em;
@@ -9,18 +8,17 @@ export class TitleProcessor {
 		this.totalSize = 0;
 	}
 	async loadAll() {
-		console.time("TitleProcessor.loadAll");
+		console.time('TitleProcessor.loadAll');
 		const titles = await this.tm.loadTitleList();
 		this.totalSize = 0;
 		const keys = [];
-		for (let title of titles) {
+		for (const title of titles) {
 			this.titleSizeCache = {};
 			const size = await this.getSizes(title);
 			title.size = size;
 			this.totalSize += size;
 		}
-		console.timeEnd("TitleProcessor.loadAll");
-
+		console.timeEnd('TitleProcessor.loadAll');
 		return { list: titles, totalSize: this.totalSize };
 	}
 	getTotalSum() {
@@ -32,13 +30,13 @@ export class TitleProcessor {
 		}
 		let size = await ObjectUtil.calcSize(this.em, target);
 		const refCols = target.getRefCols();
-		for (let colName of refCols) {
+		for (const colName of refCols) {
 			const colValue = target[colName];
 			if (!colValue) {
 				continue;
 			}
 			if (Array.isArray(colValue)) {
-				for (let pk of colValue) {
+				for (const pk of colValue) {
 					if (!pk) {
 						size += 2;
 						continue;
@@ -50,7 +48,7 @@ export class TitleProcessor {
 						size += currentSize;
 					}
 				}
-			} else if (typeof colValue === "string") {
+			} else if (typeof colValue === 'string') {
 				if (this.titleSizeCache[colValue] === undefined) {
 					const entity = await this.em.get(colValue, true);
 					const currentSize = Number.isInteger(entity) ? entity : await this.getSizes(entity);
@@ -63,11 +61,11 @@ export class TitleProcessor {
 	}
 	async clearAll() {
 		const titles = await this.tm.loadTitleList();
-		for (let title of titles) {
+		for (const title of titles) {
 			await this.removeDescendant(title);
 		}
 		//dual!
-		for (let title of titles) {
+		for (const title of titles) {
 			await this.removeDescendant(title);
 		}
 		return await this.loadAll();
@@ -77,19 +75,19 @@ export class TitleProcessor {
 			return;
 		}
 		const refCols = target.getRefCols();
-		for (let colName of refCols) {
+		for (const colName of refCols) {
 			const colValue = target[colName];
 			if (!colValue) {
 				continue;
 			}
 			if (Array.isArray(colValue)) {
-				for (let pk of colValue) {
+				for (const pk of colValue) {
 					await this.removeExecute(pk);
 				}
-				for (let index in colValue) {
+				for (const index in colValue) {
 					delete colValue[index];
 				}
-			} else if (typeof colValue === "string") {
+			} else if (typeof colValue === 'string') {
 				await this.removeExecute(colValue);
 			}
 		}
@@ -102,15 +100,13 @@ export class TitleProcessor {
 		if (entity) {
 			await this.removeDescendant(entity);
 			if (entity.pages) {
-				for (let index in entity.pages) {
+				for (const index in entity.pages) {
 					delete entity.pages[index];
 				}
 			}
 			await this.em.delete(pk);
 			const titles = await this.tm.loadTitleList();
-			return titles && titles.length > 0 ?
-				titles[0] :
-				null
+			return titles && titles.length > 0 ? titles[0] : null;
 		}
 		return this.tm.loadCurrent();
 	}

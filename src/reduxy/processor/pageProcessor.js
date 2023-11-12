@@ -1,5 +1,4 @@
-import { Sorter } from "../../util/sorter";
-import { MainService } from "../../service/mainService"
+import { MainService } from '../../service/mainService.js';
 export class PageProcessor {
 	constructor() {
 		this.ms = MainService.getInstance();
@@ -20,11 +19,10 @@ export class PageProcessor {
 		const delPages = [];
 		const addPageAsNew = {};
 		if (pages.length > pageNum) {
-
 			const pageEntitysMap = await this.em.getAsMap(pages);
-			for (let index in pages) {
+			for (const index in pages) {
 				const pk = pages[index];
-				if (!pk || typeof pk !== "string") {
+				if (!pk || typeof pk !== 'string') {
 					addPageAsNew[index] = true;
 					continue;
 				}
@@ -38,9 +36,9 @@ export class PageProcessor {
 					delPages.push(pk);
 				}
 			}
-			for (let index in delPages) {
+			for (const index in delPages) {
 				const delTarget = delPages[index];
-				for (let i in pages) {
+				for (const i in pages) {
 					const current = pages[i];
 					if (delTarget === current) {
 						delete pages[i];
@@ -49,7 +47,7 @@ export class PageProcessor {
 					}
 				}
 			}
-			for (let keyIndex in addPageAsNew) {
+			for (const keyIndex in addPageAsNew) {
 				const index = keyIndex * 1;
 				if (index < pageNum) {
 					const addOne = await this.pm.save(null, null, null, null, null, index);
@@ -72,7 +70,7 @@ export class PageProcessor {
 				continue;
 			}
 			const pk = pages[index];
-			if (!pk || typeof pk !== "string") {
+			if (!pk || typeof pk !== 'string') {
 				const addOne = await this.pm.save(null, null, null, null, null, index);
 				pages[index] = addOne.getPk();
 				// console.warn("index:"+index+"/pk:"+pk+"/pages[index]:"+pages[index]);
@@ -93,7 +91,7 @@ export class PageProcessor {
 		const title = await this.tm.load();
 		const pages = title.pages;
 		const pageEntitis = [];
-		for (let index in pages) {
+		for (const index in pages) {
 			const pk = pages[index];
 			if (!pk) {
 				continue;
@@ -104,7 +102,7 @@ export class PageProcessor {
 		return pageEntitis;
 	}
 	async move(fromPk, toPk) {
-		await this.pm.move(fromPk, toPk)
+		await this.pm.move(fromPk, toPk);
 	}
 	async add(imagePk, pagePk) {
 		await this.pm.addPage(imagePk, pagePk);

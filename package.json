@@ -18,7 +18,7 @@
   "author": "ryunosinfx",
   "license": "MIT",
   "dependencies": {
-    "indexedbwrapper": "0.0.7",
+    "indexedbwrapper": "0.0.9",
     "snabbdom": "^0.7.1",
     "zlibjs": "^0.3.1"
   },

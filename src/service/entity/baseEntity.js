@@ -1,7 +1,7 @@
-import { ObjectUtil } from "../../util/objectUtil";
+import { ObjectUtil } from '../../util/objectUtil.js';
 const refcols = [];
 export class BaseEntity {
-	constructor(entitiyName = "BaseEntity", pk = "oid") {
+	constructor(entitiyName = 'BaseEntity', pk = 'oid') {
 		this.pk = pk;
 		this.entitiyName = entitiyName;
 		this.refs = [];
@@ -15,7 +15,7 @@ export class BaseEntity {
 	create() {}
 	update() {}
 	setPk(pkValue) {
-		return this[this.pk] = pkValue;
+		return (this[this.pk] = pkValue);
 	}
 	getPk() {
 		return this[this.pk];
@@ -32,7 +32,7 @@ export class BaseEntity {
 		return await ObjectUtil.deepClone(this);
 	}
 	load(obj) {
-		for (let key in obj) {
+		for (const key in obj) {
 			this[key] = obj[key];
 		}
 	}

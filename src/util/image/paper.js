@@ -1,15 +1,15 @@
-import { dpis, printMargin, paperSizeSet, basePaper } from "../../settings/exportSettings";
+import { dpis, printMargin, paperSizeSet, basePaper } from '../../settings/exportSettings.js';
 export class Paper {
 	constructor() {
 		//
-		this.paparSize = {}
+		this.paparSize = {};
 	}
 	calcClopOffsetPixcel(basePaperSet, dpi) {
 		const cropSizeMm = this.calcClopOffsetMm(basePaperSet);
 		//const size = this.getTargetPaperSizeMm(basePaperSet);
 		const offset = {
 			x: this.calcPixcel(dpi, cropSizeMm.x) * -1,
-			y: this.calcPixcel(dpi, cropSizeMm.y) * -1
+			y: this.calcPixcel(dpi, cropSizeMm.y) * -1,
 		};
 		// console.log("calcClopOffsetPixce:l"+JSON.stringify(offset)+"/"+dpi);
 		return offset;
@@ -18,9 +18,9 @@ export class Paper {
 		const targetPaper = basePaper[basePaperSet];
 		const offset = {
 			x: 0,
-			y: 0
+			y: 0,
 		};
-		if (!targetPaper || targetPaper.target === "same") {
+		if (!targetPaper || targetPaper.target === 'same') {
 			//
 			return offset;
 		}
@@ -35,7 +35,7 @@ export class Paper {
 	getTargetPaperSizeMm(basePaperSet) {
 		const size = {
 			x: 0,
-			y: 0
+			y: 0,
 		};
 		if (!basePaperSet) {
 			//
@@ -48,9 +48,9 @@ export class Paper {
 		const targetPaper = basePaper[basePaperSet];
 		const size = {
 			x: 0,
-			y: 0
+			y: 0,
 		};
-		if (!targetPaper || targetPaper.target === "same") {
+		if (!targetPaper || targetPaper.target === 'same') {
 			//
 			return size;
 		}
@@ -61,11 +61,11 @@ export class Paper {
 		return size;
 	}
 	calcPixcel(dpi, mm) {
-		return Math.floor(mm * dpi / 25.4);
+		return Math.floor((mm * dpi) / 25.4);
 	}
 
 	calcDpi(pixcel, mm) {
-		return pixcel / mm * 25.4;
+		return (pixcel / mm) * 25.4;
 	}
 	getPaperFrameSizeMm(basePaperSet) {
 		const targetPaper = basePaper[basePaperSet];
@@ -90,7 +90,7 @@ export class Paper {
 		const mpi = dpi / 25.4;
 		return Math.floor(mpi * margin);
 	}
-	getPixcelSizeBySelected(paperSize, dpiName, marginSetting = "none") {
+	getPixcelSizeBySelected(paperSize, dpiName, marginSetting = 'none') {
 		const size = this.getPaperSizeMm(paperSize);
 		const margin = this.getPrintMargin(marginSetting);
 		const dpi = this.getDpi(dpiName);
@@ -100,11 +100,11 @@ export class Paper {
 		const mpi = dpi / 25.4;
 		return {
 			width: Math.floor(mpi * mmWidth),
-			height: Math.floor(mpi * mmHeight)
-		}
+			height: Math.floor(mpi * mmHeight),
+		};
 	}
 	getPixcelSizeWithMargin(dpi, mmWidth, mmHeight, mmMargin) {
 		const mmMarginDual = mmMargin * 2;
-		return this.getPixcelSize(dpi, mmWidth - mmMarginDual, mmHeight - mmMarginDual)
+		return this.getPixcelSize(dpi, mmWidth - mmMarginDual, mmHeight - mmMarginDual);
 	}
 }

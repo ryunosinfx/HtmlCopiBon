@@ -1,10 +1,9 @@
-import { ExportActionCreator } from '../action/exportActionCreator'
-import { MainService } from "../../service/mainService"
-import { BaseReducer } from '../../util/reactive/baseReducer'
-import { ExportImageProcessor } from '../processor/exportImageProcessor'
-import { ExportUtilProcessor } from '../processor/exportUtilProcessor'
-import { PageProcessor } from '../processor/pageProcessor'
-import { ImageActionCreator } from '../action/imageActionCreator'
+import { ExportActionCreator } from '../action/exportActionCreator.js';
+import { MainService } from '../../service/mainService.js';
+import { BaseReducer } from '../../util/reactive/baseReducer.js';
+import { ExportImageProcessor } from '../processor/exportImageProcessor.js';
+import { ExportUtilProcessor } from '../processor/exportUtilProcessor.js';
+import { PageProcessor } from '../processor/pageProcessor.js';
 let exportReducer = null;
 export class ExportReducer extends BaseReducer {
 	constructor() {
@@ -89,7 +88,7 @@ export class ExportReducer extends BaseReducer {
 			if (action.data.selectOrder && action.data.selectOptions) {
 				const newData = {
 					selectOptions: action.data.selectOptions,
-					selectOrder: action.data.selectOrder
+					selectOrder: action.data.selectOrder,
 				};
 				store[this.storeSelectedOrderKey] = newData;
 			}

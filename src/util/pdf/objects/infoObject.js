@@ -1,5 +1,5 @@
-import { RefObject } from '../base/refObject'
-import { getNow } from '../util/pdfTimeUtil'
+import { RefObject } from '../base/refObject.js';
+import { getNow } from '../util/pdfTimeUtil.js';
 export class InfoObject extends RefObject {
 	constructor() {
 		super();

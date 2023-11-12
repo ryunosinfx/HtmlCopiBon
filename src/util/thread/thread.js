@@ -1,5 +1,5 @@
-const defaultWorker = "worker.js";
-const defaultWorkerFromWorker = "./worker.js";
+const defaultWorker = './src/worker.js';
+const defaultWorkerFromWorker = './worker.js';
 export class Thread {
 	constructor(workerJsPath = defaultWorker) {
 		this.worker = new Worker(workerJsPath);
@@ -11,7 +11,7 @@ export class Thread {
 			// console.warn(dataMap);
 			const { transObject, tranceArray } = Thread.buildPostObj(key, dataMap);
 			// console.warn("trance！ー！＝！＝！＝！:" + tranceArray.length);
-			// for (let trance of tranceArray) {
+			// for (const trance of tranceArray) {
 			// 	console.warn("trance:" + trance.length + "/" + trance.byteLength);
 			// }
 			// console.warn("trance！ー！＝！＝！＝！:-----");
@@ -22,7 +22,7 @@ export class Thread {
 					const returendData = event.data;
 					// console.warn(returendData);
 					resolve(returendData);
-				}
+				};
 				this.worker.onerror = (event) => {
 					console.log(event);
 					const e = event;
@@ -37,7 +37,7 @@ export class Thread {
 					console.error(e.lineno);
 					console.error(e.error);
 					reject(event);
-				}
+				};
 			} catch (e) {
 				console.error(e);
 				console.error(e.stack);
@@ -47,11 +47,11 @@ export class Thread {
 
 	static buildPostObj(key, dataMap) {
 		const tranceArray = [];
-		if (dataMap && typeof dataMap === "object") {
+		if (dataMap && typeof dataMap === 'object') {
 			dataMap.key = key;
 		} else {
 			dataMap = {
-				key: key
+				key: key,
 			};
 		}
 
@@ -66,20 +66,19 @@ export class Thread {
 		if (!dataMap) {
 			// console.log("trance--buildPostObjExec dataMap:" + dataMap);
 			// nothig todo
-			return
+			return;
 		}
 		// console.log("trance buildPostObjExec A2 dataMap:" + dataMap);
 		if (Array.isArray(dataMap)) {
 			// console.log("trance buildPostObjExec array:" + dataMap);
 			let count = 0;
-			for (let value of dataMap) {
+			for (const value of dataMap) {
 				Thread.buildPostObjExecParValue(count, value, tranceArray);
 				count++;
 			}
-		} else if (typeof dataMap === 'object' && Object.keys(dataMap)
-			.length > 0) {
+		} else if (typeof dataMap === 'object' && Object.keys(dataMap).length > 0) {
 			// console.log("trance buildPostObjExec object:" + dataMap);
-			for (let objKey in dataMap) {
+			for (const objKey in dataMap) {
 				const value = dataMap[objKey];
 				if (value === undefined) {
 					continue;
@@ -93,7 +92,7 @@ export class Thread {
 	}
 	static buildPostObjExecParValue(currentKey, value, tranceArray) {
 		//「このデバッグ出力を消すと落ちる」
-		console.log("trance buildPostObjExecParValue currentKey:" + currentKey + "/" + tranceArray.length);
+		console.log('trance buildPostObjExecParValue currentKey:' + currentKey + '/' + tranceArray.length);
 		// console.log(tranceArray);
 		const type = typeof value;
 		let isNotObject = false;
@@ -111,7 +110,7 @@ export class Thread {
 			tranceArray.push(value.data.buffer);
 			isNotObject = true;
 			// console.log("trance buildPostObjExecParValueB ImageData:" + value);
-		} else if (type === "boolean" || type === "number" || type === "string") {
+		} else if (type === 'boolean' || type === 'number' || type === 'string') {
 			isNotObject = true;
 			// console.log("trance buildPostObjExecParValueC primitive:" + value);
 			// } else {
@@ -119,9 +118,8 @@ export class Thread {
 		}
 		if (!isNotObject && currentKey) {
 			// console.log("trance buildPostObjExecParValueE add:" + currentKey);
-			Thread.buildPostObjExec(value, tranceArray)
+			Thread.buildPostObjExec(value, tranceArray);
 		}
-
 	}
 	close() {
 		this.worker.terminate();

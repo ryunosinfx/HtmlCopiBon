@@ -1,27 +1,18 @@
-import { BaseView } from "../../../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../../../util/reactive/base/vtags"; //
-import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
-import { ExportReducer } from '../../../reduxy/reducer/exportReducer'
-import { ExportAllButton } from './exportAllButton'
-import { ExportImgZipButton } from "./exportImgZipButton";
-import { ExportPdfButton } from './exportPdfButton'
-import { DownloadLastExportZipButton } from './downloadLastExportZipButton'
-import { DownloadLastExportPdfButton } from './downloadLastExportPdfButton'
-import { DownloadUploadedImgZipButton } from './downloadUploadedImgZipButton'
-import { DownloadFullBackupZipButton } from './downloadFullBackupZipButton'
-import { DeleteExportOneButton } from './deleteExportOneButton'
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js'; //
+import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator.js';
+import { ExportReducer } from '../../../reduxy/reducer/exportReducer.js';
+import { ExportAllButton } from './exportAllButton.js';
+import { ExportImgZipButton } from './exportImgZipButton.js';
+import { ExportPdfButton } from './exportPdfButton.js';
+import { DownloadLastExportZipButton } from './downloadLastExportZipButton.js';
+import { DownloadLastExportPdfButton } from './downloadLastExportPdfButton.js';
+import { DownloadUploadedImgZipButton } from './downloadUploadedImgZipButton.js';
+import { DownloadFullBackupZipButton } from './downloadFullBackupZipButton.js';
+import { DeleteExportOneButton } from './deleteExportOneButton.js';
 export class ExportButton extends BaseView {
 	constructor() {
-		super("ExportButton", "ExportButtonFrame");
+		super('ExportButton', 'ExportButtonFrame');
 		this.storeKey = ExportActionCreator.getStoreKey();
 		this.exportAllButton = new ExportAllButton();
 		this.exportImgZipButton = new ExportImgZipButton();
@@ -53,15 +44,19 @@ export class ExportButton extends BaseView {
 	}
 
 	render(store, actionData) {
-		return div("", ["ExportButtons"], [
-			div(this.exportAllButton.id),
-			div(this.exportImgZipButton.id),
-			div(this.exportPdfButton.id),
-			div(this.downloadLastExportZipButton.id),
-			div(this.downloadLastExportPdfButton.id),
-			div(this.deleteExportOneButton.id),
-			div(this.downloadUploadedImgZipButton.id),
-			div(this.downloadFullBackupZipButton.id)
-		]);
+		return div(
+			'',
+			['ExportButtons'],
+			[
+				div(this.exportAllButton.id),
+				div(this.exportImgZipButton.id),
+				div(this.exportPdfButton.id),
+				div(this.downloadLastExportZipButton.id),
+				div(this.downloadLastExportPdfButton.id),
+				div(this.deleteExportOneButton.id),
+				div(this.downloadUploadedImgZipButton.id),
+				div(this.downloadFullBackupZipButton.id),
+			]
+		);
 	}
 }

@@ -1,14 +1,7 @@
-import {
-	pageSazeMap
-} from '../constants/pdfConstants'
-import {
-	UnitUtil
-} from '../util/unitUtil'
-import {
-	RefObject
-} from '../base/refObject'
+import { pageSazeMap } from '../constants/pdfConstants.js';
+import { RefObject } from '../base/refObject.js';
 export class PageObject extends RefObject {
-	constructor(sizeName = "A4") {
+	constructor(sizeName = 'A4') {
 		super();
 		this.setElm('Type', 'Page');
 		const paperSizePoint = pageSazeMap[sizeName];

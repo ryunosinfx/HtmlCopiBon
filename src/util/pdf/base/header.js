@@ -1,12 +1,6 @@
-import {
-	BinaryUtil
-} from '../util/binaryUtil'
-import {
-	RefObject
-} from './refObject'
-import {
-	UnicodeEncoder
-} from '../util/unicodeEncoder'
+import { BinaryUtil } from '../util/binaryUtil.js';
+import { RefObject } from './refObject.js';
+import { UnicodeEncoder } from '../util/unicodeEncoder.js';
 const NEW_LINE = RefObject.getNewLine();
 export class Header {
 	static getText() {

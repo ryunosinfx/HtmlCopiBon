@@ -1,24 +1,22 @@
 export class BinaryUtil {
 	constructor() {}
-	toArrayBuffer() {
-
-	}
+	toArrayBuffer() {}
 	static joinU8as(u8as) {
 		let len = 0;
 		let index = 0;
 		const u8aEdge = [];
-		for (let u8a of u8as) {
+		for (const u8a of u8as) {
 			const start = len;
 			len += u8a.byteLength;
 			const end = len;
 			u8aEdge.push({
 				start,
-				end
+				end,
 			});
 		}
 		// console.log("joinU8as.len:" + len);
 		const retU8a = new Uint8Array(len);
-		for (let u8a of u8as) {
+		for (const u8a of u8as) {
 			const edge = u8aEdge[index];
 			const start = edge.start;
 			const end = edge.end;
@@ -31,10 +29,10 @@ export class BinaryUtil {
 	}
 	static hexString2U8a(hexStr) {
 		const retArrray = [];
-		const hexList = hexStr.split(",");
+		const hexList = hexStr.split(',');
 		// console.log("BinaryUtil.hexString2U8a hexStr:" + hexStr + " /len:" + hexList.length)
 		// console.log(hexList)
-		for (let hex of hexList) {
+		for (const hex of hexList) {
 			if (hex && !Number.isNaN(parseInt(hex, 16))) {
 				retArrray.push(parseInt(hex, 16));
 			}
@@ -67,7 +65,7 @@ export class BinaryUtil {
 		for (let i = 0; i < len; i++) {
 			ua[i] = charList[i].charCodeAt(0);
 		}
-		const encodedString = String.fromCharCode.apply(null, uintArray)
+		const encodedString = String.fromCharCode.apply(null, uintArray);
 		const decodedString = decodeURIComponent(escape(atob(encodedString)));
 		return decodedString;
 	}
@@ -83,24 +81,23 @@ export class BinaryUtil {
 	}
 	unicodeStringToTypedArray(s) {
 		const escstr = encodeURIComponent(s);
-		const binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
+		const binstr = escstr.replace(/%([0-9A-F]{2})/g, function (match, p1) {
 			return String.fromCharCode('0x' + p1);
 		});
 		const ua = new Uint8Array(binstr.length);
-		Array.prototype.forEach.call(binstr, function(ch, i) {
+		Array.prototype.forEach.call(binstr, function (ch, i) {
 			ua[i] = ch.charCodeAt(0);
 		});
 		return ua;
 	}
 	typedArrayToUnicodeString(ua) {
-		const binstr = Array.prototype.map.call(ua, function(ch) {
+		const binstr = Array.prototype.map
+			.call(ua, function (ch) {
 				return String.fromCharCode(ch);
 			})
 			.join('');
-		const escstr = binstr.replace(/(.)/g, function(m, p) {
-			const code = p.charCodeAt(p)
-				.toString(16)
-				.toUpperCase();
+		const escstr = binstr.replace(/(.)/g, function (m, p) {
+			const code = p.charCodeAt(p).toString(16).toUpperCase();
 			if (code.length < 2) {
 				code = '0' + code;
 			}

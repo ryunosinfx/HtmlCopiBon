@@ -1,36 +1,27 @@
-import { BaseView } from "../../../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../../../util/reactive/base/vtags";
-import { unixTimeToDateFormat } from "../../../util/timeUtil";
-import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
-import { FileDownloader } from "../../../util/fileDownloader";
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
+import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator.js';
+import { FileDownloader } from '../../../util/fileDownloader.js';
 export class DownloadUploadedImgZipButton extends BaseView {
 	constructor() {
-		super("DownloadUploadedImgZipButton", "DownloadUploadedImgZipButton", true);
+		super('DownloadUploadedImgZipButton', 'DownloadUploadedImgZipButton', true);
 		this.storeUploadedImgZipDLKey = ExportActionCreator.getStoreUploadedImgZipDLKey();
-		this.stateId = this.id + "Button";
+		this.stateId = this.id + 'Button';
 		this.isExported = false;
 	}
 
 	render(store, actionData) {
-		const text = div(this.stateId, [
-			"button", "enable"
-		], "-Download Uploaded Images Zip-");
-		const result = div(this.id, [
-			this.id + "Frame"
-		], {
-			on: {
-				click: this.click()
-			}
-		}, [text]);
+		const text = div(this.stateId, ['button', 'enable'], '-Download Uploaded Images Zip-');
+		const result = div(
+			this.id,
+			[this.id + 'Frame'],
+			{
+				on: {
+					click: this.click(),
+				},
+			},
+			[text]
+		);
 		// alert("render this.isExported :" + this.isExported+'/this.id:'+this.id);
 		return result;
 	}
@@ -43,7 +34,7 @@ export class DownloadUploadedImgZipButton extends BaseView {
 			const output = store[this.storeUploadedImgZipDLKey];
 			if (output) {
 				if (output.ab) {
-					FileDownloader.download(output.name, output.ab, "application/zip");
+					FileDownloader.download(output.name, output.ab, 'application/zip');
 				}
 			}
 		}
@@ -54,6 +45,6 @@ export class DownloadUploadedImgZipButton extends BaseView {
 			this.dispatch(action);
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 }

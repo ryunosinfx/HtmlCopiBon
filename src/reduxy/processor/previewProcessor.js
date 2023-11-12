@@ -1,6 +1,5 @@
-import { Sorter } from "../../util/sorter";
-import { MainService } from "../../service/mainService"
-import { ProgressBarProcessor } from "./progressBarProcessor"
+import { MainService } from '../../service/mainService.js';
+import { ProgressBarProcessor } from './progressBarProcessor.js';
 export class PreviewProcessor {
 	constructor() {
 		this.ms = MainService.getInstance();
@@ -21,14 +20,14 @@ export class PreviewProcessor {
 		const pages = title.pages;
 		const retPreviews = [];
 		const pegaNum = pages.length;
-		const stepNum = 4
-		const progressUnit = 100 / (stepNum * pegaNum)
+		const stepNum = 4;
+		const progressUnit = 100 / (stepNum * pegaNum);
 		let pageCount = 0;
 
 		const pageEntitysMap = await this.em.getAsMap(pages);
-		for (let pagePk of pages) {
+		for (const pagePk of pages) {
 			pageCount++;
-			const pageStep = "[" + pageCount + "/" + pegaNum + "]";
+			const pageStep = '[' + pageCount + '/' + pegaNum + ']';
 			this.progress += progressUnit;
 			this.pbp.update(this.progress, 'load pageEnitity' + pageStep);
 			if (!pagePk) {
@@ -82,7 +81,7 @@ export class PreviewProcessor {
 		const cratePageData = PreviewProcessor.getCratePageDataFunc();
 		if (isSingle) {
 			const retSetLis = [];
-			for (let index in previews) {
+			for (const index in previews) {
 				retSetLis.push(cratePageData(index * 1 + 1, false, false, previews, this.dummyClass));
 			}
 			await this.pbp.comple(this.progress);
@@ -104,83 +103,62 @@ export class PreviewProcessor {
 				parentPk: currentBinary ? currentBinary.parentPk : null,
 				isDummy: className === dummyClass,
 				isRight: isRight,
-				binary: currentBinary
-			}
-		}
+				binary: currentBinary,
+			};
+		};
 	}
 	static buildPageFrames(setting, binaries, cratePageData, dummyClass) {
 		const retFrames = [];
 		const startPage = setting.startPage;
 		const pageNum = setting.pageNum * 1; //SettingData.pageNums[setting.pageNum-1]*1;
 		const pageDirection = setting.pageDirection;
-		const isPageDirectionR2L = pageDirection === "r2l";
-		const isPageStartR = startPage === "r";
+		const isPageDirectionR2L = pageDirection === 'r2l';
+		const isPageStartR = startPage === 'r';
 		const frameNum = Math.ceil(pageNum / 2);
-		const isOdd = (pageNum % 2 === 1);
-		const isMatchPageStartSide = (pageDirection.indexOf(startPage) === 0);
-		const addPageNum = isOdd ?
-			1 :
-			isMatchPageStartSide ?
-			0 :
-			1;
+		const isOdd = pageNum % 2 === 1;
+		const isMatchPageStartSide = pageDirection.indexOf(startPage) === 0;
+		const addPageNum = isOdd ? 1 : isMatchPageStartSide ? 0 : 1;
 		const totalPageFrame = frameNum * 1 + addPageNum * 1;
-		const pageClass = "Page";
-		const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR)
-		const leftStartDummyClass = !isPageStartR || isStartFull ?
-			"" :
-			dummyClass;
-		const rightStartDummyClass = isPageStartR || isStartFull ?
-			"" :
-			dummyClass;
-		const leftEndDummyClass = (isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L))) || (!isOdd && (!isPageDirectionR2L || isStartFull)) ?
-			"" :
-			dummyClass;
-		const rightEndDummyClass = (isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L))) || (!isOdd && (isPageDirectionR2L || isStartFull)) ?
-			"" :
-			dummyClass;
+		const pageClass = 'Page';
+		const isStartFull = (isPageDirectionR2L && isPageStartR) || (!isPageDirectionR2L && !isPageStartR);
+		const leftStartDummyClass = !isPageStartR || isStartFull ? '' : dummyClass;
+		const rightStartDummyClass = isPageStartR || isStartFull ? '' : dummyClass;
+		const leftEndDummyClass =
+			(isOdd && (!isStartFull || (isStartFull && !isPageDirectionR2L))) ||
+			(!isOdd && (!isPageDirectionR2L || isStartFull))
+				? ''
+				: dummyClass;
+		const rightEndDummyClass =
+			(isOdd && (!isStartFull || (isStartFull && isPageDirectionR2L))) ||
+			(!isOdd && (isPageDirectionR2L || isStartFull))
+				? ''
+				: dummyClass;
 		const lastIndex = totalPageFrame - 1;
 		let pagNo = 0;
 		let pageOffset = 0;
 		//console.log("★lastIndex:"+lastIndex+"/pageNum:"+pageNum+"/setting.pageNum:"+setting.pageNum);
 		for (let index = 0; index < totalPageFrame; index++) {
-			const leftPageNo = (
-				isPageDirectionR2L ?
-				1 :
-				0) + pageOffset + pagNo;
-			const rightPageNo = (
-				isPageDirectionR2L ?
-				0 :
-				1) + pageOffset + pagNo;
+			const leftPageNo = (isPageDirectionR2L ? 1 : 0) + pageOffset + pagNo;
+			const rightPageNo = (isPageDirectionR2L ? 0 : 1) + pageOffset + pagNo;
 			const pagePair = [];
 			retFrames.push(pagePair);
 			//////////////////////////////////
-			if (index === 0) { //LR
-				const leftPageNoFirst = isPageDirectionR2L && isStartFull ?
-					2 :
-					isPageDirectionR2L ?
-					1 :
-					isStartFull ?
-					1 :
-					0
-				const rightPageNoFirst = isPageDirectionR2L && isStartFull ?
-					1 :
-					isPageDirectionR2L ?
-					0 :
-					isStartFull ?
-					2 :
-					1
+			if (index === 0) {
+				//LR
+				const leftPageNoFirst =
+					isPageDirectionR2L && isStartFull ? 2 : isPageDirectionR2L ? 1 : isStartFull ? 1 : 0;
+				const rightPageNoFirst =
+					isPageDirectionR2L && isStartFull ? 1 : isPageDirectionR2L ? 0 : isStartFull ? 2 : 1;
 				pagePair.push(cratePageData(leftPageNoFirst, leftStartDummyClass, false, binaries, dummyClass));
 				pagePair.push(cratePageData(rightPageNoFirst, rightStartDummyClass, true, binaries, dummyClass));
 				pageOffset = 1;
-				pagNo += isStartFull ?
-					2 :
-					1;
+				pagNo += isStartFull ? 2 : 1;
 			} else if (index === lastIndex) {
 				pagePair.push(cratePageData(leftPageNo, leftEndDummyClass, false, binaries, dummyClass));
 				pagePair.push(cratePageData(rightPageNo, rightEndDummyClass, true, binaries, dummyClass));
 			} else {
-				pagePair.push(cratePageData(leftPageNo, "", false, binaries, dummyClass));
-				pagePair.push(cratePageData(rightPageNo, "", true, binaries, dummyClass));
+				pagePair.push(cratePageData(leftPageNo, '', false, binaries, dummyClass));
+				pagePair.push(cratePageData(rightPageNo, '', true, binaries, dummyClass));
 				pagNo += 2;
 			}
 		}
@@ -194,7 +172,6 @@ export class PreviewProcessor {
 			const value = pageEntity[key];
 			pageEntity[key] = !value;
 			await this.em.Pages.save(pageEntity);
-
 		}
 		return pageEntity;
 	}

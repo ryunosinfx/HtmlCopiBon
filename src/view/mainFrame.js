@@ -1,23 +1,14 @@
-import vu from "../util/viewUtil";
-import { Header } from "./header";
-import { Menu } from "./menu";
-import { Container } from "./container";
-import { Footer } from "./footer";
-import { BaseView } from "../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../util/reactive/base/vtags";
-import { Splash } from "./parts/splash/splash";
+import { Header } from './header.js';
+import { Menu } from './menu.js';
+import { Container } from './container.js';
+import { Footer } from './footer.js';
+import { BaseView } from '../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../util/reactive/base/vtags.js';
+import { Splash } from './parts/splash/splash.js';
 export class MainFrame extends BaseView {
 	constructor(ms) {
-		super("frame", "frame");
+		super('frame', 'frame');
+		console.log('MainFrame constructor', ms);
 		this.ms = ms;
 		BaseView.setMainService(ms);
 		this.initialize();
@@ -41,31 +32,54 @@ export class MainFrame extends BaseView {
 	}
 	render(titleText) {
 		let newVnode = div('frame', ['frame'], {}, [
-			div('header', {
-				style: {
-					color: '#000'
-				}
-			}, 'hellow!!'),
-			div('menu', {
-				style: {
-					color: '#000'
-				}
-			}, 'menu!!'),
-			div('container', {
-				style: {
-					color: '#000'
-				}
-			}, [div('content', {
-				style: {
-					color: '#000'
-				}
-			}, 'content!!')], 'container!!'),
-			div('footer', {
-				style: {
-					color: '#000'
-				}
-			}, 'footer!!?'),
-			div(this.splash.id)
+			div(
+				'header',
+				{
+					style: {
+						color: '#000',
+					},
+				},
+				'hellow!!'
+			),
+			div(
+				'menu',
+				{
+					style: {
+						color: '#000',
+					},
+				},
+				'menu!!'
+			),
+			div(
+				'container',
+				{
+					style: {
+						color: '#000',
+					},
+				},
+				[
+					div(
+						'content',
+						{
+							style: {
+								color: '#000',
+							},
+						},
+						'content!!'
+					),
+				],
+				'container!!'
+			),
+			div(
+				'footer',
+				{
+					style: {
+						color: '#000',
+					},
+				},
+				'footer!!?'
+			),
+			div(this.splash.id),
 		]);
 		return newVnode;
 	}

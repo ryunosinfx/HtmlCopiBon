@@ -1,12 +1,12 @@
-import { Thread } from "../thread/thread";
+import { Thread } from '../thread/thread.js';
 // import { ImageWorker } from "../../worker/imageWorker";
 const instances = {};
-const wokerKey = "ImageWorker";
+const wokerKey = 'ImageWorker';
 export class ImageCalcBase {
 	constructor(key) {
 		this.key = key;
 		instances[key] = this;
-		this.workerKey
+		this.workerKey;
 		// this.thread = null;
 	}
 	threadInit() {
@@ -16,10 +16,10 @@ export class ImageCalcBase {
 	}
 	async execute(methodName, dataMap, isCallFromWorker) {
 		// console.log("resizeExcWithThread. execute A ImageCalcBase methodName:" + methodName + "/dataMap:" + dataMap);
-		dataMap["methodName"] = methodName;
-		dataMap["className"] = this.key;
+		dataMap['methodName'] = methodName;
+		dataMap['className'] = this.key;
 		const arrayImageData = {};
-		for (let key in dataMap) {
+		for (const key in dataMap) {
 			const data = dataMap[key];
 			if (data instanceof ImageData) {
 				arrayImageData[key] = data;
@@ -28,10 +28,11 @@ export class ImageCalcBase {
 		}
 		// console.log("resizeExcWithThread. execute B ImageCalcBase methodName:" + methodName + "/dataMap:" + dataMap);
 		const thread = new Thread();
-		const result = await thread.postMessage(wokerKey, dataMap)
-			.catch((e) => { console.error(e) });
+		const result = await thread.postMessage(wokerKey, dataMap).catch((e) => {
+			console.error(e);
+		});
 		if (result) {
-			for (let key in dataMap) {
+			for (const key in dataMap) {
 				// console.log("execute key:" + key);
 				const resultData = result[key];
 				// console.log(resultData)
@@ -65,7 +66,13 @@ export class ImageCalcBase {
 	}
 	convertImageDataToObj(target) {
 		if (target && target.data && target.data.length > 0 && target instanceof ImageData) {
-			return { width: target.width, height: target.height, data: target.data, offsetX: target.offsetX, offsetY: target.offsetY };
+			return {
+				width: target.width,
+				height: target.height,
+				data: target.data,
+				offsetX: target.offsetX,
+				offsetY: target.offsetY,
+			};
 		}
 		return target;
 	}

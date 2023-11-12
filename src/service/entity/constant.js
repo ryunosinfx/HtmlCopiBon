@@ -1,7 +1,7 @@
-const ua = navigator.userAgent.replace(/[\.0-9]+/g, "x");
+const ua = navigator.userAgent.replace(/[\.0-9]+/g, 'x');
 const domain = window.location;
 export default {
-	dbName: "CopiBon",
+	dbName: 'CopiBon',
 	ua: ua,
-	domain: domain
-}
+	domain: domain,
+};

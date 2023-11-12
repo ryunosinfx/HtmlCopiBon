@@ -1,42 +1,16 @@
-import {
-	RefObject
-} from './base/refObject'
-import {
-	Header
-} from './base/header'
-import {
-	BinaryUtil
-} from './util/binaryUtil'
-import {
-	CatalogObject
-} from './objects/catalogObject'
-import {
-	FontObject
-} from './objects/fontObject'
-import {
-	ImageContentsObject
-} from './objects/imageContentsObject'
-import {
-	ImageResourcesObject
-} from './objects/imageResourcesObject'
-import {
-	ImageXObject
-} from './objects/imageXObject'
-import {
-	InfoObject
-} from './objects/infoObject'
-import {
-	PageObject
-} from './objects/pageObject'
-import {
-	PagesObject
-} from './objects/pagesObject'
-import {
-	TextStreamObject
-} from './objects/textStreamObject'
-import {
-	TrailerObject
-} from './objects/trailerObject'
+import { RefObject } from './base/refObject.js';
+import { Header } from './base/header.js';
+import { BinaryUtil } from './util/binaryUtil.js';
+import { CatalogObject } from './objects/catalogObject.js';
+// import { FontObject } from './objects/fontObject.js';
+import { ImageContentsObject } from './objects/imageContentsObject.js';
+import { ImageResourcesObject } from './objects/imageResourcesObject.js';
+import { ImageXObject } from './objects/imageXObject.js';
+import { InfoObject } from './objects/infoObject.js';
+import { PageObject } from './objects/pageObject.js';
+import { PagesObject } from './objects/pagesObject.js';
+// import { TextStreamObject } from './objects/textStreamObject.js';
+import { TrailerObject } from './objects/trailerObject.js';
 export class PdfDocument {
 	constructor(pageSizse) {
 		RefObject.init();

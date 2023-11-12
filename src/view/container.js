@@ -1,26 +1,16 @@
-import vu from "../util/viewUtil";
-import { BaseView } from "../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../util/reactive/base/vtags";
-import { FileUploadArea } from "./content/fileUploadArea";
-import { TitleSettings } from "./content/titleSettings";
-import { ExportArea } from "./content/exportArea";
-import { FilesArea } from "./content/filesArea";
-import { ProgressBar } from "./parts/progress/progressBar";
-import { TitleMng } from "./content/titleMng";
-import { Dialog } from "./parts/dialog/dialog";
-import { MenuSelectActionCreator } from '../reduxy/action/menuSelectActionCreator'
+import { BaseView } from '../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../util/reactive/base/vtags.js';
+import { FileUploadArea } from './content/fileUploadArea.js';
+import { TitleSettings } from './content/titleSettings.js';
+import { ExportArea } from './content/exportArea.js';
+import { FilesArea } from './content/filesArea.js';
+import { ProgressBar } from './parts/progress/progressBar.js';
+import { TitleMng } from './content/titleMng.js';
+import { Dialog } from './parts/dialog/dialog.js';
+import { MenuSelectActionCreator } from '../reduxy/action/menuSelectActionCreator.js';
 export class Container extends BaseView {
 	constructor() {
-		super("container", "main-container");
+		super('container', 'main-container');
 		this.fileUploadArea = new FileUploadArea();
 		this.titleSettings = new TitleSettings();
 		this.filesArea = new FilesArea();
@@ -47,8 +37,7 @@ export class Container extends BaseView {
 	}
 	async addScrollMap(part) {
 		await part.attach(this);
-		const scrolltop = part.currentVnode.elm.getBoundingClientRect()
-			.top;
+		const scrolltop = part.currentVnode.elm.getBoundingClientRect().top;
 		this.contentsScrollTops.push(scrolltop);
 		this.contentsIdMap[scrolltop] = part.id;
 		this.timer = null;
@@ -58,33 +47,38 @@ export class Container extends BaseView {
 		for (let i = 0; i < len; i++) {
 			const range = {
 				current: this.contentsScrollTops[i],
-				next: i === (len - 1) ?
-					9999 : this.contentsScrollTops[i + 1]
+				next: i === len - 1 ? 9999 : this.contentsScrollTops[i + 1],
 			};
 			this.contentsScrollRanges.push(range);
 		}
 	}
 	render() {
-		const newVnode = div('', ['scroll-container'], {
-			style: {
-				color: '#000'
-			}
-		}, [
-			div(this.progressBar.id),
-			div(this.dialog.id),
-			div(this.titleSettings.id),
-			div(this.fileUploadArea.id),
-			div(this.filesArea.id),
-			div(this.exportArea.id),
-			div(this.titleMng.id)
-		], "container");
+		const newVnode = div(
+			'',
+			['scroll-container'],
+			{
+				style: {
+					color: '#000',
+				},
+			},
+			[
+				div(this.progressBar.id),
+				div(this.dialog.id),
+				div(this.titleSettings.id),
+				div(this.fileUploadArea.id),
+				div(this.filesArea.id),
+				div(this.exportArea.id),
+				div(this.titleMng.id),
+			],
+			'container'
+		);
 		// console.log('container!render!!!!!!!!!!!')s
 		return newVnode;
 	}
 	onScroll() {
 		return (event) => {
 			this.currentCheck(event);
-		}
+		};
 	}
 	// 現在地をチェックする
 	currentCheck(event) {
@@ -96,20 +90,19 @@ export class Container extends BaseView {
 		}
 		this.timer = setTimeout(() => {
 			// 現在のスクロール位置を取得
-			const top = this.currentVnode.elm.getBoundingClientRect()
-				.top + 120;
+			const top = this.currentVnode.elm.getBoundingClientRect().top + 120;
 			const scrolltop = this.currentVnode.elm.childNodes[0].scrollTop + top;
 			const len = this.contentsScrollRanges.length;
 			for (let i = 0; i < len; i++) {
 				const range = this.contentsScrollRanges[i];
 				// 現在のスクロール位置が、配列に格納した開始位置と終了位置の間にあるものを調べる
-				if ((i === 0 || range.current < scrolltop) && (range.next + 0) > scrolltop) {
+				if ((i === 0 || range.current < scrolltop) && range.next + 0 > scrolltop) {
 					const id = this.contentsIdMap[range.current];
 					const action = MenuSelectActionCreator.creatSelectAction(this, { id: id });
 					this.dispatch(action);
 					return;
 				}
-			};
-		}, 100)
+			}
+		}, 100);
 	}
 }

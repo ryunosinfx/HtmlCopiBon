@@ -1,19 +1,10 @@
-import { BaseView } from "../../../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../../../util/reactive/base/vtags";
-import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
-import { Dialog } from "../dialog/dialog";
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
+import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator.js';
+import { Dialog } from '../dialog/dialog.js';
 export class DeleteExportOneButton extends BaseView {
 	constructor() {
-		super("DeleteExportOneButton", "DeleteExportOneButton", true);
+		super('DeleteExportOneButton', 'DeleteExportOneButton', true);
 		this.storeKey = ExportActionCreator.getStoreKey();
 		this.storePdfDLKey = ExportActionCreator.getStorePdfDLKey();
 		this.storeZipDLKey = ExportActionCreator.getStoreZipDLKey();
@@ -22,11 +13,16 @@ export class DeleteExportOneButton extends BaseView {
 	}
 
 	render(store, actionData) {
-		return div(this.id, [this.id + "Frame"], {
-			on: {
-				click: this.click()
-			}
-		}, [div("", ["button"], "delete Exports!")]);
+		return div(
+			this.id,
+			[this.id + 'Frame'],
+			{
+				on: {
+					click: this.click(),
+				},
+			},
+			[div('', ['button'], 'delete Exports!')]
+		);
 	}
 	async onAfterAttach(store, data) {}
 
@@ -39,13 +35,10 @@ export class DeleteExportOneButton extends BaseView {
 	}
 	click() {
 		return async (event) => {
-			const result = await Dialog.opneConfirm("Let's start!", "delete exports?");
-			if (result) {
-				const action = ExportActionCreator.creatRemoveAction();
-				this.dispatch(action);
-			}
+			if (await Dialog.opneConfirm("Let's start!", 'delete exports?'))
+				this.dispatch(ExportActionCreator.creatRemoveAction());
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 }

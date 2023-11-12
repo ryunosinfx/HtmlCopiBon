@@ -1,36 +1,26 @@
-import { BaseView } from "../../../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../../../util/reactive/base/vtags";
-import { unixTimeToDateFormat } from "../../../util/timeUtil";
-import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator'
-import { FileDownloader } from "../../../util/fileDownloader";
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
+import { ExportActionCreator } from '../../../reduxy/action/exportActionCreator.js';
 export class DownloadFullBackupZipButton extends BaseView {
 	constructor() {
-		super("DownloadFullBackupZipButton", "DownloadFullBackupZipButton", true);
+		super('DownloadFullBackupZipButton', 'DownloadFullBackupZipButton', true);
 		this.storeFullBackupZipDLKey = ExportActionCreator.getStoreFullBackupZipDLKey();
-		this.stateId = this.id + "Button";
+		this.stateId = this.id + 'Button';
 		this.isExported = false;
 	}
 
 	render(store, actionData) {
-		const text = div(this.stateId, [
-			"button", "enable"
-		], "-Download Full Backup Zip-");
-		const result = div(this.id, [
-			this.id + "Frame"
-		], {
-			on: {
-				click: this.click()
-			}
-		}, [text]);
+		const text = div(this.stateId, ['button', 'enable'], '-Download Full Backup Zip-');
+		const result = div(
+			this.id,
+			[this.id + 'Frame'],
+			{
+				on: {
+					click: this.click(),
+				},
+			},
+			[text]
+		);
 		// alert("render this.isExported :" + this.isExported+'/this.id:'+this.id);
 		return result;
 	}
@@ -44,16 +34,20 @@ export class DownloadFullBackupZipButton extends BaseView {
 			const pdf = data.pdf;
 			if (pdf) {
 				// const exportString = zip.name + " / " + zip.orderName + " / " + unixTimeToDateFormat(zip.updateDate);
-				const text = div(this.stateId, [
-					"button", "enable"
-				], {
-					on: {
-						click: this.click()
-					}
-				}, "Download Full Backup Zip!");
-				this.prePatch("#" + this.stateId, text);
+				const text = div(
+					this.stateId,
+					['button', 'enable'],
+					{
+						on: {
+							click: this.click(),
+						},
+					},
+					'Download Full Backup Zip!'
+				);
+				this.prePatch('#' + this.stateId, text);
 			}
-		} else {}
+		} else {
+		}
 	}
 	click() {
 		return (event) => {
@@ -61,6 +55,6 @@ export class DownloadFullBackupZipButton extends BaseView {
 			this.dispatch(action);
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 }

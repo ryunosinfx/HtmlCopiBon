@@ -1,25 +1,14 @@
-import vu from "../viewUtil";
-import { patch } from './base/preLoader'
-import { ElementSelector } from './elementSelector'
-import { ActionCreator } from './actionCreator'
-import { ViewAttachQueue } from './viewAttachQueue'
-import { ActionDispatcher } from './actionDispatcher'
-import { Store } from './store'
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "./base/vtags";
-import { ViewBaseReducer } from './viewBaseReducer'
+import vu from '../viewUtil.js';
+import { ElementSelector } from './elementSelector.js';
+import { ActionCreator } from './actionCreator.js';
+import { ViewAttachQueue } from './viewAttachQueue.js';
+import { ActionDispatcher } from './actionDispatcher.js';
+import { Store } from './store.js';
+import { a, div, li, ul, img, span, input, label } from './base/vtags.js';
 const viewAttachQueue = new ViewAttachQueue();
 const nodeFrame = {
 	rootVnode: null,
-	ms: null
+	ms: null,
 };
 export class BaseView {
 	constructor(id, className, isNotRenderWrap = false) {
@@ -30,17 +19,17 @@ export class BaseView {
 		this.ms = nodeFrame.ms;
 		this.es = new ElementSelector();
 		const store = Store.getStore();
-		this.onViewLoad(store)
+		this.onViewLoad(store);
 		//this.preRender(id, className);
 		this.currentVnode = null;
-		this.onViewLoaded(store)
+		this.onViewLoaded(store);
 		this.updateReactiveCallCount = 0;
 		this.updateReactiveCallTimer = null;
 		this.updateReactivePromise = new Map();
 		this.updateCount = 0;
 	}
 	static ModalWindowClass() {
-		return "ModalWindow";
+		return 'ModalWindow';
 	}
 	static setRootVnode(rootVnode) {
 		nodeFrame.rootVnode = rootVnode;
@@ -54,21 +43,23 @@ export class BaseView {
 		return this.patchFromOtherVnode(nodeFrame.rootVnode, selector, newVnode);
 	}
 	initialPatch() {
-		let elements = document.getElementsByTagName("body");
+		let elements = document.getElementsByTagName('body');
 		elements[0].innerHTML = '<div id="rootNodeA"><p>ｘ</p></div>';
 		let currentVnode = document.getElementById('rootNodeA');
 		if (this.updateCount < 1) {
 			this.patchFromOtherVnode(currentVnode, null, this.render());
-			this.updateReactiveTheTargetView({ oldVnode: this.currentVnode, selector: null, isOrverride: true })
-				.catch((e) => {
-					console.error(e)
-				});
+			this.updateReactiveTheTargetView({ oldVnode: this.currentVnode, selector: null, isOrverride: true }).catch(
+				(e) => {
+					console.error(e);
+				}
+			);
 		}
 	}
 	patchFromOtherVnode(currentVnode, selector, newVnode) {
-		let currentRootNode = selector !== null ? //for firstTime
-			nodeFrame.rootVnode :
-			currentVnode;
+		const currentRootNode =
+			selector !== null //for firstTime
+				? nodeFrame.rootVnode
+				: currentVnode;
 		const result = this.es.patch(currentRootNode, selector, newVnode);
 		result.data['name'] = this.name + Date.now();
 		nodeFrame.rootVnode = result;
@@ -105,18 +96,15 @@ export class BaseView {
 		if (isOrverride) {
 			// console.warn("isOrverride:"+isOrverride+"/this.currentVnode:"+this.currentVnode+"/selector:"+selector);
 			this.onPreViewBuild(oldVnode, store);
-			this.currentVnode = !this.currentVnode ?
-				this.renderWrap(store) :
-				this.currentVnode;
+			this.currentVnode = !this.currentVnode ? this.renderWrap(store) : this.currentVnode;
 			// console.warn(this.currentVnode);
 		} else {
 			this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
 		}
 		// console.log("XXXXXXXXXXXX01 selector:"+selector+"/this.updateCount:"+this.updateCount);
-		await this.onViewShow(store, actionData)
-			.catch((e) => {
-				console.error(e)
-			});
+		await this.onViewShow(store, actionData).catch((e) => {
+			console.error(e);
+		});
 		// console.log("XXXXXXXXXXXX02 selector:"+selector+"/isOrverride:"+isOrverride+"/oldVnode:"+oldVnode);
 		if (isOrverride) {
 			if (oldVnode) {
@@ -132,66 +120,68 @@ export class BaseView {
 		this.updateCount++;
 		// console.log("XXXXXXXXXXXX04 this.id:" + this.id+"/this.updateCount:"+this.updateCount);
 		// console.log(action);
-		if (this.updateCount <= 2 && (!action || action.type === "Attach")) {
+		if (this.updateCount <= 2 && (!action || action.type === 'Attach')) {
 			this.updateCount++;
 			await this.onAfterAttachWrap(store, actionData);
 		} else {
 			setTimeout(() => {
-				this.updateCount = 0
+				this.updateCount = 0;
 			}, 2000);
 		}
-		await this.onViewShown(store, actionData)
-			.catch((e) => {
-				console.error(e)
-			});
+		await this.onViewShown(store, actionData).catch((e) => {
+			console.error(e);
+		});
 	}
 	updateReactive(store, actionData) {
-		return new Promise(
-			(resolve, reject) => {
-				// this.updateReactiveCallCount++;
-				// const storePagesKey ="pagesData"
-				//       console.error("updateReactive:"+(store[storePagesKey]?store[storePagesKey].length:null));
-				if (this.updateReactiveCallTimer) {
-					const clearTimer = this.updateReactiveCallTimer;
-					const pre = this.updateReactivePromise.get(clearTimer);
-					clearTimeout(this.updateReactiveCallTimer);
-					pre.resolve();
-					setTimeout(() => { this.updateReactivePromise.delete(clearTimer) })
-				}
-				this.updateReactiveCallTimer = setTimeout(() => {
-					const oldVnode = store.oldVnode;
-					const selector = store.selector;
-					const isOrverride = store.isOrverride;
-					this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
-					// console.log(nodeFrame.rootVnode);
-					// console.error(this.currentVnode);
-					// console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
-					const promiseOnViewShow = this.onViewShow(store, actionData);
-					// console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-					promiseOnViewShow.then(
-						() => {
-							this.patch("#" + this.id, this.currentVnode);
-							// console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-							//this.onAfterAttach(store);
-							// console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
-							const promiseOnViewShown = this.onViewShown(store, actionData);
-							promiseOnViewShown.then(
-								() => { resolve() },
-								(e) => {
-									console.error(e);
-									reject(e)
-								}
-							);
-						}, (e) => {
-							console.error(e);
-							reject(e)
-						}
-					);
-					// console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+		return new Promise((resolve, reject) => {
+			// this.updateReactiveCallCount++;
+			// const storePagesKey ="pagesData"
+			//       console.error("updateReactive:"+(store[storePagesKey]?store[storePagesKey].length:null));
+			if (this.updateReactiveCallTimer) {
+				const clearTimer = this.updateReactiveCallTimer;
+				const pre = this.updateReactivePromise.get(clearTimer);
+				clearTimeout(this.updateReactiveCallTimer);
+				pre.resolve();
+				setTimeout(() => {
+					this.updateReactivePromise.delete(clearTimer);
 				});
-				this.updateReactivePromise.set(this.updateReactiveCallTimer, { resolve, reject })
 			}
-		)
+			this.updateReactiveCallTimer = setTimeout(() => {
+				const oldVnode = store.oldVnode;
+				const selector = store.selector;
+				const isOrverride = store.isOrverride;
+				this.currentVnode = this.es.getElements(nodeFrame.rootVnode, '#' + this.id)[0];
+				// console.log(nodeFrame.rootVnode);
+				// console.error(this.currentVnode);
+				// console.log('A0101 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/id:' + this.id);
+				const promiseOnViewShow = this.onViewShow(store, actionData);
+				// console.log('A102 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+				promiseOnViewShow.then(
+					() => {
+						this.patch('#' + this.id, this.currentVnode);
+						// console.log('A103 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+						//this.onAfterAttach(store);
+						// console.log('A104 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+						const promiseOnViewShown = this.onViewShown(store, actionData);
+						promiseOnViewShown.then(
+							() => {
+								resolve();
+							},
+							(e) => {
+								console.error(e);
+								reject(e);
+							}
+						);
+					},
+					(e) => {
+						console.error(e);
+						reject(e);
+					}
+				);
+				// console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
+			});
+			this.updateReactivePromise.set(this.updateReactiveCallTimer, { resolve, reject });
+		});
 	}
 	init() {}
 	// attache to
@@ -208,7 +198,7 @@ export class BaseView {
 		}
 		//
 		const store = Store.getStore();
-		this.onPreViewBuild(store)
+		this.onPreViewBuild(store);
 		this.activeViewTree = viewAttachQueue.addActiveView(parentView, this, this.activeViewTree);
 		// console.log('A08---attach ==selector:' + taregetSelecotor + '/parentView:' + parentView.id + "/this.id:" + this.id);
 		const action = ActionCreator.creatAttachAction(parentView, this, data);
@@ -227,9 +217,7 @@ export class BaseView {
 	}
 	getElementById(id) {
 		const elements = this.es.getElements(this.currentVnode, '#' + id);
-		return elements && elements.length > 0 ?
-			elements[0] :
-			null;
+		return elements && elements.length > 0 ? elements[0] : null;
 	}
 	async onAfterAttachWrap(store, actionData) {
 		if (this.updateCount > 2) {
@@ -279,15 +267,15 @@ export class BaseView {
 		// console.log('m006 baseView.onViewHidden nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
 	}
 	render() {
-		const elm = vu.create("BaseView", "BaseView");
+		const elm = vu.create('BaseView', 'BaseView');
 		return elm;
 	}
 	renderWrap(store, data) {
 		// console.log('renderWrap'+" id:"+this.id+"/this.isNotRenderWrap:"+this.isNotRenderWrap);
-		const classNames = this.className ? Array.isArray(this.className) ? this.className : [this.className] : [];
-		const newVnode = this.isNotRenderWrap ?
-			this.render(store, data) :
-			div(this.id, classNames, {}, [this.render(store, data)]);
+		const classNames = this.className ? (Array.isArray(this.className) ? this.className : [this.className]) : [];
+		const newVnode = this.isNotRenderWrap
+			? this.render(store, data)
+			: div(this.id, classNames, {}, [this.render(store, data)]);
 		// console.log(newVnode)
 		return newVnode;
 	}

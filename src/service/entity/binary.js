@@ -1,5 +1,5 @@
-import { BaseEntity } from "./baseEntity";
-const EnitiyName = "Binary";
+import { BaseEntity } from './baseEntity.js';
+const EnitiyName = 'Binary';
 export class Binary extends BaseEntity {
 	constructor(arrayBuffer) {
 		super(EnitiyName);
@@ -12,7 +12,7 @@ export class Binary extends BaseEntity {
 	}
 	set ab(_ab) {
 		if (buffer && !buffer.byteLength) {
-			alert("not arrayBuffer!");
+			alert('not arrayBuffer!');
 		}
 		this._ab = _ab;
 	}
@@ -21,9 +21,8 @@ export class Binary extends BaseEntity {
 	}
 
 	load(obj) {
-		super.load(obj)
-		this._ab = new Uint8Array(this._ab)
-			.buffer
+		super.load(obj);
+		this._ab = new Uint8Array(this._ab).buffer;
 	}
 	create() {
 		return new Binary();

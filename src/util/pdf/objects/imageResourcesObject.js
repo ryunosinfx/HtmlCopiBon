@@ -1,12 +1,4 @@
-import {
-	RefObject
-} from '../base/refObject'
-import {
-	BinaryUtil
-} from '../util/binaryUtil'
-import {
-	UnicodeEncoder
-} from '../util/unicodeEncoder'
+import { RefObject } from '../base/refObject.js';
 export class ImageResourcesObject extends RefObject {
 	constructor(imageId) {
 		super();

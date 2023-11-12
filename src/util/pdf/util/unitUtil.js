@@ -8,7 +8,7 @@ export class UnitUtil {
 	}
 	static convertMmToPointArray(mmArray) {
 		const retArray = [];
-		for (let mm of mmArray) {
+		for (const mm of mmArray) {
 			retArray.push(UnitUtil.convertMmToPoint(mm));
 		}
 		return retArray;

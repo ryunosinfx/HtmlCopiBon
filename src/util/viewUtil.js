@@ -3,8 +3,8 @@ export default class ViewUtil {
 
 	static getCurrentPointedElm(event) {
 		const touches = event.touches;
-		const ex = touches ? touches[0] ? touches[0].pageX : 0 : event.pageX;
-		const ey = touches ? touches[0] ? touches[0].pageY : 0 : event.pageY;
+		const ex = touches ? (touches[0] ? touches[0].pageX : 0) : event.pageX;
+		const ey = touches ? (touches[0] ? touches[0].pageY : 0) : event.pageY;
 		const wox = window.pageXOffset;
 		const woy = window.pageYOffset;
 		// console.log("event.name+:" + event.name + "/ex:" + ex + "/ey:" + ey + "/wox:" + wox + "/woy:" + woy);
@@ -14,7 +14,7 @@ export default class ViewUtil {
 	}
 	static clearSideElmClass(elm, className) {
 		if (!elm || !elm.style) {
-			return
+			return;
 		}
 		elm.style.opacity = '1';
 		const childNodes = elm.parentNode.childNodes;
@@ -23,54 +23,54 @@ export default class ViewUtil {
 			col.classList.remove(className);
 		}
 	}
-	static create(id, clasｓName, text) {
-		return ViewUtil.ce("div", id, clasｓName, text);
+	static create(id, className, text) {
+		return ViewUtil.ce('div', id, className, text);
 	}
-	static createInput(id, clasｓName, text) {
-		return ViewUtil.ce("input", id, clasｓName, text);
+	static createInput(id, className, text) {
+		return ViewUtil.ce('input', id, className, text);
 	}
-	static createText(id, clasｓName, text) {
-		return ViewUtil.ce("text", id, clasｓName, text);
+	static createText(id, className, text) {
+		return ViewUtil.ce('text', id, className, text);
 	}
-	static createFile(id, clasｓName, text) {
-		return ViewUtil.ce("input", id, clasｓName, text, "file");
+	static createFile(id, className, text) {
+		return ViewUtil.ce('input', id, className, text, 'file');
 	}
-	static createCanvas(id, clasｓName, text) {
-		return ViewUtil.ce("canvas", id, clasｓName, text);
+	static createCanvas(id, className, text) {
+		return ViewUtil.ce('canvas', id, className, text);
 	}
-	static createImage(id, clasｓName, text) {
-		return ViewUtil.ce("img", id, clasｓName, text);
+	static createImage(id, className, text) {
+		return ViewUtil.ce('img', id, className, text);
 	}
-	static createUl(id, clasｓName, text) {
-		return ViewUtil.ce("ul", id, clasｓName, text);
+	static createUl(id, className, text) {
+		return ViewUtil.ce('ul', id, className, text);
 	}
-	static createLabel(id, clasｓName, text, forId) {
-		const elm = ViewUtil.ce("label", id, clasｓName, text);
-		elm.setAttribute("for", forId);
+	static createLabel(id, className, text, forId) {
+		const elm = ViewUtil.ce('label', id, className, text);
+		elm.setAttribute('for', forId);
 		return elm;
 	}
-	static createLi(id, clasｓName, text) {
-		return ViewUtil.ce("li", id, clasｓName, text);
+	static createLi(id, className, text) {
+		return ViewUtil.ce('li', id, className, text);
 	}
-	static createSpan(id, clasｓName, text) {
-		return ViewUtil.ce("span", id, clasｓName, text);
+	static createSpan(id, className, text) {
+		return ViewUtil.ce('span', id, className, text);
 	}
-	static createStrong(id, clasｓName, text) {
-		return ViewUtil.ce("strong", id, clasｓName, text);
+	static createStrong(id, className, text) {
+		return ViewUtil.ce('strong', id, className, text);
 	}
-	static createA(id, clasｓName, text) {
-		return ViewUtil.ce("a", id, clasｓName, text);
+	static createA(id, className, text) {
+		return ViewUtil.ce('a', id, className, text);
 	}
-	static ce(tagName, id, clasｓName, text, type) {
+	static ce(tagName, id, className, text, type) {
 		const elm = document.createElement(tagName);
-		elm.className = clasｓName;
+		elm.className = className;
 		if (id) {
 			elm.id = id;
 		}
-		if (tagName === "input" && text) {
-			elm.setAttribute("value", text);
+		if (tagName === 'input' && text) {
+			elm.setAttribute('value', text);
 			if (type) {
-				elm.setAttribute("type", type);
+				elm.setAttribute('type', type);
 			}
 		} else if (text) {
 			elm.textContent = text;
@@ -96,14 +96,14 @@ export default class ViewUtil {
 		}
 	}
 	static getBodyElm() {
-		return document.getElementsByTagName("body")[0];
+		return document.getElementsByTagName('body')[0];
 	}
 	static attachBody(elm) {
-		document.getElementsByTagName("body")[0].appendChild(elm);
+		document.getElementsByTagName('body')[0].appendChild(elm);
 	}
 	static detacthBodyById(id) {
 		const child = documet.getElementById(id);
-		document.getElementsByTagName("body")[0].removeChild(child);
+		document.getElementsByTagName('body')[0].removeChild(child);
 	}
 	static removeChild(child) {
 		child.parentNode.removeChild(child);
@@ -121,7 +121,7 @@ export default class ViewUtil {
 		}
 	}
 	static setStyles(elm, styleObj) {
-		for (let name in styleObj) {
+		for (const name in styleObj) {
 			elm.style[name] = styleObj[name];
 		}
 	}
@@ -129,7 +129,7 @@ export default class ViewUtil {
 		elm.textContent = text;
 	}
 	static emit(elm, eventType, isBubbling = true, isCancelable = true) {
-		const event = document.createEvent("HTMLEvents");
+		const event = document.createEvent('HTMLEvents');
 		event.initEvent(eventType, isBubbling, isCancelable);
 		return elm.dispatchEvent(event);
 	}

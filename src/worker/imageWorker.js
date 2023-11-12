@@ -1,7 +1,7 @@
-import { BaseWorker } from "./baseWorker";
-import { ImageMerger } from "../util/image/imageMerger";
-import { ImageResizer } from "../util/image/imageResizer";
-const key = "ImageWorker";
+import { BaseWorker } from './baseWorker.js';
+import { ImageMerger } from '../util/image/imageMerger.js';
+import { ImageResizer } from '../util/image/imageResizer.js';
+const key = 'ImageWorker';
 export class ImageWorker extends BaseWorker {
 	constructor() {
 		super(key);
@@ -18,11 +18,10 @@ export class ImageWorker extends BaseWorker {
 	async execute(srcData) {
 		// console.log("ImageWorker execute key:" + this.key);
 		// console.log(srcData);
-		const result = await this.call(srcData)
-			.catch((e) => {
-				console.log(e)
-				console.error(e.stack);
-			});
+		const result = await this.call(srcData).catch((e) => {
+			console.log(e);
+			console.error(e.stack);
+		});
 		return result;
 	}
 	async call(srcData) {
@@ -32,16 +31,15 @@ export class ImageWorker extends BaseWorker {
 		if (instance && instance[methodName]) {
 			try {
 				// console.warn("ImageWorker execute call");
-				await instance[methodName](srcData)
-					.catch((e) => {
-						console.log(e)
-						console.error(e.stack);
-					});
+				await instance[methodName](srcData).catch((e) => {
+					console.log(e);
+					console.error(e.stack);
+				});
 			} catch (e) {
 				console.erroe(e);
 			}
 		}
-		return srcData
-	};
+		return srcData;
+	}
 }
 const aImageWorker = new ImageWorker();

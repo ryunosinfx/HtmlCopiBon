@@ -1,13 +1,13 @@
-import {ActionCreator} from '../../util/reactive/actionCreator'
+import { ActionCreator } from '../../util/reactive/actionCreator.js';
 export class SplashActionCreator {
-  constructor() {}
-  static creatAddAction(targetView, data, storeKey = null) {
-    return ActionCreator.createBaseAction("addSplashr", targetView, data, storeKey);
-  }
-  static creatRemoveAction(targetView, data, storeKey = null) {
-    return ActionCreator.createBaseAction("removeSplash", targetView, data, storeKey);
-  }
-  static getStoreKey(){
-    return "splash";
-  }
+	constructor() {}
+	static creatAddAction(targetView, data, storeKey = null) {
+		return ActionCreator.createBaseAction('addSplashr', targetView, data, storeKey);
+	}
+	static creatRemoveAction(targetView, data, storeKey = null) {
+		return ActionCreator.createBaseAction('removeSplash', targetView, data, storeKey);
+	}
+	static getStoreKey() {
+		return 'splash';
+	}
 }

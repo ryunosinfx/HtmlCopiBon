@@ -1,22 +1,12 @@
-import vu from "../../../util/viewUtil";
-import bc from "../../../util/binaryConverter";
-import { BaseView } from "../../../util/reactive/baseView";
-import {
-	a,
-	div,
-	li,
-	ul,
-	img,
-	span,
-	input,
-	label
-} from "../../../util/reactive/base/vtags";
-import { PreviewReducer } from '../../../reduxy/reducer/previewReducer'
-import { ImageActionCreator } from '../../../reduxy/action/imageActionCreator'
-import { PreviewActionCreator } from '../../../reduxy/action/previewActionCreator'
+import bc from '../../../util/binaryConverter.js';
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
+import { PreviewReducer } from '../../../reduxy/reducer/previewReducer.js';
+import { ImageActionCreator } from '../../../reduxy/action/imageActionCreator.js';
+import { PreviewActionCreator } from '../../../reduxy/action/previewActionCreator.js';
 export class Preview extends BaseView {
 	constructor() {
-		super("Preview", ["Preview", BaseView.ModalWindowClass()], true);
+		super('Preview', ['Preview', BaseView.ModalWindowClass()], true);
 		this.storeKey = PreviewActionCreator.getStorePreviewKey();
 		this.storeUpdateKey = PreviewActionCreator.getStoreUpdatePreviewKey();
 		this.previewOpenAction = PreviewActionCreator.creatOpenAction();
@@ -26,39 +16,48 @@ export class Preview extends BaseView {
 		this.list = [];
 		this.currentSetNum = 0;
 		this.isSingle = true;
-		this.classNameRight = "previeRight";
-		this.classNameLeft = "previeLeft";
-		this.dummyClassName = "dummy";
+		this.classNameRight = 'previeRight';
+		this.classNameLeft = 'previeLeft';
+		this.dummyClassName = 'dummy';
 		this.closeActionType = this.previewCloseAction.type;
 	}
 	onAfterAttach(store, data) {
 		PreviewReducer.register();
 	}
 	render() {
-		const viewFrame = div('', ['previewFrame', BaseView.ModalWindowClass()], [
-			div('', ['previewLeft'], "<"),
-			div('', ['previewFrameA'], {
+		const viewFrame = div(
+			'',
+			['previewFrame', BaseView.ModalWindowClass()],
+			[
+				div('', ['previewLeft'], '<'),
+				div('', ['previewFrameA'], {
+					style: {
+						width: '100%',
+					},
+				}),
+				div('', ['previewRight'], '>'),
+			]
+		);
+		return div(
+			this.id,
+			['Preview'],
+			{
 				style: {
-					width: "100%"
-				}
-			}),
-			div('', ['previewRight'], ">")
-		])
-		return div(this.id, ["Preview"], {
-			style: {
-				display: "none"
+					display: 'none',
+				},
+				on: {
+					click: this.beClose(),
+				},
 			},
-			on: {
-				click: this.beClose()
-			}
-		}, [viewFrame]);
+			[viewFrame]
+		);
 	}
 	async onViewShow(store, actionData) {
 		const data = store[this.storeKey];
 		const dataUpdate = store[this.storeUpdateKey];
 		if (dataUpdate && this.list) {
 			const { page, pk } = dataUpdate;
-			for (let index in this.list) {
+			for (const index in this.list) {
 				const pageData = this.list[index];
 				if (Array.isArray(pageData)) {
 					const one = pageData[0];
@@ -81,7 +80,6 @@ export class Preview extends BaseView {
 					}
 				}
 			}
-
 		}
 		if (data) {
 			const { isSingle, nowSetNum, list, type, setting } = data;
@@ -101,7 +99,7 @@ export class Preview extends BaseView {
 			}
 			this.currentVnode.elm.style.display = 'block';
 			const pageSetCount = this.list.length;
-			this.isR2L = this.setting.pageDirection === "r2l";
+			this.isR2L = this.setting.pageDirection === 'r2l';
 			// console.log(this.list)
 			// alert(this.list+"/isR2L:"+isR2L);
 			// alert("list:"+this.list+"/isSingle:"+isSingle);
@@ -133,86 +131,88 @@ export class Preview extends BaseView {
 		// console.warn("showPreview isR2L:" + isR2L);
 		const pageSet = list[pageNo - 1];
 		let mainView = null;
-		const leftText = isR2L ?
-			"Next" :
-			"Back";
-		const rightText = isR2L ?
-			"Back" :
-			"Next";
-		const left = div('', [
-			'previewLeft', "button"
-		], {
-			on: {
-				click: this.goNextOrBack(false)
-			}
-		}, [
-			span('', [
-				"dummy", "button", "symbol"
-			], ""),
-			span('', [
-				leftText, "button", "symbol"
-			], "<"),
-			span('', [
-				leftText, "button", "text"
-			], leftText)
-		]);
-		const right = div('', [
-			'previewRight', "button"
-		], {
-			on: {
-				click: this.goNextOrBack(true)
-			}
-		}, [
-			span('', [
-				"close", "button", "symbol"
-			], { on: { click: this.beClose() } }, "X"),
-			span('', [
-				rightText, "button", "symbol"
-			], ">"),
-			span('', [
-				rightText, "button", "text"
-			], rightText)
-		]);
+		const leftText = isR2L ? 'Next' : 'Back';
+		const rightText = isR2L ? 'Back' : 'Next';
+		const left = div(
+			'',
+			['previewLeft', 'button'],
+			{
+				on: {
+					click: this.goNextOrBack(false),
+				},
+			},
+			[
+				span('', ['dummy', 'button', 'symbol'], ''),
+				span('', [leftText, 'button', 'symbol'], '<'),
+				span('', [leftText, 'button', 'text'], leftText),
+			]
+		);
+		const right = div(
+			'',
+			['previewRight', 'button'],
+			{
+				on: {
+					click: this.goNextOrBack(true),
+				},
+			},
+			[
+				span('', ['close', 'button', 'symbol'], { on: { click: this.beClose() } }, 'X'),
+				span('', [rightText, 'button', 'symbol'], '>'),
+				span('', [rightText, 'button', 'text'], rightText),
+			]
+		);
 		if (isSingle) {
 			// console.log(pageSet)
 			// alert(pageSet+"/pageNo:"+pageNo);
 			const imgVnode = this.buildImageArea(pageSet, pageNo, null);
 			//alert("isSingle:"+isSingle+"/pageNo:"+pageNo+"/dataUri:"+dataUri);
-			mainView = div('', ['preview_single'], {
-				style: {
-					width: "100%"
+			mainView = div(
+				'',
+				['preview_single'],
+				{
+					style: {
+						width: '100%',
+					},
+					on: {
+						click: this.doNothing(),
+					},
 				},
-				on: {
-					click: this.doNothing()
-				}
-			}, [imgVnode]);
+				[imgVnode]
+			);
 		} else {
 			// console.log(list);
 			// alert("AAAlist:"+list+"/isSingle:"+isSingle);
-			const lNo = (pageNo - 1) * 2 + (
-				isR2L ?
-				1 :
-				0);
-			const rNo = (pageNo - 1) * 2 + (
-				isR2L ?
-				0 :
-				1);
+			const lNo = (pageNo - 1) * 2 + (isR2L ? 1 : 0);
+			const rNo = (pageNo - 1) * 2 + (isR2L ? 0 : 1);
 			const one = pageSet[0];
 			const two = pageSet[1];
 			const imgVnodeL = this.buildImageArea(one, lNo, false);
 			const imgVnodeR = this.buildImageArea(two, rNo, true);
-			mainView = div('', ['preview_dual'], {
-				style: {
-					width: "100%"
+			mainView = div(
+				'',
+				['preview_dual'],
+				{
+					style: {
+						width: '100%',
+					},
+					on: {
+						click: this.doNothing(),
+					},
 				},
-				on: {
-					click: this.doNothing()
-				}
-			}, [imgVnodeL, imgVnodeR]);
+				[imgVnodeL, imgVnodeR]
+			);
 		}
-		this.prePatch(".previewFrame", div("", ["previewFrame", BaseView.ModalWindowClass()], {
-			style: {}
-		}, [left, mainView, right]));
+		this.prePatch(
+			'.previewFrame',
+			div(
+				'',
+				['previewFrame', BaseView.ModalWindowClass()],
+				{
+					style: {},
+				},
+				[left, mainView, right]
+			)
+		);
 	}
 	buildImageArea(pageData, pageNo, isRight) {
 		const pageEnitiy = pageData.parent;
@@ -222,74 +222,66 @@ export class Preview extends BaseView {
 		const binalyEnitiy = pageData.binary;
 		const isForceColor = pageEnitiy ? pageEnitiy.isForceColor : null;
 		const isNoCropping = pageEnitiy ? pageEnitiy.isNoCropping : null;
-		const isForceColorClass = isForceColor ?
-			"enable" :
-			"disable";
-		const isNoCroppingClass = isNoCropping ?
-			"enable" :
-			"disable";
-		const currentClass = isRight === null ?
-			"" :
-			(
-				isRight ?
-				this.classNameRight :
-				this.classNameLeft);
+		const isForceColorClass = isForceColor ? 'enable' : 'disable';
+		const isNoCroppingClass = isNoCropping ? 'enable' : 'disable';
+		const currentClass = isRight === null ? '' : isRight ? this.classNameRight : this.classNameLeft;
 		if (binalyEnitiy) {
 			const dataUri = bc.arrayBuffer2DataURI(binalyEnitiy._ab);
 			// console.log(dataUri);
-			const imgVnode = img(binalyEnitiy.pk + "_preview", "preview_" + pageNo, "", dataUri, {});
-			const pageNoText = div('', ["pageNo"], {}, "pageNo:" + pageNo);
-			const checkForceColor = div('', [
-				"checkForceColor", isForceColorClass
-			], {
-				on: {
-					click: this.onCheckUpdate("isForceColor", isRight)
-				}
-			}, "isForceColor");
-			const checkNoCropping = div('', [
-				"checkNoCropping", isNoCroppingClass
-			], {
-				on: {
-					click: this.onCheckUpdate("isNoCropping", isRight)
-				}
-			}, "isNoCropping:");
-			const pageSide = isRight === null ? "" : isRight ? "right" : "left";
-			const info = div('', ['previewInfo'], {}, [pageNoText, div('', ["options"], [checkForceColor, checkNoCropping])]);
-			return div('', ['previewImageFrame'], {}, [info, div('', ["img", pageSide], [imgVnode])]);
+			const imgVnode = img(binalyEnitiy.pk + '_preview', 'preview_' + pageNo, '', dataUri, {});
+			const pageNoText = div('', ['pageNo'], {}, 'pageNo:' + pageNo);
+			const checkForceColor = div(
+				'',
+				['checkForceColor', isForceColorClass],
+				{
+					on: {
+						click: this.onCheckUpdate('isForceColor', isRight),
+					},
+				},
+				'isForceColor'
+			);
+			const checkNoCropping = div(
+				'',
+				['checkNoCropping', isNoCroppingClass],
+				{
+					on: {
+						click: this.onCheckUpdate('isNoCropping', isRight),
+					},
+				},
+				'isNoCropping:'
+			);
+			const pageSide = isRight === null ? '' : isRight ? 'right' : 'left';
+			const info = div('', ['previewInfo'], {}, [
+				pageNoText,
+				div('', ['options'], [checkForceColor, checkNoCropping]),
+			]);
+			return div('', ['previewImageFrame'], {}, [info, div('', ['img', pageSide], [imgVnode])]);
 		} else {
 			const isDummy = binalyEnitiy === undefined;
-			const noimageMsg = isDummy ?
-				"no Page" :
-				"no image set";
-			const dummyClass = isDummy ?
-				this.dummyClassName :
-				"";
-			const pageNoString = isDummy ?
-				"----" :
-				"pageNo:" + pageNo;
+			const noimageMsg = isDummy ? 'no Page' : 'no image set';
+			const dummyClass = isDummy ? this.dummyClassName : '';
+			const pageNoString = isDummy ? '----' : 'pageNo:' + pageNo;
 			const imgVnode = div('', ['previewInfo'], {}, noimageMsg);
 			const info = div('', ['previewInfo'], {}, pageNoString);
-			return div('', [
-				'previewImageFrame', dummyClass
-			], {}, [info, imgVnode]);
+			return div('', ['previewImageFrame', dummyClass], {}, [info, imgVnode]);
 		}
 	}
 	onCheckUpdate(key, isRight) {
 		return (event) => {
 			const action = PreviewActionCreator.creatUpdateAction(this, {
 				pk: isRight ? this.parentPkRight : this.parentPkLeft,
-				key: key
+				key: key,
 			});
 			// alert("beClose");
 			this.dispatch(action);
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 	beClose() {
 		return (event) => {
 			const action = PreviewActionCreator.creatCloseAction(this, {
-				isSingle: this.isSingle
+				isSingle: this.isSingle,
 			});
 			// alert("beClose");
 			this.dispatch(action);
@@ -297,29 +289,30 @@ export class Preview extends BaseView {
 			this.dispatch(actionReload);
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 	doNothing() {
 		return (event) => {
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 	goNextOrBack(isRight) {
 		return (event) => {
-			const action = ((isRight && this.isR2L) || (!isRight && !this.isR2L)) ?
-				PreviewActionCreator.creatBackAction(this, {
-					isSingle: this.isSingle,
-					pageNo: this.pageNo
-				}) :
-				PreviewActionCreator.creatNextAction(this, {
-					isSingle: this.isSingle,
-					pageNo: this.pageNo
-				});
+			const action =
+				(isRight && this.isR2L) || (!isRight && !this.isR2L)
+					? PreviewActionCreator.creatBackAction(this, {
+							isSingle: this.isSingle,
+							pageNo: this.pageNo,
+					  })
+					: PreviewActionCreator.creatNextAction(this, {
+							isSingle: this.isSingle,
+							pageNo: this.pageNo,
+					  });
 			this.dispatch(action);
 			// alert("goNext");
 			event.stopPropagation();
 			return false;
-		}
+		};
 	}
 }

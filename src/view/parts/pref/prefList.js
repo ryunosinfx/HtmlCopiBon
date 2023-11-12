@@ -1,30 +1,17 @@
-import {
-  BaseView
-} from "../../../util/reactive/baseView";
-import {
-  a,
-  div,
-  li,
-  ul,
-  img,
-  span,
-  input,
-  label
-} from "../../../util/reactive/base/vtags";
+import { BaseView } from '../../../util/reactive/baseView.js';
+import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
 export class PrefList extends BaseView {
-  constructor() {
-    super("PrefList", "PrefList");
-  }
+	constructor() {
+		super('PrefList', 'PrefList');
+	}
 
-  render(store, actionData) {
-    const name = div("", ["PrefList"], "TitleName");
-    return div("", [this.id + "Frame"], [name, div(this.imageAreaID, ["ImageDetailA"], this.id + "aaaaa")]);
-  }
-  async onAfterAttach(store, data) {}
+	render(store, actionData) {
+		const name = div('', ['PrefList'], 'TitleName');
+		return div('', [this.id + 'Frame'], [name, div(this.imageAreaID, ['ImageDetailA'], this.id + 'aaaaa')]);
+	}
+	async onAfterAttach(store, data) {}
 
-  async onViewShow(store, actionData) {}
+	async onViewShow(store, actionData) {}
 
-  buildRows(){
-
-  }
+	buildRows() {}
 }

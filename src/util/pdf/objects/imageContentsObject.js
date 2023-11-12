@@ -1,12 +1,5 @@
-import {
-	RefObject
-} from '../base/refObject'
-import {
-	BinaryUtil
-} from '../util/binaryUtil'
-import {
-	UnicodeEncoder
-} from '../util/unicodeEncoder'
+import { RefObject } from '../base/refObject.js';
+import { BinaryUtil } from '../util/binaryUtil.js';
 export class ImageContentsObject extends RefObject {
 	constructor(imageId) {
 		super();
@@ -21,7 +14,7 @@ export class ImageContentsObject extends RefObject {
 	createStream() {
 		const NEWLINE = RefObject.getNewLine();
 		const u8as = [];
-		let retText = ''
+		let retText = '';
 		u8as.push(RefObject.getAsU8a('stream'));
 		retText += 'q' + NEWLINE;
 		retText += this.pageWidth + ' 0 0' + ' ' + this.pageHeight + ' 0 0 cm' + NEWLINE;

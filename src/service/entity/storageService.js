@@ -1,63 +1,57 @@
-import { indexedbwrapper } from "indexedbwrapper";
-import constant from './constant'
-const USER_ID = "default";
-const PK_INCREMENT_STORE = "pk_increment";
-const idb = new indexedbwrapper(constant.dbName);
+import { idbw } from '../../../lib/ESIndexeddbWrapper.js';
+import constant from './constant.js';
+const USER_ID = 'default';
+const PK_INCREMENT_STORE = 'pk_increment';
+const idb = new idbw(constant.dbName);
 export class StorageService {
 	constructor(entityClass) {
 		this.entityClass = entityClass;
-		this.targetObj = typeof entityClass === "string" ? entityClass : new entityClass();
+		this.targetObj = typeof entityClass === 'string' ? entityClass : new entityClass();
 		this.idbAccessor = null;
-		this.entityName = this.targetObj.getEntityName ?
-			this.targetObj.getEntityName() :
-			entityClass;
+		this.entityName = this.targetObj.getEntityName ? this.targetObj.getEntityName() : entityClass;
 	}
-	async createStore(userId = USER_ID) {
-		const storeNameKey = userId + "_" + this.targetObj.getEntityName();
-		return await await idb.getObAccessor(storeNameKey);
+	async init(userId = USER_ID, targetObj) {
+		if (!this.idbAccessor) {
+			await this.setStore(userId, targetObj);
+		}
 	}
-	async setStore(userId = USER_ID) {
-		this.idbAccessor = await this.createStore(userId);
-		return;
+	async createStore(userId = USER_ID, targetObj = this.targetObj) {
+		const storeNameKey = userId + '_' + targetObj.getEntityName();
+		console.log('StorageService createStore storeNameKey:' + storeNameKey);
+		return await idb.getAccessor(storeNameKey);
+	}
+	async setStore(userId = USER_ID, targetObj) {
+		this.idbAccessor = await this.createStore(userId, targetObj);
 	}
 	async save(pk, data) {
-		let saveData = data;
-		if (data.toObj) {
-			saveData = data.toObj();
-		}
-		// console.log(saveData);
+		let saveData = data.toObj ? data.toObj() : data;
 		await this.idbAccessor.put(pk, saveData);
 		return data; //
 	}
 	async loadAll() {
 		const list = await this.idbAccessor.getAll();
 		const retList = [];
-		for (let row of list) {
-			const cloned = this.getEntity(row);
-			retList.push(cloned);
+		for (const row of list) {
+			retList.push(this.getEntity(row));
 		}
 		return retList;
 	}
 	async getAsMap(keys) {
 		const pkList = [];
-		for (let key of keys) {
-			const pk = key && key.pk ?
-				key.pk :
-				key;
+		for (const key of keys) {
+			const pk = key && key.pk ? key.pk : key;
 			pkList.push(pk);
 		}
 		const recordMap = await this.idbAccessor.getAsMap(pkList);
 		const retMap = {};
-		for (let key in recordMap) {
+		for (const key in recordMap) {
 			const record = recordMap[key];
 			retMap[key] = this.getEntity(record);
 		}
 		return retMap;
 	}
 	async get(key) {
-		const pk = key && key.pk ?
-			key.pk :
-			key;
+		const pk = key && key.pk ? key.pk : key;
 		const record = await this.idbAccessor.getRecord(pk);
 		return this.getEntity(record);
 	}

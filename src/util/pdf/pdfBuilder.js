@@ -1,6 +1,4 @@
-import {
-	PdfDocument
-} from './pdfDocument'
+import { PdfDocument } from './pdfDocument.js';
 export class PdfBuilder {
 	constructor() {}
 	createDoc(title) {}
@@ -8,7 +6,7 @@ export class PdfBuilder {
 		const pdfDoc = new PdfDocument(pageSize);
 		// console.log("createImagesDoc imageList:" + imageList.length);
 		let i = 0;
-		for (let item of imageList) {
+		for (const item of imageList) {
 			i++;
 			if (!item || typeof item !== 'object') {
 				pdfDoc.addDummyPage();

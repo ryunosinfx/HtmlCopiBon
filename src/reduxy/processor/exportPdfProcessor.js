@@ -1,13 +1,7 @@
-import {
-	MainService
-} from "../../service/mainService"
-import {
-	ProgressBarProcessor
-} from "./progressBarProcessor"
-import {
-	PdfBuilder
-} from "../../util/pdf/pdfBuilder"
-import { Paper } from "../../util/image/paper";
+import { MainService } from '../../service/mainService.js';
+// import { ProgressBarProcessor } from './progressBarProcessor';
+import { PdfBuilder } from '../../util/pdf/pdfBuilder.js';
+import { Paper } from '../../util/image/paper.js';
 
 export class ExportPdfProcessor {
 	constructor(pp) {
@@ -24,25 +18,25 @@ export class ExportPdfProcessor {
 		const letList = [];
 		const pageNum = settings.pageNum;
 		const startPage = settings.startPage;
-		const isPageDirectionR2L = settings.pageDirection === "r2l";
-		const isMatchPageStartSide = (settings.pageDirection.indexOf(startPage) === 0);
+		const isPageDirectionR2L = settings.pageDirection === 'r2l';
+		const isMatchPageStartSide = settings.pageDirection.indexOf(startPage) === 0;
 		const pdfImage = {
 			data: new Uint8Array(targetSize.x * targetSize.y * 4),
 			width: targetSize,
-			height: targetSize.y
+			height: targetSize.y,
 		};
 		if (isMatchPageStartSide) {
 			letList.push({});
 		}
 		let pageCount = 0;
 		// alert("isSaddleStitchingOrder:" + isSaddleStitchingOrder);
-		for (let page of pages) {
+		for (const page of pages) {
 			pageCount++;
 			if (pageNum < pageCount) {
 				break;
 			}
 			if (!page || !page.outputExpandImage) {
-				letList.push({})
+				letList.push({});
 				continue;
 			}
 
@@ -54,13 +48,13 @@ export class ExportPdfProcessor {
 			letList.push({
 				ab: pdfImageAb,
 				width: pdfImage.width,
-				height: pdfImage.height
-			})
+				height: pdfImage.height,
+			});
 			// console.log(pdfImageAb);
 		}
 		this.reSortAsSaddleStitchingOrder(letList, isPageDirectionR2L, isSaddleStitchingOrder);
 		const pdfBuilder = new PdfBuilder();
-		console.log(paperSize + "/isMatchPageStartSide:" + isMatchPageStartSide)
+		console.log(paperSize + '/isMatchPageStartSide:' + isMatchPageStartSide);
 		// alert(paperSize)
 		const result = pdfBuilder.createImagesDoc(paperSize, letList);
 		this.delOnList();
@@ -72,7 +66,7 @@ export class ExportPdfProcessor {
 	reSortAsSaddleStitchingOrder(letList, isPageDirectionR2L, isSaddleStitchingOrder) {
 		// console.log("reSortAsSaddleStitchingOrder A1:" + "/" + letList.length)
 		if (isSaddleStitchingOrder !== true) {
-			return
+			return;
 		}
 		const tmpList = [];
 		const len = letList.length;
@@ -80,7 +74,7 @@ export class ExportPdfProcessor {
 		for (let i = 0; i < len; i++) {
 			tmpList.push(letList.shift());
 		}
-		const mod = 4 - len % 4;
+		const mod = 4 - (len % 4);
 		// console.log("reSortAsSaddleStitchingOrder mod:" + mod);
 		if (mod < 4) {
 			for (let i = 0; i < mod; i++) {
@@ -119,9 +113,8 @@ export class ExportPdfProcessor {
 		return binaryEntity;
 	}
 	async delOnList() {
-		for (let pk of this.delList) {
-			const outputNew = await this.bm.save(pk, "expandPage", new Uint8Array(1)
-				.buffer, { width: 1, height: 1 });
+		for (const pk of this.delList) {
+			const outputNew = await this.bm.save(pk, 'expandPage', new Uint8Array(1).buffer, { width: 1, height: 1 });
 			await this.bm.remove(pk);
 		}
 	}

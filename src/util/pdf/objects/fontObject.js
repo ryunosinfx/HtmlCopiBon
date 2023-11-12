@@ -1,6 +1,4 @@
-import {
-	RefObject
-} from '../base/refObject'
+import { RefObject } from '../base/refObject.js';
 export class FontObject extends RefObject {
 	constructor() {
 		super();

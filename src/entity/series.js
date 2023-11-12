@@ -1,12 +1,12 @@
-import { BaseEntity } from "../service/entity/baseEntity";
-const refcols = ['target']
+import { BaseEntity } from '../service/entity/baseEntity.js';
+const refcols = ['target'];
 export class Series extends BaseEntity {
 	constructor(name) {
-		super("Series");
+		super('Series');
 		this.name = name;
 		this.target = null;
-		this.no = "";
-		this.date = "";
+		this.no = '';
+		this.date = '';
 		this.pageNo = 0;
 	}
 	getRefCols() {

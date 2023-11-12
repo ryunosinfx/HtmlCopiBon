@@ -1,4 +1,4 @@
-import { ImageMerger } from "./imageMerger";
+import { ImageMerger } from './imageMerger.js';
 export class ImageCropper {
 	constructor() {
 		this.imageMerger = new ImageMerger();
@@ -9,11 +9,11 @@ export class ImageCropper {
 		const imagaDataBase = {
 			data: retArray,
 			width: newWidth,
-			height: newHieght
+			height: newHieght,
 		};
 		imageData.offsetX = offsetX;
 		imageData.offsetY = offsetY;
-		await this.imageMerger.margeReplace(imagaDataBase, [imageData], false)
+		await this.imageMerger.margeReplace(imagaDataBase, [imageData], false);
 		return imagaDataBase;
 	}
 	async corpImageToData(imageData, distData, offset) {

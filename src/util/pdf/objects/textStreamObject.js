@@ -1,12 +1,5 @@
-import {
-	RefObject
-} from '../base/refObject'
-import {
-	BinaryUtil
-} from '../util/binaryUtil'
-import {
-	UnicodeEncoder
-} from '../util/unicodeEncoder'
+import { RefObject } from '../base/refObject.js';
+import { BinaryUtil } from '../util/binaryUtil.js';
 export class TextStreamObject extends RefObject {
 	constructor(pagesObj) {
 		super();
@@ -16,7 +9,7 @@ export class TextStreamObject extends RefObject {
 			offsetX: 0,
 			offsetY: 0,
 			width: 0,
-			height: 0
+			height: 0,
 		};
 		this.rowRegex = /(\r\n|\r|\n)/g;
 	}
@@ -39,23 +32,29 @@ export class TextStreamObject extends RefObject {
 			offsetY,
 			fontId,
 			fontSize,
-			lineHeight
+			lineHeight,
 		});
 	}
 	createStream() {
 		const NEWLINE = RefObject.getNewLine();
 		const u8as = [];
-		let retText = ''
+		let retText = '';
 		u8as.push(RefObject.getAsU8a('stream'));
 		//1. 0. 0. 1. 50. 720. cm
-		retText += '1. 0. 0. 1. ' + this.streamArea.offsetX + '. ' + (this.pageHeight - this.streamArea.offsetY) + '. cm' + NEWLINE;
+		retText +=
+			'1. 0. 0. 1. ' +
+			this.streamArea.offsetX +
+			'. ' +
+			(this.pageHeight - this.streamArea.offsetY) +
+			'. cm' +
+			NEWLINE;
 		retText += 'BT' + NEWLINE;
-		for (let text of this.texts) {
+		for (const text of this.texts) {
 			retText += text.fontId + ' ' + text.fontSize + ' Tf' + NEWLINE;
 			retText += '1. 0. 0. 1. ' + text.offsetX + '. ' + (this.pageHeight - text.offsetY) + '. Tm' + NEWLINE;
 			retText += text.lineHeight + ' TL' + NEWLINE;
 			const lines = text.text.split(this.rowRegex);
-			for (let line of lines) {
+			for (const line of lines) {
 				retText += '(' + text.lineHeight + ') Tj T*' + NEWLINE;
 			}
 			// /F0 36 Tf

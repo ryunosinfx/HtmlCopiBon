@@ -1,12 +1,12 @@
-import vu from "./viewUtil";
-import bc from "./binaryConverter";
-import { Paper } from "./image/paper";
-import { ImageMerger } from "./image/imageMerger";
-import { ImageResizer } from "./image/imageResizer";
+import vu from './viewUtil.js';
+import bc from './binaryConverter.js';
+import { Paper } from './image/paper.js';
+import { ImageMerger } from './image/imageMerger.js';
+import { ImageResizer } from './image/imageResizer.js';
 const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
 	constructor() {
-		this.canvas = vu.createCanvas(null, "hidden");
+		this.canvas = vu.createCanvas(null, 'hidden');
 
 		this.ctx = this.canvas.getContext('2d');
 		this.paper = new Paper();
@@ -35,9 +35,9 @@ export class ImageProcessor {
 			offsetX: marginMM,
 			data: newData.data,
 			width: newData.width,
-			height: newData.height
-		}
-		const len = newData.data.length
+			height: newData.height,
+		};
+		const len = newData.data.length;
 		for (let i = 0; i < len; i++) {
 			newPaperData.data[i] = newData.data[i];
 		}
@@ -63,15 +63,9 @@ export class ImageProcessor {
 		const retioOuter = maxWidth / maxHeight;
 		const retioInner = width / height;
 		const isWidthGreater = retioInner >= retioOuter;
-		const retio = isWidthGreater ?
-			maxWidth / width :
-			maxHeight / height;
-		const newWidth = isWidthGreater ?
-			maxWidth :
-			width * retio;
-		const newHeight = isWidthGreater ?
-			height * retio :
-			maxHeight;
+		const retio = isWidthGreater ? maxWidth / width : maxHeight / height;
+		const newWidth = isWidthGreater ? maxWidth : width * retio;
+		const newHeight = isWidthGreater ? height * retio : maxHeight;
 		// console.log("resizeInMaxSize---------------------------------------------------newWidth:" + newWidth + "/newHeight:" + newHeight)
 		return this.resizeExecute(iamegData, newWidth, newHeight);
 	}
@@ -90,7 +84,7 @@ export class ImageProcessor {
 			const img = new Image();
 			img.src = dataUri;
 			img.onload = () => {
-				dataUri = null
+				dataUri = null;
 				const width = img.width;
 				const height = img.height;
 				this.canvas.width = width;
@@ -99,16 +93,16 @@ export class ImageProcessor {
 				const imageData = this.ctx.getImageData(0, 0, width, height);
 				resolve(imageData);
 				// console.timeEnd('resize getImageDataFromArrayBuffer');
-			}
+			};
 			img.onerror = (e) => {
 				reject(e);
-			}
+			};
 		});
 	}
 	getArrayBufferFromImageBitmapDataAsJpg(iamgeBitmapData, quority) {
 		const option = {
 			type: 'image/jpeg',
-			quority: quority
+			quority: quority,
 		};
 		return this.getArrayBufferFromImageBitmapData(iamgeBitmapData, option);
 	}
@@ -120,7 +114,7 @@ export class ImageProcessor {
 		this.canvas.width = Math.floor(iamgeBitmapData.width);
 		this.canvas.height = Math.floor(iamgeBitmapData.height);
 		let newPaperData = this.ctx.createImageData(iamgeBitmapData.width, iamgeBitmapData.height);
-		const len = iamgeBitmapData.data.length
+		const len = iamgeBitmapData.data.length;
 		for (let i = 0; i < len; i++) {
 			newPaperData.data[i] = iamgeBitmapData.data[i];
 		}
@@ -141,9 +135,7 @@ export class ImageProcessor {
 			imgElm.onload = () => {
 				const widthScale = width / imgElm.width;
 				const heightScale = height / imgElm.height;
-				const scale = widthScale <= heightScale ?
-					widthScale :
-					heightScale;
+				const scale = widthScale <= heightScale ? widthScale : heightScale;
 				this.canvas.height = Math.floor(imgElm.height * scale);
 				this.canvas.width = Math.floor(imgElm.width * scale);
 				this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -172,7 +164,7 @@ export class ImageProcessor {
 			imgElm.alt = escape(name);
 
 			if (!type) {
-				type = "application/octet-stream";
+				type = 'application/octet-stream';
 			}
 			if (type && type.match(imgRe)) {
 				imgElm.src = bc.arrayBuffer2DataURI(ab, type);
@@ -180,17 +172,16 @@ export class ImageProcessor {
 					data.height = imgElm.height;
 					data.width = imgElm.width;
 					resolve(imgElm);
-				}
+				};
 				imgElm.onerror = (e) => {
 					console.log('失敗');
 					console.error(e);
 					reject(e);
 				};
-				return
+				return;
 			} else {
 				resolve(imgElm);
 			}
-
 		});
 	}
 }

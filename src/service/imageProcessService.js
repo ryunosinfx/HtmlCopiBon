@@ -1,4 +1,4 @@
-import { ImageProcessor } from "../util/imageProcessor";
+import { ImageProcessor } from '../util/imageProcessor.js';
 export class ImageProcessService {
 	constructor() {
 		this.ip = new ImageProcessor();
@@ -17,21 +17,21 @@ export class ImageProcessService {
 		return await this.ip.resize(ab, newWidth, newHeight);
 	}
 	async resizeAsPaperB5_72(ab) {
-		return await this.ip.resizeAsPaper(ab, "B5", "dpi72", "conbini");
+		return await this.ip.resizeAsPaper(ab, 'B5', 'dpi72', 'conbini');
 	}
 	async getImageDataFromArrayBuffer(ab) {
 		return await this.ip.getImageDataFromArrayBuffer(ab);
 	}
 	getArrayBufferFromImageBitmapData(imageBitmapData, option) {
-		console.time("ImageProcessService.getArrayBuffer From ImageBitmapData")
+		console.time('ImageProcessService.getArrayBuffer From ImageBitmapData');
 		const result = this.ip.getArrayBufferFromImageBitmapData(imageBitmapData, option);
-		console.timeEnd("ImageProcessService.getArrayBuffer From ImageBitmapData")
+		console.timeEnd('ImageProcessService.getArrayBuffer From ImageBitmapData');
 		return result;
 	}
 	getArrayBufferFromImageBitmapDataAsJpg(imageBitmapData, quority) {
-		console.time("ImageProcessService.getArrayBufferFromImageBitmapDataAsJpg")
+		console.time('ImageProcessService.getArrayBufferFromImageBitmapDataAsJpg');
 		const result = this.ip.getArrayBufferFromImageBitmapDataAsJpg(imageBitmapData, quority);
-		console.timeEnd("ImageProcessService.getArrayBufferFromImageBitmapDataAsJpg")
+		console.timeEnd('ImageProcessService.getArrayBufferFromImageBitmapDataAsJpg');
 		return result;
 	}
 	getArrayBufferFromImageBitmapDataAsPng(imageBitmapData) {

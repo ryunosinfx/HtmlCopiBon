@@ -1,10 +1,9 @@
-import { SettingActionCreator } from '../action/settingActionCreator'
-import { PageActionCreator } from '../action/pageActionCreator'
-import { PageProcessor } from '../processor/pageProcessor'
-import { ImageActionCreator } from '../action/imageActionCreator'
-import { Sorter } from "../../util/sorter";
-import { MainService } from "../../service/mainService"
-import { BaseReducer } from '../../util/reactive/baseReducer'
+import { SettingActionCreator } from '../action/settingActionCreator.js';
+import { PageActionCreator } from '../action/pageActionCreator.js';
+import { PageProcessor } from '../processor/pageProcessor.js';
+import { ImageActionCreator } from '../action/imageActionCreator.js';
+import { MainService } from '../../service/mainService.js';
+import { BaseReducer } from '../../util/reactive/baseReducer.js';
 let settingViewReducer = null;
 export class SettingViewReducer extends BaseReducer {
 	constructor() {
@@ -36,54 +35,43 @@ export class SettingViewReducer extends BaseReducer {
 	}
 	async reduce(store, action) {
 		if (this.creatAction.type === action.type) {
-			store[this.storeKey] = await this.load()
-				.catch((e) => {
-					console.error(e)
-				});
-			store[this.storeKeyOpm] = await this.opm.loadAll()
-				.catch((e) => {
-					console.error(e)
-				});
+			store[this.storeKey] = await this.load().catch((e) => {
+				console.error(e);
+			});
+			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
+				console.error(e);
+			});
 		} else if (this.creatRemoveAction.type === action.type) {
-			store[this.storeKey] = await this.reset(action.data)
-				.catch((e) => {
-					console.error(e)
-				});
-			store[this.storeKeyOpm] = await this.opm.loadAll()
-				.catch((e) => {
-					console.error(e)
-				});
+			store[this.storeKey] = await this.reset(action.data).catch((e) => {
+				console.error(e);
+			});
+			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
+				console.error(e);
+			});
 		} else if (this.creatLoadAction.type === action.type) {
-			store[this.storeKey] = await this.load()
-				.catch((e) => {
-					console.error(e)
-				});
-			store[this.storeKeyOpm] = await this.opm.loadAll()
-				.catch((e) => {
-					console.error(e)
-				});
+			store[this.storeKey] = await this.load().catch((e) => {
+				console.error(e);
+			});
+			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
+				console.error(e);
+			});
 		} else if (this.creatUpdateAction.type === action.type) {
-			store[this.storeKey] = await this.update(action.data)
-				.catch((e) => {
-					console.error(e)
-				});
+			store[this.storeKey] = await this.update(action.data).catch((e) => {
+				console.error(e);
+			});
 			// alert("creatUpdateAction:" + JSON.stringify(store[this.storeKey]));
-			store[this.storeKeyOpm] = await this.opm.loadAll()
-				.catch((e) => {
-					console.error(e)
-				});
-			const result = await this.pp.resetPagesFull()
-				.catch((e) => {
-					console.error(e)
-				});
-			store[this.storePagesKey] = await this.pp.loadPages(result)
-				.catch((e) => {
-					console.error(e)
-				});
-			store[this.storeImagesKey] = await this.im.loadImages()
-				.catch((e) => {
-					console.error(e)
-				});
+			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
+				console.error(e);
+			});
+			const result = await this.pp.resetPagesFull().catch((e) => {
+				console.error(e);
+			});
+			store[this.storePagesKey] = await this.pp.loadPages(result).catch((e) => {
+				console.error(e);
+			});
+			store[this.storeImagesKey] = await this.im.loadImages().catch((e) => {
+				console.error(e);
+			});
 			// console.error("storePagesKey:"+store[this.storePagesKey].length);
 		}
 	}
@@ -91,7 +79,15 @@ export class SettingViewReducer extends BaseReducer {
 		const title = await this.tm.load();
 		const pk = title.getPk();
 
-		const saved = await this.sm.save(pk, data.name, data.pageNum, data.startPage, data.pageDirection, data.outputProfile, data.listing);
+		const saved = await this.sm.save(
+			pk,
+			data.name,
+			data.pageNum,
+			data.startPage,
+			data.pageDirection,
+			data.outputProfile,
+			data.listing
+		);
 		const settingEntityLoad = await this.sm.loadByPk(pk);
 
 		if (!settingEntityLoad) {

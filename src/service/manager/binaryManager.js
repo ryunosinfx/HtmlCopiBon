@@ -1,5 +1,5 @@
-import { Binary } from "../entity/binary";
-import { PrimaryKey } from "../entity/primaryKey";
+import { Binary } from '../entity/binary.js';
+import { PrimaryKey } from '../entity/primaryKey.js';
 export class BinaryManager {
 	constructor(entityManager) {
 		this.em = entityManager;
@@ -12,7 +12,7 @@ export class BinaryManager {
 		}
 		const result = await this.em.Binary.get(binaryPk);
 		console.timeEnd('BinaryManager.load');
-		return result
+		return result;
 	}
 	async remove(pk) {
 		let binaryPk = pk;
@@ -39,12 +39,12 @@ export class BinaryManager {
 			binEntity.updateDate = Date.now();
 			binEntity._ab = ab;
 		}
-		if (addDataMap && typeof addDataMap === "object") {
-			for (let key in addDataMap) {
+		if (addDataMap && typeof addDataMap === 'object') {
+			for (const key in addDataMap) {
 				binEntity[key] = addDataMap[key];
 			}
 		}
-		const binaryEntitySaved = await this.em.Binary.save(binEntity)
+		const binaryEntitySaved = await this.em.Binary.save(binEntity);
 		console.timeEnd('BinaryManager.save');
 		return PrimaryKey.getPrimaryKey(binaryEntitySaved);
 	}

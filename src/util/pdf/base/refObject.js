@@ -1,12 +1,6 @@
-import {
-	BinaryUtil
-} from '../util/binaryUtil'
-import {
-	UnicodeEncoder
-} from '../util/unicodeEncoder'
-import {
-	KeyKeywords
-} from '../constants/pdfConstants'
+import { BinaryUtil } from '../util/binaryUtil.js';
+import { UnicodeEncoder } from '../util/unicodeEncoder.js';
+import { KeyKeywords } from '../constants/pdfConstants.js';
 const refMap = new Map();
 const NEWLINE = '\n';
 const refList = [];
@@ -19,9 +13,7 @@ export class RefObject {
 		this.isRoot = false;
 		this.isInfo = false;
 	}
-	createExport() {
-
-	}
+	createExport() {}
 	static getRefMap() {
 		return refMap;
 	}
@@ -41,12 +33,12 @@ export class RefObject {
 	registerRefMap() {
 		refList.push(this);
 		let index = 1;
-		for (let obj of refList) {
-			const indexPrefix = index + " 0 ";
+		for (const obj of refList) {
+			const indexPrefix = index + ' 0 ';
 			refMap.set(obj, indexPrefix);
 			index++;
 		}
-		for (let obj of this.afterRegsterRefMap) {
+		for (const obj of this.afterRegsterRefMap) {
 			obj.registerRefMap();
 		}
 	}
@@ -72,25 +64,24 @@ export class RefObject {
 	createObject() {
 		const u8aStream = this.createStream(this.map);
 		const u8aStart = UnicodeEncoder.encodeUTF8(this.getRefNo() + 'obj' + NEWLINE);
-		const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap("", this.map));
+		const u8aMain = UnicodeEncoder.encodeUTF8(this.createMap('', this.map));
 		const u8aEnd = UnicodeEncoder.encodeUTF8('endobj' + NEWLINE);
 		return BinaryUtil.joinU8as([u8aStart, u8aMain, u8aStream, u8aEnd]);
 	}
 	createMap(keyword, value) {
 		let retText = '';
 		if (value === null || value === undefined) {
-
 		} else if (typeof value === 'string') {
 			if (KeyKeywords[keyword]) {
-				retText += "/" + value;
+				retText += '/' + value;
 			} else {
-				retText += "(" + value + ')';
+				retText += '(' + value + ')';
 			}
 		} else if (typeof value === 'number') {
 			retText += value;
 		} else if (typeof value === 'object' && Array.isArray(value)) {
 			const newArray = [];
-			for (let index in value) {
+			for (const index in value) {
 				const val = value[index];
 				newArray.push(this.createMap(keyword, val));
 			}
@@ -98,17 +89,17 @@ export class RefObject {
 		} else if (typeof value === 'object' && value.isRegisterd && value.isRegisterd()) {
 			retText += value.getRefNo() + 'R';
 		} else if (typeof value === 'object' && value.isRegisterd && value.map) {
-			retText += '<<' + NEWLINE
-			for (let key in value.map) {
-				const val = value.map[key]
+			retText += '<<' + NEWLINE;
+			for (const key in value.map) {
+				const val = value.map[key];
 				const row = '/' + key + ' ' + this.createMap(key, val);
 				retText += row + NEWLINE;
 			}
 			retText += '>>';
 		} else if (typeof value === 'object') {
-			retText += '<<' + NEWLINE
-			for (let key in value) {
-				const val = value[key]
+			retText += '<<' + NEWLINE;
+			for (const key in value) {
+				const val = value[key];
 				const row = '/' + key + ' ' + this.createMap(key, val);
 				retText += row + NEWLINE;
 			}

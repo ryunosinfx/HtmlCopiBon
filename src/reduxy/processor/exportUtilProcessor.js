@@ -1,24 +1,12 @@
-import {
-	Sorter
-} from "../../util/sorter";
-import {
-	unixTimeToDateFormat
-} from "../../util/timeUtil";
-import {
-	UnicodeEncoder
-} from "../../util/unicodeEncoder";
-import {
-	MainService
-} from "../../service/mainService"
-import {
-	PreviewProcessor
-} from "./previewProcessor"
-import { Zlib } from "zlibjs/bin/zip.min"
+import { unixTimeToDateFormat } from '../../util/timeUtil.js';
+import { UnicodeEncoder } from '../../util/unicodeEncoder.js';
+import { MainService } from '../../service/mainService.js';
+import { Zlib } from '../../../lib/zip.min.es.js';
 
 const order = {
-	orderName: "MangaPaperA4ExpandTatikiri",
-	basePaper: "mangaPaperA4ExpandTatikiri",
-	dpiName: "dpi600"
+	orderName: 'MangaPaperA4ExpandTatikiri',
+	basePaper: 'mangaPaperA4ExpandTatikiri',
+	dpiName: 'dpi600',
 };
 export class ExportUtilProcessor {
 	constructor(pp) {
@@ -37,9 +25,9 @@ export class ExportUtilProcessor {
 	async remove(exportPk = -1) {
 		const exportPks = await this.tm.getExports();
 		if (exportPks) {
-			for (let exportｓIndex in exportPks) {
-				const current = exportPks[exportｓIndex];
-				delete exportPks[exportｓIndex];
+			for (const exportsIndex in exportPks) {
+				const current = exportPks[exportsIndex];
+				delete exportPks[exportsIndex];
 				await this.iom.remove(current);
 			}
 			await this.tm.saveCurrent();
@@ -79,35 +67,33 @@ export class ExportUtilProcessor {
 	async getZipPdfPair(exportPks) {
 		const imageOutpus = {
 			pdf: null,
-			zip: null
+			zip: null,
 		};
 		if (!!exportPks === false) {
 			return imageOutpus;
 		}
-		for (let exportPk of exportPks) {
+		for (const exportPk of exportPks) {
 			const imageOutput = await this.iom.load(exportPk);
-			if (imageOutput && imageOutput.type === "zip") {
+			if (imageOutput && imageOutput.type === 'zip') {
 				imageOutpus.zip = imageOutput;
 			}
-			if (imageOutput && imageOutput.type === "pdf") {
+			if (imageOutput && imageOutput.type === 'pdf') {
 				imageOutpus.pdf = imageOutput;
 			}
 		}
 		return imageOutpus;
 	}
 	async loadUploadedImagesZip() {
-		const now = (new Date()
-			.getTime());
-		const yyyyMMddThhmmss = unixTimeToDateFormat(now, "yyyyMMddThhmmss");
+		const now = new Date().getTime();
+		const yyyyMMddThhmmss = unixTimeToDateFormat(now, 'yyyyMMddThhmmss');
 		const output = {
 			ab: null,
-			name: "UploadedImagesZip_" + yyyyMMddThhmmss + ".zip"
-		}
-		const imageEntitis = await this.im.loadImages()
-			.catch((e) => {
-				console.error(e)
-			});
-		console.log("aaaaaaaaaaaaaaaaaaaaaaaa5a imageEntitis:" + imageEntitis);
+			name: 'UploadedImagesZip_' + yyyyMMddThhmmss + '.zip',
+		};
+		const imageEntitis = await this.im.loadImages().catch((e) => {
+			console.error(e);
+		});
+		console.log('aaaaaaaaaaaaaaaaaaaaaaaa5a imageEntitis:' + imageEntitis);
 		console.log(imageEntitis);
 		if (!imageEntitis) {
 			alert('ExportUtilProcessor UploadedImages is None!');
@@ -117,33 +103,38 @@ export class ExportUtilProcessor {
 		return output;
 	}
 	async exoprtAsUploadedZip(imageEntitis) {
-		console.time("exoprtAsUploadedZip")
+		console.time('exoprtAsUploadedZip');
 		const zip = new Zlib.Zip({
-			compress: false
+			compress: false,
 		});
 		let lastOne = null;
-		for (let imageEntity of imageEntitis) {
-			console.log("aaaaaaaaaaaaaaaaaaaaaaaa6a imageEntity:" + imageEntity);
-			if (imageEntity && imageEntity.imageEntity && imageEntity.imageEntity.binary && imageEntity.imageEntity.binary.pk) {
+		for (const imageEntity of imageEntitis) {
+			console.log('aaaaaaaaaaaaaaaaaaaaaaaa6a imageEntity:' + imageEntity);
+			if (
+				imageEntity &&
+				imageEntity.imageEntity &&
+				imageEntity.imageEntity.binary &&
+				imageEntity.imageEntity.binary.pk
+			) {
 				if (imageEntity.imageEntity.binary.pk === lastOne) {
 					// pageEntity.baseImage = null;
 					continue;
 				}
 				lastOne = imageEntity.imageEntity.binary.pk;
 				const binaryEntity = await this.em.get(lastOne);
-				console.log("aaaaaaaaaaaaaaaaaaaaaaaa7a binaryEntity:" + binaryEntity + "/lastOne:" + lastOne);
+				console.log('aaaaaaaaaaaaaaaaaaaaaaaa7a binaryEntity:' + binaryEntity + '/lastOne:' + lastOne);
 				if (binaryEntity) {
 					zip.addFile(new Uint8Array(binaryEntity._ab), {
-						filename: UnicodeEncoder.stringToByteArray(imageEntity.imageEntity.name)
+						filename: UnicodeEncoder.stringToByteArray(imageEntity.imageEntity.name),
 					});
-					console.log("exoprtAsUploadedZip" + binaryEntity)
+					console.log('exoprtAsUploadedZip' + binaryEntity);
 					this.delList.push(lastOne);
 				}
 			}
 		}
 		//uncompress
 		const result = zip.compress();
-		console.timeEnd("exoprtAsUploadedZip")
+		console.timeEnd('exoprtAsUploadedZip');
 		return result;
 	}
 
