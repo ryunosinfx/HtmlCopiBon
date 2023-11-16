@@ -1,7 +1,7 @@
 import { MainFrame } from './src/view/mainFrame.js';
 import { MainService } from './src/service/mainService.js';
 const appTitle = 'CopiBon';
-const appVersion = 'v0.0.11alpha';
+const appVersion = 'v0.0.12alpha';
 export default class CopiBonService {
 	constructor() {
 		console.log('CopiBonService constructor');
