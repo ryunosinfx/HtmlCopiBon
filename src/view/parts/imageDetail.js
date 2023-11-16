@@ -1,9 +1,10 @@
 import { BaseView } from '../../util/reactive/baseView.js';
-import bc from '../../util/binaryConverter.js';
+import { BinaryCnvtr } from '../../util/binaryConverter.js';
 import { a, div, li, ul, img, span, input, label } from '../../util/reactive/base/vtags.js';
 import { ImageActionCreator } from '../../reduxy/action/imageActionCreator.js';
 const PLANE = 'PLANE';
 const WINDOW = 'WINDOW';
+const HEIGHT = 'HEIGHT';
 const DOUBLE = 'DOUBLE';
 const HELF = 'HELF';
 const QUAD = 'QUAD';
@@ -19,9 +20,10 @@ export class ImageDetail extends BaseView {
 		this.pk = null;
 	}
 	render(store, actionData) {
-		const toNativeSizeButton = div(
+		const toNativeSizeButton = a(
 			this.id + 'toNativeSizeButton',
 			['toNativeSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toNativeSize(),
@@ -29,9 +31,10 @@ export class ImageDetail extends BaseView {
 			},
 			'1:1'
 		);
-		const toWindowSizeButton = div(
+		const toWindowSizeButton = a(
 			this.id + 'toWindowSizeButton',
 			['toWindowSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toWindowSize(),
@@ -39,9 +42,21 @@ export class ImageDetail extends BaseView {
 			},
 			'W'
 		);
-		const toDoubleWindowSizeButton = div(
+		const toWindowHeightSizeButton = a(
+			this.id + 'toWindowHeightSizeButton',
+			['toWindowHeightSizeButton'],
+			'#FilesArea',
+			{
+				on: {
+					click: this.toWindowHightSize(),
+				},
+			},
+			'H'
+		);
+		const toDoubleWindowSizeButton = a(
 			this.id + 'toDoubleWindowSizeButton',
 			['toDoubleWindowSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toDoubleWindowSize(),
@@ -49,9 +64,10 @@ export class ImageDetail extends BaseView {
 			},
 			'Wx2'
 		);
-		const toQuadWindowSizeButton = div(
+		const toQuadWindowSizeButton = a(
 			this.id + 'toQuadWindowSizeButton',
 			['toQuadWindowSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toQuadWindowSize(),
@@ -59,9 +75,10 @@ export class ImageDetail extends BaseView {
 			},
 			'Wx4'
 		);
-		const toHelfWindowSizeButton = div(
+		const toHelfWindowSizeButton = a(
 			this.id + 'toHelfWindowSizeButton',
 			['toHelfWindowSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toHelfWindowSize(),
@@ -69,9 +86,10 @@ export class ImageDetail extends BaseView {
 			},
 			'W/2'
 		);
-		const toFullWindowSizeButton = div(
+		const toFullWindowSizeButton = a(
 			this.id + 'toFullWindowSizeButton',
 			['toFullWindowSizeButton'],
+			'#FilesArea',
 			{
 				on: {
 					click: this.toFullWindowSize(),
@@ -87,6 +105,7 @@ export class ImageDetail extends BaseView {
 				title,
 				toNativeSizeButton,
 				toWindowSizeButton,
+				toWindowHeightSizeButton,
 				toDoubleWindowSizeButton,
 				toQuadWindowSizeButton,
 				toHelfWindowSizeButton,
@@ -109,6 +128,7 @@ export class ImageDetail extends BaseView {
 	async onAfterAttach(store, data) {
 		this.setSelectStyle('toNativeSizeButton', PLANE);
 		this.setSelectStyle('toWindowSizeButton', WINDOW);
+		this.setSelectStyle('toWindowHeightSizeButton', HEIGHT);
 		this.setSelectStyle('toDoubleWindowSizeButton', DOUBLE);
 		this.setSelectStyle('toQuadWindowSizeButton', QUAD);
 		this.setSelectStyle('toHelfWindowSizeButton', HELF);
@@ -118,16 +138,17 @@ export class ImageDetail extends BaseView {
 		const { imageEntity, binaryEntity, imageText } = imageData;
 		const pk = imageEntity.getPk();
 		if (this.pk !== pk) {
-			this.previewMode = PLANE;
+			this.previewMode = HEIGHT;
 		}
 		this.setSelectStyle('toNativeSizeButton', PLANE);
 		this.setSelectStyle('toWindowSizeButton', WINDOW);
+		this.setSelectStyle('toWindowHeightSizeButton', HEIGHT);
 		this.setSelectStyle('toDoubleWindowSizeButton', DOUBLE);
 		this.setSelectStyle('toQuadWindowSizeButton', QUAD);
 		this.setSelectStyle('toHelfWindowSizeButton', HELF);
 		this.setSelectStyle('toFullWindowSizeButton', FULL);
 		this.pk = pk;
-		const dataUri = bc.arrayBuffer2DataURI(binaryEntity._ab);
+		const dataUri = BinaryCnvtr.a2D(binaryEntity._ab);
 		const imgVnode = img(pk + '_image', imageEntity.name, imageEntity.name, dataUri, {});
 		const textVnode = span(pk + '_text', ['thumbnail_text'], imageData.imageText);
 		const image = [div('', [''], [imgVnode]), div('', [textVnode])];
@@ -156,6 +177,18 @@ export class ImageDetail extends BaseView {
 			this.toNativeSize()(event);
 		};
 	}
+	getFunc(previewMode) {
+		return (event) => {
+			// alert("toWindowSize this.pk):" + this.pk);
+			this.previewMode = previewMode;
+			if (this.pk) {
+				const action = ImageActionCreator.creatDetailAction(this, {
+					imagePK: this.pk,
+				});
+				this.dispatch(action);
+			}
+		};
+	}
 	setSelectStyle(id, className) {
 		const active = 'active';
 		const button = document.getElementById(this.id + id);
@@ -167,76 +200,25 @@ export class ImageDetail extends BaseView {
 		}
 	}
 	toNativeSize() {
-		return (event) => {
-			// alert("toNativeSize this.pk):" + this.pk);
-			this.previewMode = PLANE;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(PLANE);
 	}
 	toWindowSize() {
-		return (event) => {
-			// alert("toWindowSize this.pk):" + this.pk);
-			this.previewMode = WINDOW;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(WINDOW);
+	}
+	toWindowHightSize() {
+		return this.getFunc(HEIGHT);
 	}
 	toDoubleWindowSize() {
-		return (event) => {
-			// alert("toDoubleWindowSize this.pk):" + this.pk);
-			this.previewMode = DOUBLE;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(DOUBLE);
 	}
 	toHelfWindowSize() {
-		return (event) => {
-			// alert("toHelfWindowSize this.pk):" + this.pk);
-			this.previewMode = HELF;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(QUAD);
 	}
 	toQuadWindowSize() {
-		return (event) => {
-			// alert("toHelfWindowSize this.pk):" + this.pk);
-			this.previewMode = QUAD;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(HELF);
 	}
 	toFullWindowSize() {
-		return (event) => {
-			// alert("toHelfWindowSize this.pk):" + this.pk);
-			this.previewMode = FULL;
-			if (this.pk) {
-				const action = ImageActionCreator.creatDetailAction(this, {
-					imagePK: this.pk,
-				});
-				this.dispatch(action);
-			}
-		};
+		return this.getFunc(FULL);
 	}
 	onMouseOn() {
 		return (event) => {

@@ -1,4 +1,4 @@
-import bc from '../../../util/binaryConverter.js';
+import { BinaryCnvtr } from '../../../util/binaryConverter.js';
 import { BaseView } from '../../../util/reactive/baseView.js';
 import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/base/vtags.js';
 import { PreviewReducer } from '../../../reduxy/reducer/previewReducer.js';
@@ -226,7 +226,7 @@ export class Preview extends BaseView {
 		const isNoCroppingClass = isNoCropping ? 'enable' : 'disable';
 		const currentClass = isRight === null ? '' : isRight ? this.classNameRight : this.classNameLeft;
 		if (binalyEnitiy) {
-			const dataUri = bc.arrayBuffer2DataURI(binalyEnitiy._ab);
+			const dataUri = BinaryCnvtr.a2D(binalyEnitiy._ab);
 			// console.log(dataUri);
 			const imgVnode = img(binalyEnitiy.pk + '_preview', 'preview_' + pageNo, '', dataUri, {});
 			const pageNoText = div('', ['pageNo'], {}, 'pageNo:' + pageNo);

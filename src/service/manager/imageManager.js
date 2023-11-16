@@ -1,6 +1,6 @@
 import { Images } from '../../entity/images.js';
 import { MainService } from '../../service/mainService.js';
-import bc from '../../util/binaryConverter.js';
+import { BinaryCnvtr } from '../../util/binaryConverter.js';
 import { PrimaryKey } from '../entity/primaryKey.js';
 import { Sorter } from '../../util/sorter.js';
 import { FileUploadExecuter } from '../fileUploadExecuter.js';
@@ -70,7 +70,7 @@ export class ImageManager {
 		};
 		const imgElm = await this.ip.createImageNodeByData(data);
 		const dataURI = await this.ip.createThumbnail(arrayBuffer, 100, 100, file.type);
-		const arrayBufferThumbnail = bc.dataURI2ArrayBuffer(dataURI);
+		const arrayBufferThumbnail = BinaryCnvtr.D2a(dataURI);
 		const imgElmThumb = await this.ip.createImageNodeByData({
 			name: file.name,
 			ab: arrayBufferThumbnail,

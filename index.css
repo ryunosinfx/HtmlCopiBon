@@ -1,1133 +1,1156 @@
-html, body {
-  min-height: 100%;
-  max-height: 100%;
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
+html,
+body {
+	min-height: 100%;
+	max-height: 100%;
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
 }
 div {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 div.frame {
-  display:flex;
-  justify-content: center;
-  min-height: 100%;
-  max-height: 100%;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin: 0;
-  background-color: #c9d5de;
+	display: flex;
+	justify-content: center;
+	min-height: 100%;
+	max-height: 100%;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin: 0;
+	background-color: #c9d5de;
 }
-div.frame>div{
-    max-width:940px;
+div.frame > div {
+	/* -width:940px; */
 }
-div.frame>div.ModalWindow{
-    max-width:100%;
+div.frame > div.ModalWindow {
+	max-width: 100%;
 }
 
 div.footer {
-  position: fixed;
-  bottom: 0;
-  height: 3em;
-  width: 100%;
-  border: solid 0px red;
-  padding: 0.5em;
-  z-index: 500;
-  color: white;
-  background-color: #2c3440
+	position: fixed;
+	bottom: 0;
+	height: 3em;
+	width: 100%;
+	border: solid 0px red;
+	padding: 0.5em;
+	z-index: 500;
+	color: white;
+	background-color: #2c3440;
 }
 
 div.copyright {
-color: #266abd;
-  width: 100%;
-  padding: 0.5em;
-  text-align: center;
-  letter-spacing: 10px;
-  font-size: 0.8em;
+	color: #266abd;
+	width: 100%;
+	padding: 0.5em;
+	text-align: center;
+	letter-spacing: 10px;
+	font-size: 0.8em;
 }
 
 div.header {
-  position: fixed;
-  top: 0;
-  height: 4.5em;
-  width: 100%;
-  border: solid 1px #052240;
-  border-bottom-width: 3.2em;
-  z-index: 500;
-  background-color: #e8eeef;
+	position: fixed;
+	top: 0;
+	height: 4.5em;
+	width: 100%;
+	border: solid 1px #052240;
+	border-bottom-width: 3.2em;
+	z-index: 500;
+	background-color: #e8eeef;
 }
 
 div.title {
-  font-size: 2em;
-  font-weight: bold;
-  padding: 0.5em 0.9em ;
-  line-height: 0.5em;
-  color: #1664a2;
+	font-size: 2em;
+	font-weight: bold;
+	padding: 0.5em 0.9em;
+	line-height: 0.5em;
+	color: #1664a2;
 }
 
 div.title span.Version {
-  font-size: 40%;
-  font-weight: bold;
-  padding: 0em;
-  color: rgb(0, 232, 249);
+	font-size: 40%;
+	font-weight: bold;
+	padding: 0em;
+	color: rgb(0, 232, 249);
 }
 
 div.title:after {
-  font-size: 0.4em;
-  padding: 0.5em;
-  font-weight: normal;
-  content: ":The Images Converter For Book Made By Copy Machine!";
-  color: #2196f3
+	font-size: 0.4em;
+	padding: 0.5em;
+	font-weight: normal;
+	content: ':The Images Converter For Book Made By Copy Machine!';
+	color: #2196f3;
 }
 
 div.FileUploadArea input {
-  position: absolute;
-  left: -100;
+	position: absolute;
+	left: -100;
 }
 
 div.FileUploadArea {
-  display: block;
-  min-height: 10em;
-  height: 20em;
-  width: 100%;
-  border: dotted 1px black;
-  background-color: #a8bae0;
-  padding: 0.1em;
+	display: block;
+	min-height: 10em;
+	height: 20em;
+	width: 100%;
+	border: dotted 1px black;
+	background-color: #a8bae0;
+	padding: 0.1em;
 }
 
-div.FileUploadArea>div.FileUploadAreaA {
-  display: block;
-  min-height: 9.8em;
-  ;
-  height: 9.8em;
-  width: 100%;
-  border: dotted 3px rgb(100, 94, 153);
-  background-color: #a8bae0;
-  padding-top: 4em;
-  padding-bottom: 4em;
-  text-align: center;
-  color: rgb(100, 94, 153);
-  font-size: 2em;
+div.FileUploadArea > div.FileUploadAreaA {
+	display: block;
+	min-height: 9.8em;
+	height: 9.8em;
+	width: 100%;
+	border: dotted 3px rgb(100, 94, 153);
+	background-color: #a8bae0;
+	padding-top: 4em;
+	padding-bottom: 4em;
+	text-align: center;
+	color: rgb(100, 94, 153);
+	font-size: 2em;
 }
 
 input.FileUploadFile {
-  position: absolute;
-  top: -10em;
-  left: 10em;
-  visibility: hidden;
+	position: absolute;
+	top: -10em;
+	left: 10em;
+	visibility: hidden;
 }
 
 div.FilesArea {
-  min-height: 100%;
-  width: 100%;
-  border: dotted 1px black;
-  background-color: rgb(52, 158, 226);
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  text-align: center;
-  font-size: 2em;
+	min-height: 100%;
+	width: 100%;
+	border: dotted 1px black;
+	background-color: rgb(52, 158, 226);
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	text-align: center;
+	font-size: 2em;
 }
 
-div.FilesArea>div {
-  min-width: 470px;
+div.FilesArea > div {
+	min-width: 470px;
 }
 
 span.imageDataLine {
-  display: inline-block;
-  font-size: 50%;
-  padding: 0.2em;
+	display: inline-block;
+	font-size: 50%;
+	padding: 0.2em;
 }
 
 div.delButton {
-  display: inline-block;
-  font-size: 50%;
-  width: 3em;
-  padding: 0.2em;
-  line-height: 1em;
-  text-align: center;
-  cursor: pointer;
-  background-color: #675275;
+	display: inline-block;
+	font-size: 50%;
+	width: 3em;
+	padding: 0.2em;
+	line-height: 1em;
+	text-align: center;
+	cursor: pointer;
+	background-color: #675275;
 }
 
 div.delButton:active {
-  color: red;
+	color: red;
 }
 
 div.delButton:hover {
-  color: #d48a60;
-  background-color: #7b4f99;
+	color: #d48a60;
+	background-color: #7b4f99;
 }
 
 canvas.hidden {
-  position: absolute;
-  top: -10000px;
+	position: absolute;
+	top: -10000px;
 }
 
 [draggable] {
-  user-select: none;
+	user-select: none;
 }
 
 .column {
-  height: 150px;
-  width: 150px;
-  float: left;
-  border: 2px solid #666666;
-  background-color: #ccc;
-  margin-right: 5px;
-  border-radius: 10px;
-  box-shadow: inset 0 0 3px #000;
-  text-align: center;
-  cursor: move;
+	height: 150px;
+	width: 150px;
+	float: left;
+	border: 2px solid #666666;
+	background-color: #ccc;
+	margin-right: 5px;
+	border-radius: 10px;
+	box-shadow: inset 0 0 3px #000;
+	text-align: center;
+	cursor: move;
 }
 
 .column.over {
-  border: 2px dashed #000;
+	border: 2px dashed #000;
 }
 
 .column header {
-  color: #fff;
-  text-shadow: #000 0 1px;
-  box-shadow: 5px;
-  border-bottom: 1px solid #ddd;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+	color: #fff;
+	text-shadow: #000 0 1px;
+	box-shadow: 5px;
+	border-bottom: 1px solid #ddd;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
 
-.FilesArea>div {
-  width: 100%;
-  min-width: 630px;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
+.FilesArea > div {
+	width: 100%;
+	min-width: 630px;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
 }
 
-.FilesArea>div>div {
-  display: flex;
-  min-width: 115px;
-  overflow: hidden;
+.FilesArea > div > div {
+	display: flex;
+	min-width: 115px;
+	overflow: hidden;
 }
 
-.FilesArea>div>div.PageImages {
-  min-width: 225px;
-  width: 225px;
-  max-width: 50%;
+.FilesArea > div > div.PageImages {
+	min-width: 225px;
+	width: 225px;
+	max-width: 50%;
 }
 
-.FilesArea>div>div.ImageDetail {
-  width:100%;
-  /* max-width: calc(100% - 320px); */
+.FilesArea > div > div.ImageDetail {
+	width: 100%;
+	/* max-width: calc(100% - 320px); */
 }
 
-.ImageDetail>div {
-  width: 100%;
+.ImageDetail > div {
+	width: 100%;
 }
 
 .ImageDetail .ImageDetailA {
-  width: 100%;
+	width: 100%;
 }
 
 .ImageDetail .ImageDetailTitle {
-  position: relative;
-  font-size: 12px;
-  background-color: #44cec7;
-  text-align: left;
-  padding: 10px;
-  width: 100%;
-  z-index: 900;
-  display:flex;;
-  flex-direction: row;
-  flex-wrap: wrap;
+	position: relative;
+	font-size: 12px;
+	background-color: #44cec7;
+	text-align: left;
+	padding: 0 10px;
+	width: 100%;
+	z-index: 900;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
-.ImageDetail .ImageDetailTitle>div {
-  width:40px;
-  padding:0.5em;
-  border-radius: 5px;
-  background-color: gray;
-  color:white;
-  margin: 0.2em;
-  margin-left: 0.5em;
-  text-align: center;
-  cursor:pointer;
+.ImageDetail .ImageDetailTitle > a {
+	width: 40px;
+	padding: 0.5em;
+	border-radius: 5px;
+	background-color: gray;
+	color: white;
+	margin: 0.2em;
+	margin-left: 0.5em;
+	text-align: center;
+	cursor: pointer;
+	display: block;
 }
-.ImageDetail .ImageDetailTitle>div.active {
-  background-color: black;
-  color:white;
-  font-weight: bold;
+.ImageDetail .ImageDetailTitle > a.active {
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
 }
-.image_detail_block.WINDOW>div>img{
-  max-width:100%;
+.image_detail_block.WINDOW > div > img {
+	max-width: 100%;
 }
-.image_detail_block.DOUBLE>div>img{
-  max-width:200%;
+.image_detail_block.HEIGHT > div > img {
+	top: 0;
+	left: 0;
+	max-height: 75vh;
 }
-.image_detail_block.QUAD>div>img{
-  max-width:400%;
+.image_detail_block.DOUBLE > div > img {
+	max-width: 200%;
 }
-.image_detail_block.HELF>div>img{
-  max-width:50%;
+.image_detail_block.QUAD > div > img {
+	max-width: 400%;
 }
-.image_detail_block.FULL>div:first-child{
-  position:fixed;
-  z-index: 9999;
-  min-width:100%;
-  min-height:100%;
-  top:0;
-  left:0;
-  background-color: rgba(17, 19, 21, 0.44);
+.image_detail_block.HELF > div > img {
+	max-width: 50%;
 }
-.image_detail_block.FULL>div>img{
-  position:fixed;
-  z-index: 10000;
-  top:5px;
-  left:5px;
-  width:calc(100% - 10px);
-  cursor: pointer;
+.image_detail_block.FULL > div:first-child {
+	position: fixed;
+	z-index: 9999;
+	min-width: 100%;
+	min-height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(17, 19, 21, 0.44);
+}
+.image_detail_block.FULL > div > img {
+	position: fixed;
+	z-index: 10000;
+	top: 5px;
+	left: 5px;
+	width: calc(100% - 10px);
+	cursor: pointer;
 }
 .Thumnails {
-  flex-direction: column;
-  padding-right: 0.2em;
-  background-color: rgba(200, 200, 200, 0);
+	flex-direction: column;
+	padding-right: 0.2em;
+	background-color: rgba(200, 200, 200, 0);
 }
 
 .Thumnails .thumbnails_block {
-  padding: 1px;
-  background-color: rgba(220, 220, 220, 1);
-  border: 0px dotted #cad2b1;
-  height: 100%;
+	padding: 1px;
+	background-color: rgba(220, 220, 220, 1);
+	border: 0px dotted #cad2b1;
+	height: 100%;
 }
 
 .Thumnails .thumbnails_block.over {
-  background-color: rgba(190, 190, 190, 0.8);
-  border: 2px dotted #cad2b1;
+	background-color: rgba(190, 190, 190, 0.8);
+	border: 2px dotted #cad2b1;
 }
 
 .thumbnail_block {
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(182, 175, 209);
-  border: 1px solid #fdd;
-  width: 110px;
-  height: 110px;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-size: 110, 110, contain;
-  background-position: center;
-  margin-bottom: 1.8em;
+	display: flex;
+	flex-direction: column;
+	background-color: rgb(182, 175, 209);
+	border: 1px solid #fdd;
+	width: 110px;
+	height: 110px;
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-size: 110px, 110px, contain;
+	background-position: center;
+	margin-bottom: 1.8em;
 }
 
-.thumnailsImageArea .thumbnail_block {}
+.thumnailsImageArea .thumbnail_block {
+}
 
 .thumbnail_block.over {
-  background-color: #0bd5d8;
-  width: 110px;
-  border: 2px dotted #cad2b1;
+	background-color: #0bd5d8;
+	width: 110px;
+	border: 2px dotted #cad2b1;
 }
 
 .thumbnail_block span.delButton {
-  width: 30px;
-  height:30px;
-  margin-bottom: 77px;
+	width: 30px;
+	height: 30px;
+	line-height: 10px;
+	margin-bottom: 100px;
 }
 
 .thumbnail_block div {
-  display: flex;
-  height: auto;
-  margin: auto;
+	display: flex;
+	height: auto;
+	margin: auto;
 }
 
 .thumbnail_block div.page_block {
-  height: 110px;
+	height: 110px;
 }
 
 .thumbnail_block div.options_block {
-  height: 5px;
-  font-size: 0.2em;
-  padding: 0.2em;
+	height: 5px;
+	font-size: 0.2em;
+	padding: 0.2em;
 }
 
 .thumbnail_block div.options_block .checkForceColor.enable {
-  background-color: rgb(236, 145, 145);
+	background-color: rgb(236, 145, 145);
 }
 
 .thumbnail_block div.options_block .checkForceColor.disable {
-  background-color: rgb(241, 241, 241);
+	background-color: rgb(241, 241, 241);
 }
 
 .thumbnail_block div.options_block .checkNoCropping.enable {
-  background-color: rgb(233, 220, 134);
+	background-color: rgb(233, 220, 134);
 }
 
 .thumbnail_block div.options_block .checkNoCropping.disable {
-  background-color: rgb(241, 241, 241);
+	background-color: rgb(241, 241, 241);
 }
 
-.thumbnail_block div.options_block .checkForceColor.enable::after, .thumbnail_block div.options_block .checkNoCropping.enable::after {
-  content: "On";
-  color: black;
+.thumbnail_block div.options_block .checkForceColor.enable::after,
+.thumbnail_block div.options_block .checkNoCropping.enable::after {
+	content: 'On';
+	color: black;
 }
 
-.thumbnail_block div.options_block .checkForceColor.disable::after, .thumbnail_block div.options_block .checkNoCropping.disable::after {
-  content: "Off";
-  color: gray;
+.thumbnail_block div.options_block .checkForceColor.disable::after,
+.thumbnail_block div.options_block .checkNoCropping.disable::after {
+	content: 'Off';
+	color: gray;
 }
 
 .thumbnail_text {
-  display: block;
-  background-color: rgb(0, 103, 135);
-  border: 0 solid #fdd;
-  color: rgb(189, 193, 201);
-  font-size: 0.3em;
-  padding: 0.3em;
-  min-height: 50px;
+	display: block;
+	background-color: rgb(0, 103, 135);
+	border: 0 solid #fdd;
+	color: rgb(189, 193, 201);
+	font-size: 0.3em;
+	line-height: 1.1em;
+	padding: 0.3em;
+	min-height: 50px;
+	word-break: break-all;
 }
 
 .image_detail_block {
-  position: relative;
-  top: -10px;
-  left: -30px;
+	position: relative;
+	top: -10px;
+	left: -30px;
 }
 
-.ProgressBar, .Preview {
-  top: 0;
-  left: 0;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(118, 118, 118, 0.80);
-  z-index: 1001;
-  display: none;
+.ProgressBar,
+.Preview {
+	top: 0;
+	left: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(118, 118, 118, 0.8);
+	z-index: 1001;
+	display: none;
 }
 
-.ProgressBar>div {
-  position: fixed;
-  top: 50%;
-  left: 5%;
-  margin: 0 auto;
-  width: 90%;
-  height: 7em;
-  background-color: rgba(238, 118, 238, 1);
-  z-index: 1000;
-  padding: 10px
+.ProgressBar > div {
+	position: fixed;
+	top: 50%;
+	left: 5%;
+	margin: 0 auto;
+	width: 90%;
+	height: 7em;
+	background-color: rgba(238, 118, 238, 1);
+	z-index: 1000;
+	padding: 10px;
 }
 
-.ProgressBar>div .progeressTitle {
-  padding-bottom: 5px;
+.ProgressBar > div .progeressTitle {
+	padding-bottom: 5px;
 }
 
-.ProgressBar>div .progeressFrame {
-  margin: 0 auto;
-  width: 95%;
-  height: 3em;
-  background-color: rgb(193, 165, 200);
-  z-index: 1000;
-  padding: 0px
+.ProgressBar > div .progeressFrame {
+	margin: 0 auto;
+	width: 95%;
+	height: 3em;
+	background-color: rgb(193, 165, 200);
+	z-index: 1000;
+	padding: 0px;
 }
 
-.ProgressBar>div .progeressInfo {
-  padding-top: 5px;
+.ProgressBar > div .progeressInfo {
+	padding-top: 5px;
 }
 
-.ProgressBar>div .progeressInfo>div {
-  width: 70%;
-  float: left;
+.ProgressBar > div .progeressInfo > div {
+	width: 70%;
+	float: left;
 }
 
-.ProgressBar>div .progeressInfo>div.progeressPoints {
-  width: 5em;
+.ProgressBar > div .progeressInfo > div.progeressPoints {
+	width: 5em;
 }
 
 .progeress {
-  position: relative;
-  top: 0;
-  left: 0;
-  height: 3em;
-  background-color: rgb(120, 231, 194);
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 3em;
+	background-color: rgb(120, 231, 194);
 }
 
-.Preview>div {
-  position: fixed;
-  top: 2%;
-  left: 2%;
-  margin: 0 auto;
-  width: 96%;
-  height: 96%;
-  background-color: rgb(197, 206, 213);
-  z-index: 1000;
-  padding: 0px
+.Preview > div {
+	position: fixed;
+	top: 2%;
+	left: 2%;
+	margin: 0 auto;
+	width: 96%;
+	height: 96%;
+	background-color: rgb(197, 206, 213);
+	z-index: 1000;
+	padding: 0px;
 }
 
-.Preview>div div.img {
-  max-width: 100%;
-  max-height: calc(100% - 72px);
+.Preview > div div.img {
+	max-width: 100%;
+	max-height: calc(100% - 72px);
 }
-.Preview>div div.img.right {
-  text-align: left;
+.Preview > div div.img.right {
+	text-align: left;
 }
-.Preview>div div.img.left {
-  text-align: right;
+.Preview > div div.img.left {
+	text-align: right;
 }
-.Preview>div div.img>img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.Preview>div .previewLeft, .Preview>div .previewRight {
-  cursor: pointer;
-  padding: 10px;
-  background-color: rgba(95, 161, 212, 0.58);
-}
-.Preview>div .previewLeft>.Dummy, .Preview>div .previewRight>.close {
-  display: inline-block;
-  width:1em;
-  height:1em;
+.Preview > div div.img > img {
+	max-width: 100%;
+	max-height: 100%;
 }
 
-.Preview>div .previewInfo {
-  font-size: 60%;
-  padding: 10px 10px 0 10px;
-  color: rgb(43, 176, 218)
+.Preview > div .previewLeft,
+.Preview > div .previewRight {
+	cursor: pointer;
+	padding: 10px;
+	background-color: rgba(95, 161, 212, 0.58);
+}
+.Preview > div .previewLeft > .Dummy,
+.Preview > div .previewRight > .close {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
 }
 
-.Preview>div .preview_dual {
-  display: flex;
+.Preview > div .previewInfo {
+	font-size: 60%;
+	padding: 10px 10px 0 10px;
+	color: rgb(43, 176, 218);
 }
 
-.Preview>div .preview_dual .previewImageFrame {
-  width: 50%;
+.Preview > div .preview_dual {
+	display: flex;
 }
-.Preview>div .previewImageFrame {
-    display: flex;
-    flex-direction: column;
+
+.Preview > div .preview_dual .previewImageFrame {
+	width: 50%;
+}
+.Preview > div .previewImageFrame {
+	display: flex;
+	flex-direction: column;
 }
 
 .previewInfo .options {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 0.2em;
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 0.2em;
 }
 
-.previewInfo .options>div {
-  width: 10em;
-  padding: 0.2em 0.2em 0.2em 0.2em;
-  cursor: pointer;
-  font-size: 0.7em;
-  color: rgb(29, 154, 114);
+.previewInfo .options > div {
+	width: 10em;
+	padding: 0.2em 0.2em 0.2em 0.2em;
+	cursor: pointer;
+	font-size: 0.7em;
+	color: rgb(29, 154, 114);
 }
 
 .previewInfo .options .checkForceColor.enable {
-  background-color: rgb(236, 145, 145);
+	background-color: rgb(236, 145, 145);
 }
 
 .previewInfo .options .checkForceColor.disable {
-  background-color: rgb(241, 241, 241);
+	background-color: rgb(241, 241, 241);
 }
 
 .previewInfo .options .checkNoCropping.enable {
-  background-color: rgb(233, 220, 134);
+	background-color: rgb(233, 220, 134);
 }
 
 .previewInfo .options .checkNoCropping.disable {
-  background-color: rgb(241, 241, 241);
+	background-color: rgb(241, 241, 241);
 }
 
-.previewInfo .options .checkForceColor.enable::after, .previewInfo .options .checkNoCropping.enable::after {
-  content: "On";
-  color: black;
+.previewInfo .options .checkForceColor.enable::after,
+.previewInfo .options .checkNoCropping.enable::after {
+	content: 'On';
+	color: black;
 }
 
-.previewInfo .options .checkForceColor.disable::after, .previewInfo .options .checkNoCropping.disable::after {
-  content: "Off";
-  color: gray;
+.previewInfo .options .checkForceColor.disable::after,
+.previewInfo .options .checkNoCropping.disable::after {
+	content: 'Off';
+	color: gray;
 }
 
-.Preview>div .preview_dual .previewImageFrame.dummy {
-  background-color: rgb(174, 181, 184);
+.Preview > div .preview_dual .previewImageFrame.dummy {
+	background-color: rgb(174, 181, 184);
 }
 
 .TitleSettings {
-  background-color: rgb(159, 117, 242);
-  padding: 0.5em;
-  margin: 0.1em 0;
-  margin-top: 1em;
+	background-color: rgb(159, 117, 242);
+	padding: 0.1em 0.5em;
+	margin: 0.1em 0;
+	margin-top: 0.2em;
 }
 
 .TitleSettingsTitle {
-  padding: 0.3em;
-  margin-bottom: 0.3em;
-  font-weight: bold;
-  font-size: 110%;
-  width: 100%;
-  text-align: center;
-  background-color: rgb(139, 87, 242);
+	padding: 0.3em;
+	margin-bottom: 0.3em;
+	font-weight: bold;
+	font-size: 110%;
+	width: 100%;
+	text-align: center;
+	background-color: rgb(139, 87, 242);
 }
 
 .TitleSettingsFrame {
-  display: flex;
+	display: flex;
 }
 
-.TitleSettingsFrame>div {
-  width: 50%;
+.TitleSettingsFrame > div {
+	width: 50%;
 }
 
-.TitleSettingsRow>span, .TitleSettingsRow>input {
-  display: inline-flex;
-  width: 40%;
+.TitleSettingsRow > span,
+.TitleSettingsRow > input {
+	display: inline-flex;
+	width: 40%;
 }
 
 .TitleSettingsUpdate {
-  width: 70%;
-  background-color: rgb(3, 21, 186);
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  margin: 0.5em auto;
-  padding: 0.5em;
-  border-radius: 1em;
-  cursor: pointer;
+	width: 70%;
+	background-color: rgb(3, 21, 186);
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	margin: 0.5em auto;
+	padding: 0.5em;
+	border-radius: 1em;
+	cursor: pointer;
 }
 
 .previewFrame {
-  display: flex;
+	display: flex;
 }
 .previewFrame.right {
-  justify-content: right;
+	justify-content: right;
 }
 .previewFrame.left {
-  justify-content: left;
+	justify-content: left;
 }
 
-.previewFrame>div.button {
-  width: 2em;
+.previewFrame > div.button {
+	width: 2em;
 }
 
-.previewFrame>div.button span.button {
-  display: block;
-  width: 20px;
-  text-align: center;
+.previewFrame > div.button span.button {
+	display: block;
+	width: 20px;
+	text-align: center;
 }
 
-.previewFrame>div.button span.button.symbol {
-  font-size: 150%;
+.previewFrame > div.button span.button.symbol {
+	font-size: 150%;
 }
 
-.previewFrame>div.button span.button.text {
-  font-size: 50%;
+.previewFrame > div.button span.button.text {
+	font-size: 50%;
 }
-.previewFrame>div.button span.button.dummy {
-  font-size: 100%;
-  height:25px;
-}
-
-.previewFrame>div.button span.button.close {
-  font-size: 85%;
-  font-weight: bold;
-  text-align: center;
-  background-color: #2d3031;
-  color: #babdce;
-  height:35px;
-  width:35px;
-  border-radius: 22px;
-  border: 5px solid #babdce;
-  margin-top:-18px;
-  margin-right:-18px;
-  margin-bottom:3px;
-  margin-left:18px;
-}
-.previewFrame>div.button span.button.close:hover {
-  color: white;
-  border: 5px solid white;
+.previewFrame > div.button span.button.dummy {
+	font-size: 100%;
+	height: 25px;
 }
 
+.previewFrame > div.button span.button.close {
+	font-size: 85%;
+	font-weight: bold;
+	text-align: center;
+	background-color: #2d3031;
+	color: #babdce;
+	height: 35px;
+	width: 35px;
+	border-radius: 22px;
+	border: 5px solid #babdce;
+	margin-top: -18px;
+	margin-right: -18px;
+	margin-bottom: 3px;
+	margin-left: 18px;
+}
+.previewFrame > div.button span.button.close:hover {
+	color: white;
+	border: 5px solid white;
+}
 
 .previewCallButton {
-  width: 110px;
-  background-color: #0b47b5;
-  font-size: 50%;
-  padding: 10px;
-  margin: 1px;
-  cursor: pointer;
-  border-radius: 5px;
+	width: 110px;
+	background-color: #0b47b5;
+	font-size: 50%;
+	padding: 10px;
+	margin: 1px;
+	cursor: pointer;
+	border-radius: 5px;
 }
 
 .previewCallButton:hover {
-  background-color: #072763;
-  color: #9a98de;
-  font-weight: bold;
+	background-color: #072763;
+	color: #9a98de;
+	font-weight: bold;
 }
 
 .pageFrameHeader {
-  font-size: 60%;
-  background-color: rgb(4, 29, 56);
-  color: white;
-  padding: 5px;
+	font-size: 60%;
+	background-color: rgb(4, 29, 56);
+	color: white;
+	padding: 5px;
 }
 
 .pageFrameHeaderLeft {
-  text-align: left;
+	text-align: left;
 }
 
 .pageFrameHeaderRight {
-  text-align: right;
+	text-align: right;
 }
 
 .PageFrame {
-  display: inline-block;
-  display: flex;
-  background-color: rgb(90, 123, 144);
-  width: 220px;
-  height: 150px;
-  font-size: 1em;
-  margin: 0.1em auto;
-  padding: 0.1em 0em;
+	display: inline-block;
+	display: flex;
+	background-color: rgb(90, 123, 144);
+	width: 220px;
+	height: 150px;
+	font-size: 1em;
+	margin: 0.1em auto;
+	padding: 0.1em 0em;
 }
 
 .PageFrame .Page {
-  width: 110px;
-  border: 2px solid rgb(126, 100, 113);
-  background-color: rgb(172, 148, 185);
-  height: 140px;
-  margin: 0.0em auto;
+	width: 110px;
+	border: 2px solid rgb(126, 100, 113);
+	background-color: rgb(172, 148, 185);
+	height: 140px;
+	margin: 0em auto;
 }
 
 .PageFrame .Dummy {
-  background-color: rgb(108, 110, 115);
-  color: rgb(108, 110, 115);
+	background-color: rgb(108, 110, 115);
+	color: rgb(108, 110, 115);
 }
 
 .PageFrame .Page .thumbnail_block {
-  height: 110px;
-  width: 106px;
-  margin: 0.0em auto;
-  background-color: rgb(227, 209, 238);
+	height: 110px;
+	width: 106px;
+	margin: 0em auto;
+	background-color: rgb(227, 209, 238);
 }
 
 .thumbnail_block .image_block {
-  height: 110px;
-  width: 106px;
-  margin: 0.0em auto;
-  background-color: rgb(227, 209, 238);
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+	height: 110px;
+	width: 106px;
+	margin: 0em auto;
+	background-color: rgb(227, 209, 238);
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
 }
 
 .ExportArea .ExportArea {
-  background-color: rgb(195, 240, 204);
-  border: 1px solid rgb(87, 158, 17);
-  padding: 1em;
-  margin-bottom: 0.2em;
+	background-color: rgb(195, 240, 204);
+	border: 1px solid rgb(87, 158, 17);
+	padding: 1em;
+	margin-bottom: 0.2em;
 }
 
 .ExportOrdrList .ExportOrdersListTitle {
-  background-color: rgb(162, 233, 176);
-  padding: 10px;
-  margin-bottom: 0.3em;
+	background-color: rgb(162, 233, 176);
+	padding: 10px;
+	margin-bottom: 0.3em;
 }
 
 .ExportOrdrList .ExportOrdrListFrame {
-  background-color: rgb(222, 232, 219);
-  padding: 15px;
-  border: 1px solid rgb(87, 158, 17);
-  margin-bottom: 0.5em;
+	background-color: rgb(222, 232, 219);
+	padding: 15px;
+	border: 1px solid rgb(87, 158, 17);
+	margin-bottom: 0.5em;
 }
 
 .ExportOrdrList .ExportOrdrs {
-  margin-bottom: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .ExportButtons {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
-div.button>div.exportedState {
-  background-color: rgb(148, 222, 164);
-  padding: 0.2em;
-  font-size: 60%;
-  max-width:100%;
-  word-wrap: break-word;
+div.button > div.exportedState {
+	background-color: rgb(148, 222, 164);
+	padding: 0.2em;
+	font-size: 60%;
+	max-width: 100%;
+	word-wrap: break-word;
 }
 
-.ExportButtons>div {
-  display: flex;
-  width: 144px;
-  padding: 15px;
-  margin: 2px;
-  border: 1px solid rgb(87, 158, 17);
-  cursor: pointer;
-  border-radius: 3px;
-  background-color: rgb(141, 233, 159);
+.ExportButtons > div {
+	display: flex;
+	width: 144px;
+	padding: 15px;
+	margin: 2px;
+	border: 1px solid rgb(87, 158, 17);
+	cursor: pointer;
+	border-radius: 3px;
+	background-color: rgb(141, 233, 159);
 }
 
-.ExportButtons>div>div{
-  max-width:100%;
+.ExportButtons > div > div {
+	max-width: 100%;
 }
 
-div.DownloadLastExportZipButtonFrame, div.DownloadLastExportPdfButtonFrame, div.DownloadUploadedImgZipButtonFrame, div.DownloadFullBackupZipButtonFrame {
-  padding: 0em;
+div.DownloadLastExportZipButtonFrame,
+div.DownloadLastExportPdfButtonFrame,
+div.DownloadUploadedImgZipButtonFrame,
+div.DownloadFullBackupZipButtonFrame {
+	padding: 0em;
 }
 
-div.button.disable, div.button.enable {
-  background-color: rgb(104, 131, 116);
-  padding: 1em;
-  margin: 0em;
-  width: 100%;
+div.button.disable,
+div.button.enable {
+	background-color: rgb(104, 131, 116);
+	padding: 1em;
+	margin: 0em;
+	width: 100%;
 }
 
 div.button.enable {
-  background-color: rgb(148, 219, 86);
+	background-color: rgb(148, 219, 86);
 }
 
 .ExportArea .ExportAreaTitle {
-  margin-bottom: 0.2em;
-  text-align: center;
-  padding: 0.3em;
-  font-weight: bold;
-  background-color: rgb(151, 238, 143);
+	margin-bottom: 0.2em;
+	text-align: center;
+	padding: 0.3em;
+	font-weight: bold;
+	background-color: rgb(151, 238, 143);
 }
 
-.ExportArea .ExportOrdrs>div {
-  margin: 0.1em;
-  padding: 0.4em;
-  padding-left: 2em;
-  border: 1px solid #aaa;
-  cursor: pointer;
-  background-color: rgb(232, 242, 229);
+.ExportArea .ExportOrdrs > div {
+	margin: 0.1em;
+	padding: 0.4em;
+	padding-left: 2em;
+	border: 1px solid #aaa;
+	cursor: pointer;
+	background-color: rgb(232, 242, 229);
 }
 
-.ExportArea .ExportOrdrs>div:active {
-  border: 1px solid #666;
-  background-color: rgb(242, 252, 239);
+.ExportArea .ExportOrdrs > div:active {
+	border: 1px solid #666;
+	background-color: rgb(242, 252, 239);
 }
 
-.ExportArea .ExportOrdrs>div:hover {
-  border: 1px solid #999;
-  background-color: rgb(237, 247, 234);
+.ExportArea .ExportOrdrs > div:hover {
+	border: 1px solid #999;
+	background-color: rgb(237, 247, 234);
 }
 
-.ExportArea .ExportOrdrs>div.active {
-  font-weight: bold;
-  color: rgb(223, 238, 218);
-  background-color: rgb(70, 187, 35);
+.ExportArea .ExportOrdrs > div.active {
+	font-weight: bold;
+	color: rgb(223, 238, 218);
+	background-color: rgb(70, 187, 35);
 }
 
-.ExportArea .ExportOrdrs>label {
-  display: inline-block;
-  line-height: 2em;
-  margin: 0.1em;
-  padding: 0.4em 0.6em;
-  border: 0px solid #aaa;
-  cursor: pointer;
-  background-color: rgb(232, 242, 229);
+.ExportArea .ExportOrdrs > label {
+	display: inline-block;
+	line-height: 2em;
+	margin: 0.1em;
+	padding: 0.4em 0.6em;
+	border: 0px solid #aaa;
+	cursor: pointer;
+	background-color: rgb(232, 242, 229);
 }
 
-.ExportArea .ExportOrdrs>label:active {
-  background-color: rgb(174, 223, 160);
+.ExportArea .ExportOrdrs > label:active {
+	background-color: rgb(174, 223, 160);
 }
 
-.ExportArea .ExportOrdrs>label:hover {
-  background-color: rgb(237, 247, 234);
+.ExportArea .ExportOrdrs > label:hover {
+	background-color: rgb(237, 247, 234);
 }
 
 .TitleMng {
-  padding: 10px;
-  background-color: rgb(255, 165, 162);
+	padding: 10px;
+	background-color: rgb(255, 165, 162);
 }
 
 .TitleMng .name {
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  font-weight: bold;
-  background-color: rgb(255, 113, 82);
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	font-weight: bold;
+	background-color: rgb(255, 113, 82);
 }
 
-.TitleMng>.StorageMeter {
-  margin: 0.5em;
-  padding: 0.5em;
-  background-color: rgb(255, 155, 124);
+.TitleMng > .StorageMeter {
+	margin: 0.5em;
+	padding: 0.5em;
+	background-color: rgb(255, 155, 124);
 }
 
-.TitleListFrame, .StorageInitializerFrame, .TitleMng>.TitleNewone {
-  margin: 0.5em;
-  padding: 0.5em;
-  background-color: rgb(255, 155, 124);
+.TitleListFrame,
+.StorageInitializerFrame,
+.TitleMng > .TitleNewone {
+	margin: 0.5em;
+	padding: 0.5em;
+	background-color: rgb(255, 155, 124);
 }
 
-.TitleMng .StorageMeterFrame, .StorageInitializerFrame {
-  display: flex;
-  padding: 0.1em;
-  height: 2em;
+.TitleMng .StorageMeterFrame,
+.StorageInitializerFrame {
+	display: flex;
+	padding: 0.1em;
+	height: 2em;
 }
 
 .TitleMng .StorageMeterFrame div.StorageMeter {
-  line-height: 1.8em;
-  height: 2em;
-  margin-right: 0.5em;
+	line-height: 1.8em;
+	height: 2em;
+	margin-right: 0.5em;
 }
 
-.TitleMng .StorageMeterFrame span.button, .TitleRowRow .button, .TitleNewone .button, .StorageInitializerFrame div.button {
-  display: inline-block;
-  margin-left: 1em;
-  background-color: gray;
-  cursor: pointer;
-  padding: 0.5em 2em;
-  border-radius: 3px;
+.TitleMng .StorageMeterFrame span.button,
+.TitleRowRow .button,
+.TitleNewone .button,
+.StorageInitializerFrame div.button {
+	display: inline-block;
+	margin-left: 1em;
+	background-color: gray;
+	cursor: pointer;
+	padding: 0.5em 2em;
+	border-radius: 3px;
 }
 
 .TitleMng .StorageMeterFrame span.button {
-  padding: 0.2em 2em;
+	padding: 0.2em 2em;
 }
 
-.TitleRowRow>div, .StorageInitializerFrame>div {
-  padding: 0.2em;
+.TitleRowRow > div,
+.StorageInitializerFrame > div {
+	padding: 0.2em;
 }
 
 .TitleNewoneRow {
-  margin-left: 1em;
+	margin-left: 1em;
 }
 
 .TitleRowRow {
-  display: flex;
+	display: flex;
 }
-div#menu{
-  position: fixed;
-  top: 4.6em;
-  z-index: 500;
-  width: 100%;
+div#menu {
+	position: fixed;
+	top: 4.6em;
+	z-index: 500;
+	width: 100%;
 }
 .MenuFrame {
-  display: flex;
-  width: 100%;
-  max-width: 940px;
-  align-items: stretch;
+	display: flex;
+	width: 100%;
+	max-width: 940px;
+	align-items: stretch;
 }
 
 .MenuFrame a {
-  flex-grow:0;
-  display: inline-block;
-  width: 20%;
-  cursor: pointer;
-  text-decoration: none;
-  min-height: 2.5em;
-  padding: 5px 10px;
-  margin: 2px 1px 0 1px;
-  border: 0px solid rgb(83, 122, 134);
-  border-radius: 5px;
-  background-color: rgb(170, 185, 210);
-  color: rgb(222, 240, 222);
+	flex-grow: 0;
+	display: inline-block;
+	width: 20%;
+	cursor: pointer;
+	text-decoration: none;
+	min-height: 2.5em;
+	padding: 5px 10px;
+	margin: 2px 1px 0 1px;
+	border: 0px solid rgb(83, 122, 134);
+	border-radius: 5px;
+	background-color: rgb(170, 185, 210);
+	color: rgb(222, 240, 222);
 }
 
 a.dummy {
-  display: inline-block;
-  width: 50px;
-  text-decoration: none;
+	display: inline-block;
+	width: 50px;
+	text-decoration: none;
 }
 
-.MenuFrame>a.MenuButton.active:nth-child(1) {
-  background-color: rgb(249, 111, 52);
+.MenuFrame > a.MenuButton.active:nth-child(1) {
+	background-color: rgb(249, 111, 52);
 }
 
-.MenuFrame>a.MenuButton.active:nth-child(2) {
-  background-color: rgb(104, 65, 199);
+.MenuFrame > a.MenuButton.active:nth-child(2) {
+	background-color: rgb(104, 65, 199);
 }
 
-.MenuFrame>a.MenuButton.active:nth-child(3) {
-  background-color: rgb(72, 159, 222);
+.MenuFrame > a.MenuButton.active:nth-child(3) {
+	background-color: #a8bae0;
 }
 
-.MenuFrame>a.MenuButton.active:nth-child(4) {
-  background-color: rgb(123, 193, 68);
+.MenuFrame > a.MenuButton.active:nth-child(4) {
+	background-color: rgb(72, 159, 222);
 }
 
-.MenuFrame>a.MenuButton.active:nth-child(5) {
-  background-color: rgb(80, 50, 60);
+.MenuFrame > a.MenuButton.active:nth-child(5) {
+	background-color: rgb(123, 193, 68);
 }
 
-.MenuFrame>a.MenuButton.active {
-  font-weight: bold;
-  border-width: 0;
+.MenuFrame > a.MenuButton.active:nth-child(6) {
+	background-color: rgb(80, 50, 60);
 }
 
-nav, div.scroll-container {
-  display: block;
-  margin: 0 auto;
-  text-align: center;
+.MenuFrame > a.MenuButton.active {
+	font-weight: bold;
+	border-width: 0;
+}
+
+nav,
+div.scroll-container {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
 }
 
 div.main-container {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 div.main-container {
-  position: absolute;
-  top: 0;
-  padding-top: 8em;
-  height: 100%;
-  padding-bottom: 3em;
+	position: absolute;
+	top: 0;
+	padding-top: 8em;
+	height: 100%;
+	padding-bottom: 3em;
 }
 
 div.scroll-container {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  scroll-behavior: smooth;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	scroll-behavior: smooth;
 }
 
 div.Splash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgb(241, 253, 255);
-  z-index: 1200;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgb(241, 253, 255);
+	z-index: 1200;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
-div.Splash>div.splashTitle {
-  width:360px;
-  height:300px;
-  background-color: #e8eeef;
-  border: solid 1px #052240;
-  padding:1em;
-  border-bottom:203px solid #052240;
+div.Splash > div.splashTitle {
+	width: 360px;
+	height: 300px;
+	background-color: #e8eeef;
+	border: solid 1px #052240;
+	padding: 1em;
+	border-bottom: 203px solid #052240;
 }
 
 div.Splash div.appTitle {
-  color: #1664a2;
-  font-size: 500%;
-  padding-top: 30px;
-  letter-spacing: -0.05em;
-  padding-left: 1%;
-  font-weight: bold;
+	color: #1664a2;
+	font-size: 500%;
+	padding-top: 30px;
+	letter-spacing: -0.05em;
+	padding-left: 1%;
+	font-weight: bold;
 }
 
 div.Splash div.appVerion {
-  font-size: 100%;
-  padding-top: 0%;
-  padding-left: 50%;
-  color: rgb(0, 232, 249);
+	font-size: 100%;
+	padding-top: 0%;
+	padding-left: 50%;
+	color: rgb(0, 232, 249);
 }
 
 div.Splash div.message {
-  font-size: 200%;
-  padding-top: 10%;
+	font-size: 200%;
+	padding-top: 10%;
 }
 
-div.Splash div.message>div {
-  text-align: center;
+div.Splash div.message > div {
+	text-align: center;
 }
 
 div.loader {
-  text-align: center;
-  font-family: 'Nunito', sans-serif;
-  font-size: 1em;
-  color: transparent;
-  letter-spacing: 0.01em;
+	text-align: center;
+	font-family: 'Nunito', sans-serif;
+	font-size: 1em;
+	color: transparent;
+	letter-spacing: 0.01em;
 }
 
 .loader span {
-  text-shadow:
-    0 0 2px rgba(204, 208, 212, 0.9),
-    0 15px 25px rgba(0, 0, 0, 0.3),
-    0 -2px 3px rgba(0, 0, 0, 0.1),
-    0 -5px 10px rgba(255, 255, 255, 0.5),
-    0 5px 10px rgba(0, 0, 0, 0.3),
-    0 3px 4px rgba(255, 255, 255, 0.2),
-    0 0 20px rgba(255, 255, 255, 0.45);
-  animation: loading 0.95s ease-in-out infinite alternate;
+	text-shadow: 0 0 2px rgba(204, 208, 212, 0.9), 0 15px 25px rgba(0, 0, 0, 0.3), 0 -2px 3px rgba(0, 0, 0, 0.1),
+		0 -5px 10px rgba(255, 255, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3), 0 3px 4px rgba(255, 255, 255, 0.2),
+		0 0 20px rgba(255, 255, 255, 0.45);
+	animation: loading 0.95s ease-in-out infinite alternate;
 }
 
 @keyframes loading {
-  to {
-    text-shadow:
-      0 0 2px rgba(204, 208, 212, 0.2),
-      0 0 3px rgba(0, 0, 0, 0.02),
-      0 0 0 rgba(0, 0, 0, 0),
-      0 0 0 rgba(255, 255, 255, 0),
-      0 0 0 rgba(0, 0, 0, 0),
-      0 0 0 rgba(255, 255, 255, 0),
-      0 0 0 rgba(255, 255, 255, 0);
-  }
+	to {
+		text-shadow: 0 0 2px rgba(204, 208, 212, 0.2), 0 0 3px rgba(0, 0, 0, 0.02), 0 0 0 rgba(0, 0, 0, 0),
+			0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(255, 255, 255, 0),
+			0 0 0 rgba(255, 255, 255, 0);
+	}
 }
 
 .loader span:nth-child(2) {
-  animation-delay: 0.15s;
+	animation-delay: 0.15s;
 }
 
 .loader span:nth-child(3) {
-  animation-delay: 0.30s;
+	animation-delay: 0.3s;
 }
 
 .loader span:nth-child(4) {
-  animation-delay: 0.45s;
+	animation-delay: 0.45s;
 }
 
 .loader span:nth-child(5) {
-  animation-delay: 0.60s;
+	animation-delay: 0.6s;
 }
 
 .loader span:nth-child(6) {
-  animation-delay: 0.75s;
+	animation-delay: 0.75s;
 }
 
 .loader span:nth-child(7) {
-  animation-delay: 0.90s;
+	animation-delay: 0.9s;
 }
 
+#Dialog {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1200;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(10, 10, 10, 0.5);
+}
+#Dialog > div {
+	width: 320px;
+	height: 300px;
 
-#Dialog{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top:0;
-  left: 0;
-  z-index: 1200;
-  width: 100%;
-  height: 100%;
-  background-color:rgba(10, 10, 10, 0.5);
+	background-color: #dce4e8;
 }
-#Dialog>div{
-  width: 320px;
-  height: 300px;
-
-  background-color:#dce4e8;
+#Dialog > div div.dialogTitle {
+	height: 3em;
+	padding: 0.5em;
 }
-#Dialog>div div.dialogTitle{
-  height:3em;
-  padding:0.5em;
+#Dialog > div div.dialogInfo {
+	height: 13em;
+	padding: 0.5em;
 }
-#Dialog>div div.dialogInfo{
-  height:13em;
-  padding:0.5em;
+#Dialog > div div.dialogDeside {
+	height: 3em;
+	padding: 0.2em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
 }
-#Dialog>div div.dialogDeside{
-  height:3em;
-  padding:0.2em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-#Dialog>div div.dialogDeside>div{
-  cursor: pointer;
-  padding: 0.2em;
-  width:130px;
-  background-color: #96e8d8;
-  margin: 0 0.2em;
-  border-radius: 3px;
+#Dialog > div div.dialogDeside > div {
+	cursor: pointer;
+	padding: 0.2em;
+	width: 130px;
+	background-color: #96e8d8;
+	margin: 0 0.2em;
+	border-radius: 3px;
 }
 .display_none {
-  display: none;
+	display: none;
 }

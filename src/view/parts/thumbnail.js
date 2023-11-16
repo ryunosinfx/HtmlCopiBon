@@ -1,4 +1,5 @@
 import vu from '../../util/viewUtil.js';
+import { BinaryCnvtr, H } from '../../util/binaryConverter.js';
 import { BaseView } from '../../util/reactive/baseView.js';
 import { a, div, li, ul, img, span, input, label } from '../../util/reactive/base/vtags.js';
 import { ImageActionCreator } from '../../reduxy/action/imageActionCreator.js';
@@ -17,6 +18,7 @@ export class Thumbnail extends BaseView {
 			this.doDrop(elm);
 		};
 	}
+	static Cash = new Map();
 	setImageData(imageData) {
 		this.imageData = imageData;
 	}
@@ -208,10 +210,14 @@ export class Thumbnail extends BaseView {
 			ab: binaryEntity._ab,
 			type: imageEntity.type,
 		};
-		const imgElm = await this.ip.createImageNodeByData(data).catch((e) => {
-			console.error(e);
-			throw e;
-		});
+		const h1 = await H.d(BinaryCnvtr.u8(binaryEntity._ab));
+		const hash = await H.d(
+			BinaryCnvtr.jus([BinaryCnvtr.s2u(imageEntity.name), BinaryCnvtr.U2a(h1), BinaryCnvtr.s2u(imageEntity.type)])
+		);
+		const cashSrc = Thumbnail.Cash.get(hash);
+		const src = cashSrc ? cashSrc : (await this.ip.createImageNodeByData(data)).src;
+		Thumbnail.Cash.set(hash, src);
+		console.log(hash + '/' + (cashSrc === src) + '/' + !!src);
 		const pk = imageEntity.getPk();
 		// const imgVnode = img(pk + "_image", imageEntity.name, imageEntity.name, imgElm.src, {});
 		const textVnode = span(pk + '_text', ['thumbnail_text'], imageData.imageText);
@@ -225,27 +231,27 @@ export class Thumbnail extends BaseView {
 			},
 			'x'
 		);
-		const imageVnode = div('', ['image_block'], {
-			on: {
-				dragstart: this.handleDragStart(imgElm.src),
-				dragover: this.handleDragOver(),
-				dragenter: this.handleDragEnter(),
-				dragleave: this.handleDragLeave(),
-				drop: this.handleDrop(),
-				dragend: this.handleDragEnd(),
-				click: this.selectImage(),
-				touchstart: this.handleTouchStart(imgElm.src),
-				touchmove: this.handleTouchMove(),
-				touchend: this.handleTouchEnd(),
-			},
-			dataset: {
-				pk: pk,
-				is_image: true,
-			},
-			props: {
-				draggable: 'true',
-			},
-		});
+		// const imageVnode = div('', ['image_block'], {
+		// 	on: {
+		// 		dragstart: this.handleDragStart(src),
+		// 		dragover: this.handleDragOver(),
+		// 		dragenter: this.handleDragEnter(),
+		// 		dragleave: this.handleDragLeave(),
+		// 		drop: this.handleDrop(),
+		// 		dragend: this.handleDragEnd(),
+		// 		click: this.selectImage(),
+		// 		touchstart: this.handleTouchStart(src),
+		// 		touchmove: this.handleTouchMove(),
+		// 		touchend: this.handleTouchEnd(),
+		// 	},
+		// 	dataset: {
+		// 		pk: pk,
+		// 		is_image: true,
+		// 	},
+		// 	props: {
+		// 		draggable: 'true',
+		// 	},
+		// });
 		const classObj = {};
 		classObj[this.displayNone] = pagesMap[pk];
 		const rowVnode = div(
@@ -253,19 +259,19 @@ export class Thumbnail extends BaseView {
 			[this.thumbnail_block],
 			{
 				on: {
-					dragstart: this.handleDragStart(imgElm.src),
+					dragstart: this.handleDragStart(src),
 					dragover: this.handleDragOver(),
 					dragenter: this.handleDragEnter(),
 					dragleave: this.handleDragLeave(),
 					drop: this.handleDrop(),
 					dragend: this.handleDragEnd(),
 					click: this.selectImage(),
-					touchstart: this.handleTouchStart(imgElm.src),
+					touchstart: this.handleTouchStart(src),
 					touchmove: this.handleTouchMove(),
 					touchend: this.handleTouchEnd(),
 				},
 				style: {
-					'background-image': 'url(' + imgElm.src + ')',
+					'background-image': 'url(' + src + ')',
 				},
 				class: classObj,
 				dataset: {

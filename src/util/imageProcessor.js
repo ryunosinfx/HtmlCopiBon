@@ -1,5 +1,5 @@
 import vu from './viewUtil.js';
-import bc from './binaryConverter.js';
+import { BinaryCnvtr } from './binaryConverter.js';
 import { Paper } from './image/paper.js';
 import { ImageMerger } from './image/imageMerger.js';
 import { ImageResizer } from './image/imageResizer.js';
@@ -52,7 +52,7 @@ export class ImageProcessor {
 		newPaperData = undefined;
 		let dataUri = this.canvas.toDataURL();
 		console.time('resize copy');
-		const abResized = bc.dataURI2ArrayBuffer(dataUri);
+		const abResized = BinaryCnvtr.D2a(dataUri);
 		dataUri = undefined;
 		console.timeEnd('resize copy');
 		return abResized;
@@ -79,7 +79,7 @@ export class ImageProcessor {
 	getImageDataFromArrayBuffer(ab) {
 		// console.time('resize getImageDataFromArrayBuffer');
 		return new Promise((resolve, reject) => {
-			let dataUri = bc.arrayBuffer2DataURI(ab);
+			let dataUri = BinaryCnvtr.a2D(ab);
 			ab = null;
 			const img = new Image();
 			img.src = dataUri;
@@ -120,7 +120,7 @@ export class ImageProcessor {
 		}
 		this.ctx.putImageData(newPaperData, 0, 0);
 		let dataUri = option ? this.canvas.toDataURL(option.type, option.quority) : this.canvas.toDataURL();
-		const abResized = bc.dataURI2ArrayBuffer(dataUri);
+		const abResized = BinaryCnvtr.D2a(dataUri);
 		// console.log('iamgeBitmapData.data.length:'+iamgeBitmapData.data.length+'/w:'+iamgeBitmapData.width+'/h:'+iamgeBitmapData.height);
 		// console.log('dataUri:'+dataUri);
 		// console.log(abResized);
@@ -131,7 +131,7 @@ export class ImageProcessor {
 	create(arrayBuffer, width, height, type) {
 		return new Promise((resolve, reject) => {
 			const imgElm = new Image();
-			imgElm.src = bc.arrayBuffer2DataURI(arrayBuffer, type);
+			imgElm.src = BinaryCnvtr.a2D(arrayBuffer, type);
 			imgElm.onload = () => {
 				const widthScale = width / imgElm.width;
 				const heightScale = height / imgElm.height;
@@ -160,14 +160,11 @@ export class ImageProcessor {
 	createImageNodeByData(data) {
 		return new Promise((resolve, reject) => {
 			let { name, ab, type } = data;
-			let imgElm = vu.createImage();
+			const imgElm = vu.createImage();
 			imgElm.alt = escape(name);
-
-			if (!type) {
-				type = 'application/octet-stream';
-			}
+			if (!type) type = 'application/octet-stream';
 			if (type && type.match(imgRe)) {
-				imgElm.src = bc.arrayBuffer2DataURI(ab, type);
+				imgElm.src = BinaryCnvtr.a2D(ab, type);
 				imgElm.onload = () => {
 					data.height = imgElm.height;
 					data.width = imgElm.width;

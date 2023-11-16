@@ -26,7 +26,13 @@ export class Menu extends BaseView {
 			id: 'step2',
 			ancker: '#' + 'fuaPArent',
 			label: 'Step2 Select Files',
-			targets: ['fuaPArent', 'FilesArea'],
+			targets: ['fuaPArent'],
+		});
+		this.steps.push({
+			id: 'step25',
+			ancker: '#' + 'FilesArea',
+			label: 'Step2.5 Files Area',
+			targets: ['FilesArea'],
 		});
 		this.steps.push({
 			id: 'step3',

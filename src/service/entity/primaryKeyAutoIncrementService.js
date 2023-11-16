@@ -1,4 +1,4 @@
-import bc from '../../util/binaryConverter.js';
+import { BinaryCnvtr } from '../../util/binaryConverter.js';
 import { StorageService } from './storageService.js';
 const USER_ID = 'default';
 const PK_INCREMENT_STORE = 'pk_increment';
@@ -23,7 +23,7 @@ export class PrimaryKeyAutoIncrementService {
 			let nextCountAB = this.countUpUint32(record.data);
 			result.data = nextCountAB;
 		});
-		return bc.arrayBuffer2base64(data);
+		return BinaryCnvtr.a2B(data);
 	}
 	countUpUint32(arrayBuffer) {
 		let currentCount = arrayBuffer;

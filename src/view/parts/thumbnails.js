@@ -35,17 +35,11 @@ export class Thumbnails extends BaseView {
 		return div(this.imageAreaID, 'Thumnails');
 	}
 	updatePageMap(pagesData) {
-		for (const key in this.pageMap) {
-			delete this.pageMap[key];
-		}
+		for (const key in this.pageMap) delete this.pageMap[key];
 		for (const pageEntity of pagesData) {
-			if (!pageEntity) {
-				continue;
-			}
+			if (!pageEntity) continue;
 			const imagePk = pageEntity.baseImage;
-			if (imagePk) {
-				this.pageMap[imagePk] = true;
-			}
+			if (imagePk) this.pageMap[imagePk] = true;
 		}
 	}
 	handleDragEnter() {
@@ -88,9 +82,7 @@ export class Thumbnails extends BaseView {
 	async showImages(imageDatas) {
 		const images = [];
 		for (const imageData of imageDatas) {
-			if (!imageData) {
-				continue;
-			}
+			if (!imageData) continue;
 			const imageEntity = imageData.imageEntity;
 			const pk = imageEntity.getPk();
 			const vnode = await this.thumbnail.crateDataLine(imageData, this.pageMap).catch((e) => {
