@@ -1,4 +1,4 @@
-import vu from './viewUtil.js';
+import { ViewUtil } from './ViewUtil.js';
 import { BinaryCnvtr } from './binaryConverter.js';
 import { Paper } from './image/paper.js';
 import { ImageMerger } from './image/imageMerger.js';
@@ -6,8 +6,7 @@ import { ImageResizer } from './image/imageResizer.js';
 const imgRe = /^image\/.+|application\/octet-stream/;
 export class ImageProcessor {
 	constructor() {
-		this.canvas = vu.createCanvas(null, 'hidden');
-
+		this.canvas = ViewUtil.createCanvas(null, 'hidden');
 		this.ctx = this.canvas.getContext('2d');
 		this.paper = new Paper();
 		this.imageMerger = new ImageMerger();
@@ -26,20 +25,22 @@ export class ImageProcessor {
 	async resizeAsPaper(ab, paperSize, dpiName, marginSetting) {
 		const origin = await this.getImageDataFromArrayBuffer(ab);
 		const sizeOfPaper = this.paper.getPixcelSizeBySelected(paperSize, dpiName);
-		let newPaperData = this.ctx.createImageData(sizeOfPaper.width, sizeOfPaper.height);
 		const sizeOfImage = this.paper.getPixcelSizeBySelected(paperSize, dpiName, marginSetting);
 		const newData = this.resizeInMaxSize(origin, sizeOfImage.width, sizeOfImage.height);
 		const marginMM = this.paper.getOffset(dpiName, marginSetting);
+		const nd = newData.data;
 		const data = {
 			offsetY: marginMM,
 			offsetX: marginMM,
-			data: newData.data,
+			data: nd,
 			width: newData.width,
 			height: newData.height,
 		};
-		const len = newData.data.length;
+		const npd = newPaperData.data;
+		const len = nd.length;
+		let newPaperData = this.ctx.createImageData(sizeOfPaper.width, sizeOfPaper.height);
 		for (let i = 0; i < len; i++) {
-			newPaperData.data[i] = newData.data[i];
+			npd[i] = nd[i];
 		}
 		this.canvas.width = newPaperData.width;
 		this.canvas.height = newPaperData.height;
@@ -57,7 +58,6 @@ export class ImageProcessor {
 		console.timeEnd('resize copy');
 		return abResized;
 	}
-
 	resizeInMaxSize(iamegData, maxWidth, maxHeight) {
 		const { data, width, height } = iamegData;
 		const retioOuter = maxWidth / maxHeight;
@@ -156,11 +156,10 @@ export class ImageProcessor {
 	exportJpeg(quority = 1.0) {
 		return this.canvas.toDataURL('image/jpeg', quority);
 	}
-
 	createImageNodeByData(data) {
 		return new Promise((resolve, reject) => {
 			let { name, ab, type } = data;
-			const imgElm = vu.createImage();
+			const imgElm = ViewUtil.createImage();
 			imgElm.alt = escape(name);
 			if (!type) type = 'application/octet-stream';
 			if (type && type.match(imgRe)) {

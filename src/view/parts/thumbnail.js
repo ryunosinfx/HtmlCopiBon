@@ -1,4 +1,4 @@
-import vu from '../../util/viewUtil.js';
+import { ViewUtil } from '../../util/ViewUtil.js';
 import { BinaryCnvtr, H } from '../../util/binaryConverter.js';
 import { BaseView } from '../../util/reactive/baseView.js';
 import { a, div, li, ul, img, span, input, label } from '../../util/reactive/base/vtags.js';
@@ -113,7 +113,7 @@ export class Thumbnail extends BaseView {
 			}
 			this.draggableArea.nowSelectedElm = null;
 		}
-		vu.clearSideElmClass(elm, 'over');
+		ViewUtil.clearSideElmClass(elm, 'over');
 	}
 	handleDragEnd(event) {
 		return (event) => {
@@ -124,7 +124,7 @@ export class Thumbnail extends BaseView {
 			window.blockMenuHeaderScroll = true;
 			const nowSelectedElm = this.draggableArea.nowSelectedElm;
 			// console.log('handleDragEnd imagePKmove:'+(nowSelectedElm?nowSelectedElm.dataset.pk:nowSelectedElm)+"/elm.dataset.pk:"+elm.dataset.pk)
-			vu.clearSideElmClass(elm, 'over');
+			ViewUtil.clearSideElmClass(elm, 'over');
 		};
 	}
 	handleTouchStart(dragImageSrc) {
@@ -152,9 +152,9 @@ export class Thumbnail extends BaseView {
 			if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
 				return;
 			}
-			const pointedElm = vu.getCurrentPointedElm(event);
+			const pointedElm = ViewUtil.getCurrentPointedElm(event);
 			if (this.pointedElm && this.pointedElm !== pointedElm) {
-				vu.clearSideElmClass(this.pointedElm, 'over');
+				ViewUtil.clearSideElmClass(this.pointedElm, 'over');
 			}
 			this.pointedElm = pointedElm;
 			if (!pointedElm.getAttribute('draggable') || pointedElm === elm) {
@@ -173,18 +173,18 @@ export class Thumbnail extends BaseView {
 				return;
 			}
 			const nowSelectedElm = this.draggableArea.nowSelectedElm;
-			vu.clearSideElmClass(elm, 'over');
-			const pointedElm = this.pointedElm;
-			if (!pointedElm || !pointedElm.getAttribute('draggable') || pointedElm === elm) {
+			ViewUtil.clearSideElmClass(elm, 'over');
+			const pE = this.pointedElm;
+			if (!pE || !pE.getAttribute('draggable') || pE === elm) {
 				return;
 			}
 			this.pointedElm = null;
-			if (!pointedElm.classList || !pointedElm.classList.contains(pointedElm.thumbnail_block)) {
-				this.draggableArea.toDropPage(pointedElm);
+			if (!pE.classList || !pE.classList.contains(pE.thumbnail_block)) {
+				this.draggableArea.toDropPage(pE);
 				return;
 			}
 			// console.log('handleDragEnd imagePKmove:'+(nowSelectedElm?nowSelectedElm.dataset.pk:nowSelectedElm)+"/elm.dataset.pk:"+elm.dataset.pk)
-			vu.clearSideElmClass(pointedElm, 'over');
+			ViewUtil.clearSideElmClass(pE, 'over');
 			this.doDrop(elm);
 		};
 	}
@@ -219,7 +219,6 @@ export class Thumbnail extends BaseView {
 		Thumbnail.Cash.set(hash, src);
 		console.log(hash + '/' + (cashSrc === src) + '/' + !!src);
 		const pk = imageEntity.getPk();
-		// const imgVnode = img(pk + "_image", imageEntity.name, imageEntity.name, imgElm.src, {});
 		const textVnode = span(pk + '_text', ['thumbnail_text'], imageData.imageText);
 		const delButton = span(
 			pk + '_delButton',
@@ -231,27 +230,6 @@ export class Thumbnail extends BaseView {
 			},
 			'x'
 		);
-		// const imageVnode = div('', ['image_block'], {
-		// 	on: {
-		// 		dragstart: this.handleDragStart(src),
-		// 		dragover: this.handleDragOver(),
-		// 		dragenter: this.handleDragEnter(),
-		// 		dragleave: this.handleDragLeave(),
-		// 		drop: this.handleDrop(),
-		// 		dragend: this.handleDragEnd(),
-		// 		click: this.selectImage(),
-		// 		touchstart: this.handleTouchStart(src),
-		// 		touchmove: this.handleTouchMove(),
-		// 		touchend: this.handleTouchEnd(),
-		// 	},
-		// 	dataset: {
-		// 		pk: pk,
-		// 		is_image: true,
-		// 	},
-		// 	props: {
-		// 		draggable: 'true',
-		// 	},
-		// });
 		const classObj = {};
 		classObj[this.displayNone] = pagesMap[pk];
 		const rowVnode = div(

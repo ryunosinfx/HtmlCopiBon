@@ -1,4 +1,4 @@
-import vu from '../../util/viewUtil.js';
+import { ViewUtil } from '../../util/ViewUtil.js';
 import { BaseView } from '../../util/reactive/baseView.js';
 import { a, div, li, ul, img, span, input, label } from '../../util/reactive/base/vtags.js';
 import { PageActionCreator } from '../../reduxy/action/pageActionCreator.js';
@@ -134,7 +134,7 @@ export class PageImage extends BaseView {
 				this.dispatch(action);
 			}
 		}
-		vu.clearSideElmClass(elm, 'over');
+		ViewUtil.clearSideElmClass(elm, 'over');
 	}
 	handleDragEnd(event) {
 		return (event) => {
@@ -145,7 +145,7 @@ export class PageImage extends BaseView {
 				return;
 			}
 			this.draggableArea.nowSelectedElm = null;
-			vu.clearSideElmClass(elm, 'over');
+			ViewUtil.clearSideElmClass(elm, 'over');
 			if (this.draggableArea.cancelPageArea !== null) {
 				const action = PageActionCreator.creatRemovePageAction(this, {
 					pagePk: targetPk,
@@ -180,9 +180,9 @@ export class PageImage extends BaseView {
 			if (!elm.classList || !elm.classList.contains(this.thumbnail_block)) {
 				return;
 			}
-			const pointedElm = vu.getCurrentPointedElm(event);
+			const pointedElm = ViewUtil.getCurrentPointedElm(event);
 			if (this.pointedElm && this.pointedElm !== pointedElm) {
-				vu.clearSideElmClass(this.pointedElm, 'over');
+				ViewUtil.clearSideElmClass(this.pointedElm, 'over');
 			}
 			this.pointedElm = pointedElm;
 			if (!pointedElm.getAttribute('draggable') || pointedElm === elm) {
@@ -197,13 +197,13 @@ export class PageImage extends BaseView {
 			const elm = event.target;
 			const targetPk = elm.dataset.pk;
 			//console.log('sort handleDrop imagePKmove:' + this.draggableArea.nowSelectedElm + "/elm.dataset.pk:" + elm.dataset.pk + "/targetPk:" + targetPk)
-			vu.clearSideElmClass(elm, 'over');
+			ViewUtil.clearSideElmClass(elm, 'over');
 			const pointedElm = this.pointedElm;
 			if (!pointedElm || pointedElm === elm) {
 				return;
 			}
 			this.pointedElm = null;
-			vu.clearSideElmClass(pointedElm, 'over');
+			ViewUtil.clearSideElmClass(pointedElm, 'over');
 			if (!pointedElm.classList || !pointedElm.classList.contains(pointedElm.thumbnail_block)) {
 				if (pointedElm.id === 'thumnailsImageArea' || pointedElm.getAttribute('draggable')) {
 					const action = PageActionCreator.creatRemovePageAction(this, {

@@ -1,4 +1,4 @@
-import vu from '../viewUtil.js';
+import { ViewUtil } from '../ViewUtil.js';
 import { ElementSelector } from './elementSelector.js';
 import { ActionCreator } from './actionCreator.js';
 import { ViewAttachQueue } from './viewAttachQueue.js';
@@ -267,7 +267,7 @@ export class BaseView {
 		// console.log('m006 baseView.onViewHidden nextView:' + nextView + '/actionData:' + actionData+"/this.id:"+ this.id);
 	}
 	render() {
-		return vu.create('BaseView', 'BaseView');
+		return ViewUtil.create('BaseView', 'BaseView');
 	}
 	renderWrap(store, data) {
 		// console.log('renderWrap'+" id:"+this.id+"/this.isNotRenderWrap:"+this.isNotRenderWrap);
