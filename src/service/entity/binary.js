@@ -7,9 +7,7 @@ export class Binary extends BaseEntity {
 		this.createDate = Date.now();
 		this.updateDate = Date.now();
 	}
-	static getEnitiyName() {
-		return EnitiyName;
-	}
+	static getEnitiyName = () => EnitiyName;
 	set ab(_ab) {
 		if (buffer && !buffer.byteLength) {
 			alert('not arrayBuffer!');
