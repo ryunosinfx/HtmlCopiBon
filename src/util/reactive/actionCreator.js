@@ -5,14 +5,14 @@ export class ActionCreator {
 		return baseActions;
 	}
 	static createAction(key, data, storeKey = null) {
-		return { type: key, data: data, storeKey: storeKey };
+		return { type: key, data: data, storeKey };
 	}
 	static createBaseAction(type, targetView, data, storeKey = null) {
 		const addData = data && typeof data === 'object' ? data : {};
 		addData.targetView = targetView;
 		addData.selector = targetView ? targetView.id : null;
 		addData.storeKey = storeKey;
-		return { type: type, data: addData };
+		return { type: type, data: addData, storeKey };
 	}
 	static creatAttachAction(parentView, newView, data, storeKey = null) {
 		// console.log("creatAttachAction");
@@ -22,7 +22,7 @@ export class ActionCreator {
 		addData.parentView = parentView;
 		addData.selector = newView.id;
 		addData.storeKey = storeKey;
-		return { type: 'Attach', data: addData };
+		return { type: 'Attach', data: addData, storeKey };
 	}
 	static createShowViewAction(key, oldVnode, selector, data, storeKey = null) {
 		return ActionCreator.createGoOtherViewAction(key, null, oldVnode, selector, data, storeKey);
@@ -31,7 +31,7 @@ export class ActionCreator {
 		let addData = data;
 		if (!view && !oldVnode) {
 			console.warn('createGoOtherViewAction is null!');
-			return { type: key, data: addData, storeKey: storeKey };
+			return { type: key, data: addData, storeKey };
 		}
 		if (!data) {
 			addData = {};
@@ -39,7 +39,7 @@ export class ActionCreator {
 		addData.view = view;
 		addData.oldVnode = oldVnode;
 		addData.selector = selector;
-		return { type: key, data: addData, storeKey: storeKey };
+		return { type: key, data: addData, storeKey };
 	}
 	static isEquals(a, b) {
 		if (a && b && a.type === b.type) {
