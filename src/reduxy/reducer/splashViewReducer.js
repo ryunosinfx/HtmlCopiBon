@@ -12,19 +12,16 @@ export class SplashViewReducer extends BaseReducer {
 		this.addInitializeKey(this.storeKey);
 	}
 	static register() {
-		if (!splashViewReducer) {
-			splashViewReducer = new SplashViewReducer();
-		}
+		if (!splashViewReducer) splashViewReducer = new SplashViewReducer();
 	}
 	async reduce(store, action) {
-		if (this.splashAddAction.type === action.type) {
+		if (this.splashAddAction.type === action.type)
 			store[this.storeKey] = this.createSplash(true, 0, false, action.data.msg, action.data.title);
-		} else if (this.splashRemoveAction.type === action.type) {
+		else if (this.splashRemoveAction.type === action.type)
 			store[this.storeKey] = this.createSplash(false, 0, false);
-		}
 		return store;
 	}
 	createSplash(isVisible, progress, isComple, msg, title) {
-		return { isVisible: isVisible, progress: progress, msg: msg, isComple: isComple, title: title };
+		return { isVisible, progress, msg, isComple, title };
 	}
 }
