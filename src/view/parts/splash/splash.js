@@ -30,10 +30,9 @@ export class Splash extends BaseView {
 	}
 	async onViewShow(store, actionData) {
 		const data = store[this.storeKey];
-		if (data) {
-			if (data.isVisible === false) {
-				this.close();
-			}
+		// console.log('Splash onViewShow this.storeKey:' + this.storeKey, data, actionData);
+		if (data !== void 0 && data !== null) {
+			if (data.isVisible === false) this.close();
 			//alert("OK");
 		}
 	}
