@@ -9,6 +9,7 @@ const DOUBLE = 'DOUBLE';
 const HELF = 'HELF';
 const QUAD = 'QUAD';
 const FULL = 'FULL';
+const NONE = 'NONE';
 export class ImageDetail extends BaseView {
 	constructor() {
 		super('ImageDetail', 'ImageDetail');
@@ -16,7 +17,7 @@ export class ImageDetail extends BaseView {
 		this.isOnScroll = false;
 		this.startX = 0;
 		this.startY = 0;
-		this.previewMode = PLANE;
+		this.previewMode = NONE;
 		this.pk = null;
 	}
 	render(store, actionData) {
@@ -97,6 +98,17 @@ export class ImageDetail extends BaseView {
 			},
 			'FW'
 		);
+		const toClearButton = a(
+			this.id + 'toClearButton',
+			['toClearButton'],
+			'#FilesArea',
+			{
+				on: {
+					click: this.toClear(),
+				},
+			},
+			'X'
+		);
 		const title = span('', ['ImageDetailTitleText'], 'ImageDetailTitle');
 		const titleBar = div(
 			'',
@@ -110,22 +122,30 @@ export class ImageDetail extends BaseView {
 				toQuadWindowSizeButton,
 				toHelfWindowSizeButton,
 				toFullWindowSizeButton,
+				toClearButton,
 			]
 		);
 		return div('', [''], [titleBar, div(this.imageAreaID, ['ImageDetailA'], 'No Image Selected')]);
 	}
 
 	async onViewShow(store, actionData) {
-		if (store.imagesDetailData) {
+		console.log(
+			'onViewShow actionData.imagePK :' + actionData.imagePK + '/actionData.isDelete:' + actionData.isDelete,
+			actionData
+		);
+		if (!actionData.imagePK && !actionData.isDelete) return;
+		if (store.imagesDetailData && (this.previewMode !== NONE || actionData.imagePK) && !actionData.isDelete) {
+			this.imageData = store.imagesDetailData;
 			await this.showImage(store.imagesDetailData);
 			this.startX = 0;
 			this.startY = 0;
 			this.offsetX = 0;
 			this.offsetY = 0;
 			this.isOnScroll = false;
-		}
+		} else await this.clearImage();
 	}
 	async onAfterAttach(store, data) {
+		this.setSelectStyle('toClearButton', NONE);
 		this.setSelectStyle('toNativeSizeButton', PLANE);
 		this.setSelectStyle('toWindowSizeButton', WINDOW);
 		this.setSelectStyle('toWindowHeightSizeButton', HEIGHT);
@@ -140,6 +160,7 @@ export class ImageDetail extends BaseView {
 		if (this.pk !== pk) {
 			this.previewMode = HEIGHT;
 		}
+		this.setSelectStyle('toClearButton', NONE);
 		this.setSelectStyle('toNativeSizeButton', PLANE);
 		this.setSelectStyle('toWindowSizeButton', WINDOW);
 		this.setSelectStyle('toWindowHeightSizeButton', HEIGHT);
@@ -164,18 +185,33 @@ export class ImageDetail extends BaseView {
 						click: this.onClick(),
 					},
 					style: {
-						top: 0,
-						left: 0,
+						top: '1px',
+						left: '1px',
 					},
 				},
 				image
 			)
 		);
 	}
+	async clearImage() {
+		this.previewMode = NONE;
+		this.setSelectStyle('toClearButton', NONE);
+		this.setSelectStyle('toNativeSizeButton', PLANE);
+		this.setSelectStyle('toWindowSizeButton', WINDOW);
+		this.setSelectStyle('toWindowHeightSizeButton', HEIGHT);
+		this.setSelectStyle('toDoubleWindowSizeButton', DOUBLE);
+		this.setSelectStyle('toQuadWindowSizeButton', QUAD);
+		this.setSelectStyle('toHelfWindowSizeButton', HELF);
+		this.setSelectStyle('toFullWindowSizeButton', FULL);
+		const imageData = this.imageData;
+		if (imageData) {
+			const keys = Object.keys(imageData);
+			for (const key of keys) delete imageData[key];
+		}
+		this.prePatch('#' + this.imageAreaID, div(this.imageAreaID, ['ImageDetailA'], 'No Image Selected'));
+	}
 	onClick() {
-		return (event) => {
-			this.toNativeSize()(event);
-		};
+		return (event) => this.toWindowHightSize()(event);
 	}
 	getFunc(previewMode) {
 		return (event) => {
@@ -185,6 +221,7 @@ export class ImageDetail extends BaseView {
 				const action = ImageActionCreator.creatDetailAction(this, {
 					imagePK: this.pk,
 				});
+				// alert('aaaazaa previewMode:' + previewMode);
 				this.dispatch(action);
 			}
 		};
@@ -212,19 +249,31 @@ export class ImageDetail extends BaseView {
 		return this.getFunc(DOUBLE);
 	}
 	toHelfWindowSize() {
-		return this.getFunc(QUAD);
+		return this.getFunc(HELF);
 	}
 	toQuadWindowSize() {
-		return this.getFunc(HELF);
+		return this.getFunc(QUAD);
 	}
 	toFullWindowSize() {
 		return this.getFunc(FULL);
 	}
+	toClear() {
+		return (event) => {
+			// alert("toWindowSize this.pk):" + this.pk);
+			this.pk = null;
+			this.previewMode = NONE;
+			const action = ImageActionCreator.creatDetailAction(this, {
+				imagePK: null,
+				isDelete: true,
+			});
+			this.dispatch(action);
+		};
+	}
 	onMouseOn() {
 		return (event) => {
 			// alert("onMouseOn");
-			this.startX = this.offsetX ? event.clientX + this.offsetX * 0 - this.offsetX１ : event.clientX;
-			this.startY = this.offsetY ? event.clientY + this.offsetY * 0 - this.offsetY１ : event.clientY;
+			this.startX = this.offsetX ? event.clientX + this.offsetX * 0 - this.offsetX1 : event.clientX;
+			this.startY = this.offsetY ? event.clientY + this.offsetY * 0 - this.offsetY1 : event.clientY;
 			const elm = event.target;
 			this.isOnScroll = this.isOnScroll ? false : true;
 		};
@@ -239,7 +288,7 @@ export class ImageDetail extends BaseView {
 	onMouseMove() {
 		return (event) => {
 			const elm = event.target;
-			if (this.isOnScroll) {
+			if (this.isOnScroll && this.previewMode === FULL) {
 				const currentX = event.clientX;
 				const currentY = event.clientY;
 				const offsetX = currentX - this.startX;
@@ -252,8 +301,8 @@ export class ImageDetail extends BaseView {
 				targetNode.style.left = offsetX + 'px';
 				this.offsetX = this.startX;
 				this.offsetY = this.startY;
-				this.offsetX１ = offsetX;
-				this.offsetY１ = offsetY;
+				this.offsetX1 = offsetX;
+				this.offsetY1 = offsetY;
 			}
 		};
 	}

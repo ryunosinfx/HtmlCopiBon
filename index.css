@@ -207,7 +207,8 @@ canvas.hidden {
 .FilesArea > div > div {
 	display: flex;
 	min-width: 115px;
-	overflow: hidden;
+	overflow: scroll;
+	height: calc(100vh - 140px);
 }
 
 .FilesArea > div > div.PageImages {
@@ -222,7 +223,9 @@ canvas.hidden {
 }
 
 .ImageDetail > div {
-	width: 100%;
+	width: calc(100% - 5px);
+	height: calc(100vh - 180px);
+	overflow: scroll;
 }
 
 .ImageDetail .ImageDetailA {
@@ -265,7 +268,7 @@ canvas.hidden {
 .image_detail_block.HEIGHT > div > img {
 	top: 0;
 	left: 0;
-	max-height: 75vh;
+	max-height: calc(100vh - 250px);
 }
 .image_detail_block.DOUBLE > div > img {
 	max-width: 200%;
@@ -293,10 +296,12 @@ canvas.hidden {
 	width: calc(100% - 10px);
 	cursor: pointer;
 }
-.Thumnails {
+#Thumnails.Thumnails {
 	flex-direction: column;
 	padding-right: 0.2em;
 	background-color: rgba(200, 200, 200, 0);
+	background-repeat: inherit;
+	overflow-y: scroll;
 }
 
 .Thumnails .thumbnails_block {
@@ -395,6 +400,9 @@ canvas.hidden {
 	padding: 0.3em;
 	min-height: 50px;
 	word-break: break-all;
+}
+.image_detail_block > div > .thumbnail_text {
+	min-height: 18px;
 }
 
 .image_detail_block {

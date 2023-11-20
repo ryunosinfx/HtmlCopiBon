@@ -1,5 +1,6 @@
 import { ViewUtil } from '../../util/ViewUtil.js';
 import { BinaryCnvtr, H } from '../../util/binaryConverter.js';
+import { ImageSrcCache } from '../../util/image/ImageSrcCache.js';
 import { BaseView } from '../../util/reactive/baseView.js';
 import { a, div, li, ul, img, span, input, label } from '../../util/reactive/base/vtags.js';
 import { ImageActionCreator } from '../../reduxy/action/imageActionCreator.js';
@@ -18,7 +19,6 @@ export class Thumbnail extends BaseView {
 			this.doDrop(elm);
 		};
 	}
-	static Cash = new Map();
 	setImageData(imageData) {
 		this.imageData = imageData;
 	}
@@ -28,12 +28,19 @@ export class Thumbnail extends BaseView {
 	remove(pk) {
 		return async (event) => {
 			const result = await Dialog.opneConfirm('Clicked Image Delete Button!', 'delete ok?');
-			if (result)
+			if (result) {
+				// alert('result:' + result);
 				this.dispatch(
 					ImageActionCreator.creatRemoveAction(this, {
 						imagePKforDelete: pk,
 					})
 				);
+				const action = ImageActionCreator.creatDetailAction(this, {
+					imagePK: pk,
+					isDelete: true,
+				});
+				this.dispatch(action);
+			}
 		};
 	}
 	handleDragStart(dragImageSrc) {
@@ -188,7 +195,7 @@ export class Thumbnail extends BaseView {
 			this.doDrop(elm);
 		};
 	}
-	selectImage(event) {
+	selectImageToDetail(event) {
 		return (event) => {
 			event.stopPropagation(); // Stops some browsers from redirecting.
 			event.preventDefault();
@@ -196,6 +203,7 @@ export class Thumbnail extends BaseView {
 			// console.log(' selecImage imagePKmove:/elm.dataset.pk:'+elm.dataset.pk)
 			const action = ImageActionCreator.creatDetailAction(this, {
 				imagePK: elm.dataset.pk,
+				isDelete: false,
 			});
 			this.dispatch(action);
 			return false;
@@ -203,21 +211,8 @@ export class Thumbnail extends BaseView {
 	}
 	async crateDataLine(imageData, pagesMap = {}) {
 		const imageEntity = imageData.imageEntity;
-		const binaryEntity = imageData.binaryEntity;
 		//console.log(binaryEntity)
-		const data = {
-			name: imageEntity.name,
-			ab: binaryEntity._ab,
-			type: imageEntity.type,
-		};
-		const h1 = await H.d(BinaryCnvtr.u8(binaryEntity._ab));
-		const hash = await H.d(
-			BinaryCnvtr.jus([BinaryCnvtr.s2u(imageEntity.name), BinaryCnvtr.U2a(h1), BinaryCnvtr.s2u(imageEntity.type)])
-		);
-		const cashSrc = Thumbnail.Cash.get(hash);
-		const src = cashSrc ? cashSrc : (await this.ip.createImageNodeByData(data)).src;
-		Thumbnail.Cash.set(hash, src);
-		console.log(hash + '/' + (cashSrc === src) + '/' + !!src);
+		const src = await ImageSrcCache.get(imageData);
 		const pk = imageEntity.getPk();
 		const textVnode = span(pk + '_text', ['thumbnail_text'], imageData.imageText);
 		const delButton = span(
@@ -243,7 +238,7 @@ export class Thumbnail extends BaseView {
 					dragleave: this.handleDragLeave(),
 					drop: this.handleDrop(),
 					dragend: this.handleDragEnd(),
-					click: this.selectImage(),
+					click: this.selectImageToDetail(),
 					touchstart: this.handleTouchStart(src),
 					touchmove: this.handleTouchMove(),
 					touchend: this.handleTouchEnd(),

@@ -24,7 +24,7 @@ export class BaseView {
 		this.currentVnode = null;
 		this.onViewLoaded(store);
 		this.updateReactiveCallCount = 0;
-		this.updateReactiveCallTimer = null;
+		this.updateReactiveCallTimer = {};
 		this.updateReactivePromise = new Map();
 		this.updateCount = 0;
 	}
@@ -133,20 +133,22 @@ export class BaseView {
 		});
 	}
 	updateReactive(store, actionData) {
+		const s = actionData.selector;
+		const clearTimer = this.updateReactiveCallTimer[s];
 		return new Promise((resolve, reject) => {
 			// this.updateReactiveCallCount++;
 			// const storePagesKey ="pagesData"
 			//       console.error("updateReactive:"+(store[storePagesKey]?store[storePagesKey].length:null));
-			if (this.updateReactiveCallTimer) {
-				const clearTimer = this.updateReactiveCallTimer;
-				const pre = this.updateReactivePromise.get(clearTimer);
-				clearTimeout(this.updateReactiveCallTimer);
+			const clearTimer = this.updateReactiveCallTimer[s];
+			const pre = this.updateReactivePromise.get(clearTimer);
+			if (pre) {
+				clearTimeout(clearTimer);
 				pre.resolve();
 				setTimeout(() => {
 					this.updateReactivePromise.delete(clearTimer);
 				});
 			}
-			this.updateReactiveCallTimer = setTimeout(() => {
+			this.updateReactiveCallTimer[s] = setTimeout(() => {
 				const oldVnode = store.oldVnode;
 				const selector = store.selector;
 				const isOrverride = store.isOrverride;
@@ -180,7 +182,7 @@ export class BaseView {
 				);
 				// console.log('A105 --oldVnode:' + oldVnode + '/isOrverride=' + isOrverride + '/selector=' + selector + '/currentVnode:' + this.currentVnode);
 			});
-			this.updateReactivePromise.set(this.updateReactiveCallTimer, { resolve, reject });
+			this.updateReactivePromise.set(clearTimer, { resolve, reject });
 		});
 	}
 	init() {}
