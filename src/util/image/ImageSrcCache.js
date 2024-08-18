@@ -8,10 +8,13 @@ export class ImageSrcCache {
 		const imageEntity = imgRecord.imageEntity;
 		const binaryEntity = imgRecord.binaryEntity;
 		//console.log(binaryEntity)
-		const d = {
-			ab: binaryEntity._ab,
-			type: imageEntity.type,
-		};
+		const d =
+			binaryEntity && imageEntity
+				? {
+						ab: binaryEntity._ab,
+						type: imageEntity.type,
+				  }
+				: {};
 		const hash = await ImageSrcCache.calcHash(imgRecord);
 		const cashSrc = ImageSrcCache.cache.get(hash);
 		const src = cashSrc ? cashSrc : await ImageSrcCache.loadSrc(d);
@@ -21,13 +24,15 @@ export class ImageSrcCache {
 	static async calcHash(data) {
 		const imageEntity = data.imageEntity;
 		const binaryEntity = data.binaryEntity;
-		return await H.d(
-			BinaryCnvtr.jus([
-				BinaryCnvtr.s2u(imageEntity.name),
-				BinaryCnvtr.u8(binaryEntity._ab),
-				BinaryCnvtr.s2u(imageEntity.type),
-			])
-		);
+		return binaryEntity && imageEntity
+			? await H.d(
+					BinaryCnvtr.jus([
+						BinaryCnvtr.s2u(imageEntity.name),
+						BinaryCnvtr.u8(binaryEntity._ab),
+						BinaryCnvtr.s2u(imageEntity.type),
+					])
+			  )
+			: null;
 	}
 	static loadSrc(data) {
 		return new Promise((resolve, reject) => {
