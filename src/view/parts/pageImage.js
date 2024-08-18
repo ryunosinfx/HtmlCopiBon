@@ -238,9 +238,7 @@ export class PageImage extends BaseView {
 	}
 	renderVnode(parent) {
 		const pageEntity = this.pageData;
-		if (!pageEntity) {
-			return div(this.id, ['aaaaaaa' + this.listing], 'null' + this.listing);
-		}
+		// if (!pageEntity) return div(this.id, ['aaaaaaa' + this.listing], 'null' + this.listing);
 		const src = this.thumbnail ? this.thumbnail.src : null;
 		const imageBg = !src
 			? {}
@@ -254,12 +252,12 @@ export class PageImage extends BaseView {
 		const pageBlock = div('', ['page_block'], []);
 		const checkNoCropping = div(
 			'',
-			['checkNoCropping', pageEntity.isNoCropping ? enable : disable],
+			['checkNoCropping', pageEntity && pageEntity.isNoCropping ? enable : disable],
 			'isNoCropping'
 		);
 		const checkForceColor = div(
 			'',
-			['checkForceColor', pageEntity.isForceColor ? enable : disable],
+			['checkForceColor', pageEntity && pageEntity.isForceColor ? enable : disable],
 			'isForceColor'
 		);
 		const optionsBlock = div('', ['options_block'], [checkForceColor, checkNoCropping]);
