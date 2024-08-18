@@ -11,9 +11,7 @@ export class ImageProcessor {
 		this.paper = new Paper();
 		this.imageMerger = new ImageMerger();
 		this.imageResizer = new ImageResizer();
-		window.onload = () => {
-			document.body.appendChild(this.canvas);
-		};
+		window.onload = () => document.body.appendChild(this.canvas);
 	}
 	setDataURI(dataURI) {
 		this.dataURI = dataURI;
@@ -23,25 +21,23 @@ export class ImageProcessor {
 		return this.resizeInMaxSize(origin, maxWidth, maxHeight);
 	}
 	async resizeAsPaper(ab, paperSize, dpiName, marginSetting) {
-		const origin = await this.getImageDataFromArrayBuffer(ab);
-		const sizeOfPaper = this.paper.getPixcelSizeBySelected(paperSize, dpiName);
-		const sizeOfImage = this.paper.getPixcelSizeBySelected(paperSize, dpiName, marginSetting);
-		const newData = this.resizeInMaxSize(origin, sizeOfImage.width, sizeOfImage.height);
-		const marginMM = this.paper.getOffset(dpiName, marginSetting);
-		const nd = newData.data;
-		const data = {
-			offsetY: marginMM,
-			offsetX: marginMM,
-			data: nd,
-			width: newData.width,
-			height: newData.height,
-		};
-		const npd = newPaperData.data;
-		const len = nd.length;
+		const origin = await this.getImageDataFromArrayBuffer(ab),
+			sizeOfPaper = this.paper.getPixcelSizeBySelected(paperSize, dpiName),
+			sizeOfImage = this.paper.getPixcelSizeBySelected(paperSize, dpiName, marginSetting),
+			newData = this.resizeInMaxSize(origin, sizeOfImage.width, sizeOfImage.height),
+			marginMM = this.paper.getOffset(dpiName, marginSetting),
+			nd = newData.data,
+			data = {
+				offsetY: marginMM,
+				offsetX: marginMM,
+				data: nd,
+				width: newData.width,
+				height: newData.height,
+			},
+			len = nd.length;
 		let newPaperData = this.ctx.createImageData(sizeOfPaper.width, sizeOfPaper.height);
-		for (let i = 0; i < len; i++) {
-			npd[i] = nd[i];
-		}
+		const npd = newPaperData.data;
+		for (let i = 0; i < len; i++) npd[i] = nd[i];
 		this.canvas.width = newPaperData.width;
 		this.canvas.height = newPaperData.height;
 		await this.imageMerger.margeReplace(newPaperData, [data], true);
@@ -59,13 +55,13 @@ export class ImageProcessor {
 		return abResized;
 	}
 	resizeInMaxSize(iamegData, maxWidth, maxHeight) {
-		const { data, width, height } = iamegData;
-		const retioOuter = maxWidth / maxHeight;
-		const retioInner = width / height;
-		const isWidthGreater = retioInner >= retioOuter;
-		const retio = isWidthGreater ? maxWidth / width : maxHeight / height;
-		const newWidth = isWidthGreater ? maxWidth : width * retio;
-		const newHeight = isWidthGreater ? height * retio : maxHeight;
+		const { data, width, height } = iamegData,
+			retioOuter = maxWidth / maxHeight,
+			retioInner = width / height,
+			isWidthGreater = retioInner >= retioOuter,
+			retio = isWidthGreater ? maxWidth / width : maxHeight / height,
+			newWidth = isWidthGreater ? maxWidth : width * retio,
+			newHeight = isWidthGreater ? height * retio : maxHeight;
 		// console.log("resizeInMaxSize---------------------------------------------------newWidth:" + newWidth + "/newHeight:" + newHeight)
 		return this.resizeExecute(iamegData, newWidth, newHeight);
 	}
@@ -85,8 +81,8 @@ export class ImageProcessor {
 			img.src = dataUri;
 			img.onload = () => {
 				dataUri = null;
-				const width = img.width;
-				const height = img.height;
+				const width = img.width,
+					height = img.height;
 				this.canvas.width = width;
 				this.canvas.height = height;
 				this.ctx.drawImage(img, 0, 0);
@@ -94,9 +90,7 @@ export class ImageProcessor {
 				resolve(imageData);
 				// console.timeEnd('resize getImageDataFromArrayBuffer');
 			};
-			img.onerror = (e) => {
-				reject(e);
-			};
+			img.onerror = (e) => reject(e);
 		});
 	}
 	getArrayBufferFromImageBitmapDataAsJpg(iamgeBitmapData, quority) {
@@ -115,9 +109,8 @@ export class ImageProcessor {
 		this.canvas.height = Math.floor(iamgeBitmapData.height);
 		let newPaperData = this.ctx.createImageData(iamgeBitmapData.width, iamgeBitmapData.height);
 		const len = iamgeBitmapData.data.length;
-		for (let i = 0; i < len; i++) {
-			newPaperData.data[i] = iamgeBitmapData.data[i];
-		}
+		for (let i = 0; i < len; i++) newPaperData.data[i] = iamgeBitmapData.data[i];
+
 		this.ctx.putImageData(newPaperData, 0, 0);
 		let dataUri = option ? this.canvas.toDataURL(option.type, option.quority) : this.canvas.toDataURL();
 		const abResized = BinaryCnvtr.D2a(dataUri);
@@ -133,9 +126,9 @@ export class ImageProcessor {
 			const imgElm = new Image();
 			imgElm.src = BinaryCnvtr.a2D(arrayBuffer, type);
 			imgElm.onload = () => {
-				const widthScale = width / imgElm.width;
-				const heightScale = height / imgElm.height;
-				const scale = widthScale <= heightScale ? widthScale : heightScale;
+				const widthScale = width / imgElm.width,
+					heightScale = height / imgElm.height,
+					scale = widthScale <= heightScale ? widthScale : heightScale;
 				this.canvas.height = Math.floor(imgElm.height * scale);
 				this.canvas.width = Math.floor(imgElm.width * scale);
 				this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -144,7 +137,7 @@ export class ImageProcessor {
 				resolve(this.exportPng());
 			};
 			imgElm.onerror = (e) => {
-				console.log('失敗');
+				console.log('失敗', { arrayBuffer, width, height, type });
 				console.error(e);
 				reject(null);
 			};
@@ -170,14 +163,15 @@ export class ImageProcessor {
 					resolve(imgElm);
 				};
 				imgElm.onerror = (e) => {
-					console.log('失敗');
-					console.error(e);
+					console.log('失敗 type:' + type + '/ab:', data);
+					console.error(e, e.stack);
 					reject(e);
 				};
+				// setTimeout(() => {
+				// 	resolve(imgElm);
+				// }, 10000);
 				return;
-			} else {
-				resolve(imgElm);
-			}
+			} else resolve(imgElm);
 		});
 	}
 }
