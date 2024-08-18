@@ -35,9 +35,7 @@ export class TitleSettings extends BaseView {
 	}
 	async onViewShow(store, actionData) {
 		// console.log("TitleSettings onViewShow 01 this.storeKey:" + this.storeKey + '/' + store[this.storeKey]);
-		if (store[this.storeKey]) {
-			await this.showSettings(store[this.storeKey], store[this.getStoreKeyOpm]);
-		}
+		if (store[this.storeKey]) await this.showSettings(store[this.storeKey], store[this.getStoreKeyOpm]);
 	}
 	update() {
 		return (event) => {
@@ -46,7 +44,7 @@ export class TitleSettings extends BaseView {
 		};
 	}
 	updateExec() {
-		alert('update');
+		// alert('update');
 		const nameInput = document.getElementById(this.id + 'NameInput').value;
 		const pageNumInput = document.getElementById(this.id + 'PageNumInput').value;
 		const startPageInput = document.getElementById(this.id + 'StartPageInput').value;
