@@ -100,7 +100,10 @@ export class ExportImgZipButton extends BaseView {
 	click() {
 		return async (event) => {
 			if (!this.exportOrderData) {
-				Dialog.opneAlert("I'm need ExportSettings!", 'Export Order is not Selected!');
+				Dialog.opneAlert("I'm need ExportSettings!", 'Export Order is not Selected!', {
+					'background-color': '#ffff41',
+					color: '#881c1c',
+				});
 				// alert("Export Order is not Selected!");
 				return;
 			}

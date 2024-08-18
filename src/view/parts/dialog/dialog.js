@@ -3,6 +3,7 @@ import { a, div, li, ul, img, span, input, label } from '../../../util/reactive/
 import { DialogActionCreator } from '../../../reduxy/action/dialogActionCreator.js';
 import { DialogViewReducer } from '../../../reduxy/reducer/dialogViewReducer.js';
 let dialogInstance = null;
+const defaultStyle = { 'background-color': '', color: '' };
 export class Dialog extends BaseView {
 	constructor() {
 		super('Dialog', ['Dialog', BaseView.ModalWindowClass()]);
@@ -20,33 +21,34 @@ export class Dialog extends BaseView {
 		this.close();
 		DialogViewReducer.register();
 	}
-	static opneAlert = async (title, msg) =>
+	static opneAlert = async (title, msg, style) =>
 		new Promise((resolv, reject) => {
-			dialogInstance.showAlertDialog(title, msg);
+			dialogInstance.showAlertDialog(title, msg, style);
 			dialogInstance.resolv = resolv;
 			dialogInstance.reject = reject;
 		});
-	static opneConfirm = async (title, msg) =>
+	static opneConfirm = async (title, msg, style) =>
 		new Promise((resolv, reject) => {
-			dialogInstance.showConfirmDialog(title, msg);
+			dialogInstance.showConfirmDialog(title, msg, style);
 			dialogInstance.resolv = resolv;
 			dialogInstance.reject = reject;
 		});
-	showAlertDialog(title, msg) {
-		const action = DialogActionCreator.creatAlertAction(this, { title: title, msg: msg });
+	showAlertDialog(title, msg, style = defaultStyle) {
+		const action = DialogActionCreator.creatAlertAction(this, { title, msg, style });
 		this.dispatch(action);
 	}
-	showConfirmDialog(title, msg) {
-		const action = DialogActionCreator.creatConfirmAction(this, { title: title, msg: msg });
+	showConfirmDialog(title, msg, style = defaultStyle) {
+		const action = DialogActionCreator.creatConfirmAction(this, { title, msg, style });
 		this.dispatch(action);
 	}
 	render() {
 		return div(
-			''['DialogView'],
+			'',
 			{
 				style: {
 					display: 'none',
 				},
+				Dialog,
 			},
 			[
 				div('', ['dialogTitle'], this.title),
@@ -76,7 +78,7 @@ export class Dialog extends BaseView {
 	async onViewShow(store, actionData) {
 		if (store[this.storeKey]) {
 			//alert("onViewShow");
-			this.showDialog(store[this.storeKey]);
+			this.showDialog(store[this.storeKey], actionData);
 			//console.log("Dialog onViewShow");
 		}
 	}
@@ -106,16 +108,19 @@ export class Dialog extends BaseView {
 			return false;
 		};
 	}
-	showDialog(data) {
+	showDialog(data, actionData) {
 		const { isVisible, type, msg, title } = data;
+		const { style } = actionData;
+		console.log('showDialog data:', data, actionData);
 		if (title) this.title = title;
 
 		if (isVisible) {
 			this.show();
+			this.setStyleToCurrentChild('div', style);
 			this.prePatch(
-				'.dialog',
-				div('', ['dialog'], {
-					style: {},
+				'.DialogView',
+				div('', ['DialogView'], {
+					style,
 				})
 			);
 			this.prePatch('.dialogTitle', div('', ['dialogTitle'], {}, this.title));
@@ -128,9 +133,10 @@ export class Dialog extends BaseView {
 			this.prePatch('.dialogDeside', div('', ['dialogDeside'], buttons));
 		} else {
 			this.close();
+			this.setStyleToCurrentChild('div', defaultStyle);
 			this.prePatch(
-				'.dialog',
-				div('', ['dialog'], {
+				'.DialogView',
+				div('', ['DialogView'], {
 					style: {
 						width: '0%',
 					},
