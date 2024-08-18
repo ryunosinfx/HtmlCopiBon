@@ -29,9 +29,7 @@ export class ImageViewReducer extends BaseReducer {
 		this.storePagesKey = PageActionCreator.getStorePagesKey();
 	}
 	static register() {
-		if (!imageViewReducer) {
-			imageViewReducer = new ImageViewReducer();
-		}
+		if (!imageViewReducer) imageViewReducer = new ImageViewReducer();
 	}
 	async reduce(store, action) {
 		if (this.imagAddAction.type === action.type) {
@@ -60,9 +58,7 @@ export class ImageViewReducer extends BaseReducer {
 	async saveFiles(files) {
 		const imageEntitis = await this.tm.addImageFiles(files);
 		const retList = this.im.getEntitisAsList();
-		for (const imageEntity of imageEntitis) {
-			retList.unshift(imageEntity);
-		}
+		for (const imageEntity of imageEntitis) retList.unshift(imageEntity);
 		return await this.im.createRetList(retList);
 	}
 
@@ -108,16 +104,15 @@ export class ImageViewReducer extends BaseReducer {
 	}
 
 	async loadAImage(pk) {
-		if (!pk) {
-			return;
-		}
+		if (!pk) return;
 		const imageEntity = await this.em.get(pk);
+		if (!imageEntity) return;
 		const binaryEntity = await this.em.get(imageEntity.binary);
+		if (!binaryEntity) return;
 		const size = binaryEntity._ab.byteLength;
 		const imageText = `${escape(imageEntity.name)} (${imageEntity.type || 'n/a'}) - ${size}bytes, last modified: ${
 			imageEntity.modifyDate
 		} size:${imageEntity.width}x${imageEntity.height}`;
-
 		return { imageEntity: imageEntity, binaryEntity: binaryEntity, imageText: imageText };
 	}
 	async loadImages() {
@@ -131,4 +126,3 @@ export class ImageViewReducer extends BaseReducer {
 		return this.im.getRetObjsAsList();
 	}
 }
-// setTimeout(ImageViewReducer.register,1);
