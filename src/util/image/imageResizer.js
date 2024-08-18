@@ -280,7 +280,9 @@ export class ImageResizer extends ImageCalcBase {
 					x = Math.floor(wfx),
 					startX = x - sizeHalfm1,
 					endX = x + sizeHalf;
-				let r = (g = b = 0);
+				let r = 0,
+					g = 0,
+					b = 0;
 				for (let jy = startY; jy <= endY; jy++) {
 					const weightY = weightFunc(Math.abs(wfy - jy)),
 						sy = jy < 0 || jy > shLimit ? y : jy,
