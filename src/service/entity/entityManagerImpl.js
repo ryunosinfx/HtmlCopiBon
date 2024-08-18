@@ -3,15 +3,12 @@ import { Binary } from './binary.js';
 import { ObjectUtil } from '../../util/objectUtil.js';
 import { PrimaryKey } from './primaryKey.js';
 import { PrimaryKeyAutoIncrementService } from './primaryKeyAutoIncrementService.js';
-const title = 'CopiBon';
 const USER_ID = 'default';
-const titlePrefix = 'title_';
 const BINALY_PK_ROW = 'BINALY_PK_ROW';
-const entityManagerImpls = {};
 const binarySizeMap = {};
 const binaryEntity = new Binary();
 export class EntityManagerImpl {
-	constructor(entityManager, entityClass, userId = USER_ID) {
+	constructor(entityManager, entityClass, userId = USER_ID, closeTimeout) {
 		this.userId = userId;
 		this.entityClass = entityClass;
 		this.entity = new entityClass();
@@ -20,93 +17,67 @@ export class EntityManagerImpl {
 		this.ss = new StorageService(entityClass);
 		this.pkais = new PrimaryKeyAutoIncrementService(userId);
 		this.em = entityManager;
+		this.ct = closeTimeout;
 	}
-
 	async init() {
 		console.log('init! ' + this.entityName);
-		return await this.ss.setStore(this.userId);
+		return await this.ss.setStore(this.userId, undefined, this.ct);
 	}
 	async save(data) {
 		const result = await this.saveExecute(data, false);
-		if (this.isBinary) {
-			const currentPK = result.getPk();
-			let size = await ObjectUtil.recalcSize(this, result);
-			binarySizeMap[currentPK] = size;
-		}
+		if (this.isBinary) binarySizeMap[result.getPk()] = await ObjectUtil.recalcSize(this, result);
 		return result;
 	}
 	async saveWithBinary(data) {
 		return await this.saveExecute(data, true);
 	}
 	async saveExecute(data, isWithBinary) {
-		//console.log("EntityManagerImpl save!!A!! data:" + data+"/isWithBinary:"+isWithBinary);
+		console.log(
+			`EntityManagerImpl save!!A!! this.entityName:${this.entityName}/data:${data}/isWithBinary:${isWithBinary}`
+		);
 		if (!data || !data.getEntityName || !data.getPk || data.getEntityName() !== this.entityName) {
-			console.log(
-				`EntityManagerImpl save!!Z!! data:${data.getEntityName()}/this.entityName:${
+			return console.log(
+				`EntityManagerImpl save!!Z!! this.entityName:${
 					this.entityName
-				}/data.getPk:${data.getPk}`
+				}/data:${data.getEntityName()}/this.entityName:${this.entityName}/data.getPk:${data.getPk}`
 			);
-			return;
 		}
-		let currentPK = data.getPk();
-		if (!currentPK) {
-			currentPK = PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
-		}
-		if (!isWithBinary) {
-			await this.saveArrayBufferCols(data);
-		} else {
-			// console.log("EntityManagerImpl saveBinary!!A!! data:" + data + "/isWithBinary:" + isWithBinary);
-			// console.log(data);
-			// console.log("EntityManagerImpl saveBinary!!B!! data:" + data + "/isWithBinary:" + isWithBinary);
-		}
+		const currentPK = data.getPk()
+			? data.getPk()
+			: PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
+		if (!isWithBinary) await this.saveArrayBufferCols(data);
 		data.setPk(currentPK);
-		// console.log(data);
+		console.log('EntityManagerImpl save!!B!! this.entityName:' + this.entityName + '/data:', data);
 		const savedData = await this.ss.save(currentPK, data);
-		// console.log("EntityManagerImpl save!!B!! savedData:" + savedData);
+		console.log('EntityManagerImpl save!!C!! this.entityName:' + this.entityName + '/savedData:', savedData);
 		return savedData;
 	}
 	async saveArrayBufferCols(data) {
-		if (binaryEntity.getEntityName() === data.getEntityName()) {
-			return;
-		}
-		// console.log("saveArrayBufferCols save!!A!! data:" + data);
-		// console.log(data);
-		// console.log("saveArrayBufferCols save!!B!! data:" + data);
+		if (binaryEntity.getEntityName() === data.getEntityName()) return;
+		// console.log("saveArrayBufferCols save!!A!! data:" + data,data);
 		for (const key in data) {
 			const column = data[key];
-			if (!column) {
-				continue;
-			}
+			if (!column) continue;
 			if (Array.isArray(column)) {
 				for (const index of column) {
 					const item = column[index];
-					if (!item || item.byteLength) {
-						continue;
-					}
-					const pk = await this.saveArrayBufferData(item);
-					column[index] = new PrimaryKey(pk);
+					if (!item || item.byteLength) continue;
+					column[index] = new PrimaryKey(await this.saveArrayBufferData(item));
 				}
-			} else if (column.byteLength) {
-				const pk = await this.saveArrayBufferData(column);
-				data[key] = new PrimaryKey(pk);
-			}
+			} else if (column.byteLength) data[key] = new PrimaryKey(await this.saveArrayBufferData(column));
 		}
 	}
 	async saveArrayBufferData(item) {
-		// console.log("saveArrayBufferData save!!A!! item:" + item);
-		// console.log(item);
-		// console.log("saveArrayBufferData save!!B!! item:" + item);
+		// console.log("saveArrayBufferData save!!A!! item:" + item,item);
 		if (!item.getEntityName && item.byteLength) {
 			const data = new Binary(item);
 			const newPK = await this.getBinaryPK();
 			data.setPk(newPK);
-			// console.log("saveArrayBufferData save!!C!! data:" + data);
-			// console.log(data);
+			// console.log("saveArrayBufferData save!!C!! data:" + data,data);
 			await this.em.Binary.saveWithBinary(data);
 			return newPK;
-		} else if (item.getEntityName && item.getEntityName() === 'PrimaryKey') {
-			return item;
-		} else if (item.getEntityName && item.getEntityName() === 'Binary') {
+		} else if (item.getEntityName && item.getEntityName() === 'PrimaryKey') return item;
+		else if (item.getEntityName && item.getEntityName() === 'Binary') {
 			const currentPK = item.getPk();
 			if (currentPK) {
 				item.setPk(currentPK);
@@ -133,26 +104,17 @@ export class EntityManagerImpl {
 		return await this.ss.getAsMap(keys, this.entity);
 	}
 	async get(pk, isSizeOnly) {
-		if (isSizeOnly) {
-			if (binarySizeMap[pk]) {
-				return binarySizeMap[pk] * 1;
-			}
-		}
+		if (isSizeOnly) if (binarySizeMap[pk]) return binarySizeMap[pk] * 1;
 		const key = 'EntityManagerImpl.get pk:' + pk + '/entityName:' + this.entityName;
 		console.time(key);
 		const result = await this.ss.get(pk, this.entity);
-		// console.log("get this.entityName:" + this.entityName + "/pk:" + pk);
+		// console.log('get this.entityName:' + this.entityName + '/pk:' + pk, result);
 		console.timeEnd(key);
-		if (this.isBinary) {
-			let size = await ObjectUtil.recalcSize(this, result);
-			binarySizeMap[pk] = size;
-		}
+		if (this.isBinary) binarySizeMap[pk] = await ObjectUtil.recalcSize(this, result);
 		return result;
 	}
 	async delete(pk) {
-		if (this.isBinary) {
-			delete binarySizeMap[pk];
-		}
+		if (this.isBinary) delete binarySizeMap[pk];
 		return await this.ss.delete(pk);
 	}
 }

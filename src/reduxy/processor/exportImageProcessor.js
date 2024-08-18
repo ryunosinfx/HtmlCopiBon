@@ -18,6 +18,7 @@ const order = {
 	basePaper: 'mangaPaperA4ExpandTatikiri',
 	dpiName: 'dpi600',
 };
+const isOtherThread = false;
 export class ExportImageProcessor {
 	constructor(pp) {
 		this.pp = pp;
@@ -41,41 +42,23 @@ export class ExportImageProcessor {
 		this.delList = [];
 	}
 	async exportZipExecute(exportOrders = [order]) {
-		return await this.exportExecute(exportOrders, true);
+		return await this.exportExecuteEIP(exportOrders, true);
 	}
 	async exportPdfExecute(exportOrders) {
-		return await this.exportExecute(exportOrders, false);
+		return await this.exportExecuteEIP(exportOrders, false);
 	}
-	async exportExecute(exportOrders = [order], isZip = true) {
+	async exportExecuteEIP(exportOrders = [order], isZip = true) {
 		// 0 load Title & pages ExecutePerPage
 		await this.pbp.open('Export and save files for print as ' + (isZip ? 'zip' : 'pdf'));
 		this.progress = 0;
 		this.pbp.update(this.progress, 'loading Settings');
-		const setting = await this.tm.loadSettings().catch((e) => {
-			console.error(e);
-		});
+		const setting = await this.tm.loadSettings();
 		this.progress = 1;
 		this.pbp.update(this.progress, 'loading pages');
-		const pages = await this.pp.loadPages().catch((e) => {
-			console.error(e);
-		});
+		const pages = await this.pp.loadPages();
 		this.progress = 2;
 		await this.pbp.update(this.progress, 'start executess');
-		const result = await this.executeParOrder(setting, pages, exportOrders[0], isZip).catch((e) => {
-			console.error('ExportImageProcessor exportExecute executeParOrder');
-			console.error(e.stack);
-			console.error(e);
-			console.error(e.currentTarget);
-			console.error(e.returnValue);
-			console.error(e.srcElement);
-			console.error(e.target);
-			console.error(e.type);
-			console.error(e.eventPhase);
-			console.error(e.timeStamp);
-			console.error(e.message);
-			console.error(e.lineno);
-			console.error(e.error);
-		});
+		const result = await this.executeParOrder(setting, pages, exportOrders[0], isZip);
 		await this.pbp.comple(this.progress);
 		return result;
 	}
@@ -104,21 +87,7 @@ export class ExportImageProcessor {
 			isGrayscale,
 			isLanczose,
 			setting.pageNum
-		).catch((e) => {
-			console.error('ExportImageProcessor exportExecute executeParOrder');
-			console.error(e.stack);
-			console.error(e);
-			console.error(e.currentTarget);
-			console.error(e.returnValue);
-			console.error(e.srcElement);
-			console.error(e.target);
-			console.error(e.type);
-			console.error(e.eventPhase);
-			console.error(e.timeStamp);
-			console.error(e.message);
-			console.error(e.lineno);
-			console.error(e.error);
-		});
+		);
 		const exports = isZip
 			? await this.executeAsZip(targetSize, setting, pages, isMaxSize10M)
 			: await this.executeAsPdf(order.basePaper, setting, pages, isMaxSize10M, isSaddleStitchingOrder);
@@ -269,19 +238,17 @@ export class ExportImageProcessor {
 		};
 		const targetRetio = targetSize.x / targetSize.y;
 		const isBaseWhite = true;
+		const pegaNum = pageNum; //pages.length;
+		const stepNum = 9;
+		const progressUnit = 50 / (stepNum * pegaNum);
 		let currentDataAb = null;
 		this.progress = 5;
 		this.pbp.update(this.progress, 'start pages');
 		//50
-		const pegaNum = pageNum; //pages.length;
-		const stepNum = 9;
-		const progressUnit = 50 / (stepNum * pegaNum);
 		let pageCount = 0;
 		for (const pageEntity of pages) {
 			pageCount++;
-			if (pageCount > pegaNum) {
-				break;
-			}
+			if (pageCount > pegaNum) break;
 			const pageStep = '[' + pageCount + '/' + pegaNum + ']';
 			if (pageEntity && pageEntity.baseImage) {
 				// console.log(pageEntity)
@@ -293,6 +260,7 @@ export class ExportImageProcessor {
 				const width = baseImageEntity.width;
 				const height = baseImageEntity.height;
 				const baseBinaryEntity = await this.em.get(baseImageEntity.binary);
+				if (!baseBinaryEntity) break;
 				// console.log(baseImageEntity)
 				// console.log(bastapNumseBinaryEntity)
 				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa0a")
@@ -325,16 +293,15 @@ export class ExportImageProcessor {
 				this.pbp.update(this.progress, 'maege Replace origin to whitePaper' + pageStep);
 
 				console.time('maege Replace origin to whitePaper' + pageStep);
-				if (isGrayscale && !pageEntity.isForceColor) {
+				if (isGrayscale && !pageEntity.isForceColor)
 					await this.imageMerger.margeReplace(
 						whitePaper,
 						[this.imageFilter.beGrascale(origin)],
 						isBaseWhite,
-						true
+						isOtherThread
 					);
-				} else {
-					await this.imageMerger.margeReplace(whitePaper, [origin], isBaseWhite, true);
-				}
+				else await this.imageMerger.margeReplace(whitePaper, [origin], isBaseWhite, isOtherThread);
+
 				console.timeEnd('maege Replace origin to whitePaper' + pageStep);
 				// console.log("aaaaaaaaaaaaaaaaaaaaaaaa2a/" + expandedPaper.data.length)
 				this.progress += progressUnit;
@@ -344,20 +311,14 @@ export class ExportImageProcessor {
 				);
 				console.time((isLanczose ? 'expand resizeAsLanczos' : 'expand resizeAsByCubic') + pageStep);
 				if (pageEntity.isNoCropping) {
-					if (isLanczose) {
-						await this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper, true);
-					} else {
-						await this.imageResizer.resizeAsByCubic(whitePaper, cropedPaper, true);
-					}
+					if (isLanczose) await this.imageResizer.resizeAsLanczos(whitePaper, cropedPaper, isOtherThread);
+					else await this.imageResizer.resizeAsByCubic(whitePaper, cropedPaper, isOtherThread);
 					//console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;
 					this.pbp.update(this.progress, 'No crop!' + pageStep);
 				} else {
-					if (isLanczose) {
-						await this.imageResizer.resizeAsLanczos(whitePaper, expandedPaper, true);
-					} else {
-						await this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper, true);
-					}
+					if (isLanczose) await this.imageResizer.resizeAsLanczos(whitePaper, expandedPaper, isOtherThread);
+					else await this.imageResizer.resizeAsByCubic(whitePaper, expandedPaper, isOtherThread);
 					// console.log("aaaaaaaaaaaaaaaaaaaaaaaa3a/" + cropedPaper.data.length)
 					this.progress += progressUnit;
 					this.pbp.update(this.progress, 'crop!' + pageStep);
@@ -462,9 +423,7 @@ export class ExportImageProcessor {
 		let indexA = 0;
 		console.time('exportDualImage4Print A1:');
 		for (const page of pages) {
-			if (indexA === 0 && isSideSynced) {
-				printPages.push(null);
-			}
+			if (indexA === 0 && isSideSynced) printPages.push(null);
 			indexA++;
 			// console.error(page);
 			const data = {
@@ -482,9 +441,7 @@ export class ExportImageProcessor {
 			const newPair = [null, null];
 			newPair[0] = printPages[index];
 			index++;
-			if (index < printPages.length) {
-				newPair[1] = printPages[index];
-			}
+			if (index < printPages.length) newPair[1] = printPages[index];
 			printPairs.push(newPair);
 		}
 		this.progress = 61;
@@ -500,7 +457,6 @@ export class ExportImageProcessor {
 			const pageStep = '[' + pageCount + '/' + pageNum + ']';
 			this.progress += progressUnit;
 			this.pbp.update(this.progress, 'exportDualImage4Print' + pageStep);
-
 			// console.log("exportDualImage4Print　pageStep:" + pageStep + "/" + cropedPaperDual.data.length);
 			// console.log(cropedPaperDual);
 			await this.buildDualImage(
@@ -577,7 +533,7 @@ export class ExportImageProcessor {
 			// console.log("A pairPages.leftBin　pageStep:" + pageStep);
 			// console.log(cropedPaperDual);
 			// console.log(origin);
-			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, true);
+			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, isOtherThread);
 			// console.log("pairPages.leftBin");
 		}
 		this.progress += progressUnit;
@@ -595,7 +551,7 @@ export class ExportImageProcessor {
 			// console.log("B pairPages.rightBin　pageStep:" + pageStep);
 			// console.log(cropedPaperDual);
 			// console.log(origin);
-			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, true);
+			await this.imageMerger.margeReplace(cropedPaperDual, [origin], false, isOtherThread);
 			// console.log("pairPages.rightBin");
 		}
 		//ping?

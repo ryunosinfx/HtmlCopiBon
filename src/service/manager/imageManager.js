@@ -17,28 +17,19 @@ export class ImageManager {
 		this.tm = tm;
 	}
 	async load(pk) {
-		let binaryPk = pk;
-		if (typeof pk !== 'string') {
-			binaryPk = PrimaryKey.getPrimaryKey(pk);
-		}
+		const binaryPk = typeof pk !== 'string' ? PrimaryKey.getPrimaryKey(pk) : pk;
 		return await this.em.Images.get(binaryPk);
 	}
 	async reloadLoadedImages() {
 		return await this.createRetList(this.getEntitisAsList());
 	}
 	async loadImages() {
-		const title = await this.tm.load();
-		const images = title.images;
-		const imageEntitis = [];
+		const title = await this.tm.load(),
+			images = title.images,
+			imageEntitis = [];
 		for (const index in images) {
 			const pk = images[index];
-			if (!pk) {
-				continue;
-			}
-			const imageEntity = await this.em.get(pk);
-			if (imageEntity) {
-			}
-			imageEntitis.push(imageEntity);
+			if (pk) imageEntitis.push(await this.em.get(pk));
 		}
 		return await this.createRetList(imageEntitis);
 	}
@@ -100,20 +91,15 @@ export class ImageManager {
 		);
 		console.log('addImageFiles imageEntity:' + imageEntity);
 		const imagePk = imageEntity.getPk();
-		return { imagePk: imagePk, imageEntity: imageEntity };
+		return { imagePk, imageEntity };
 	}
 	async save(pk, name, binary, type, width, height, thumbnail, listing = 0) {
 		let image = null;
-		if (pk) {
-			image = await this.em.Images.get(pk);
-		}
-		console.log('ImageManager save!!9!! binary:' + binary);
-		let binaryPk = PrimaryKey.getPrimaryKey(binary);
-		if (!image) {
-			image = new Images();
-		} else {
-			image.updateDate = Date.now();
-		}
+		if (pk) image = await this.em.Images.get(pk);
+		console.log('ImageManager save!!9!! binary:', binary);
+		const binaryPk = PrimaryKey.getPrimaryKey(binary);
+		if (!image) image = new Images();
+		else image.updateDate = Date.now();
 
 		console.log('ImageManager save!!A!! image:' + image);
 		image.name = name || name === null ? name : image.name;
@@ -124,22 +110,22 @@ export class ImageManager {
 		image.thumbnail = thumbnail || thumbnail === null ? thumbnail : PrimaryKey.getPrimaryKey(image.thumbnail);
 		image.listing = listing || listing === null ? listing : image.listing;
 		const savedData = await this.em.Images.save(image);
-		console.log('ImageManager save!!B!! image:' + savedData);
+		console.log('ImageManager save!!B!! image:', savedData);
 		return savedData;
 	}
 
 	async loadThumbnails(images) {
-		const retList = [];
-		const imageList = [];
+		const retList = [],
+			imageList = [];
 		for (const image of images) {
-			const imagePk = PrimaryKey.getPrimaryKey(image);
-			const imageEntity = await this.load(imagePk);
+			const imagePk = PrimaryKey.getPrimaryKey(image),
+				imageEntity = await this.load(imagePk);
 			imageList.push(imageEntity);
 		}
 		Sorter.orderBy(imageList, [{ colName: 'listing', isDESC: false }]);
 		for (const imageEntity of imageList) {
-			const imagePk = PrimaryKey.getPrimaryKey(imageEntity);
-			const thumbnailEntity = await this.tbm.loadFromImagePk(imagePk);
+			const imagePk = PrimaryKey.getPrimaryKey(imageEntity),
+				thumbnailEntity = await this.tbm.loadFromImagePk(imagePk);
 			retList.push(thumbnailEntity);
 		}
 		return retList;
@@ -159,12 +145,9 @@ export class ImageManager {
 		const retList = [];
 		for (const imageEntity of imageEntitis) {
 			const pk = imageEntity && imageEntity.getPk ? imageEntity.getPk() : null;
-			if (loadedImageMap.has(pk)) {
-				const retObj = loadedImageMap.get(pk);
-				retList.push(retObj);
-			} else if (!pk) {
-				retList.push(null);
-			} else {
+			if (loadedImageMap.has(pk)) retList.push(loadedImageMap.get(pk));
+			else if (!pk) retList.push(null);
+			else {
 				const retObj = await this.processParImage(imageEntity);
 				loadedImageMap.set(pk, retObj);
 				retList.push(retObj);
@@ -173,35 +156,28 @@ export class ImageManager {
 		return retList;
 	}
 	async processParImage(imageEntity) {
-		const imagePk = imageEntity.getPk();
-		const thumbnailEntity = await this.em.get(imageEntity.thumbnail);
-		const binaryEntity = await this.em.get(thumbnailEntity.binary);
-		const imgElm = await this.ip.createImageNodeByData({
+		imageEntity.getPk();
+		const thumbnailEntity = await this.em.get(imageEntity.thumbnail),
+			binaryEntity = await this.em.get(thumbnailEntity.binary);
+		console.log('processParImage thumbnailEntity:', thumbnailEntity);
+		console.log('processParImage binaryEntity:', binaryEntity);
+		if (!thumbnailEntity || !binaryEntity) return null;
+		await this.ip.createImageNodeByData({
 			name: imageEntity.name,
 			ab: binaryEntity.ab,
 			type: imageEntity.type,
 		});
-		const size = binaryEntity.ab ? new Uint8Array(binaryEntity.ab).length : 0;
-		const imageText =
-			escape(imageEntity.name) +
-			' (' +
-			(imageEntity.type || 'n/a') +
-			') - ' +
-			size +
-			'bytes, last modified: ' +
-			imageEntity.modifyDate +
-			' size:' +
-			imageEntity.width +
-			'x' +
-			imageEntity.height;
-
-		const retObj = {
-			imageEntity: imageEntity,
-			binaryEntity: binaryEntity,
-			size: size,
-			imageText: imageText,
-			isOnPage: false,
-		};
+		const size = binaryEntity.ab ? new Uint8Array(binaryEntity.ab).length : 0,
+			imageText = `${escape(imageEntity.name)} (${imageEntity.type || 'n/a'}) - ${size}bytes, last modified: ${
+				imageEntity.modifyDate
+			} size:${imageEntity.width}x${imageEntity.height}`,
+			retObj = {
+				imageEntity: imageEntity,
+				binaryEntity: binaryEntity,
+				size: size,
+				imageText: imageText,
+				isOnPage: false,
+			};
 		return retObj;
 	}
 	removeLoaded(pk) {
@@ -209,16 +185,12 @@ export class ImageManager {
 	}
 	getRetObjsAsList() {
 		const retList = [];
-		for (const [key, retObj] of loadedImageMap.entries()) {
-			retList.push(retObj);
-		}
+		for (const [key, retObj] of loadedImageMap.entries()) if (retObj) retList.push(retObj);
 		return retList;
 	}
 	getEntitisAsList() {
 		const retList = [];
-		for (const [key, retObj] of loadedImageMap.entries()) {
-			retList.push(retObj.imageEntity);
-		}
+		for (const [key, retObj] of loadedImageMap.entries()) if (retObj) retList.push(retObj.imageEntity);
 		return retList;
 	}
 	getFromLoaded(pk) {
