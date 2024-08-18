@@ -33,18 +33,13 @@ export class ActionCreator {
 			console.warn('createGoOtherViewAction is null!');
 			return { type: key, data: addData, storeKey };
 		}
-		if (!data) {
-			addData = {};
-		}
+		if (!data) addData = {};
 		addData.view = view;
 		addData.oldVnode = oldVnode;
 		addData.selector = selector;
 		return { type: key, data: addData, storeKey };
 	}
 	static isEquals(a, b) {
-		if (a && b && a.type === b.type) {
-			return true;
-		}
-		return false;
+		return a && b && a.type === b.type;
 	}
 }
