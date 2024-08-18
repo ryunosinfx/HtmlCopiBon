@@ -11,7 +11,7 @@ export const SettingData = {
 		l2r: 'LeftToRight',
 		r2l: 'RightToLeft',
 	},
-	pageNums: [1, 2, 4, 6, 8, 10, 12, 16],
+	pageNums: [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32],
 };
 export const PrefareceData = {
 	previewSizeSingle: {
