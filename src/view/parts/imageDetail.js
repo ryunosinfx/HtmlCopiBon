@@ -156,10 +156,9 @@ export class ImageDetail extends BaseView {
 	}
 	async showImage(imageData) {
 		const { imageEntity, binaryEntity, imageText } = imageData;
+		if (!imageEntity || !binaryEntity) return;
 		const pk = imageEntity.getPk();
-		if (this.pk !== pk) {
-			this.previewMode = HEIGHT;
-		}
+		if (this.pk !== pk) this.previewMode = HEIGHT;
 		this.setSelectStyle('toClearButton', NONE);
 		this.setSelectStyle('toNativeSizeButton', PLANE);
 		this.setSelectStyle('toWindowSizeButton', WINDOW);
