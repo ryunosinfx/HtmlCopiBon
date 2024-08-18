@@ -10,11 +10,8 @@ export class ImageResizer extends ImageCalcBase {
 	culcWeightByCubic(alpha) {
 		return (x) => {
 			let result = 0;
-			if (x <= 1) {
-				result = (alpha + 2.0) * x * x * x - (alpha + 3.0) * x * x + 1;
-			} else if (x <= 2) {
-				result = alpha * x * x * x - 5.0 * alpha * x * x + 8.0 * alpha * x - 4.0 * alpha;
-			}
+			if (x <= 1) result = (alpha + 2.0) * x * x * x - (alpha + 3.0) * x * x + 1;
+			else if (x <= 2) result = alpha * x * x * x - 5.0 * alpha * x * x + 8.0 * alpha * x - 4.0 * alpha;
 			return result;
 		};
 	}
@@ -23,9 +20,7 @@ export class ImageResizer extends ImageCalcBase {
 	}
 
 	lanczosWeight(n = 3) {
-		return (d) => {
-			return d === 0 ? 1 : Math.abs(d) < n ? this.sincLanczos(d) * this.sincLanczos(d / n) : 0;
-		};
+		return (d) => (d === 0 ? 1 : Math.abs(d) < n ? this.sincLanczos(d) * this.sincLanczos(d / n) : 0);
 	}
 
 	async resizeAsLanczos(iamegData, distImage, isOtherThread) {
@@ -108,27 +103,26 @@ export class ImageResizer extends ImageCalcBase {
 			iamegData = iamegData.iamegData;
 
 			this.threadInit();
-			const distBitmap = distImage.data;
-			const newWidth = distImage.width;
-			const newHeight = distImage.height;
-			const currentBitmap = iamegData.data;
-			const currentWidth = iamegData.width;
-			const currentHeight = iamegData.height;
-			const promises = [];
+			const distBitmap = distImage.data,
+				newWidth = distImage.width,
+				newHeight = distImage.height,
+				currentBitmap = iamegData.data,
+				currentWidth = iamegData.width,
+				currentHeight = iamegData.height,
+				promises = [],
+				parLength = Math.floor(newHeight / threadCount);
 			let total = 0;
-			const parLength = Math.floor(newHeight / threadCount);
 			// console.log("resizeExcWithThread. C threadCount:" + threadCount + "/name:" + name);
 			for (let i = 0; i < threadCount; i++) {
-				const limitHeight = threadCount - 1 === i ? newHeight - total : parLength;
-				// todo Plus
-				const newData = new Uint8ClampedArray(newWidth * 4 * limitHeight);
-				const newDistData = { data: newData, width: newWidth, height: newHeight };
-				const currentImageLen = currentBitmap.length;
-				const newIData = new Uint8ClampedArray(currentImageLen);
+				const limitHeight = threadCount - 1 === i ? newHeight - total : parLength,
+					// todo Plus
+					newData = new Uint8ClampedArray(newWidth * 4 * limitHeight),
+					newDistData = { data: newData, width: newWidth, height: newHeight },
+					currentImageLen = currentBitmap.length,
+					newIData = new Uint8ClampedArray(currentImageLen);
 				// console.log("resizeExcWithThread. D limitHeight:" + limitHeight + "/i:" + i);
-				for (let j = 0; j < currentImageLen; j++) {
-					newIData[j] = currentBitmap[j];
-				}
+				for (let j = 0; j < currentImageLen; j++) newIData[j] = currentBitmap[j];
+
 				const newImageData = { data: newIData, width: currentWidth, height: currentHeight };
 
 				// console.log("resizeExcWithThread. E limitHeight:" + limitHeight + "/i:" + i);
@@ -180,10 +174,10 @@ export class ImageResizer extends ImageCalcBase {
 		});
 	}
 	resizeAsLanczosExe(iamegData, distImage, offsetY, rowCount) {
-		const { data, width, height } = iamegData;
-		const distBitmap = distImage.data;
-		const newWidth = distImage.width;
-		const newHeight = distImage.height;
+		const { data, width, height } = iamegData,
+			distBitmap = distImage.data,
+			newWidth = distImage.width,
+			newHeight = distImage.height;
 		distImage.offsetY = offsetY;
 		distImage.rowCount = rowCount;
 		// console.log("resizeAsByCubicExe offsetY:" + offsetY + "/newWidth:" + newWidth + "/rowCount:" + rowCount + "/newHeight:" + newHeight);
@@ -194,10 +188,10 @@ export class ImageResizer extends ImageCalcBase {
 		return distImage;
 	}
 	resizeAsByCubicExe(iamegData, distImage, offsetY, rowCount) {
-		const { data, width, height } = iamegData;
-		const distBitmap = distImage.data;
-		const newWidth = distImage.width;
-		const newHeight = distImage.height;
+		const { data, width, height } = iamegData,
+			distBitmap = distImage.data,
+			newWidth = distImage.width,
+			newHeight = distImage.height;
 		distImage.offsetY = offsetY;
 		distImage.rowCount = rowCount;
 		// console.log("A offsetY:[" + offsetY + "]" + "--resizeAsByCubicExe A1 offsetY:" + offsetY + "/newWidth:" + newWidth + "/rowCount:" + rowCount + "/newHeight:" + newHeight);
@@ -212,9 +206,9 @@ export class ImageResizer extends ImageCalcBase {
 	}
 	/////////////
 	resize(iamegData, newWidth, newHeight, distImage) {
-		const { data, width, height } = iamegData;
-		const distBitmap = distImage.data;
-		const newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap));
+		const { data, width, height } = iamegData,
+			distBitmap = distImage.data,
+			newData = new Uint8ClampedArray(this.resizeByCubic(data, width, height, newWidth, newHeight, distBitmap));
 		return distImage;
 	}
 	resizeLanczos(originBitmap, sourceWidth, sourceHeight, newWidth, newHeight, distBitmap, offsetY, rowCount) {
@@ -258,49 +252,45 @@ export class ImageResizer extends ImageCalcBase {
 		offsetY,
 		rowCount
 	) {
-		const newWidth = Math.floor(newWidthF);
-		const newHeight = Math.floor(newHeightF);
-		const sw = Math.floor(sourceWidth);
-		const sw4 = sw * 4;
-		const swLimit = sw - 1;
-		const sh = Math.floor(sourceHeight);
-		const sh4 = sh * 4;
-		const shLimit = sh - 1;
-		const wf = sw / newWidth;
-		const hf = sh / newHeight;
-		const src = originBitmap;
-		const dist = distBitmap ? distBitmap : new Uint8Array(newWidth * newHeight * 4);
-		const sizeHalf = size / 2;
-		const sizeHalfm1 = sizeHalf - 1;
-		const xMap = {};
-		const threadRowCount = rowCount ? rowCount : newHeight;
-		const threadOffsetY = offsetY ? offsetY : 0;
-		const threadEnd = threadOffsetY + threadRowCount;
+		const newWidth = Math.floor(newWidthF),
+			newHeight = Math.floor(newHeightF),
+			sw = Math.floor(sourceWidth),
+			sw4 = sw * 4,
+			swLimit = sw - 1,
+			sh = Math.floor(sourceHeight),
+			sh4 = sh * 4,
+			shLimit = sh - 1,
+			wf = sw / newWidth,
+			hf = sh / newHeight,
+			src = originBitmap,
+			dist = distBitmap ? distBitmap : new Uint8Array(newWidth * newHeight * 4),
+			sizeHalf = size / 2,
+			sizeHalfm1 = sizeHalf - 1,
+			threadRowCount = rowCount ? rowCount : newHeight,
+			threadOffsetY = offsetY ? offsetY : 0,
+			threadEnd = threadOffsetY + threadRowCount;
 		for (let iy = threadOffsetY; iy < threadEnd; iy++) {
-			const wfy = hf * iy;
-			const y = Math.floor(wfy);
-			const startY = y - sizeHalfm1;
-			const endY = y + sizeHalf;
-			const y32bitOffsetDist = (iy - threadOffsetY) * 4 * newWidth;
+			const wfy = hf * iy,
+				y = Math.floor(wfy),
+				startY = y - sizeHalfm1,
+				endY = y + sizeHalf,
+				y32bitOffsetDist = (iy - threadOffsetY) * 4 * newWidth;
 			for (let ix = 0; ix < newWidth; ix++) {
-				const wfx = wf * ix;
-				const x = Math.floor(wfx);
-				let r = 0;
-				let g = 0;
-				let b = 0;
-				const startX = x - sizeHalfm1;
-				const endX = x + sizeHalf;
+				const wfx = wf * ix,
+					x = Math.floor(wfx),
+					startX = x - sizeHalfm1,
+					endX = x + sizeHalf;
+				let r = (g = b = 0);
 				for (let jy = startY; jy <= endY; jy++) {
-					const weightY = weightFunc(Math.abs(wfy - jy));
-					const sy = jy < 0 || jy > shLimit ? y : jy;
-					const y32bitOffset = sw4 * sy;
+					const weightY = weightFunc(Math.abs(wfy - jy)),
+						sy = jy < 0 || jy > shLimit ? y : jy,
+						y32bitOffset = sw4 * sy;
 					for (let jx = startX; jx <= endX; jx++) {
 						const w = weightFunc(Math.abs(wfx - jx)) * weightY;
-						if (w === 0) {
-							continue;
-						}
-						const sx = jx < 0 || jx > swLimit ? x : jx;
-						const offset32bit = y32bitOffset + sx * 4;
+						if (w === 0) continue;
+
+						const sx = jx < 0 || jx > swLimit ? x : jx,
+							offset32bit = y32bitOffset + sx * 4;
 						r += src[offset32bit] * w;
 						g += src[offset32bit + 1] * w;
 						b += src[offset32bit + 2] * w;
