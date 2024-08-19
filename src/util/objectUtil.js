@@ -112,7 +112,7 @@ export class ObjectUtil {
 			// console.log("====ABvaluseSize:" + valuseSize);
 			size += indexSize + valuseSize + 1 + delimiterSize;
 		} else if (typeof value === 'function') {
-			continu;
+			return 1;
 		} else if (typeof value === 'number') {
 			size += indexSize + 4 + 1 + delimiterSize;
 		} else if (typeof value === 'string') {
