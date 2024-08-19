@@ -206,7 +206,7 @@ canvas.hidden {
 
 .FilesArea > div > div {
 	display: flex;
-	min-width: 115px;
+	min-width: 128px;
 	overflow: auto;
 	height: calc(100vh - 140px);
 }
