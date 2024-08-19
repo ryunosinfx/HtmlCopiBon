@@ -8,7 +8,7 @@ export class EntityManager {
 	async initAsNewUser(entities, userId = USER_ID) {
 		console.log('EntityManager initAsNewUser', entities, userId);
 		for (const entityClass of entities) await this.initParEntity(entityClass, userId);
-		await this.initParEntity(Binary, userId, 3000);
+		await this.initParEntity(Binary, userId, 30000);
 	}
 	async initParEntity(entityClass, userId, closeTimeout) {
 		console.log('EntityManager initParEntity 1', entityClass, userId);
