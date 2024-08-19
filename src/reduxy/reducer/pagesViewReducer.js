@@ -23,9 +23,7 @@ export class PagesViewReducer extends BaseReducer {
 		this.storeImagesKey = ImageActionCreator.getStoreImagesKey();
 	}
 	static register() {
-		if (!pagesViewReducer) {
-			pagesViewReducer = new PagesViewReducer();
-		}
+		if (!pagesViewReducer) pagesViewReducer = new PagesViewReducer();
 	}
 	async reduce(store, action) {
 		if (this.pageAddAction.type === action.type) {

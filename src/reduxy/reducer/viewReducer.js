@@ -7,9 +7,9 @@ export default class ViewBaseReducer extends BaseReducer {
 		this.atatch(ViewBaseActions.getShowViewAction());
 	}
 	async reduce(store, action) {
-		if (ActionCreator.isEquals(ViewBaseActions.getGotoAnotherViewAction(), action)) {
+		if (ActionCreator.isEquals(ViewBaseActions.getGotoAnotherViewAction(), action))
 			console.log('getGotoAnotherViewAction!');
-		} else if (ActionCreator.isEquals(ViewBaseActions.getShowViewAction(), action)) {
+		else if (ActionCreator.isEquals(ViewBaseActions.getShowViewAction(), action)) {
 			store.isOrverride = true;
 			store.oldVnode = action.data.oldVnode;
 			store.selector = action.data.selector;

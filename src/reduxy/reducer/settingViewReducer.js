@@ -29,49 +29,25 @@ export class SettingViewReducer extends BaseReducer {
 		this.storePagesKey = PageActionCreator.getStorePagesKey();
 	}
 	static register() {
-		if (!settingViewReducer) {
-			settingViewReducer = new SettingViewReducer();
-		}
+		if (!settingViewReducer) settingViewReducer = new SettingViewReducer();
 	}
 	async reduce(store, action) {
 		if (this.creatAction.type === action.type) {
-			store[this.storeKey] = await this.load().catch((e) => {
-				console.error(e);
-			});
-			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
-				console.error(e);
-			});
+			store[this.storeKey] = await this.load();
+			store[this.storeKeyOpm] = await this.opm.loadAll();
 		} else if (this.creatRemoveAction.type === action.type) {
-			store[this.storeKey] = await this.reset(action.data).catch((e) => {
-				console.error(e);
-			});
-			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
-				console.error(e);
-			});
+			store[this.storeKey] = await this.reset(action.data);
+			store[this.storeKeyOpm] = await this.opm.loadAll();
 		} else if (this.creatLoadAction.type === action.type) {
-			store[this.storeKey] = await this.load().catch((e) => {
-				console.error(e);
-			});
-			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
-				console.error(e);
-			});
+			store[this.storeKey] = await this.load();
+			store[this.storeKeyOpm] = await this.opm.loadAll();
 		} else if (this.creatUpdateAction.type === action.type) {
-			store[this.storeKey] = await this.update(action.data).catch((e) => {
-				console.error(e);
-			});
+			store[this.storeKey] = await this.update(action.data);
 			// alert("creatUpdateAction:" + JSON.stringify(store[this.storeKey]));
-			store[this.storeKeyOpm] = await this.opm.loadAll().catch((e) => {
-				console.error(e);
-			});
-			const result = await this.pp.resetPagesFull().catch((e) => {
-				console.error(e);
-			});
-			store[this.storePagesKey] = await this.pp.loadPages(result).catch((e) => {
-				console.error(e);
-			});
-			store[this.storeImagesKey] = await this.im.loadImages().catch((e) => {
-				console.error(e);
-			});
+			store[this.storeKeyOpm] = await this.opm.loadAll();
+			const result = await this.pp.resetPagesFull();
+			store[this.storePagesKey] = await this.pp.loadPages(result);
+			store[this.storeImagesKey] = await this.im.loadImages();
 			// console.error("storePagesKey:"+store[this.storePagesKey].length);
 		}
 	}
@@ -90,10 +66,7 @@ export class SettingViewReducer extends BaseReducer {
 		);
 		const settingEntityLoad = await this.sm.loadByPk(pk);
 
-		if (!settingEntityLoad) {
-			const settingEntity = await this.sm.createDefault(pk);
-			return settingEntity;
-		}
+		if (!settingEntityLoad) return await this.sm.createDefault(pk);
 		const savedLoad = await this.tm.loadSettings();
 		// console.warn(saved);
 		// console.warn(settingEntityLoad);
@@ -103,8 +76,7 @@ export class SettingViewReducer extends BaseReducer {
 	async reset() {
 		const title = await this.tm.load();
 		const pk = title.getPk();
-		const settingEntity = await this.sm.createDefault(pk);
-		return settingEntity;
+		return await this.sm.createDefault(pk);
 	}
 	async load() {
 		return await this.tm.loadSettings();

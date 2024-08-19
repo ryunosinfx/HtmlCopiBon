@@ -28,9 +28,7 @@ export class TitleViewReducer extends BaseReducer {
 		this.addInitializeKey(this.storeCurrentKey);
 	}
 	static register() {
-		if (!titleViewReducer) {
-			titleViewReducer = new TitleViewReducer();
-		}
+		if (!titleViewReducer) titleViewReducer = new TitleViewReducer();
 	}
 	async reduce(store, action) {
 		if (this.titleCreatAction.type === action.type) {
@@ -52,9 +50,7 @@ export class TitleViewReducer extends BaseReducer {
 		} else if (this.titleUpdateAction.type === action.type) {
 			store[this.storeKey] = await this.tp.loadAll();
 			store[this.storeCurrentKey] = await this.tp.update(action.data.titleId, action.data.name);
-		} else if (this.titleClearAllAction.type === action.type) {
-			store[this.storeKey] = await this.tp.clearAll();
-		}
+		} else if (this.titleClearAllAction.type === action.type) store[this.storeKey] = await this.tp.clearAll();
 		return store;
 	}
 }

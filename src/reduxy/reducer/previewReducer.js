@@ -28,16 +28,12 @@ export class PreviewReducer extends BaseReducer {
 		this.addInitializeKey(this.storeSettingKey);
 	}
 	static register() {
-		if (!previewReducer) {
-			previewReducer = new PreviewReducer();
-		}
+		if (!previewReducer) previewReducer = new PreviewReducer();
 	}
 	async reduce(store, action) {
 		if (this.previewOpenAction.type === action.type) {
 			const isSingle = action.data.isSingle;
-			const setting = await this.tm.loadSettings().catch((e) => {
-				console.log(e);
-			});
+			const setting = await this.tm.loadSettings();
 			const list = await this.loadPreviews(setting, isSingle);
 			store[this.storeKey] = {
 				isSingle: isSingle,
@@ -70,7 +66,6 @@ export class PreviewReducer extends BaseReducer {
 	}
 	async loadPreviews(setting, isSingle) {
 		const binaries = await this.pvp.loadPreviews();
-		const list = await this.pvp.shapeListBySets(binaries, isSingle, setting);
-		return list;
+		return await this.pvp.shapeListBySets(binaries, isSingle, setting);
 	}
 }

@@ -55,9 +55,7 @@ export class ExportReducer extends BaseReducer {
 		this.addInitializeKey(this.storeSelectedOrderKey);
 	}
 	static register() {
-		if (!exportReducer) {
-			exportReducer = new ExportReducer();
-		}
+		if (!exportReducer) exportReducer = new ExportReducer();
 	}
 	async reduce(store, action) {
 		if (this.exportExecuteAction.type === action.type) {

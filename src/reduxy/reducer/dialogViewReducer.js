@@ -16,12 +16,10 @@ export class DialogViewReducer extends BaseReducer {
 		this.addInitializeKey(this.storeKey);
 	}
 	static register() {
-		if (!dialogViewReducer) {
-			dialogViewReducer = new DialogViewReducer();
-		}
+		if (!dialogViewReducer) dialogViewReducer = new DialogViewReducer();
 	}
 	async reduce(store, action) {
-		if (this.dialogOpenAction.type === action.type) {
+		if (this.dialogOpenAction.type === action.type)
 			store[this.storeKey] = this.createDialog(
 				true,
 				action.type,
@@ -29,13 +27,12 @@ export class DialogViewReducer extends BaseReducer {
 				action.data.title,
 				action.data.nextActions
 			);
-		} else if (this.dialogAlertAction.type === action.type) {
+		else if (this.dialogAlertAction.type === action.type)
 			store[this.storeKey] = this.createDialog(true, action.type, action.data.msg, action.data.title);
-		} else if (this.dialogConfirmAction.type === action.type) {
+		else if (this.dialogConfirmAction.type === action.type)
 			store[this.storeKey] = this.createDialog(true, action.type, action.data.msg, action.data.title);
-		} else if (this.dialogCloseAction.type === action.type) {
+		else if (this.dialogCloseAction.type === action.type)
 			store[this.storeKey] = this.createDialog(false, action.type);
-		}
 		return store;
 	}
 	createDialog(isVisible, type, msg, title, nextActions) {

@@ -10,14 +10,10 @@ export class MenuSelectViewReducer extends BaseReducer {
 		this.addInitializeKey(this.storeKey);
 	}
 	static register() {
-		if (!menuSelectViewReducer) {
-			menuSelectViewReducer = new MenuSelectViewReducer();
-		}
+		if (!menuSelectViewReducer) menuSelectViewReducer = new MenuSelectViewReducer();
 	}
 	async reduce(store, action) {
-		if (this.menuSelectAction.type === action.type) {
-			store[this.storeKey] = action.data.id;
-		}
+		if (this.menuSelectAction.type === action.type) store[this.storeKey] = action.data.id;
 		return store;
 	}
 }
