@@ -20,9 +20,7 @@ export class ActionDispatcherImple {
 			if (!reducers.includes(reducer)) {
 				reducers.push(reducer);
 			} else return false;
-		} else {
-			actionMap.set(type, [reducer]);
-		}
+		} else actionMap.set(type, [reducer]);
 		return true;
 	}
 	static remove(action, reducer = null) {
@@ -69,9 +67,9 @@ export class ActionDispatcherImple {
 			}
 			for (const reducer of reducers) {
 				// console.log('A01 dispatch type:' + type + '/reducer.reduce:' + reducer.reduce);
-				await reducer.preReduce(store, action).catch(ActionDispatcherImple.getE());
-				await reducer.reduce(store, action).catch(ActionDispatcherImple.getE());
-				await reducer.postReduce(store, action).catch(ActionDispatcherImple.getE());
+				await reducer.preReduce(store, action); //.catch(ActionDispatcherImple.getE());
+				await reducer.reduce(store, action); //.catch(ActionDispatcherImple.getE());
+				await reducer.postReduce(store, action); //.catch(ActionDispatcherImple.getE());
 			}
 			// console.log('A02 dispatch type:' + type + '/', reducers[0]);
 		}
@@ -85,9 +83,9 @@ export class ActionDispatcherImple {
 			const targetView = action.data.views;
 			// console.log('A05 dispatch store.isOrverride:' + store.isOrverride + '/targetView:', targetView);
 			if (this.view.onViewHide(targetView, data) === false) return;
-			result = await this.callUpdate(targetView, data, storeKey, action).catch(ActionDispatcherImple.getE());
+			result = await this.callUpdate(targetView, data, storeKey, action); //.catch(ActionDispatcherImple.getE());
 			await this.view.onViewHidden(targetView, data);
-		} else result = await this.callUpdate(targetView, data, storeKey, action).catch(ActionDispatcherImple.getE());
+		} else result = await this.callUpdate(targetView, data, storeKey, action); //.catch(ActionDispatcherImple.getE());
 		//store = Store.getStore(storeKey);
 		Store.setStore(storeAsClones, storeKey, actionClass);
 		// console.error(storeAsClones);
@@ -97,7 +95,7 @@ export class ActionDispatcherImple {
 		return true;
 	}
 	callUpdate(targetView, actionData, storeKey, action) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			const promises = [];
 			const activViews = viewAttachQueue.getActiveViewList();
 			// console.log('A0 callUpdate targetView:' + targetView.id + '/targetView:', targetView);
@@ -111,15 +109,12 @@ export class ActionDispatcherImple {
 					if (promise) {
 						if (!promise.then) {
 							alert(
-								"your view has override method name 'updateReactiveTheTargetView'! activeView.id):" +
-									activeView.id
+								`your view has override method name 'updateReactiveTheTargetView'! activeView.id):${activeView.id}`
 							);
 							reject(promise);
 							return;
 						}
 						promises.push(promise.then(() => {}, ActionDispatcherImple.getE()));
-					} else {
-						// console.log(activeView);
 					}
 				} else {
 					// console.log('A3 callUpdate updateReactive id:' + activeView.id);
@@ -128,20 +123,17 @@ export class ActionDispatcherImple {
 					if (promise) {
 						if (!promise.then) {
 							alert(
-								"your view has override method name 'updateReactive'! activeView.id):" + activeView.id
+								`your view has override method name 'updateReactive'! activeView.id):${activeView.id}`
 							);
 							reject(promise);
 							return;
 						}
 						promises.push(promise.then(() => {}, ActionDispatcherImple.getE()));
-					} else {
-						//console.log(activeView);
 					}
 				}
 			}
-			if (promises.length > 0) {
-				Promise.all(promises).then(resolve, reject);
-			} else resolve(targetView);
+			if (promises.length > 0) await Promise.all(promises).then(resolve, reject);
+			else resolve(targetView);
 		});
 
 		// console.log('callUpdate END----------------');
