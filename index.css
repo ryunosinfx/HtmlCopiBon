@@ -207,12 +207,12 @@ canvas.hidden {
 .FilesArea > div > div {
 	display: flex;
 	min-width: 115px;
-	overflow: scroll;
+	overflow: auto;
 	height: calc(100vh - 140px);
 }
 
 .FilesArea > div > div.PageImages {
-	min-width: 225px;
+	min-width: 240px;
 	width: 225px;
 	max-width: 50%;
 }
@@ -225,7 +225,7 @@ canvas.hidden {
 .ImageDetail > div {
 	width: calc(100% - 5px);
 	height: calc(100vh - 180px);
-	overflow: scroll;
+	overflow: auto;
 }
 
 .ImageDetail .ImageDetailA {
@@ -301,7 +301,7 @@ canvas.hidden {
 	padding-right: 0.2em;
 	background-color: rgba(200, 200, 200, 0);
 	background-repeat: inherit;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .Thumnails .thumbnails_block {
@@ -350,6 +350,8 @@ canvas.hidden {
 	display: flex;
 	height: auto;
 	margin: auto;
+	max-width: 110px;
+	flex-wrap: wrap;
 }
 
 .thumbnail_block div.page_block {
@@ -714,7 +716,7 @@ canvas.hidden {
 	width: 110px;
 	border: 2px solid rgb(126, 100, 113);
 	background-color: rgb(172, 148, 185);
-	height: 140px;
+	height: 150px;
 	margin: 0em auto;
 }
 
