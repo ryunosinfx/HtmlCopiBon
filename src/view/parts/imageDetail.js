@@ -203,10 +203,7 @@ export class ImageDetail extends BaseView {
 		this.setSelectStyle('toHelfWindowSizeButton', HELF);
 		this.setSelectStyle('toFullWindowSizeButton', FULL);
 		const imageData = this.imageData;
-		if (imageData) {
-			const keys = Object.keys(imageData);
-			for (const key of keys) delete imageData[key];
-		}
+		if (imageData) for (const key of Object.keys(imageData)) delete imageData[key];
 		this.prePatch('#' + this.imageAreaID, div(this.imageAreaID, ['ImageDetailA'], 'No Image Selected'));
 	}
 	onClick() {
@@ -228,12 +225,10 @@ export class ImageDetail extends BaseView {
 	setSelectStyle(id, className) {
 		const active = 'active';
 		const button = document.getElementById(this.id + id);
-		if (this.previewMode === className) {
+		if (this.previewMode === className)
 			// alert(this.previewMode);
 			button.classList.add(active);
-		} else {
-			button.classList.remove(active);
-		}
+		else button.classList.remove(active);
 	}
 	toNativeSize() {
 		return this.getFunc(PLANE);

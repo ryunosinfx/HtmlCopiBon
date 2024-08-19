@@ -7,10 +7,7 @@ export class BaseReducer {
 		// console.log('BaseReducer constructor:' + isBaseUse);
 		if (isBaseUse) {
 			const baseActions = ActionCreator.getBaseActions();
-			for (const index in baseActions) {
-				const type = baseActions[index];
-				this.atatch({ type: type });
-			}
+			for (const index in baseActions) this.atatch({ type: baseActions[index] });
 		}
 	}
 	addInitializeKey(targetKey) {
@@ -18,9 +15,7 @@ export class BaseReducer {
 	}
 	getInitializeKeys() {
 		const retList = [];
-		for (const value of initializeStoreKeys) {
-			retList.push(value);
-		}
+		for (const value of initializeStoreKeys) retList.push(value);
 		return retList;
 	}
 	atatch(action) {
@@ -39,7 +34,6 @@ export class BaseReducer {
 	async reduce(store, action) {
 		// console.log('A0 BaseReducer reduce:' + action);
 		store.isOrverride = true;
-
 		store.oldVnode = action.data.oldVnode;
 		store.selector = '#' + action.data.selector;
 		//alert(store);
