@@ -97,7 +97,7 @@ export class ImageResizer extends ImageCalcBase {
 	}
 	resizeExcWithThread(iamegData, distImage, name) {
 		// console.log("resizeExcWithThread A .iamegData:" + iamegData);
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			// console.log("resizeExcWithThread. B iamegData:" + iamegData);
 			distImage = iamegData.distImage;
 			iamegData = iamegData.iamegData;
@@ -122,9 +122,7 @@ export class ImageResizer extends ImageCalcBase {
 					newIData = new Uint8ClampedArray(currentImageLen);
 				// console.log("resizeExcWithThread. D limitHeight:" + limitHeight + "/i:" + i);
 				for (let j = 0; j < currentImageLen; j++) newIData[j] = currentBitmap[j];
-
 				const newImageData = { data: newIData, width: currentWidth, height: currentHeight };
-
 				// console.log("resizeExcWithThread. E limitHeight:" + limitHeight + "/i:" + i);
 				const promise = this.execute(name, {
 					iamegData: newImageData,
@@ -135,7 +133,7 @@ export class ImageResizer extends ImageCalcBase {
 				total += limitHeight;
 				promises.push(promise);
 			}
-			Promise.all(promises)
+			await Promise.all(promises)
 				.then((values) => {
 					// console.log("resizeExcWithThread -----A--- values.length:" + values.length);
 					// console.log(values)
