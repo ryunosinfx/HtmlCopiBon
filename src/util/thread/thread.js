@@ -1,7 +1,7 @@
 const defaultWorker = './src/worker.js';
-const defaultWorkerFromWorker = './worker.js';
 export class Thread {
 	constructor(workerJsPath = defaultWorker) {
+		console.log('trance Thread workerJsPath:' + workerJsPath);
 		this.worker = new Worker(workerJsPath);
 	}
 
@@ -17,15 +17,18 @@ export class Thread {
 			// console.warn("trance！ー！＝！＝！＝！:-----");
 
 			try {
-				this.worker.postMessage(transObject, tranceArray);
+				console.warn('postMessage tranceArray:', tranceArray);
+				console.warn('postMessage transObject:', transObject);
+
 				this.worker.onmessage = (event) => {
 					const returendData = event.data;
 					// console.warn(returendData);
 					resolve(returendData);
 				};
-				this.worker.onerror = (event) => {
-					console.log(event);
+				this.worker.onerror = (event, e2) => {
+					console.log(event, e2);
 					const e = event;
+					console.error(e.stack);
 					console.error(e.currentTarget);
 					console.error(e.returnValue);
 					console.error(e.srcElement);
@@ -38,6 +41,7 @@ export class Thread {
 					console.error(e.error);
 					reject(event);
 				};
+				this.worker.postMessage(transObject, tranceArray);
 			} catch (e) {
 				console.error(e);
 				console.error(e.stack);
@@ -47,17 +51,15 @@ export class Thread {
 
 	static buildPostObj(key, dataMap) {
 		const tranceArray = [];
-		if (dataMap && typeof dataMap === 'object') {
-			dataMap.key = key;
-		} else {
+		if (dataMap && typeof dataMap === 'object') dataMap.key = key;
+		else
 			dataMap = {
-				key: key,
+				key,
 			};
-		}
 
-		// console.log("trance--buildPostObj A dataMap:" + dataMap);
+		console.log('trance--buildPostObj A dataMap:' + dataMap);
 		Thread.buildPostObjExec(dataMap, tranceArray);
-		// console.log("trance--buildPostObj B tranceArray:" + tranceArray.length);
+		console.log('trance--buildPostObj B tranceArray:' + tranceArray.length);
 		return { transObject: dataMap, tranceArray };
 	}
 
@@ -80,9 +82,7 @@ export class Thread {
 			// console.log("trance buildPostObjExec object:" + dataMap);
 			for (const objKey in dataMap) {
 				const value = dataMap[objKey];
-				if (value === undefined) {
-					continue;
-				}
+				if (value === undefined) continue;
 				Thread.buildPostObjExecParValue(objKey, value, tranceArray);
 			}
 		} else {
@@ -97,31 +97,33 @@ export class Thread {
 		const type = typeof value;
 		let isNotObject = false;
 		if (!value) {
+			console.log('trance buildPostObjExecParValue1 value:' + value);
 			isNotObject = true;
-		} else if (value.buffer) {
+		} else if (value.buffer && value.buffer > 0) {
 			tranceArray.push(value.buffer);
 			isNotObject = true;
-			// console.log("trance buildPostObjExecParValue0 buffer:" + value);
-		} else if (value.byteLength) {
+			console.log('trance buildPostObjExecParValue0 buffer:' + value);
+		} else if (value.byteLength && value.byteLength > 0) {
 			tranceArray.push(value);
 			isNotObject = true;
-			// console.log("trance buildPostObjExecParValueA byteLength:" + value);
-		} else if (value instanceof ImageData) {
+			console.log('trance buildPostObjExecParValueA byteLength:' + value);
+		} else if (value.data && value.data.buffer && value.data.buffer.byteLength > 0) {
 			tranceArray.push(value.data.buffer);
 			isNotObject = true;
-			// console.log("trance buildPostObjExecParValueB ImageData:" + value);
+			console.log('trance buildPostObjExecParValueB ImageData:' + value + '/' + value.data.buffer.byteLength);
 		} else if (type === 'boolean' || type === 'number' || type === 'string') {
 			isNotObject = true;
-			// console.log("trance buildPostObjExecParValueC primitive:" + value);
+			console.log('trance buildPostObjExecParValueC primitive:' + value);
 			// } else {
 			// 	console.log("trance buildPostObjExecParValueD other:" + value);
 		}
 		if (!isNotObject && currentKey) {
-			// console.log("trance buildPostObjExecParValueE add:" + currentKey);
+			console.log('trance buildPostObjExecParValueE add:' + currentKey, value);
 			Thread.buildPostObjExec(value, tranceArray);
 		}
 	}
 	close() {
+		console.log('trance close terminate:' + terminate);
 		this.worker.terminate();
 	}
 }
