@@ -41,7 +41,7 @@ export class StorageService {
 		for (const key in recordMap) retMap[key] = this.getEntity(recordMap[key]);
 		return retMap;
 	}
-	async get(key) {
+	async getRow(key) {
 		const pk = key && key.pk ? key.pk : key,
 			record = await this.idbAccessor.getRecord(pk);
 		return this.getEntity(record);
