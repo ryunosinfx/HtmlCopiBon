@@ -26,7 +26,8 @@ export class TitleProcessor {
 	}
 	async getSizes(target) {
 		if (!target || !target.getRefCols) return 1;
-		let size = await ObjectUtil.calcSize(this.em, target);
+		console.warn('calcSize this.em:', this.em, target);
+		let size = await ObjectUtil.calcSize(this.em[target.entitiyName], target);
 		const refCols = target.getRefCols();
 		for (const colName of refCols) {
 			const colValue = target[colName];
