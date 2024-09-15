@@ -6,38 +6,29 @@ export class ImageOutputsManager {
 	}
 	async load(pk) {
 		let binaryPk = pk;
-		if (!pk) {
-			binaryPk = PrimaryKey.getPrimaryKey(pk);
-		}
-		return await this.em.ImageOutputs.get(binaryPk);
+		if (!pk) binaryPk = PrimaryKey.getPrimaryKey(pk);
+		return await this.em.ImageOutputs.getEntity(binaryPk);
 	}
 	async remove(pk) {
-		const target = await this.em.ImageOutputs.get(pk);
+		const target = await this.em.ImageOutputs.getEntity(pk);
 		if (target) {
-			if (target.binary) {
-				await this.em.Binary.delete(target.binary);
-			}
+			if (target.binary) await this.em.Binary.delete(target.binary);
 			await this.em.ImageOutputs.delete(pk);
 		}
 	}
 	async save(pk, name, binary, type, orderName, size, listing = 0) {
-		let imageOutputs = null;
-		if (pk) {
-			imageOutputs = await this.em.ImageOutputs.get(pk);
-		}
+		let ios = null;
+		if (pk) ios = await this.em.ImageOutputs.getEntity(pk);
 		let binaryPk = PrimaryKey.getPrimaryKey(binary);
-		if (!imageOutputs) {
-			imageOutputs = new ImageOutputs();
-		} else {
-			imageOutputs.updateDate = Date.now();
-		}
-		imageOutputs.name = name || name === null ? name : imageOutputs.name;
-		imageOutputs.binary = binaryPk ? binaryPk : binary;
-		imageOutputs.type = type || type === null ? type : imageOutputs.type;
-		imageOutputs.orderName = orderName || orderName === null ? orderName : imageOutputs.orderName;
-		imageOutputs.size = size || size === null ? size : imageOutputs.size;
-		imageOutputs.listing = listing || listing === null ? listing : imageOutputs.listing;
-		const imageEntitySaved = await this.em.ImageOutputs.save(imageOutputs);
+		if (!ios) ios = new ImageOutputs();
+		else ios.updateDate = Date.now();
+		ios.name = name || name === null ? name : ios.name;
+		ios.binary = binaryPk ? binaryPk : binary;
+		ios.type = type || type === null ? type : ios.type;
+		ios.orderName = orderName || orderName === null ? orderName : ios.orderName;
+		ios.size = size || size === null ? size : ios.size;
+		ios.listing = listing || listing === null ? listing : ios.listing;
+		const imageEntitySaved = await this.em.ImageOutputs.save(ios);
 		return PrimaryKey.getPrimaryKey(imageEntitySaved);
 	}
 }

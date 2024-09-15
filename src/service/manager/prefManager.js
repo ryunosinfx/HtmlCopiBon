@@ -4,45 +4,36 @@ export class PrefManager {
 		this.opm = opm;
 	}
 	async loadByPk(titilePk) {
-		const prefarenceEntity = await this.em.Prefarences.get(titilePk);
-		return prefarenceEntity;
+		return await this.em.Prefarences.getEntity(titilePk);
 	}
 
 	async loadAll() {
 		const retList = [];
 		const prefarences = this.em.Pages.loadAll();
-		for (const prefarence of prefarences) {
-			retList.push(prefarence);
-		}
+		for (const pref of prefarences) retList.push(pref);
 		return retList;
 	}
 	async createDefault(titilePk) {
-		const prefarence = new Prefarences();
-		prefarence.setPk(titilePk);
-		prefarence.pageNum = 8;
-		prefarence.startPage = 'l';
-		prefarence.pageDelection = 'r2l';
-		prefarence.outputProfile = this.opm.getDefaultPk();
-		prefarence.listing = 0;
-		const saved = await this.em.Prefarences.save(prefarence);
+		const pref = new Prefarences();
+		pref.setPk(titilePk);
+		pref.pageNum = 8;
+		pref.startPage = 'l';
+		pref.pageDelection = 'r2l';
+		pref.outputProfile = this.opm.getDefaultPk();
+		pref.listing = 0;
+		const saved = await this.em.Prefarences.save(pref);
 		return saved;
 	}
 	async save(pk, name, pageNum, startPage, pageDirection, outputProfile, listing = 0) {
-		let prefarences = null;
-		if (pk) {
-			prefarences = await this.em.Prefarences.get(pk);
-		}
-		if (!prefarences) {
-			prefarences = new Prefarences();
-		} else {
-			prefarences.updateDate = Date.now();
-		}
-		prefarences.name = name || name === null ? name : prefarences.name;
-		prefarences.pageNum = pageNum ? pageNum : 8;
-		prefarences.startPage = startPage || startPage === null ? startPage : prefarences.startPage;
-		prefarences.pageDirection = pageDirection || pageDirection === null ? pageDirection : prefarences.pageDirection;
-		prefarences.outputProfile = outputProfile || outputProfile === null ? outputProfile : prefarences.outputProfile;
-		prefarences.listing = listing || listing === null ? listing : prefarences.listing;
-		return await this.em.Prefarences.save(prefarences);
+		let pref = pk ? await this.em.Prefarences.getEntity(pk) : null;
+		if (!pref) pref = new Prefarences();
+		else pref.updateDate = Date.now();
+		pref.name = name || name === null ? name : pref.name;
+		pref.pageNum = pageNum ? pageNum : 8;
+		pref.startPage = startPage || startPage === null ? startPage : pref.startPage;
+		pref.pageDirection = pageDirection || pageDirection === null ? pageDirection : pref.pageDirection;
+		pref.outputProfile = outputProfile || outputProfile === null ? outputProfile : pref.outputProfile;
+		pref.listing = listing || listing === null ? listing : pref.listing;
+		return await this.em.Prefarences.save(pref);
 	}
 }

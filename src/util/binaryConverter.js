@@ -111,7 +111,7 @@ export class BinaryCnvtr {
 		let o = 0;
 		for (let i = 0; i < c; i++) {
 			const u = s[i];
-			a.set(u, o);
+			a.set(u.buffer ? u : B.u8(u), o);
 			o += gBl(u);
 		}
 		return a;

@@ -26,19 +26,13 @@ export class TitleManager {
 		return this.currentTitle;
 	}
 	async isExist(titleId) {
-		return titleId ? !!(await this.em.Title.get(titleId)) : false;
+		return titleId ? !!(await this.em.Title.getEntity(titleId)) : false;
 	}
 	async load(titleId = defaultTitle) {
-		if (!titleId) {
-			return null;
-		}
-		if (this.currentTitle && this.currentTitle.getPk() === titleId) {
-			return this.currentTitle;
-		}
-		let title = await this.em.Title.get(titleId);
-		if (!title) {
-			title = await this.createTitle(titleId);
-		}
+		if (!titleId) return null;
+		if (this.currentTitle && this.currentTitle.getPk() === titleId) return this.currentTitle;
+		let title = await this.em.Title.getEntity(titleId);
+		if (!title) title = await this.createTitle(titleId);
 		this.currentTitle = title;
 		return title;
 	}
@@ -54,9 +48,8 @@ export class TitleManager {
 
 	async changeTitle(newTitleId) {
 		this.currentTitle = await this.loadTitle(newTitleId);
-		if (!this.currentTitle) {
+		if (!this.currentTitle)
 			this.currentTitle = await this.createTitle(defaultTitle, defaultTitlePrefix, defaultName);
-		}
 	}
 	async loadTitleList() {
 		return await this.em.Title.loadAll();
@@ -68,9 +61,7 @@ export class TitleManager {
 			Sorter.thinningNullData(images);
 			for (const index in images) {
 				const image = images[index];
-				if (!PrimaryKey.isPrimaryKey(image)) {
-					images[index] = PrimaryKey.getPrimaryKey(image);
-				}
+				if (!PrimaryKey.isPrimaryKey(image)) images[index] = PrimaryKey.getPrimaryKey(image);
 			}
 			this.currentTitle = await this.em.Title.save(title);
 		}
@@ -111,9 +102,8 @@ export class TitleManager {
 	}
 	async getExports() {
 		const title = await this.loadCurrent();
-		if (title && title.exports && Array.isArray(title.exports)) {
-			return title.exports;
-		} else {
+		if (title && title.exports && Array.isArray(title.exports)) return title.exports;
+		else {
 			title.exports = [];
 			await this.saveTitle(title);
 			return title.exports;

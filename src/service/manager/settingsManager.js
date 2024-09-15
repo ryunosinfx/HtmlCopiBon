@@ -5,16 +5,13 @@ export class SettingsManager {
 		this.opm = opm;
 	}
 	async loadByPk(titilePk) {
-		const settingEntity = await this.em.Settings.get(titilePk);
-		return settingEntity;
+		return await this.em.Settings.getEntity(titilePk);
 	}
 
 	async loadAll() {
 		const retList = [];
 		const settings = this.em.Pages.loadAll();
-		for (const setting of settings) {
-			retList.push(setting);
-		}
+		for (const setting of settings) retList.push(setting);
 		return retList;
 	}
 	async createDefault(titilePk) {
@@ -25,19 +22,12 @@ export class SettingsManager {
 		setting.pageDelection = 'r2l';
 		setting.outputProfile = this.opm.getDefaultPk();
 		setting.listing = 0;
-		const saved = await this.em.Settings.save(setting);
-		return saved;
+		return await this.em.Settings.save(setting);
 	}
 	async save(pk, name, pageNum, startPage, pageDirection, outputProfile, listing = 0) {
-		let settings = null;
-		if (pk) {
-			settings = await this.em.Settings.get(pk);
-		}
-		if (!settings) {
-			settings = new Settings();
-		} else {
-			settings.updateDate = Date.now();
-		}
+		let settings = pk ? await this.em.Settings.getEntity(pk) : null;
+		if (!settings) settings = new Settings();
+		else settings.updateDate = Date.now();
 		settings.name = name || name === null ? name : settings.name;
 		settings.pageNum = pageNum ? pageNum : 8;
 		settings.startPage = startPage || startPage === null ? startPage : settings.startPage;

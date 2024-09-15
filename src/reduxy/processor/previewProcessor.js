@@ -68,9 +68,7 @@ export class PreviewProcessor {
 					binaryEntity.parentPk = pagePk;
 					retPreviews.push(binaryEntity);
 				}
-			} else {
-				retPreviews.push(null);
-			}
+			} else retPreviews.push(null);
 		}
 
 		this.progress = 100;
@@ -81,9 +79,8 @@ export class PreviewProcessor {
 		const cratePageData = PreviewProcessor.getCratePageDataFunc();
 		if (isSingle) {
 			const retSetLis = [];
-			for (const index in previews) {
+			for (const index in previews)
 				retSetLis.push(cratePageData(index * 1 + 1, false, false, previews, this.dummyClass));
-			}
 			await this.pbp.comple(this.progress);
 			return retSetLis;
 		} else {
@@ -166,8 +163,8 @@ export class PreviewProcessor {
 	}
 
 	async updatePage(pk, key) {
-		const pageEntity = await this.em.Pages.get(pk);
-		const cratePageData = PreviewProcessor.getCratePageDataFunc();
+		const pageEntity = await this.em.Pages.getEntity(pk);
+		// const cratePageData = PreviewProcessor.getCratePageDataFunc();
 		if (pageEntity) {
 			const value = pageEntity[key];
 			pageEntity[key] = !value;

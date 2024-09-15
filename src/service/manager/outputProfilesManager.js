@@ -12,51 +12,34 @@ export class OutputProfilesManager {
 	async loadAll() {
 		const retList = [];
 		const outputProfiles = await this.em.OutputProfiles.loadAll();
-		for (const outputProfile of outputProfiles) {
-			retList.push(outputProfile);
-		}
-		if (retList.length < 1) {
-			retList.push(await this.createDefault());
-		}
+		for (const outputProfile of outputProfiles) retList.push(outputProfile);
+		if (retList.length < 1) retList.push(await this.createDefault());
 		return retList;
 	}
 	async loadByPk(pk) {
 		const outputProfilePK = PrimaryKey.getPrimaryKey(pk);
-		if (!outputProfilePK) {
-			const outputProfileEntity = await this.em.OutputProfiles.get(pk);
-			return outputProfileEntity;
-		} else {
-			const outputProfileEntity = await this.em.OutputProfiles.get(outputProfilePK);
-			return outputProfileEntity;
-		}
+		return !outputProfilePK
+			? await this.em.OutputProfiles.getEntity(pk)
+			: await this.em.OutputProfiles.getEntity(outputProfilePK);
 	}
 	async createDefault() {
 		const savedOne = await this.loadByPk(defaultPk);
-		if (savedOne) {
-			return savedOne;
-		}
+		if (savedOne) return savedOne;
 		const outputProfiles = new OutputProfiles();
 		outputProfiles.setPk(defaultPk);
-		const saved = await this.em.OutputProfiles.save(outputProfiles);
-		return saved;
+		return await this.em.OutputProfiles.save(outputProfiles);
 	}
 	async save(pk, name, binary, type, width, height, listing = 0) {
-		let image = null;
-		if (pk) {
-			image = await this.em.OutputProfiles.get(pk);
-		}
+		let img = pk ? await this.em.OutputProfiles.getEntity(pk) : null;
 		let binaryPk = PrimaryKey.getPrimaryKey(binary);
-		if (!image) {
-			image = new Setting();
-		} else {
-			image.updateDate = Date.now();
-		}
-		image.name = name || name === null ? name : image.name;
-		image.binary = binaryPk ? binaryPk : binary;
-		image.type = type || type === null ? type : image.type;
-		image.width = width || width === null ? width : image.width;
-		image.height = height || height === null ? height : image.height;
-		image.listing = listing || listing === null ? listing : image.listing;
-		return await this.em.Thumbnales.save(image);
+		if (!img) img = new Setting();
+		else img.updateDate = Date.now();
+		img.name = name || name === null ? name : img.name;
+		img.binary = binaryPk ? binaryPk : binary;
+		img.type = type || type === null ? type : img.type;
+		img.width = width || width === null ? width : img.width;
+		img.height = height || height === null ? height : img.height;
+		img.listing = listing || listing === null ? listing : img.listing;
+		return await this.em.Thumbnales.save(img);
 	}
 }

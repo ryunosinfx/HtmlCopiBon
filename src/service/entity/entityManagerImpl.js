@@ -3,10 +3,12 @@ import { Binary } from './binary.js';
 import { ObjectUtil } from '../../util/objectUtil.js';
 import { PrimaryKey } from './primaryKey.js';
 import { PrimaryKeyAutoIncrementService } from './primaryKeyAutoIncrementService.js';
+import { BinaryCnvtr } from '../../util/binaryConverter.js';
 const USER_ID = 'default';
 const BINALY_PK_ROW = 'BINALY_PK_ROW';
 const binarySizeMap = {};
 const binaryEntity = new Binary();
+const maxBytesLengthForChromium = 100 * 1024; // 16658431;
 export class EntityManagerImpl {
 	constructor(entityManager, entityClass, userId = USER_ID, closeTimeout) {
 		this.userId = userId;
@@ -18,6 +20,7 @@ export class EntityManagerImpl {
 		this.pkais = new PrimaryKeyAutoIncrementService(userId);
 		this.em = entityManager;
 		this.ct = closeTimeout;
+		this.a = this.isBinary ? [] : null;
 	}
 	async init() {
 		console.log('init! ' + this.entityName);
@@ -74,6 +77,21 @@ export class EntityManagerImpl {
 			const newPK = await this.getBinaryPK();
 			data.setPk(newPK);
 			// console.log("saveArrayBufferData save!!C!! data:" + data,data);
+			if (item.byteLength > maxBytesLengthForChromium) {
+				data.pks = [];
+				const l = item.byteLength;
+				const b = new Uint8Array(item);
+				const c = Math.ceil(l / maxBytesLengthForChromium);
+				const t = l - (c - 1) * maxBytesLengthForChromium;
+				for (let i = 0; i < c; i++) {
+					const r = i + 1 === c ? t : maxBytesLengthForChromium;
+					const a = new Uint8Array(r);
+					const s = i * maxBytesLengthForChromium;
+					const u = b.subarray(s, s + r);
+					for (let j = 0; j < r; j++) a[j] = u[j];
+					data.pks.push(new PrimaryKey(await this.saveArrayBufferData(a.buffer)));
+				}
+			}
 			await this.em.Binary.saveWithBinary(data);
 			return newPK;
 		} else if (item.getEntityName && item.getEntityName() === 'PrimaryKey') return item;
@@ -103,15 +121,27 @@ export class EntityManagerImpl {
 	async getAsMap(keys) {
 		return await this.ss.getAsMap(keys, this.entity);
 	}
-	async get(pk, isSizeOnly) {
+	async getEntity(pk, isSizeOnly) {
 		if (isSizeOnly) if (binarySizeMap[pk]) return binarySizeMap[pk] * 1;
-		const key = 'EntityManagerImpl.get pk:' + pk + '/entityName:' + this.entityName;
+		const key = 'EntityManagerImpl.getEntity pk:' + pk + '/entityName:' + this.entityName;
 		console.time(key);
-		const result = await this.ss.get(pk, this.entity);
-		// console.log('get this.entityName:' + this.entityName + '/pk:' + pk, result);
+		const result = await this.ss.getRow(pk, this.entity);
+		if (result && this.isBinary && Array.isArray(result.pks) && result.pks.length > 0)
+			result._ab = await this.loadBinary(result.pks);
 		console.timeEnd(key);
 		if (this.isBinary) binarySizeMap[pk] = await ObjectUtil.recalcSize(this, result);
 		return result;
+	}
+	async loadBinary(pks) {
+		const a = this.a;
+		a.splice(0, a.length);
+		for (const pk of pks) {
+			const e = await this.ss.getRow(pk, this.entity);
+			a.push(e._ab);
+		}
+		const u8a = BinaryCnvtr.jus(a);
+		a.splice(0, a.length);
+		return u8a.buffer;
 	}
 	async delete(pk) {
 		if (this.isBinary) delete binarySizeMap[pk];

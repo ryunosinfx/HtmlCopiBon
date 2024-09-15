@@ -38,7 +38,7 @@ export class EntityManager {
 		if (!PrimaryKey.isPrimaryKey(truePk)) return console.log(truePk) ? 0 : null;
 		const entityName = PrimaryKey.getEntityName(truePk);
 		// console.log("★get entityName:"+entityName+truePk);
-		return await this[entityName].get(truePk);
+		return await this[entityName].getEntity(truePk);
 	}
 	async delete(pk) {
 		if (!pk) return alert('pk is null! pk:' + pk) ? null : 0;

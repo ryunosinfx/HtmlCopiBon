@@ -18,7 +18,7 @@ export class ImageManager {
 	}
 	async load(pk) {
 		const binaryPk = typeof pk !== 'string' ? PrimaryKey.getPrimaryKey(pk) : pk;
-		return await this.em.Images.get(binaryPk);
+		return await this.em.Images.getEntity(binaryPk);
 	}
 	async reloadLoadedImages() {
 		return await this.createRetList(this.getEntitisAsList());
@@ -95,12 +95,11 @@ export class ImageManager {
 	}
 	async save(pk, name, binary, type, width, height, thumbnail, listing = 0) {
 		let image = null;
-		if (pk) image = await this.em.Images.get(pk);
+		if (pk) image = await this.em.Images.getEntity(pk);
 		console.log('ImageManager save!!9!! binary:', binary);
 		const binaryPk = PrimaryKey.getPrimaryKey(binary);
 		if (!image) image = new Images();
 		else image.updateDate = Date.now();
-
 		console.log('ImageManager save!!A!! image:' + image);
 		image.name = name || name === null ? name : image.name;
 		image.binary = binaryPk ? binaryPk : binary;

@@ -4,6 +4,7 @@ export class Binary extends BaseEntity {
 	constructor(arrayBuffer) {
 		super(EnitiyName);
 		this._ab = arrayBuffer;
+		this.pks = null;
 		this.createDate = Date.now();
 		this.updateDate = Date.now();
 	}

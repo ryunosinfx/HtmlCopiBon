@@ -5,13 +5,12 @@ export class BinaryManager {
 		this.em = entityManager;
 	}
 	async load(pk) {
-		console.time('BinaryManager.load');
-		let binaryPk = pk;
-		if (!pk) binaryPk = PrimaryKey.getPrimaryKey(pk);
-		const result = await this.em.Binary.get(binaryPk);
+		console.time('BinaryManager.load pk:', pk);
+		let binaryPk = pk ? pk : (binaryPk = PrimaryKey.getPrimaryKey(pk));
+		const result = await this.em.Binary.getEntity(binaryPk);
 		const ab = result._ab;
 		result._ab = ab.buffer ? ab.buffer : ab;
-		console.timeEnd('BinaryManager.load');
+		console.timeEnd('BinaryManager.load ab:' + ab.byteLength, ab);
 		return result;
 	}
 	async remove(pk) {
@@ -20,12 +19,11 @@ export class BinaryManager {
 		return await this.em.Binary.delete(binaryPk);
 	}
 	async save(pk, name, ab, addDataMap) {
-		console.time('BinaryManager.save');
+		console.time('BinaryManager.save pk:' + pk + '/byteLength:' + ab.byteLength, ab);
 		// console.log("BinaryManager save!!A!! pk:" + pk);
 		// console.log(binary);
 		// console.log("BinaryManager save!!B!! name:" + name);
-		let binEntity = null;
-		if (pk) binEntity = await this.em.Binary.get(pk);
+		let binEntity = pk ? await this.em.Binary.getEntity(pk) : null;
 		const u8a = new Uint8Array(ab);
 		// console.log(binary);
 		//alert(binary);
