@@ -32,9 +32,7 @@ export class BaseEntity {
 		return await ObjectUtil.deepClone(this);
 	}
 	load(obj) {
-		for (const key in obj) {
-			this[key] = obj[key];
-		}
+		for (const key in obj) this[key] = obj[key];
 	}
 	toObj() {
 		let cloned = ObjectUtil.singleDeepCloneWithoutFuncs(this);

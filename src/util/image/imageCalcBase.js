@@ -21,16 +21,17 @@ export class ImageCalcBase {
 		const arrayImageData = {};
 		for (const key in dataMap) {
 			const data = dataMap[key];
-			if (data instanceof ImageData) {
-				arrayImageData[key] = data;
-			}
+			if (data instanceof ImageData) arrayImageData[key] = data;
+
 			dataMap[key] = this.convertImageDataToObj(data);
 		}
 		// console.log("resizeExcWithThread. execute B ImageCalcBase methodName:" + methodName + "/dataMap:" + dataMap);
 		const thread = new Thread();
-		const result = await thread.postMessage(wokerKey, dataMap).catch((e) => {
-			console.error(e);
-		});
+		const result = dataMap; //await thread.postMessage(wokerKey, dataMap).catch((e) => {
+		// 	console.error(e);
+		// 	thread.close();
+		// });
+		thread.close();
 		if (result) {
 			for (const key in dataMap) {
 				// console.log("execute key:" + key);

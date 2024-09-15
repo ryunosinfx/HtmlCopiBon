@@ -156,14 +156,15 @@ export class ImageProcessor {
 			imgElm.alt = escape(name);
 			if (!type) type = 'application/octet-stream';
 			if (type && type.match(imgRe)) {
-				imgElm.src = BinaryCnvtr.a2D(ab, type);
+				const dURL = BinaryCnvtr.a2D(ab, type);
+				imgElm.src = dURL;
 				imgElm.onload = () => {
 					data.height = imgElm.height;
 					data.width = imgElm.width;
 					resolve(imgElm);
 				};
 				imgElm.onerror = (e) => {
-					console.log('失敗 type:' + type + '/ab:', data);
+					console.log('失敗 type:' + type + '/ab:', data, dURL);
 					console.error(e, e.stack);
 					reject(e);
 				};
