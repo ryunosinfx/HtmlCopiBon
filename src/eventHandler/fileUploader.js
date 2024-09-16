@@ -12,8 +12,7 @@ export class FileUploader extends BaseEventHandler {
 		return (event) => {
 			event.stopPropagation(); // Stops some browsers from redirecting.
 			event.preventDefault();
-			const files = event.target.files; // FileList object
-			this.handleFiles(view, files);
+			this.handleFiles(view, event.target.files); // FileList object
 		};
 	}
 
@@ -21,12 +20,11 @@ export class FileUploader extends BaseEventHandler {
 		return (event) => {
 			event.stopPropagation(); // Stops some browsers from redirecting.
 			event.preventDefault();
-			const files = event.dataTransfer.files;
-			this.handleFiles(view, files);
+			this.handleFiles(view, event.dataTransfer.files);
 		};
 	}
 	handleFiles(view, files) {
-		const actin = ImageActionCreator.creatAddAction(view, { files: files });
+		const actin = ImageActionCreator.creatAddAction(view, { files });
 		view.dispatch(actin);
 		//this.fileProcessor.processFiles(files);
 	}
