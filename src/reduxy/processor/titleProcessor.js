@@ -64,7 +64,7 @@ export class TitleProcessor {
 		return await this.loadAll();
 	}
 	async removeDescendant(target) {
-		if (!target || target.getRefCols) return;
+		if (!target || !target.getRefCols) return;
 		const refCols = target.getRefCols();
 		for (const colName of refCols) {
 			const colValue = target[colName];
