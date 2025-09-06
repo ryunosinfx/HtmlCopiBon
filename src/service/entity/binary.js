@@ -1,5 +1,6 @@
 import { BaseEntity } from './baseEntity.js';
 const EnitiyName = 'Binary';
+const refcols = ['pks'];
 export class Binary extends BaseEntity {
 	constructor(arrayBuffer) {
 		super(EnitiyName);
@@ -25,5 +26,8 @@ export class Binary extends BaseEntity {
 	}
 	create() {
 		return new Binary();
+	}
+	getRefCols() {
+		return refcols;
 	}
 }
