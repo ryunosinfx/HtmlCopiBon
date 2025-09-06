@@ -8,7 +8,7 @@ const USER_ID = 'default';
 const BINALY_PK_ROW = 'BINALY_PK_ROW';
 const binarySizeMap = {};
 const binaryEntity = new Binary();
-const maxBytesLengthForChromium = 100 * 1024; // 16658431;
+const maxBytesLengthForChromium = 15 * 1024 * 1024; // 16658431;
 export class EntityManagerImpl {
 	constructor(entityManager, entityClass, userId = USER_ID, closeTimeout) {
 		this.userId = userId;
@@ -50,7 +50,20 @@ export class EntityManagerImpl {
 			: PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
 		if (!isWithBinary) await this.saveArrayBufferCols(data);
 		data.setPk(currentPK);
+		if (
+			data.getEntityName &&
+			data.getEntityName() === 'Binary' &&
+			data._ab &&
+			data._ab.buffer &&
+			data._ab.buffer.byteLength > maxBytesLengthForChromium
+		) {
+			console.log('EntityManagerImpl save!!X!! this.entityName:' + this.entityName + '/data:', data);
+			await this.em.Binary.saveWithBinary(data);
+			console.log('EntityManagerImpl save!!Y!! this.entityName:' + this.entityName + '/data:', data);
+			return data.getPk();
+		}
 		console.log('EntityManagerImpl save!!B!! this.entityName:' + this.entityName + '/data:', data);
+
 		const savedData = await this.ss.save(currentPK, data);
 		console.log('EntityManagerImpl save!!C!! this.entityName:' + this.entityName + '/savedData:', savedData);
 		return savedData;
@@ -70,13 +83,16 @@ export class EntityManagerImpl {
 			} else if (column.byteLength) data[key] = new PrimaryKey(await this.saveArrayBufferData(column));
 		}
 	}
+	async saveArrayBufferCore(data) {
+		// console.log("saveArrayBufferData save!!C!! data:" + data,data);
+		await this.em.Binary.saveWithBinary(data);
+	}
 	async saveArrayBufferData(item) {
 		// console.log("saveArrayBufferData save!!A!! item:" + item,item);
 		if (!item.getEntityName && item.byteLength) {
 			const data = new Binary(item);
 			const newPK = await this.getBinaryPK();
 			data.setPk(newPK);
-			// console.log("saveArrayBufferData save!!C!! data:" + data,data);
 			if (item.byteLength > maxBytesLengthForChromium) {
 				data.pks = [];
 				const l = item.byteLength;
@@ -92,7 +108,7 @@ export class EntityManagerImpl {
 					data.pks.push(new PrimaryKey(await this.saveArrayBufferData(a.buffer)));
 				}
 			}
-			await this.em.Binary.saveWithBinary(data);
+			await this.saveArrayBufferCore(data);
 			return newPK;
 		} else if (item.getEntityName && item.getEntityName() === 'PrimaryKey') return item;
 		else if (item.getEntityName && item.getEntityName() === 'Binary') {
