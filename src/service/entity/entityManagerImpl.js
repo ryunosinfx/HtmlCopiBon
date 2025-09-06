@@ -21,6 +21,7 @@ export class EntityManagerImpl {
 		this.em = entityManager;
 		this.ct = closeTimeout;
 		this.a = this.isBinary ? [] : null;
+		this.isB = this.entityName === 'Binary';
 	}
 	async init() {
 		console.log('init! ' + this.entityName);
@@ -36,7 +37,7 @@ export class EntityManagerImpl {
 	}
 	async saveExecute(data, isWithBinary) {
 		console.log(
-			`EntityManagerImpl save!!A!! this.entityName:${this.entityName}/data:${data}/isWithBinary:${isWithBinary}`
+			`EntityManagerImpl save!!A!! this.entityName:${this.entityName}/data:${data}/isWithBinary:${isWithBinary}/${this.isB}`
 		);
 		if (!data || !data.getEntityName || !data.getPk || data.getEntityName() !== this.entityName) {
 			return console.log(
@@ -48,20 +49,9 @@ export class EntityManagerImpl {
 		const currentPK = data.getPk()
 			? data.getPk()
 			: PrimaryKey.assemblePK(this.entity, await this.pkais.acquirePKNo(this.userId, this.entity));
-		if (!isWithBinary) await this.saveArrayBufferCols(data);
+		if (!isWithBinary || this.isB) await this.saveArrayBufferCols(data);
 		data.setPk(currentPK);
-		if (
-			data.getEntityName &&
-			data.getEntityName() === 'Binary' &&
-			data._ab &&
-			data._ab.buffer &&
-			data._ab.buffer.byteLength > maxBytesLengthForChromium
-		) {
-			console.log('EntityManagerImpl save!!X!! this.entityName:' + this.entityName + '/data:', data);
-			await this.em.Binary.saveWithBinary(data);
-			console.log('EntityManagerImpl save!!Y!! this.entityName:' + this.entityName + '/data:', data);
-			return data.getPk();
-		}
+
 		console.log('EntityManagerImpl save!!B!! this.entityName:' + this.entityName + '/data:', data);
 
 		const savedData = await this.ss.save(currentPK, data);
@@ -83,33 +73,33 @@ export class EntityManagerImpl {
 			} else if (column.byteLength) data[key] = new PrimaryKey(await this.saveArrayBufferData(column));
 		}
 	}
-	async saveArrayBufferCore(data) {
+	async saveArrayBufferCore(item) {
 		// console.log("saveArrayBufferData save!!C!! data:" + data,data);
+		const data = new Binary(item);
+		const newPK = await this.getBinaryPK();
+		data.setPk(newPK);
+		if (item.byteLength > maxBytesLengthForChromium) {
+			data.pks = [];
+			const l = item.byteLength;
+			const b = new Uint8Array(item);
+			const c = Math.ceil(l / maxBytesLengthForChromium);
+			const t = l - (c - 1) * maxBytesLengthForChromium;
+			for (let i = 0; i < c; i++) {
+				const r = i + 1 === c ? t : maxBytesLengthForChromium;
+				const a = new Uint8Array(r);
+				const s = i * maxBytesLengthForChromium;
+				const u = b.subarray(s, s + r);
+				for (let j = 0; j < r; j++) a[j] = u[j];
+				data.pks.push(new PrimaryKey(await this.saveArrayBufferData(a.buffer)));
+			}
+		}
 		await this.em.Binary.saveWithBinary(data);
+		return newPK;
 	}
 	async saveArrayBufferData(item) {
 		// console.log("saveArrayBufferData save!!A!! item:" + item,item);
 		if (!item.getEntityName && item.byteLength) {
-			const data = new Binary(item);
-			const newPK = await this.getBinaryPK();
-			data.setPk(newPK);
-			if (item.byteLength > maxBytesLengthForChromium) {
-				data.pks = [];
-				const l = item.byteLength;
-				const b = new Uint8Array(item);
-				const c = Math.ceil(l / maxBytesLengthForChromium);
-				const t = l - (c - 1) * maxBytesLengthForChromium;
-				for (let i = 0; i < c; i++) {
-					const r = i + 1 === c ? t : maxBytesLengthForChromium;
-					const a = new Uint8Array(r);
-					const s = i * maxBytesLengthForChromium;
-					const u = b.subarray(s, s + r);
-					for (let j = 0; j < r; j++) a[j] = u[j];
-					data.pks.push(new PrimaryKey(await this.saveArrayBufferData(a.buffer)));
-				}
-			}
-			await this.saveArrayBufferCore(data);
-			return newPK;
+			return await this.saveArrayBufferCore(item);
 		} else if (item.getEntityName && item.getEntityName() === 'PrimaryKey') return item;
 		else if (item.getEntityName && item.getEntityName() === 'Binary') {
 			const currentPK = item.getPk();
