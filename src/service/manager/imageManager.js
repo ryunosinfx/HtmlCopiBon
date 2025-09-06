@@ -172,23 +172,29 @@ export class ImageManager {
 		console.log('processParImage thumbnailEntity:', thumbnailEntity);
 		console.log('processParImage binaryEntity:', binaryEntity);
 		if (!thumbnailEntity || !binaryEntity || binaryEntity.ab.byteLength < 2) return null;
-		await this.ip.createImageNodeByData({
-			name: imageEntity.name,
-			ab: binaryEntity.ab,
-			type: imageEntity.type,
-		});
-		const size = binaryEntity.ab ? new Uint8Array(binaryEntity.ab).length : 0,
-			imageText = `${escape(imageEntity.name)} (${imageEntity.type || 'n/a'}) - ${size}bytes, last modified: ${
-				imageEntity.modifyDate
-			} size:${imageEntity.width}x${imageEntity.height}`,
-			retObj = {
-				imageEntity: imageEntity,
-				binaryEntity: binaryEntity,
-				size: size,
-				imageText: imageText,
-				isOnPage: false,
-			};
-		return retObj;
+		try {
+			await this.ip.createImageNodeByData({
+				name: imageEntity.name,
+				ab: binaryEntity.ab,
+				type: imageEntity.type,
+			});
+			const size = binaryEntity.ab ? new Uint8Array(binaryEntity.ab).length : 0,
+				imageText = `${escape(imageEntity.name)} (${
+					imageEntity.type || 'n/a'
+				}) - ${size}bytes, last modified: ${imageEntity.modifyDate} size:${imageEntity.width}x${
+					imageEntity.height
+				}`,
+				retObj = {
+					imageEntity: imageEntity,
+					binaryEntity: binaryEntity,
+					size: size,
+					imageText: imageText,
+					isOnPage: false,
+				};
+			return retObj;
+		} catch (e) {
+			return null;
+		}
 	}
 	removeLoaded(pk) {
 		loadedImageMap.delete(pk);
