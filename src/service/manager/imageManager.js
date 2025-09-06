@@ -35,6 +35,7 @@ export class ImageManager {
 	}
 	async remove(pk) {
 		const imageEntity = await this.em.get(pk);
+		if (!imageEntity) return;
 		console.log('removeImage imageEntity.thumbnail:' + imageEntity.thumbnail);
 		const binaryPk = PrimaryKey.getPrimaryKey(imageEntity.binary);
 		console.log('removeImage binaryPk:' + binaryPk);
@@ -53,6 +54,7 @@ export class ImageManager {
 	}
 	async saveImageFile(file, count = 0) {
 		const fue = new FileUploadExecuter();
+		// console.log('saveImageFile A count:' + count + '/file:', file);
 		const arrayBuffer = await fue.readAsArrayBuffer(file);
 		const data = {
 			name: file.name,
@@ -67,6 +69,10 @@ export class ImageManager {
 			ab: arrayBufferThumbnail,
 			type: file.type,
 		});
+		// console.log(
+		// 	`saveImageFile B file.name:${file.name}/arrayBuffer:${arrayBuffer.byteLength}/file:`,
+		// 	file
+		// );
 		const thumbnailEntity = await this.tbm.save(
 			null,
 			file.name,
@@ -76,9 +82,13 @@ export class ImageManager {
 			imgElmThumb.height,
 			0
 		);
-		console.log('addImageFiles thumbnailEntity:' + thumbnailEntity);
+		// console.log(
+		// 	`saveImageFile C thumbnailEntity:${thumbnailEntity}/arrayBufferThumbnail:${arrayBufferThumbnail.byteLength}/file:`,
+		// 	file,
+		// 	thumbnailEntity
+		// );
 		const thumbnailPk = PrimaryKey.getPrimaryKey(thumbnailEntity);
-		console.log('addImageFiles thumbnailPk:' + thumbnailPk);
+		// console.log('saveImageFile D thumbnailPk:' + thumbnailPk + '/file:', file);
 		const imageEntity = await this.save(
 			null,
 			file.name,
@@ -89,7 +99,7 @@ export class ImageManager {
 			thumbnailPk,
 			count
 		);
-		console.log('addImageFiles imageEntity:' + imageEntity);
+		// console.log('saveImageFile E imageEntity:' + imageEntity + '/file:', file);
 		const imagePk = imageEntity.getPk();
 		return { imagePk, imageEntity };
 	}
