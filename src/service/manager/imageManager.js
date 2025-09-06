@@ -158,6 +158,7 @@ export class ImageManager {
 			else if (!pk) retList.push(null);
 			else {
 				const retObj = await this.processParImage(imageEntity);
+				if (retObj === null) continue;
 				loadedImageMap.set(pk, retObj);
 				retList.push(retObj);
 			}
@@ -170,7 +171,7 @@ export class ImageManager {
 			binaryEntity = await this.em.get(thumbnailEntity.binary);
 		console.log('processParImage thumbnailEntity:', thumbnailEntity);
 		console.log('processParImage binaryEntity:', binaryEntity);
-		if (!thumbnailEntity || !binaryEntity) return null;
+		if (!thumbnailEntity || !binaryEntity || binaryEntity.ab.byteLength < 2) return null;
 		await this.ip.createImageNodeByData({
 			name: imageEntity.name,
 			ab: binaryEntity.ab,
